@@ -1,1 +1,4 @@
 *.DS_Store
+build.properties
+build/
+dist/
