@@ -9,7 +9,7 @@
 	</head>
 	
 	<body>
-		<form id="formulario" action="<%=request.getContextPath() + "/fc/insertBook"%>" method="post" onsubmit="validacionDOM()">
+		<form id="insertForm" action="<%=request.getContextPath() + "/fc/insertBook"%>" method="post" onsubmit="validacionDOM()">
 			<fieldset>
 				<legend>Formulario alta libro</legend>
 				<p>
@@ -17,15 +17,17 @@
 					<input id="isbn" type="text" name="isbn"/>
 				</p>
 				<p>
-					<label for="titulo">Título:</label>
-					<input id="titulo" type="text" name="titulo"/>
+					<label for="title">Título:</label>
+					<input id="title" type="text" name="title"/>
 				</p>
+				<!--  
 				<p>
-					<label for="categoria">Categoría:</label>
-					<input id="categoria" type="text" name="categoria"/>
+					<label for="category">Categoría:</label>
+					<input id="category" type="text" name="category"/>
 				</p>
+				-->
 				<p>
-					<input type="submit" value="Insertar"/>
+					<input type="submit" value="Insert"/>
 				</p>
 			</fieldset>
 		</form>

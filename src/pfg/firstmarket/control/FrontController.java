@@ -8,7 +8,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//@WebServlet("/*")
+import pfg.firstmarket.control.actions.Action;
+import pfg.firstmarket.control.actions.InsertBookAction;
+
+//@WebServlet("/fc/*")
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -37,6 +40,17 @@ public class FrontController extends HttpServlet {
 		if (request.getRequestURI().equals("/firstmarket/fc/admin")) {
 			response.sendRedirect(request.getContextPath() + "/admin/adminMenu.html");
 			//response.sendRedirect("http://localhost:8080/firstmarket/adminMenu.html");
+		}
+		
+		if (request.getRequestURI().equals("/firstmarket/fc/adminWantsNewBook")) {
+			response.sendRedirect(request.getContextPath() + "/admin/newBookForm.jsp");
+			//response.sendRedirect("http://localhost:8080/firstmarket/adminMenu.html");
+		}
+		
+		if (request.getRequestURI().equals("/firstmarket/fc/insertBook")) {
+			Action insertBookAction = new InsertBookAction();
+			insertBookAction.execute(request, response);
+			response.sendRedirect(request.getContextPath() + "/admin/adminMenu.html");
 		}
 	}
 
