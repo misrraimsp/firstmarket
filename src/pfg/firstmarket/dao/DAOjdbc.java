@@ -3,7 +3,9 @@ package pfg.firstmarket.dao;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,8 +24,20 @@ public class DAOjdbc implements DAO {
 
 	@Override
 	public List<Book> getAllBooks() {
-		// TODO Auto-generated method stub
-		return null;
+		String sql = "select * from books";
+		List<Book> books = new ArrayList<Book>();
+		
+		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
+			 Statement stm = connexion.createStatement();
+			 ResultSet rs = stm.executeQuery(sql)) {
+			
+			while(rs.next()) {
+				Book b = new Book(rs.getString("isbn"),rs.getString("title"));
+				books.add(b);
+			}
+		}
+		catch (SQLException e) { e.printStackTrace(); }
+		return books;
 	}
 
 	@Override
@@ -44,7 +58,6 @@ public class DAOjdbc implements DAO {
 			 PreparedStatement stm = getParameterizedQuery(connexion, sql, params)) {
 			
 			stm.executeUpdate();
-				
 		}
 		catch (SQLException e) { e.printStackTrace(); }
 	}
