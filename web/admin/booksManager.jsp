@@ -8,10 +8,15 @@
 
 	<head>
 		<meta charset="UTF-8">
-		<title>Show Books Page</title>
+		<title>Books Manager</title>
 	</head>
 
 	<body>
+		<h1>Books Manager</h1>
+		<p><a href="/firstmarket/fc/admin">go back</a></p>
+		<p><a href="/firstmarket/fc/admin/newBook">new book</a></p>
+		<p>Please, to edit some book just click on the ISBN reference</p>
+		<br/>
 		<table border="1">
 			<tr>
 				<td><b>ISBN</b></td>
@@ -20,14 +25,13 @@
 			
 			<c:forEach var="book" items="${requestScope.books}">
 			<tr>
-				<td><c:out value="${book.isbn}"/></td>
+				<td><a href="/firstmarket/fc/admin/editBook?isbn='${book.isbn}'"><c:out value="${book.isbn}"/></a></td>
 				<td><c:out value="${book.title}"/></td>
 			</tr>
 			</c:forEach>
 			
 		</table>
-		<br/>
-		<a href="/firstmarket/fc/admin">go back</a>
+		
 	</body>
 
 </html>

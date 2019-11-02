@@ -9,9 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import pfg.firstmarket.control.actions.Action;
-import pfg.firstmarket.control.actions.GetAllBooksAction;
-import pfg.firstmarket.control.actions.InsertBookAction;
+import pfg.firstmarket.control.actions.*;
 
 @WebServlet("/fc/*")
 public class FrontController extends HttpServlet {
@@ -22,25 +20,37 @@ public class FrontController extends HttpServlet {
 
 		String uri = request.getRequestURI();
 		String ctxtPath = request.getContextPath();
+		String query = request.getQueryString();
 		
 		System.out.println();
-		System.out.println("requestURI: " + uri);
+		System.out.println("requestURI: " + uri + " -- requestQUERY: " + query);
 		
 		if (uri.equals("/firstmarket/fc/admin")) {
-			response.sendRedirect(ctxtPath + "/admin/adminMenu.html");
+			response.sendRedirect(ctxtPath + "/admin/mainMenu.html");
 		}
-		else if (uri.equals("/firstmarket/fc/adminWantsNewBook")) {
+		else if (uri.equals("/firstmarket/fc/admin/newBook")) {
 			response.sendRedirect(ctxtPath + "/admin/newBookForm.jsp");
 		}
-		else if (uri.equals("/firstmarket/fc/insertBook")) {
+		else if (uri.equals("/firstmarket/fc/admin/insertBook")) {
 			Action insertBookAction = new InsertBookAction();
 			insertBookAction.execute(request, response);
-			response.sendRedirect(ctxtPath + "/admin/adminMenu.html");
+			response.sendRedirect(ctxtPath + "/fc/admin/bookManager ");
 		}
-		else if (uri.equals("/firstmarket/fc/adminWantsShowBooks")) {
+		else if (uri.equals("/firstmarket/fc/admin/updateBook")) {
+			Action updateBookAction = new UpdateBookAction();
+			updateBookAction.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/bookManager ");
+		}
+		else if (uri.equals("/firstmarket/fc/admin/bookManager")) {
 			Action getAllBooksAction = new GetAllBooksAction();
 			getAllBooksAction.execute(request, response);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/showBooksPage.jsp");
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/booksManager.jsp");
+			dispatcher.forward(request, response);
+		}
+		else if (uri.equals("/firstmarket/fc/admin/editBook")) {
+			Action getBooksByKeyAction = new GetBooksByKeyAction(query);
+			getBooksByKeyAction.execute(request, response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/editBook.jsp");
 			dispatcher.forward(request, response);
 		}
 		else {
@@ -59,7 +69,7 @@ public class FrontController extends HttpServlet {
 		//System.out.println("requestSERVPATH: " + servpath);
 		//System.out.println("requestPATHINFO: " + pathinfo);
 		//System.out.println("requestPATHTRANSL: " + pathtranslated);
-		//System.out.println("requestQUERYSTRG: " + querystring);
+		//
 		//System.out.println("requestCONTXTPTH: " + contxtpath);
 		*/
 	}

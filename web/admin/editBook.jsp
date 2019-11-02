@@ -9,16 +9,16 @@
 	</head>
 	
 	<body>
-		<form id="insertForm" action="<%=request.getContextPath() + "/fc/admin/insertBook"%>" method="post" onsubmit="validacionDOM()">
+		<form id="insertForm" action="<%=request.getContextPath() + "/fc/admin/updateBook"%>" method="post" onsubmit="validacionDOM()">
 			<fieldset>
-				<legend>Formulario alta libro</legend>
+				<legend>Book Edition Form</legend>
 				<p>
 					<label for="isbn">ISBN:</label>
-					<input id="isbn" type="text" name="isbn"/>
+					<input id="isbn" type="text" name="isbn" value="${requestScope.books[0].isbn}"/>
 				</p>
 				<p>
 					<label for="title">Título:</label>
-					<input id="title" type="text" name="title"/>
+					<input id="title" type="text" name="title" value="${requestScope.books[0].title}"/>
 				</p>
 				<!--  
 				<p>
@@ -27,7 +27,7 @@
 				</p>
 				-->
 				<p>
-					<input type="submit" value="Insert"/>
+					<input type="submit" value="Update"/>
 				</p>
 			</fieldset>
 		</form>
