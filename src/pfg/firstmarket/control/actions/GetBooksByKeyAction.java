@@ -14,15 +14,14 @@ public class GetBooksByKeyAction implements Action {
 	
 	private String urlConditions;//separated by &
 	
-	
-
-	public String getUrlConditions() {
-		return urlConditions;
-	}
 
 	public GetBooksByKeyAction(String urlConditions) {
 		super();
 		this.urlConditions = urlConditions;
+	}
+	
+	public String getUrlConditions() {
+		return urlConditions;
 	}
 
 	@Override
@@ -31,7 +30,6 @@ public class GetBooksByKeyAction implements Action {
 		List<String> sqlConditions = getConditionList(urlConditions);
 		List<Book> books = db.getBooksByKey(sqlConditions);
 		request.setAttribute("books", books);
-
 	}
 	
 	private List<String> getConditionList(String urlConditions){

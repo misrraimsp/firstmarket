@@ -25,7 +25,7 @@
 			
 			<c:forEach var="book" items="${requestScope.books}">
 			<tr>
-				<td><a href="/firstmarket/fc/admin/editBook?isbn='${book.isbn}'"><c:out value="${book.isbn}"/></a></td>
+				<td><a href="/firstmarket/fc/admin/editBook?isbn=${book.isbn}"><c:out value="${book.isbn}"/></a></td>
 				<td><c:out value="${book.title}"/></td>
 			</tr>
 			</c:forEach>

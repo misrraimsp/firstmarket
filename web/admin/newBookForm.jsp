@@ -1,3 +1,8 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <!DOCTYPE html>
 <html>
 
@@ -5,7 +10,7 @@
 		<link rel="stylesheet" type="text/css" href="css/formato.css"/>
 		<script type="text/javascript" src="js/validacion.js"></script>
 		<meta charset="UTF-8"/>
-		<title>Gestión de Libros</title>
+		<title>GestiÃ³n de Libros</title>
 	</head>
 	
 	<body>
@@ -17,12 +22,12 @@
 					<input id="isbn" type="text" name="isbn"/>
 				</p>
 				<p>
-					<label for="title">Título:</label>
+					<label for="title">TÃ­tulo:</label>
 					<input id="title" type="text" name="title"/>
 				</p>
 				<!--  
 				<p>
-					<label for="category">Categoría:</label>
+					<label for="category">CategorÃ­a:</label>
 					<input id="category" type="text" name="category"/>
 				</p>
 				-->

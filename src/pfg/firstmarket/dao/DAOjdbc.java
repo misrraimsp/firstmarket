@@ -93,9 +93,23 @@ public class DAOjdbc implements DAO {
 		catch (SQLException e) { e.printStackTrace(); }
 	}
 	
+	@Override
+	public void deleteBook(Book book) {
+		String sql = "delete from books where isbn=?";
+		List<String> params = new ArrayList<String>();
+		params.add(book.getIsbn());
+		
+		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
+			 PreparedStatement stm = getParameterizedQuery(connexion, sql, params)) {
+			
+			stm.executeUpdate();
+		}
+		catch (SQLException e) { e.printStackTrace(); }
+	}
+	
 	private static PreparedStatement getParameterizedQuery(Connection connexion, String sql, List<String> params) throws SQLException {
 		
-		PreparedStatement stm=connexion.prepareStatement(sql);
+		PreparedStatement stm = connexion.prepareStatement(sql);
 		int index = 1;
 		for (String param : params) {
 			stm.setString(index, param);
@@ -103,5 +117,7 @@ public class DAOjdbc implements DAO {
 		}
 		return stm;
 }
+
+	
 
 }

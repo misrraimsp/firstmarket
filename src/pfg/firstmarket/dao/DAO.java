@@ -10,4 +10,5 @@ public interface DAO {
 	public List<Book> getBooksByKey(List<String> conditions);
 	public void insertBook(Book book);
 	public void updateBook(Book book);
+	public void deleteBook(Book book);
 }

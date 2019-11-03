@@ -24,6 +24,14 @@ public class Book {
 
 
 
+	public Book(String isbn) {
+		super();
+		this.isbn = isbn;
+		this.title = null;
+	}
+
+
+
 	public String getIsbn() {
 		return isbn;
 	}

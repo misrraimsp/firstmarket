@@ -28,30 +28,36 @@ public class FrontController extends HttpServlet {
 		if (uri.equals("/firstmarket/fc/admin")) {
 			response.sendRedirect(ctxtPath + "/admin/mainMenu.html");
 		}
+		else if (uri.equals("/firstmarket/fc/admin/booksManager")) {
+			Action getAllBooksAction = new GetAllBooksAction();
+			getAllBooksAction.execute(request, response);
+			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/booksManager.jsp");
+			dispatcher.forward(request, response);
+		}
 		else if (uri.equals("/firstmarket/fc/admin/newBook")) {
 			response.sendRedirect(ctxtPath + "/admin/newBookForm.jsp");
 		}
 		else if (uri.equals("/firstmarket/fc/admin/insertBook")) {
 			Action insertBookAction = new InsertBookAction();
 			insertBookAction.execute(request, response);
-			response.sendRedirect(ctxtPath + "/fc/admin/bookManager ");
+			response.sendRedirect(ctxtPath + "/fc/admin/booksManager ");
 		}
 		else if (uri.equals("/firstmarket/fc/admin/updateBook")) {
 			Action updateBookAction = new UpdateBookAction();
 			updateBookAction.execute(request, response);
-			response.sendRedirect(ctxtPath + "/fc/admin/bookManager ");
+			response.sendRedirect(ctxtPath + "/fc/admin/booksManager ");
 		}
-		else if (uri.equals("/firstmarket/fc/admin/bookManager")) {
-			Action getAllBooksAction = new GetAllBooksAction();
-			getAllBooksAction.execute(request, response);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/booksManager.jsp");
-			dispatcher.forward(request, response);
-		}
+		
 		else if (uri.equals("/firstmarket/fc/admin/editBook")) {
 			Action getBooksByKeyAction = new GetBooksByKeyAction(query);
 			getBooksByKeyAction.execute(request, response);
 			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/editBook.jsp");
 			dispatcher.forward(request, response);
+		}
+		else if (uri.equals("/firstmarket/fc/admin/deleteBook")) {
+			Action deleteBookAction = new DeleteBookAction();
+			deleteBookAction.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/booksManager ");
 		}
 		else {
 			response.getWriter().append("Served at: ").append(ctxtPath);
