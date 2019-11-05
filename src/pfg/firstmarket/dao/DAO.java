@@ -6,8 +6,8 @@ import pfg.firstmarket.model.Book;
 
 public interface DAO {
 
-	public List<Book> getAllBooks();
-	public List<Book> getBooksByKey(List<String> conditions);
+	public List<Book> getBooks();
+	public List<Book> getBooks(List<String> conditions);
 	public void insertBook(Book book);
 	public void updateBook(Book book);
 	public void deleteBook(Book book);

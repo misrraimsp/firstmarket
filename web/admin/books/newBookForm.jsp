@@ -14,7 +14,7 @@
 	</head>
 	
 	<body>
-		<form id="insertForm" action="<%=request.getContextPath() + "/fc/admin/insertBook"%>" method="post" onsubmit="validacionDOM()">
+		<form id="insertForm" action="<%=request.getContextPath() + "/fc/admin/books/insertBook"%>" method="post" onsubmit="validacionDOM()">
 			<fieldset>
 				<legend>Formulario alta libro</legend>
 				<p>

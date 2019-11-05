@@ -14,7 +14,7 @@
 	
 	<body>
 		<h1>Book Edition Page</h1>
-		<form id="updateForm" action="<%=request.getContextPath() + "/fc/admin/updateBook"%>">
+		<form id="updateForm" action="<%=request.getContextPath() + "/fc/admin/books/updateBook"%>">
 			<fieldset>
 				<legend>Edit Book</legend>
 				<p>
@@ -30,7 +30,7 @@
 				</p>
 			</fieldset>
 		</form>
-		<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/deleteBook"%>">
+		<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/books/deleteBook"%>">
 			<fieldset>
 				<legend>Delete Book</legend>
 				<p>

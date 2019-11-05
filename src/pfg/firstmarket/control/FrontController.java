@@ -18,6 +18,9 @@ public class FrontController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+		RequestDispatcher dispatcher = null;
+		Action action = null;
+		
 		String uri = request.getRequestURI();
 		String ctxtPath = request.getContextPath();
 		String query = request.getQueryString();
@@ -25,41 +28,44 @@ public class FrontController extends HttpServlet {
 		System.out.println();
 		System.out.println("requestURI: " + uri + " -- requestQUERY: " + query);
 		
-		if (uri.equals("/firstmarket/fc/admin")) {
-			response.sendRedirect(ctxtPath + "/admin/mainMenu.html");
-		}
-		else if (uri.equals("/firstmarket/fc/admin/booksManager")) {
-			Action getAllBooksAction = new GetAllBooksAction();
-			getAllBooksAction.execute(request, response);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/booksManager.jsp");
-			dispatcher.forward(request, response);
-		}
-		else if (uri.equals("/firstmarket/fc/admin/newBook")) {
-			response.sendRedirect(ctxtPath + "/admin/newBookForm.jsp");
-		}
-		else if (uri.equals("/firstmarket/fc/admin/insertBook")) {
-			Action insertBookAction = new InsertBookAction();
-			insertBookAction.execute(request, response);
-			response.sendRedirect(ctxtPath + "/fc/admin/booksManager ");
-		}
-		else if (uri.equals("/firstmarket/fc/admin/updateBook")) {
-			Action updateBookAction = new UpdateBookAction();
-			updateBookAction.execute(request, response);
-			response.sendRedirect(ctxtPath + "/fc/admin/booksManager ");
-		}
 		
-		else if (uri.equals("/firstmarket/fc/admin/editBook")) {
-			Action getBooksByKeyAction = new GetBooksByKeyAction(query);
-			getBooksByKeyAction.execute(request, response);
-			RequestDispatcher dispatcher = request.getRequestDispatcher("/admin/editBook.jsp");
+		switch (uri) {
+		case "/firstmarket/fc/admin":
+			dispatcher = request.getRequestDispatcher("/admin/mainMenu.html");
 			dispatcher.forward(request, response);
-		}
-		else if (uri.equals("/firstmarket/fc/admin/deleteBook")) {
-			Action deleteBookAction = new DeleteBookAction();
-			deleteBookAction.execute(request, response);
-			response.sendRedirect(ctxtPath + "/fc/admin/booksManager ");
-		}
-		else {
+			break;
+		case "/firstmarket/fc/admin/books/booksManager":
+			action = new GetBooksAction();
+			action.execute(request, response);
+			dispatcher = request.getRequestDispatcher("/admin/books/booksManager.jsp");
+			dispatcher.forward(request, response);
+			break;
+		case "/firstmarket/fc/admin/books/newBook":
+			dispatcher = request.getRequestDispatcher("/admin/books/newBookForm.jsp");
+			dispatcher.forward(request, response);
+			break;
+		case "/firstmarket/fc/admin/books/insertBook":
+			action = new InsertBookAction();
+			action.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager ");
+			break;
+		case "/firstmarket/fc/admin/books/updateBook":
+			action = new UpdateBookAction();
+			action.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager ");
+			break;
+		case "/firstmarket/fc/admin/books/editBook":
+			action = new GetBooksAction(query);
+			action.execute(request, response);
+			dispatcher = request.getRequestDispatcher("/admin/books/editBook.jsp");
+			dispatcher.forward(request, response);
+			break;
+		case "/firstmarket/fc/admin/books/deleteBook":
+			action = new DeleteBookAction();
+			action.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager ");
+			break;
+		default:
 			response.getWriter().append("Served at: ").append(ctxtPath);
 		}
 		
@@ -74,9 +80,7 @@ public class FrontController extends HttpServlet {
 		//System.out.println("requestURL: " + url);
 		//System.out.println("requestSERVPATH: " + servpath);
 		//System.out.println("requestPATHINFO: " + pathinfo);
-		//System.out.println("requestPATHTRANSL: " + pathtranslated);
-		//
-		//System.out.println("requestCONTXTPTH: " + contxtpath);
+		//System.out.println("requestPATHTRANSL: " + pathtranslated); 
 		*/
 	}
 
