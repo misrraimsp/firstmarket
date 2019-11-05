@@ -65,6 +65,12 @@ public class FrontController extends HttpServlet {
 			action.execute(request, response);
 			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager ");
 			break;
+		case "/firstmarket/fc/admin/categories/categoriesManager":
+			action = new GetCategoriesAction();
+			action.execute(request, response);
+			dispatcher = request.getRequestDispatcher("/admin/categories/categoriesManager.jsp");
+			dispatcher.forward(request, response);
+			break;
 		default:
 			response.getWriter().append("Served at: ").append(ctxtPath);
 		}

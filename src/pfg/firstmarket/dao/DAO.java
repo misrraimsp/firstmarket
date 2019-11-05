@@ -2,7 +2,9 @@ package pfg.firstmarket.dao;
 
 import java.util.List;
 
+import pfg.firstmarket.adt.trees.TreeNode;
 import pfg.firstmarket.model.Book;
+import pfg.firstmarket.model.Category;
 
 public interface DAO {
 
@@ -11,4 +13,6 @@ public interface DAO {
 	public void insertBook(Book book);
 	public void updateBook(Book book);
 	public void deleteBook(Book book);
+	
+	public TreeNode<Category> getCategories();
 }

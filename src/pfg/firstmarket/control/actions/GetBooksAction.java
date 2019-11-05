@@ -49,7 +49,7 @@ public class GetBooksAction implements Action {
 	 * @param urlConditions
 	 * @return
 	 */
-	private List<String> getConditionList(String urlConditions){
+	private static List<String> getConditionList(String urlConditions){
 		List<String> sqlConditions = new ArrayList<String>(List.of(urlConditions.split("&")));
 		String[] parts = null;
 		for (int i = 0; i < sqlConditions.size(); i++) {
