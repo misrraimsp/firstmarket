@@ -3,9 +3,6 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<%@ page import="pfg.firstmarket.adt.TreeNode"  %>
-<%@ page import="pfg.firstmarket.model.Category"  %>
-
 <!DOCTYPE html>
 <html>
 	<head>
@@ -21,7 +18,7 @@
 			/* Fixed sidenav, full height */
 			.sidenav {
 			  height: 100%;
-			  width: 250px;
+			  width: 200px;
 			  position: fixed;
 			  z-index: 1;
 			  top: 0;
@@ -35,7 +32,7 @@
 			.sidenav a, .dropdown-btn {
 			  padding: 6px 8px 6px 16px;
 			  text-decoration: none;
-			  font-size: 15px;
+			  font-size: 20px;
 			  color: #818181;
 			  display: block;
 			  border: none;
@@ -53,7 +50,7 @@
 	
 			/* Main content */
 			.main {
-			  margin-left: 250px; /* Same as the width of the sidenav */
+			  margin-left: 200px; /* Same as the width of the sidenav */
 			  font-size: 20px; /* Increased text to enable scrolling */
 			  padding: 0px 10px;
 			}
@@ -85,42 +82,12 @@
 		</style>
 	</head>
 	<body>
-	
-	<%!
-	public String showCategories(TreeNode<Category> node) {
-		
-		if (node.isRoot()){
-			
-		}
-		else{
-			
-		}
-		String code = null;
-		return code;
-	}
-	
-	public String test1(){
-		return "<b>Hola, test1</b>";
-	}
-	
-	public String test2(){
-		return "Hola, test2";
-	}
-	%>
-	
-	
 		<div class="sidenav">
-			<a><%=test1()%></a>
-			<a><%=test2()%></a>
-			<a><c:out value='Hola, test3'/></a>
-			<c:forEach var="child" items="${applicationScope.categoryCatalog.children}">
-				<a><c:out value="${child.data.name}"/></a>
-			</c:forEach>
 			<a href="#about">About</a>
 			<a href="#services">Services</a>
 			<a href="#clients">Clients</a>
 			<a href="#contact">Contact</a>
-			<button class="dropdown-btn"><i>Dropdown</i> 
+			<button class="dropdown-btn">Dropdown 
 				<i class="fa fa-caret-down"></i>
 			</button>
 			<div class="dropdown-container">
@@ -156,52 +123,9 @@
 		</div>
 		<div class="main">
 			<h2>Category Manager</h2>
-			<form id="updateForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Edit Category</legend>
-					<p>
-						<label for="name">Name:</label>
-						<input type="text" name="name" value=""/>
-					</p>
-					<p>
-						<label for="parent">Nested under:</label>
-						<input type="text" name="parent" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Update"/>
-					</p>
-				</fieldset>
-			</form>
-			<br/>
-			<form id="createForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Create Category</legend>
-					<p>
-						<label for="name">Name:</label>
-						<input type="text" name="name" value=""/>
-					</p>
-					<p>
-						<label for="parent">Nested under:</label>
-						<input type="text" name="parent" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Create"/>
-					</p>
-				</fieldset>
-			</form>
-			<br/>
-			<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Delete Category</legend>
-					<p>
-						<input type="hidden" name="name" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Delete"/>
-					</p>
-				</fieldset>
-			</form>
-			<p><a href="/firstmarket/fc/admin">go back</a></p>
+			<p>Click on the dropdown button to open the dropdown menu inside the side navigation.</p>
+			<p>This sidebar is of full height (100%) and always shown.</p>
+			<p>Some random text..</p>
 		</div>
 		<script>
 			/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */

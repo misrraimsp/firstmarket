@@ -10,6 +10,6 @@
 <title>Index</title>
 </head>
 <body>
-	<c:redirect url="fc/admin"/>
+	<c:redirect url="fc/initialSetup"/>
 </body>
 </html>

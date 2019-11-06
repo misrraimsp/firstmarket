@@ -6,35 +6,35 @@ public class CatPath {
 	private String descendant;
 	private int path_length;
 	
-	public CatPath(String ancestor_id, String descendant_id, int depth) {
+	public CatPath(String ancestor, String descendant, int path_length) {
 		super();
-		this.ancestor = ancestor_id;
-		this.descendant = descendant_id;
-		this.path_length = depth;
+		this.ancestor = ancestor;
+		this.descendant = descendant;
+		this.path_length = path_length;
 	}
 
-	public String getAncestor_id() {
+	public String getAncestor() {
 		return ancestor;
 	}
 
-	public void setAncestor_id(String ancestor_id) {
-		this.ancestor = ancestor_id;
+	public void setAncestor(String ancestor) {
+		this.ancestor = ancestor;
 	}
 
-	public String getDescendant_id() {
+	public String getDescendant() {
 		return descendant;
 	}
 
-	public void setDescendant_id(String descendant_id) {
-		this.descendant = descendant_id;
+	public void setDescendant(String descendant) {
+		this.descendant = descendant;
 	}
 
-	public int getDepth() {
+	public int getPath_length() {
 		return path_length;
 	}
 
-	public void setDepth(int depth) {
-		this.path_length = depth;
+	public void setPath_length(int path_length) {
+		this.path_length = path_length;
 	}
 	
 	

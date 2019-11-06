@@ -7,27 +7,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import pfg.firstmarket.dao.DAO;
-import pfg.firstmarket.dao.DAOjdbc;
 import pfg.firstmarket.model.Book;
 
 public class GetBooksAction implements Action {
 	
 	private String urlConditions;//param1=val1&param2=val2&param3=val3 (conditions separated by &)
+	private DAO db;
 	
-	public GetBooksAction(String urlConditions) {
+	public GetBooksAction(DAO db, String urlConditions) {
 		super();
 		this.urlConditions = urlConditions;
+		this.db = db;
 	}
 	
-	public GetBooksAction() {
+	public GetBooksAction(DAO db) {
 		super();
 		this.urlConditions = null;
+		this.db = db;
 	}
 
 	
 	@Override
 	public void execute(HttpServletRequest request, HttpServletResponse response) {
-		DAO db = new DAOjdbc();
 		List<Book> books = null;
 		if (urlConditions != null) {
 			List<String> sqlConditions = getConditionList(urlConditions);

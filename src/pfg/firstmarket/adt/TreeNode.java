@@ -1,4 +1,4 @@
-package pfg.firstmarket.adt.trees;
+package pfg.firstmarket.adt;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -8,7 +8,7 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
 	private T data;
 	public TreeNode<T> parent;
-	public List<TreeNode<T>> children;
+	private List<TreeNode<T>> children;
 	
 	private List<TreeNode<T>> elementsIndex;
 	
@@ -18,6 +18,20 @@ public class TreeNode<T> implements Iterable<TreeNode<T>> {
 		this.elementsIndex = new LinkedList<TreeNode<T>>();
 		this.elementsIndex.add(this);
 	}
+
+	
+	
+	public List<TreeNode<T>> getChildren() {
+		return children;
+	}
+
+
+
+	public void setChildren(List<TreeNode<T>> children) {
+		this.children = children;
+	}
+
+
 
 	public T getData() {
 		return data;

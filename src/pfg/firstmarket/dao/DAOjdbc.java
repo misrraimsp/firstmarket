@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import pfg.firstmarket.adt.trees.TreeNode;
+import pfg.firstmarket.adt.TreeNode;
 import pfg.firstmarket.model.Book;
 import pfg.firstmarket.model.CatPath;
 import pfg.firstmarket.model.Category;
@@ -19,19 +19,16 @@ public class DAOjdbc implements DAO {
 	
 	private static String connRoute = "jdbc:mysql://localhost:3306/fm?serverTimezone=UTC";
 	private static TreeNode<Category> rootCategory;
-	private static HashMap<String,String> categoriesMap;
-	private static List<CatPath> firstOrderRelations;
 	
 	static {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			categoriesMap = fetchCategoriesMap("SELECT * FROM categories");
-			firstOrderRelations = fetchCatPaths("SELECT * FROM catpaths WHERE path_length=1");
-			rootCategory = getRootCategory();
-			populate(rootCategory);
 		}
 		catch (ClassNotFoundException ex) { ex.printStackTrace(); }
+		loadCategories();
 	}
+
+	
 
 	@Override
 	public List<Book> getBooks() { 
@@ -83,26 +80,9 @@ public class DAOjdbc implements DAO {
 		return rootCategory;
 	}
 	
-	private static void populate(TreeNode<Category> node) {
-		for (Category c : getChildren(node.getData())) {
-			populate(node.addChild(c));
-		}
-	}
-	
-	private static List<Category> getChildren(Category c){
-		String parent = c.getCategory_Id();
-		List<Category> children = new ArrayList<Category>();
-		String ancestor = null;
-		String descendant = null;
-		
-		for (CatPath cp : firstOrderRelations) {
-			ancestor = cp.getAncestor_id();
-			descendant = cp.getDescendant_id();
-			if (parent.equals(ancestor)) {
-				children.add(new Category(descendant, categoriesMap.get(descendant)));
-			}
-		}
-		return children;
+	private static void loadCategories() {
+		rootCategory = getRootCategory();
+		populate(rootCategory, fetchCategoriesMap(), fetchFirstOrderPaths());
 	}
 	
 	private static TreeNode<Category> getRootCategory() {
@@ -112,15 +92,38 @@ public class DAOjdbc implements DAO {
 			 Statement stm = connexion.createStatement();
 			 ResultSet rs = stm.executeQuery(sql)) {
 			
-			System.out.println(rs.getFetchSize());
-			root = new TreeNode<Category>(new Category(rs.getString("category_id"),rs.getString("name")));
+			while (rs.next()) {
+				root = new TreeNode<Category>(new Category(rs.getString("category_id"),rs.getString("name")));
+			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }
-		if (root == null) System.out.println("root null");
 		return root;
 	}
-
-	private static List<CatPath> fetchCatPaths(String sql) {
+	
+	private static void populate(TreeNode<Category> node, HashMap<String,String> categoriesMap, List<CatPath> firstOrderRelations) {
+		for (Category c : getChildren(node.getData(), categoriesMap, firstOrderRelations)) {
+			populate(node.addChild(c), categoriesMap, firstOrderRelations);
+		}
+	}
+	
+	public static List<Category> getChildren(Category c, HashMap<String,String> categoriesMap, List<CatPath> firstOrderRelations){
+		String parent = c.getCategory_id();
+		List<Category> children = new ArrayList<Category>();
+		String ancestor = null;
+		String descendant = null;
+		
+		for (CatPath cp : firstOrderRelations) {
+			ancestor = cp.getAncestor();
+			descendant = cp.getDescendant();
+			if (parent.equals(ancestor)) {
+				children.add(new Category(descendant, categoriesMap.get(descendant)));
+			}
+		}
+		return children;
+	}
+	
+	private static List<CatPath> fetchFirstOrderPaths() {
+		String sql = "SELECT * FROM catpaths WHERE path_length=1";
 		List<CatPath> relations = new ArrayList<CatPath>();
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
 			 Statement stm = connexion.createStatement();
@@ -135,7 +138,8 @@ public class DAOjdbc implements DAO {
 		return relations;
 	}
 	
-	private static HashMap<String,String> fetchCategoriesMap(String sql) {
+	private static HashMap<String,String> fetchCategoriesMap() {
+		String sql = "SELECT * FROM categories";
 		HashMap<String,String> categories = new HashMap<String,String>();
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
 			 Statement stm = connexion.createStatement();

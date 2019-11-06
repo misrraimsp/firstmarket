@@ -1,4 +1,4 @@
-package pfg.firstmarket.adt.trees;
+package pfg.firstmarket.adt;
 
 class SampleSearching {
 

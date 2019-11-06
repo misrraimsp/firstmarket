@@ -2,7 +2,7 @@ package pfg.firstmarket.dao;
 
 import java.util.List;
 
-import pfg.firstmarket.adt.trees.TreeNode;
+import pfg.firstmarket.adt.TreeNode;
 import pfg.firstmarket.model.Book;
 import pfg.firstmarket.model.Category;
 

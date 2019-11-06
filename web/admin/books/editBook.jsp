@@ -41,6 +41,7 @@
 				</p>
 			</fieldset>
 		</form>
+		<p><a href="/firstmarket/fc/admin/books/booksManager">go back</a></p>
 	</body>
 	
 </html>

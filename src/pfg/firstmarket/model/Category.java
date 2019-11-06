@@ -2,13 +2,13 @@ package pfg.firstmarket.model;
 
 public class Category {
 
-	private String name;
 	private String category_id;
+	private String name;
 	
-	public Category(String name, String id) {
+	public Category(String category_id, String name) {
 		super();
 		this.name = name;
-		this.category_id = id;
+		this.category_id = category_id;
 	}
 
 	public String getName() {
@@ -19,11 +19,11 @@ public class Category {
 		this.name = name;
 	}
 
-	public String getCategory_Id() {
+	public String getCategory_id() {
 		return category_id;
 	}
 
-	public void setCategory_Id(String id) {
+	public void setCategory_id(String id) {
 		this.category_id = id;
 	}
 	
