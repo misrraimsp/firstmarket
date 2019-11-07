@@ -7,7 +7,7 @@ import java.util.List;
 public class TreeNode<T> implements Iterable<TreeNode<T>> {
 
 	private T data;
-	public TreeNode<T> parent;
+	private TreeNode<T> parent;
 	private List<TreeNode<T>> children;
 	
 	private List<TreeNode<T>> elementsIndex;

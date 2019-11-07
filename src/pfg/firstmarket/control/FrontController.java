@@ -12,6 +12,7 @@ import pfg.firstmarket.control.actions.Action;
 import pfg.firstmarket.control.actions.DeleteBookAction;
 import pfg.firstmarket.control.actions.GetBooksAction;
 import pfg.firstmarket.control.actions.InsertBookAction;
+import pfg.firstmarket.control.actions.InsertCategoryAction;
 import pfg.firstmarket.control.actions.LoadCategoriesAction;
 import pfg.firstmarket.control.actions.UpdateBookAction;
 import pfg.firstmarket.dao.DAO;
@@ -85,6 +86,11 @@ public class FrontController extends HttpServlet {
 			break;
 		case "/firstmarket/fc/admin/categories/newCategory":
 			request.getRequestDispatcher("/admin/categories/newCategoryForm.jsp").forward(request, response);
+			break;
+		case "/firstmarket/fc/admin/categories/insertCategory":
+			action = new InsertCategoryAction(db);
+			action.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/reloadCategories");
 			break;	
 		default:
 			response.getWriter().append("Served at: ").append(ctxtPath);

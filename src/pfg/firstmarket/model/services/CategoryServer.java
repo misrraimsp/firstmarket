@@ -11,7 +11,9 @@ import pfg.firstmarket.model.Category;
 
 public class CategoryServer {
 	
-	private static TreeNode<Category> rootCategoryNode;
+	private TreeNode<Category> rootCategoryNode;
+	//@SuppressWarnings("unused")
+	//private List<Category> categoryList;
 	
 	private DAO db;
 
@@ -30,6 +32,23 @@ public class CategoryServer {
 		return rootCategoryNode;
 	}
 	
+	public List<Category> getCategoryList(){
+		List<Category> list = new ArrayList<Category>();
+		for (TreeNode<Category> node : rootCategoryNode) {
+			list.add(node.getData());
+		}
+		return list;
+	}
+	
+	public List<Category> getIndentedCategoryList(){
+		List<Category> list = new ArrayList<Category>();
+		for (TreeNode<Category> node : rootCategoryNode) {
+			String indent = createIndent(node.getLevel());
+			Category indentedCategory = new Category(node.getData().getCategory_id(),indent + node.getData().getName());
+			list.add(indentedCategory);
+		}
+		return list;
+	}
 	
 	
 	private static void populate(TreeNode<Category> node, HashMap<String,String> categoriesMap, List<CatPath> firstOrderRelations) {
@@ -67,5 +86,13 @@ public class CategoryServer {
 		List<String> conditions = new ArrayList<String>();
 		conditions.add("path_length=1");
 		return db.getCatPaths(conditions);
+	}
+	
+	private String createIndent(int depth) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < depth; i++) {
+			sb.append('-');
+		}
+		return sb.toString();
 	}
 }

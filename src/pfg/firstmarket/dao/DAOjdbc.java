@@ -27,23 +27,23 @@ public class DAOjdbc implements DAO {
 	
 	@Override
 	public List<Book> getBooks() { 
-		return fetchBooks("select * from books");
+		return fetchBooks("SELECT * FROM books");
 	}
 
 	@Override
 	public List<Book> getBooks(List<String> conditions) {
-		String sql = "select * from books where ";
+		String sql = "SELECT * FROM books WHERE ";
 		for (String condition : conditions) {
-			sql += condition + " and "; 
+			sql += condition + " AND "; 
 		}
-		sql = sql.substring(0, sql.lastIndexOf(" and "));//el ultimo ' and ' sobra
+		sql = sql.substring(0, sql.lastIndexOf(" AND "));//el ultimo ' and ' sobra
 		return fetchBooks(sql);
 	}
 
 	@Override
 	public void insertBook(Book book) {
 		
-		String sql = "insert into books (isbn,title) values (?,?)";
+		String sql = "INSERT INTO books (isbn,title) VALUES (?,?)";
 		List<String> params = new ArrayList<String>();
 		params.add(book.getIsbn());
 		params.add(book.getTitle());
@@ -53,7 +53,7 @@ public class DAOjdbc implements DAO {
 
 	@Override
 	public void updateBook(Book book) {
-		String sql = "update books set title=? where isbn=?";
+		String sql = "UPDATE books SET title=? WHERE isbn=?";
 		List<String> params = new ArrayList<String>();
 		params.add(book.getTitle());
 		params.add(book.getIsbn());
@@ -63,7 +63,7 @@ public class DAOjdbc implements DAO {
 	
 	@Override
 	public void deleteBook(Book book) {
-		String sql = "delete from books where isbn=?";
+		String sql = "DELETE FROM books WHERE isbn=?";
 		List<String> params = new ArrayList<String>();
 		params.add(book.getIsbn());
 		
@@ -103,7 +103,18 @@ public class DAOjdbc implements DAO {
 		return fetchCatPaths(sql);
 	}
 	
-	
+	@Override
+	public void insertCategory(String parent_category_id, String category_name) {
+		String sql = "INSERT INTO categories (name) VALUES (?)";
+		List<String> params = new ArrayList<String>();
+		params.add(category_name);
+		update(sql, params);
+		
+		sql = "INSERT INTO catpaths (ancestor,descendant,path_length) SELECT ancestor,(SELECT MAX(category_id) FROM categories),path_length+1 FROM catpaths where descendant=? UNION ALL SELECT (SELECT MAX(category_id) FROM categories),(SELECT MAX(category_id) FROM categories),(SELECT 0)";
+		params.clear();
+		params.add(parent_category_id);
+		update(sql, params); 
+	}
 	
 	private static List<CatPath> fetchCatPaths(String sql) {
 		List<CatPath> catpaths = new ArrayList<CatPath>();

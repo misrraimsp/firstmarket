@@ -13,16 +13,15 @@
 			<fieldset>
 				<legend>New Category</legend>
 				<p>
-					<label for="name">Name:</label>
-					<input type="text" name="name" value=""/>
+					<label for="category_name">Name:</label>
+					<input type="text" name="category_name"/>
 				</p>
 				<p>
-					<label for="parent">Nested under:</label>
-					<select name="cars">
-						<option value="volvo" selected>Volvo</option>
-						<option value="saab">Saab</option>
-						
-						<option value="fiat">Fiat</option>
+					<label for="parent_category_id">Nested under:</label>
+					<select name="parent_category_id">
+						<c:forEach var="category" items="${applicationScope.categoryServer.indentedCategoryList}">
+							<option value="${category.category_id}">${category.name}</option>
+						</c:forEach>
 					</select>
 				</p>
 				<p>

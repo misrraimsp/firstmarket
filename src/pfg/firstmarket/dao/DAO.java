@@ -17,4 +17,5 @@ public interface DAO {
 	public List<Category> getCategories();
 	public Category getRootCategory();
 	public List<CatPath> getCatPaths(List<String> conditions);
+	public void insertCategory(String parent_category_id, String category_name);
 }
