@@ -2,8 +2,8 @@ package pfg.firstmarket.dao;
 
 import java.util.List;
 
-import pfg.firstmarket.adt.TreeNode;
 import pfg.firstmarket.model.Book;
+import pfg.firstmarket.model.CatPath;
 import pfg.firstmarket.model.Category;
 
 public interface DAO {
@@ -14,5 +14,7 @@ public interface DAO {
 	public void updateBook(Book book);
 	public void deleteBook(Book book);
 	
-	public TreeNode<Category> getCategories();
+	public List<Category> getCategories();
+	public Category getRootCategory();
+	public List<CatPath> getCatPaths(List<String> conditions);
 }

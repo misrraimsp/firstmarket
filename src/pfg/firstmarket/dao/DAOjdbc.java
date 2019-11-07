@@ -7,10 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-import pfg.firstmarket.adt.TreeNode;
 import pfg.firstmarket.model.Book;
 import pfg.firstmarket.model.CatPath;
 import pfg.firstmarket.model.Category;
@@ -18,18 +16,15 @@ import pfg.firstmarket.model.Category;
 public class DAOjdbc implements DAO {
 	
 	private static String connRoute = "jdbc:mysql://localhost:3306/fm?serverTimezone=UTC";
-	private static TreeNode<Category> rootCategory;
 	
 	static {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
 		}
 		catch (ClassNotFoundException ex) { ex.printStackTrace(); }
-		loadCategories();
 	}
 
 	
-
 	@Override
 	public List<Book> getBooks() { 
 		return fetchBooks("select * from books");
@@ -75,78 +70,64 @@ public class DAOjdbc implements DAO {
 		update(sql, params);
 	}
 	
+	
+	
 	@Override
-	public TreeNode<Category> getCategories() {
-		return rootCategory;
-	}
-	
-	private static void loadCategories() {
-		rootCategory = getRootCategory();
-		populate(rootCategory, fetchCategoriesMap(), fetchFirstOrderPaths());
-	}
-	
-	private static TreeNode<Category> getRootCategory() {
+	public Category getRootCategory() {
 		String sql = "SELECT category_id,name FROM (SELECT category_id,name,COUNT(category_id) AS count FROM categories AS c, catpaths AS cp WHERE c.category_id=cp.descendant GROUP BY category_id) AS aux WHERE aux.count=1";
-		TreeNode<Category> root = null;
+		Category root = null;
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
 			 Statement stm = connexion.createStatement();
 			 ResultSet rs = stm.executeQuery(sql)) {
 			
 			while (rs.next()) {
-				root = new TreeNode<Category>(new Category(rs.getString("category_id"),rs.getString("name")));
+				root = new Category(rs.getString("category_id"),rs.getString("name"));
 			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }
 		return root;
 	}
 	
-	private static void populate(TreeNode<Category> node, HashMap<String,String> categoriesMap, List<CatPath> firstOrderRelations) {
-		for (Category c : getChildren(node.getData(), categoriesMap, firstOrderRelations)) {
-			populate(node.addChild(c), categoriesMap, firstOrderRelations);
-		}
+	@Override
+	public List<Category> getCategories() {
+		return fetchCategories("SELECT * FROM categories");
 	}
 	
-	public static List<Category> getChildren(Category c, HashMap<String,String> categoriesMap, List<CatPath> firstOrderRelations){
-		String parent = c.getCategory_id();
-		List<Category> children = new ArrayList<Category>();
-		String ancestor = null;
-		String descendant = null;
-		
-		for (CatPath cp : firstOrderRelations) {
-			ancestor = cp.getAncestor();
-			descendant = cp.getDescendant();
-			if (parent.equals(ancestor)) {
-				children.add(new Category(descendant, categoriesMap.get(descendant)));
-			}
+	@Override
+	public List<CatPath> getCatPaths(List<String> conditions){
+		String sql = "SELECT * FROM catpaths WHERE ";
+		for (String condition : conditions) {
+			sql += condition + " and "; 
 		}
-		return children;
+		sql = sql.substring(0, sql.lastIndexOf(" and "));//el ultimo ' and ' sobra
+		return fetchCatPaths(sql);
 	}
 	
-	private static List<CatPath> fetchFirstOrderPaths() {
-		String sql = "SELECT * FROM catpaths WHERE path_length=1";
-		List<CatPath> relations = new ArrayList<CatPath>();
+	
+	
+	private static List<CatPath> fetchCatPaths(String sql) {
+		List<CatPath> catpaths = new ArrayList<CatPath>();
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
 			 Statement stm = connexion.createStatement();
 			 ResultSet rs = stm.executeQuery(sql)) {
 				
 			while(rs.next()) {
 				CatPath cp = new CatPath(rs.getString("ancestor"),rs.getString("descendant"),rs.getInt("path_length"));
-				relations.add(cp);
+				catpaths.add(cp);
 			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }
-		return relations;
+		return catpaths;
 	}
 	
-	private static HashMap<String,String> fetchCategoriesMap() {
-		String sql = "SELECT * FROM categories";
-		HashMap<String,String> categories = new HashMap<String,String>();
+	private static List<Category> fetchCategories(String sql) {
+		List<Category> categories = new ArrayList<Category>();
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
 			 Statement stm = connexion.createStatement();
 			 ResultSet rs = stm.executeQuery(sql)) {
 				
 			while(rs.next()) {
-				categories.put(rs.getString("category_id"), rs.getString("name"));
+				categories.add(new Category(rs.getString("category_id"), rs.getString("name")));
 			}
 		}
 		catch (SQLException e) { e.printStackTrace(); }

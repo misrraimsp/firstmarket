@@ -5,6 +5,7 @@
 
 <%@ page import="pfg.firstmarket.adt.TreeNode"  %>
 <%@ page import="pfg.firstmarket.model.Category"  %>
+<%@ page import="pfg.firstmarket.model.services.CategoryServer"  %>
 
 <!DOCTYPE html>
 <html>
@@ -84,78 +85,44 @@
 			}
 		</style>
 	</head>
-	<body>
-	
-	<%!
-	public String showCategories(TreeNode<Category> node) {
-		
-		if (node.isRoot()){
-			
+	<body>	
+<%!
+public String unroll(TreeNode<Category> node) {
+	String code = "";
+	if (!node.isRoot()){
+		code = "<a><b>" + node.getData().getName() + "</b></a>";
+	}
+	for (TreeNode<Category> child : node.getChildren()){
+		if (child.isLeaf()){
+			code += "<a>" + child.getData().getName() + "</a>";
 		}
-		else{
-			
+		else {
+			//button
+			code += "<button class='dropdown-btn'><i>" + child.getData().getName() + "</i>";
+				code += "<i class='fa fa-caret-down'></i>";
+			code += "</button>";
+			//dropdown container
+			code += "<div class='dropdown-container'>";
+				code += unroll(child);
+			code += "</div>";
 		}
-		String code = null;
-		return code;
 	}
-	
-	public String test1(){
-		return "<b>Hola, test1</b>";
-	}
-	
-	public String test2(){
-		return "Hola, test2";
-	}
-	%>
-	
-	
+	return code;
+}
+
+public String deployCategories(CategoryServer cs) {
+	return unroll(cs.getRootCategoryNode());
+}
+%>
 		<div class="sidenav">
-			<a><%=test1()%></a>
-			<a><%=test2()%></a>
-			<a><c:out value='Hola, test3'/></a>
-			<c:forEach var="child" items="${applicationScope.categoryCatalog.children}">
-				<a><c:out value="${child.data.name}"/></a>
-			</c:forEach>
-			<a href="#about">About</a>
-			<a href="#services">Services</a>
-			<a href="#clients">Clients</a>
-			<a href="#contact">Contact</a>
-			<button class="dropdown-btn"><i>Dropdown</i> 
-				<i class="fa fa-caret-down"></i>
-			</button>
-			<div class="dropdown-container">
-				<a href="#">Link 1</a>
-				<button class="dropdown-btn">Dropdown 2
-					<i class="fa fa-caret-down"></i>
-				</button>
-				<div class="dropdown-container">
-					<a href="#">Link 1.1</a>
-					<a href="#">Link 2.2</a>
-					<button class="dropdown-btn">Dropdown 3
-						<i class="fa fa-caret-down"></i>
-					</button>
-					<div class="dropdown-container">
-						<a href="#">Link 1.1.1</a>
-						<a href="#">Link 2.2.2</a>
-						<a href="#">Link 3.3.3</a>
-						<button class="dropdown-btn">Dropdown 4
-							<i class="fa fa-caret-down"></i>
-						</button>
-						<div class="dropdown-container">
-							<a href="#">Link 1.1.1.1</a>
-							<a href="#">Link 2.2.2.2</a>
-							<a href="#">Link 3.3.3.3</a>
-						</div>
-					</div>
-					<a href="#">Link 3.3</a>
-				</div>
-				<a href="#">Link 2</a>
-				<a href="#">Link 3</a>
-			</div>
-			<a href="#contact">Search</a>
+			<%=deployCategories((CategoryServer)application.getAttribute("categoryServer"))%>
 		</div>
+		
 		<div class="main">
 			<h2>Category Manager</h2>
+			<p><a href="/firstmarket/fc/admin">go back</a></p>
+			<p><a href="/firstmarket/fc/admin/categories/newCategory">new category</a></p>
+			<p>Please, to edit some category just click on its link</p>
 			<form id="updateForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
 				<fieldset>
 					<legend>Edit Category</legend>
@@ -173,22 +140,7 @@
 				</fieldset>
 			</form>
 			<br/>
-			<form id="createForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Create Category</legend>
-					<p>
-						<label for="name">Name:</label>
-						<input type="text" name="name" value=""/>
-					</p>
-					<p>
-						<label for="parent">Nested under:</label>
-						<input type="text" name="parent" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Create"/>
-					</p>
-				</fieldset>
-			</form>
+			<!-- new category form link -->
 			<br/>
 			<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
 				<fieldset>
@@ -201,7 +153,6 @@
 					</p>
 				</fieldset>
 			</form>
-			<p><a href="/firstmarket/fc/admin">go back</a></p>
 		</div>
 		<script>
 			/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
