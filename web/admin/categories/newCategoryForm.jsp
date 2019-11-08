@@ -19,7 +19,7 @@
 				<p>
 					<label for="parent_category_id">Nested under:</label>
 					<select name="parent_category_id">
-						<c:forEach var="category" items="${applicationScope.categoryServer.indentedCategoryList}">
+						<c:forEach var="category" items="${applicationScope.categoryServer.indentedCategories}">
 							<option value="${category.category_id}">${category.name}</option>
 						</c:forEach>
 					</select>

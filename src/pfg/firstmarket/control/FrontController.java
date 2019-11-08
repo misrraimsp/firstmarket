@@ -11,10 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 import pfg.firstmarket.control.actions.Action;
 import pfg.firstmarket.control.actions.DeleteBookAction;
 import pfg.firstmarket.control.actions.GetBooksAction;
+import pfg.firstmarket.control.actions.GetCategoriesAction;
 import pfg.firstmarket.control.actions.InsertBookAction;
 import pfg.firstmarket.control.actions.InsertCategoryAction;
 import pfg.firstmarket.control.actions.LoadCategoriesAction;
 import pfg.firstmarket.control.actions.UpdateBookAction;
+import pfg.firstmarket.control.actions.UpdateCategoryAction;
 import pfg.firstmarket.dao.DAO;
 import pfg.firstmarket.dao.DAOjdbc;
 import pfg.firstmarket.model.services.CategoryServer;
@@ -23,8 +25,8 @@ import pfg.firstmarket.model.services.CategoryServer;
 public class FrontController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private static DAO db = new DAOjdbc();
-	private static CategoryServer cs = new CategoryServer(db);
+	public static DAO db = new DAOjdbc();
+	public static CategoryServer cs = new CategoryServer();
 	
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,20 +43,15 @@ public class FrontController extends HttpServlet {
 		
 		switch (uri) {
 		case "/firstmarket/fc/initialSetup":
-			action = new LoadCategoriesAction(cs);
+			action = new LoadCategoriesAction();
 			action.execute(request, response);//initial categories loading
 			response.sendRedirect(ctxtPath + "/fc/admin");
-			break;
-		case "/firstmarket/fc/reloadCategories":
-			action = new LoadCategoriesAction(cs);
-			action.execute(request, response);//reloading categories
-			response.sendRedirect(ctxtPath + "/fc/admin/categories/categoriesManager");
 			break;
 		case "/firstmarket/fc/admin":
 			request.getRequestDispatcher("/admin/mainMenu.html").forward(request, response);
 			break;
 		case "/firstmarket/fc/admin/books/booksManager":
-			action = new GetBooksAction(db);
+			action = new GetBooksAction();
 			action.execute(request, response);
 			request.getRequestDispatcher("/admin/books/booksManager.jsp").forward(request, response);
 			break;
@@ -62,24 +59,29 @@ public class FrontController extends HttpServlet {
 			request.getRequestDispatcher("/admin/books/newBookForm.jsp").forward(request, response);
 			break;
 		case "/firstmarket/fc/admin/books/insertBook":
-			action = new InsertBookAction(db);
+			action = new InsertBookAction();
 			action.execute(request, response);
 			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager");
 			break;
 		case "/firstmarket/fc/admin/books/updateBook":
-			action = new UpdateBookAction(db);
+			action = new UpdateBookAction();
 			action.execute(request, response);
 			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager");
 			break;
 		case "/firstmarket/fc/admin/books/editBook":
-			action = new GetBooksAction(db, query);
+			action = new GetBooksAction(query);
 			action.execute(request, response);
 			request.getRequestDispatcher("/admin/books/editBook.jsp").forward(request, response);
 			break;
 		case "/firstmarket/fc/admin/books/deleteBook":
-			action = new DeleteBookAction(db);
+			action = new DeleteBookAction();
 			action.execute(request, response);
 			response.sendRedirect(ctxtPath + "/fc/admin/books/booksManager");
+			break;
+		case "/firstmarket/fc/admin/categories/reloadCategories":
+			action = new LoadCategoriesAction();
+			action.execute(request, response);//reloading categories
+			response.sendRedirect(ctxtPath + "/fc/admin/categories/categoriesManager");
 			break;
 		case "/firstmarket/fc/admin/categories/categoriesManager":
 			request.getRequestDispatcher("/admin/categories/categoriesManager.jsp").forward(request, response);
@@ -88,10 +90,20 @@ public class FrontController extends HttpServlet {
 			request.getRequestDispatcher("/admin/categories/newCategoryForm.jsp").forward(request, response);
 			break;
 		case "/firstmarket/fc/admin/categories/insertCategory":
-			action = new InsertCategoryAction(db);
+			action = new InsertCategoryAction();
 			action.execute(request, response);
-			response.sendRedirect(ctxtPath + "/fc/reloadCategories");
+			response.sendRedirect(ctxtPath + "/fc/admin/categories/reloadCategories");
 			break;	
+		case "/firstmarket/fc/admin/categories/updateCategory":
+			action = new UpdateCategoryAction();
+			action.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/categories/reloadCategories");
+			break;
+		case "/firstmarket/fc/admin/categories/editCategory":
+			action = new GetCategoriesAction(query);
+			action.execute(request, response);
+			request.getRequestDispatcher("/admin/categories/editCategory.jsp").forward(request, response);
+			break;
 		default:
 			response.getWriter().append("Served at: ").append(ctxtPath);
 		}

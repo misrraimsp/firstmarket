@@ -90,11 +90,11 @@
 public String unroll(TreeNode<Category> node) {
 	String code = "";
 	if (!node.isRoot()){
-		code = "<a><b>" + node.getData().getName() + "</b></a>";
+		code = "<a href='/firstmarket/fc/admin/categories/editCategory?category_id=" + node.getData().getCategory_id() + "'><b>" + node.getData().getName() + "</b></a>";
 	}
 	for (TreeNode<Category> child : node.getChildren()){
 		if (child.isLeaf()){
-			code += "<a>" + child.getData().getName() + "</a>";
+			code += "<a href='/firstmarket/fc/admin/categories/editCategory?category_id=" + child.getData().getCategory_id() + "'>" + child.getData().getName() + "</a>";
 		}
 		else {
 			//button
@@ -123,36 +123,6 @@ public String deployCategories(CategoryServer cs) {
 			<p><a href="/firstmarket/fc/admin">go back</a></p>
 			<p><a href="/firstmarket/fc/admin/categories/newCategory">new category</a></p>
 			<p>Please, to edit some category just click on its link</p>
-			<form id="updateForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Edit Category</legend>
-					<p>
-						<label for="name">Name:</label>
-						<input type="text" name="name" value=""/>
-					</p>
-					<p>
-						<label for="parent">Nested under:</label>
-						<input type="text" name="parent" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Update"/>
-					</p>
-				</fieldset>
-			</form>
-			<br/>
-			<!-- new category form link -->
-			<br/>
-			<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Delete Category</legend>
-					<p>
-						<input type="hidden" name="name" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Delete"/>
-					</p>
-				</fieldset>
-			</form>
 		</div>
 		<script>
 			/* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */

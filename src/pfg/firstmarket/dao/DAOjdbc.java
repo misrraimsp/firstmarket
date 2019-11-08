@@ -104,16 +104,40 @@ public class DAOjdbc implements DAO {
 	}
 	
 	@Override
-	public void insertCategory(String parent_category_id, String category_name) {
+	public void insertCategory(Category category, Category parent_category) {
 		String sql = "INSERT INTO categories (name) VALUES (?)";
 		List<String> params = new ArrayList<String>();
-		params.add(category_name);
+		params.add(category.getName());
 		update(sql, params);
 		
 		sql = "INSERT INTO catpaths (ancestor,descendant,path_length) SELECT ancestor,(SELECT MAX(category_id) FROM categories),path_length+1 FROM catpaths where descendant=? UNION ALL SELECT (SELECT MAX(category_id) FROM categories),(SELECT MAX(category_id) FROM categories),(SELECT 0)";
 		params.clear();
-		params.add(parent_category_id);
+		params.add(parent_category.getCategory_id());
 		update(sql, params); 
+	}
+	
+	@Override
+	public void updateCategory(Category category, Category parent_category) {
+		//update name
+		String sql = "UPDATE categories SET name=? WHERE category_id=?";
+		List<String> params = new ArrayList<String>();
+		params.add(category.getName());
+		params.add(category.getCategory_id());
+		update(sql, params);
+		
+		//delete old links
+		sql = "DELETE FROM catpaths WHERE descendant IN (SELECT descendant FROM catpaths WHERE ancestor=?) AND ancestor IN (SELECT ancestor FROM catpaths WHERE descendant=? AND ancestor != descendant)";
+		params.clear();
+		params.add(category.getCategory_id());
+		params.add(category.getCategory_id());
+		update(sql, params);
+		
+		//insert new links
+		sql = "INSERT INTO catpaths (ancestor, descendant, path_length) SELECT supertree.ancestor, subtree.descendant, supertree.path_length+subtree.path_length+1 FROM catpaths AS supertree CROSS JOIN catpaths AS subtree WHERE supertree.descendant=? AND subtree.ancestor=?;";
+		params.clear();
+		params.add(parent_category.getCategory_id());
+		params.add(category.getCategory_id());
+		update(sql, params);
 	}
 	
 	private static List<CatPath> fetchCatPaths(String sql) {
