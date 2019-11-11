@@ -36,7 +36,7 @@ public abstract class GetAction {
 		String[] parts = null;
 		for (int i = 0; i < sqlConditions.size(); i++) {
 			parts = sqlConditions.get(i).split("=");
-			sqlConditions.set(i, parts[0] + "='" + parts[1] + "'");
+			sqlConditions.set(i, parts[0] + "='" + parts[1].replaceAll("%20", " ") + "'");
 		}
 		return sqlConditions;
 	}
