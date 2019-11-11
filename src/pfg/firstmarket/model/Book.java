@@ -1,36 +1,45 @@
 package pfg.firstmarket.model;
 
-//import java.util.List;
+import pfg.firstmarket.control.FrontController;
 
 public class Book {
 
 	private String isbn;
 	private String title;
+	private Category category;
 	//private List<String> author;
-	//private String category;
 	//private String publisher;
 	
-	public Book() {
+	public Book(String isbn, String title, Category category) {
 		super();
+		this.isbn = isbn;
+		this.title = title;
+		this.category = category;
 	}
 	
-	
+	//Si no se especifica, cada libro queda asociado a la categoría root
+	public Book() {
+		super();
+		this.isbn = null;
+		this.title = null;
+		this.category = FrontController.cs.getRootCategoryNode().getData();
+	}
 
+	//Si no se especifica, cada libro queda asociado a la categoría root
 	public Book(String isbn, String title) {
 		super();
 		this.isbn = isbn;
 		this.title = title;
+		this.category = FrontController.cs.getRootCategoryNode().getData();
 	}
 
-
-
+	//Si no se especifica, cada libro queda asociado a la categoría root
 	public Book(String isbn) {
 		super();
 		this.isbn = isbn;
 		this.title = null;
+		this.category = FrontController.cs.getRootCategoryNode().getData();
 	}
-
-
 
 	public String getIsbn() {
 		return isbn;
@@ -47,6 +56,15 @@ public class Book {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+	
 /*
 	public List<String> getAuthor() {
 		return author;
@@ -54,14 +72,6 @@ public class Book {
 
 	public void setAuthor(List<String> author) {
 		this.author = author;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	public String getPublisher() {

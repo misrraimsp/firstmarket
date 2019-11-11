@@ -21,12 +21,14 @@
 			<tr>
 				<td><b>ISBN</b></td>
 				<td><b>Title</b></td>
+				<td><b>Category</b></td>
 			</tr>
 			
 			<c:forEach var="book" items="${requestScope.books}">
 			<tr>
 				<td><a href="/firstmarket/fc/admin/books/editBook?isbn=${book.isbn}"><c:out value="${book.isbn}"/></a></td>
 				<td><c:out value="${book.title}"/></td>
+				<td><c:out value="${book.category.name}"/></td>
 			</tr>
 			</c:forEach>
 			

@@ -82,6 +82,14 @@ public class CategoryServer {
 		return list;
 	}
 	
+	public Category getCategory(String category_id) {
+		for (TreeNode<Category> node : rootCategoryNode) {
+			Category category = node.getData();
+			if (category.getCategory_id().equals(category_id)) return category;
+		}
+		return null;
+	}
+	
 	
 	private static void populate(TreeNode<Category> node, HashMap<String,String> categoriesMap, List<CatPath> firstOrderRelations) {
 		for (Category c : getChildren(node.getData(), categoriesMap, firstOrderRelations)) {

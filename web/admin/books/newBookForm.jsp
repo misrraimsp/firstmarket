@@ -16,21 +16,23 @@
 	<body>
 		<form id="insertForm" action="<%=request.getContextPath() + "/fc/admin/books/insertBook"%>" method="post" onsubmit="validacionDOM()">
 			<fieldset>
-				<legend>Formulario alta libro</legend>
+				<legend>New Book Form</legend>
 				<p>
 					<label for="isbn">ISBN:</label>
 					<input id="isbn" type="text" name="isbn"/>
 				</p>
 				<p>
-					<label for="title">Título:</label>
+					<label for="title">Title:</label>
 					<input id="title" type="text" name="title"/>
 				</p>
-				<!--  
 				<p>
-					<label for="category">Categoría:</label>
-					<input id="category" type="text" name="category"/>
+					<label for="category">Category:</label>
+					<select name="category_id">
+						<c:forEach var="category" items="${applicationScope.categoryServer.indentedCategories}">
+							<option value="${category.category_id}">${category.name}</option>
+						</c:forEach>
+					</select>
 				</p>
-				-->
 				<p>
 					<input type="submit" value="Insert"/>
 				</p>

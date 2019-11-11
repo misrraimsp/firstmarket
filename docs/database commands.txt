@@ -3,17 +3,9 @@
 CREATE DATABASE fm;
 USE fm;
 
-***
-
-CREATE TABLE books (isbn VARCHAR(60), title VARCHAR(60) NOT NULL, PRIMARY KEY (isbn));
-
-INSERT INTO books (isbn,title) VALUES ('00001','JavaWeb');
-
-***
-
 CREATE TABLE categories (category_id INT UNSIGNED AUTO_INCREMENT, name VARCHAR(60) NOT NULL, PRIMARY KEY(category_id));
-
-CREATE TABLE catpaths (ancestor INT UNSIGNED, descendant INT UNSIGNED, path_length INT UNSIGNED NOT NULL, PRIMARY KEY(ancestor, descendant), FOREIGN KEY (ancestor) REFERENCES categories(category_id), FOREIGN KEY (descendant) REFERENCES categories(category_id));
+CREATE TABLE catpaths (ancestor INT UNSIGNED, descendant INT UNSIGNED, path_length INT UNSIGNED NOT NULL, PRIMARY KEY (ancestor, descendant), FOREIGN KEY (ancestor) REFERENCES categories(category_id), FOREIGN KEY (descendant) REFERENCES categories(category_id));
+CREATE TABLE books (isbn VARCHAR(60), title VARCHAR(60) NOT NULL, category_id INT UNSIGNED, PRIMARY KEY (isbn), FOREIGN KEY (category_id) REFERENCES categories(category_id));
 
 INSERT INTO categories (name) VALUES ('fm');
 INSERT INTO categories (name) VALUES ('Computers & Tech');
@@ -47,6 +39,8 @@ INSERT INTO catpaths (ancestor, descendant, path_length) VALUES (1,8,2);
 INSERT INTO catpaths (ancestor, descendant, path_length) VALUES (6,7,1);
 INSERT INTO catpaths (ancestor, descendant, path_length) VALUES (6,8,1);
 
+INSERT INTO books (isbn,title,category_id) VALUES ('00001','JavaWeb','2');
+INSERT INTO books (isbn,title,category_id) VALUES ('00002','Java Programming','2');
 
 /*query para actualizar los enlaces tras una inserción de una categoría*/
 INSERT INTO catpaths (ancestor,descendant,path_length) SELECT ancestor,(SELECT MAX(category_id) FROM categories),path_length+1 FROM catpaths where descendant=2 UNION ALL SELECT (SELECT MAX(category_id) FROM categories),(SELECT MAX(category_id) FROM categories),(SELECT 0)
@@ -66,7 +60,11 @@ delete from catpaths where (ancestor,descendant) in (select ancestor,descendant 
 delete from categories where category_id=?
 
 
-*********************************
+*********************************************************************************************************************************************************************
+
+
+
+
 
 
 

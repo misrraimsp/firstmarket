@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import pfg.firstmarket.control.FrontController;
 import pfg.firstmarket.model.Book;
 import pfg.firstmarket.model.CatPath;
 import pfg.firstmarket.model.Category;
@@ -43,19 +44,21 @@ public class DAOjdbc implements DAO {
 	@Override
 	public void insertBook(Book book) {
 		
-		String sql = "INSERT INTO books (isbn,title) VALUES (?,?)";
+		String sql = "INSERT INTO books (isbn,title,category_id) VALUES (?,?,?)";
 		List<String> params = new ArrayList<String>();
 		params.add(book.getIsbn());
 		params.add(book.getTitle());
+		params.add(book.getCategory().getCategory_id());
 		
 		update(sql, params);
 	}
 
 	@Override
 	public void updateBook(Book book) {
-		String sql = "UPDATE books SET title=? WHERE isbn=?";
+		String sql = "UPDATE books SET title=?,category_id=? WHERE isbn=?";
 		List<String> params = new ArrayList<String>();
 		params.add(book.getTitle());
+		params.add(book.getCategory().getCategory_id());
 		params.add(book.getIsbn());
 		
 		update(sql, params);
@@ -176,6 +179,8 @@ public class DAOjdbc implements DAO {
 		
 	}
 	
+	
+	
 	private static List<CatPath> fetchCatPaths(String sql) {
 		List<CatPath> catpaths = new ArrayList<CatPath>();
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");
@@ -212,7 +217,7 @@ public class DAOjdbc implements DAO {
 			 ResultSet rs = stm.executeQuery(sql)) {
 				
 			while(rs.next()) {
-				Book b = new Book(rs.getString("isbn"),rs.getString("title"));
+				Book b = new Book(rs.getString("isbn"),rs.getString("title"),FrontController.cs.getCategory(rs.getString("category_id")));
 				books.add(b);
 			}
 		}
