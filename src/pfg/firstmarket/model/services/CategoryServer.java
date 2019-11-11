@@ -79,9 +79,6 @@ public class CategoryServer {
 		for (TreeNode<Category> node : subtreeRoot) {
 			list.add(node.getData());
 		}
-		for (Category c : list) {
-			System.out.println(c.getName());
-		}
 		return list;
 	}
 	

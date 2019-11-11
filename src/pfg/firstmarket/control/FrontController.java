@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import pfg.firstmarket.control.actions.Action;
 import pfg.firstmarket.control.actions.DeleteBookAction;
+import pfg.firstmarket.control.actions.DeleteCategoryAction;
 import pfg.firstmarket.control.actions.GetBooksAction;
 import pfg.firstmarket.control.actions.GetCategoriesAction;
 import pfg.firstmarket.control.actions.InsertBookAction;
@@ -103,6 +104,11 @@ public class FrontController extends HttpServlet {
 			action = new GetCategoriesAction(query);
 			action.execute(request, response);
 			request.getRequestDispatcher("/admin/categories/editCategory.jsp").forward(request, response);
+			break;
+		case "/firstmarket/fc/admin/categories/deleteCategory":
+			action = new DeleteCategoryAction();
+			action.execute(request, response);
+			response.sendRedirect(ctxtPath + "/fc/admin/categories/reloadCategories");
 			break;
 		default:
 			response.getWriter().append("Served at: ").append(ctxtPath);

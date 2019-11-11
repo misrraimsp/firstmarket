@@ -19,4 +19,7 @@ public interface DAO {
 	public List<CatPath> getCatPaths(List<String> conditions);
 	public void insertCategory(Category category, Category parent_category);
 	public void updateCategory(Category category, Category parent_category);
+	public void deleteCategory(Category c);
+	public void deleteSubCategories(Category c);
+	
 }

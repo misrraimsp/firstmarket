@@ -140,6 +140,42 @@ public class DAOjdbc implements DAO {
 		update(sql, params);
 	}
 	
+	@Override
+	public void deleteCategory(Category category) {
+		String category_id = category.getCategory_id();
+		String sql = "";
+		List<String> params = new ArrayList<String>();
+		//update path_length from descendants
+		sql = "UPDATE catpaths SET path_length=path_length-1 WHERE (ancestor,descendant) IN (SELECT aux1.ancestor, aux2.descendant FROM (SELECT * FROM catpaths WHERE descendant=? AND ancestor!=?) AS aux1,(SELECT * FROM catpaths WHERE descendant!=? AND ancestor=?) AS aux2)";
+		params.add(category_id);
+		params.add(category_id);
+		params.add(category_id);
+		params.add(category_id);
+		update(sql, params);
+		
+		params.clear();
+		//delete in and out links
+		sql = "DELETE FROM catpaths WHERE (ancestor,descendant) IN (SELECT ancestor,descendant FROM catpaths WHERE ancestor=? OR descendant=?)";
+		params.add(category_id);
+		params.add(category_id);
+		update(sql, params);
+		
+		params.clear();
+		//delete category row
+		sql = "DELETE FROM categories WHERE category_id=?";
+		params.add(category_id);
+		update(sql, params);
+	}
+
+	@Override
+	public void deleteSubCategories(Category c) {
+		List<Category> descendants = c.getDescendants();
+		for (Category descendant : descendants) {
+			deleteCategory(descendant);
+		}
+		
+	}
+	
 	private static List<CatPath> fetchCatPaths(String sql) {
 		List<CatPath> catpaths = new ArrayList<CatPath>();
 		try (Connection connexion = DriverManager.getConnection(connRoute,"root","misrra");

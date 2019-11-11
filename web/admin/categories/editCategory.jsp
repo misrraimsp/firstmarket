@@ -58,38 +58,19 @@
 				</p>
 			</fieldset>
 		</form>
-		
-		
-		<!--  
-		<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/books/deleteBook"%>">
+		<br/>
+		<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/categories/deleteCategory"%>">
 			<fieldset>
-				<legend>Delete Book</legend>
+				<legend>Delete Category</legend>
 				<p>
-					<input type="hidden" name="isbn" value="${requestScope.books[0].isbn}"/>
+					<input type="hidden" name="category_id" value="${requestScope.categories[0].category_id}"/>
+					<input type="checkbox" name="deleteSubtree" value="yes">Also delete nested subcategories
 				</p>
 				<p>
 					<input type="submit" value="Delete"/>
 				</p>
 			</fieldset>
 		</form>
-		
-		
-		<form id="deleteForm" action="<%=request.getContextPath() + "/fc/admin/categories/algo"%>">
-				<fieldset>
-					<legend>Delete Category</legend>
-					<p>
-						<input type="hidden" name="name" value=""/>
-					</p>
-					<p>
-						<input type="submit" value="Delete"/>
-					</p>
-				</fieldset>
-			</form>
-		
-		
-		
-		-->
-		
 		<p><a href="/firstmarket/fc/admin/categories/categoriesManager">go back</a></p>
 	</body>
 	
