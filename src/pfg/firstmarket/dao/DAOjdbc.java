@@ -144,39 +144,73 @@ public class DAOjdbc implements DAO {
 	}
 	
 	@Override
-	public void deleteCategory(Category category) {
+	public void deleteCategory(Category category, boolean includeSubtree) {
 		String category_id = category.getCategory_id();
 		String sql = "";
 		List<String> params = new ArrayList<String>();
-		//update path_length from descendants
-		sql = "UPDATE catpaths SET path_length=path_length-1 WHERE (ancestor,descendant) IN (SELECT aux1.ancestor, aux2.descendant FROM (SELECT * FROM catpaths WHERE descendant=? AND ancestor!=?) AS aux1,(SELECT * FROM catpaths WHERE descendant!=? AND ancestor=?) AS aux2)";
-		params.add(category_id);
-		params.add(category_id);
-		params.add(category_id);
-		params.add(category_id);
-		update(sql, params);
 		
-		params.clear();
-		//delete in and out links
-		sql = "DELETE FROM catpaths WHERE (ancestor,descendant) IN (SELECT ancestor,descendant FROM catpaths WHERE ancestor=? OR descendant=?)";
-		params.add(category_id);
-		params.add(category_id);
-		update(sql, params);
-		
-		params.clear();
-		//delete category row
-		sql = "DELETE FROM categories WHERE category_id=?";
-		params.add(category_id);
-		update(sql, params);
-	}
-
-	@Override
-	public void deleteSubCategories(Category c) {
-		List<Category> descendants = c.getDescendants();
-		for (Category descendant : descendants) {
-			deleteCategory(descendant);
+		if (includeSubtree) {
+			//1- recuperar y guardar en VARIABLE la lista de category_id de las categorias a eliminar
+			//   equivalente a: VARIABLE <-- SELECT descendant FROM catpaths WHERE ancestor=?
+			List<String> conditions = new ArrayList<String>();
+			conditions.add("ancestor=" + category_id);
+			String category_id_list = "";
+			for (CatPath catpath : getCatPaths(conditions)) {
+				category_id_list += catpath.getDescendant() + ",";
+			}
+			category_id_list = category_id_list.substring(0, category_id_list.lastIndexOf(","));//el ultimo ',' sobra
+			
+			//2- eliminar todos los caminos que entran o salen de alguna categoria a eliminar
+			sql = "DELETE FROM catpaths WHERE (ancestor,descendant) IN (SELECT ancestor,descendant FROM catpaths WHERE ancestor IN (" + category_id_list + ") OR descendant IN (" + category_id_list + "))";
+			update(sql, params);
+			
+			//3- eliminar las categorias en cuestion de la tabla de categorias
+			sql = "DELETE FROM categories WHERE category_id IN (" + category_id_list + ")";
+			update(sql, params);
 		}
+		else {
+			//update path_length from descendants
+			sql = "UPDATE catpaths SET path_length=path_length-1 WHERE (ancestor,descendant) IN (SELECT aux1.ancestor, aux2.descendant FROM (SELECT * FROM catpaths WHERE descendant=? AND ancestor!=?) AS aux1,(SELECT * FROM catpaths WHERE descendant!=? AND ancestor=?) AS aux2)";
+			params.add(category_id);
+			params.add(category_id);
+			params.add(category_id);
+			params.add(category_id);
+			update(sql, params);
 		
+			params.clear();
+			//delete in and out links
+			sql = "DELETE FROM catpaths WHERE (ancestor,descendant) IN (SELECT ancestor,descendant FROM catpaths WHERE ancestor=? OR descendant=?)";
+			params.add(category_id);
+			params.add(category_id);
+			update(sql, params);
+		
+			params.clear();
+			//delete category row
+			sql = "DELETE FROM categories WHERE category_id=?";
+			params.add(category_id);
+			update(sql, params);
+		}
+	}
+	
+	@Override
+	public void updateBooksOnDeletingCategory(Category deleting_category, Category parent_category, boolean includeSubtree) {
+		String deleting_category_id = deleting_category.getCategory_id();
+		String parent_category_id = parent_category.getCategory_id();
+		String sql = "";
+		List<String> params = new ArrayList<String>();
+		
+		if (includeSubtree) {
+			sql = "UPDATE books SET category_id=? WHERE isbn IN (SELECT isbn FROM books WHERE category_id IN (SELECT descendant FROM catpaths WHERE ancestor=?))";
+			params.add(parent_category_id);
+			params.add(deleting_category_id);
+			update(sql, params);
+		}
+		else {
+			sql = "UPDATE books SET category_id=? WHERE isbn IN (SELECT isbn FROM books WHERE category_id=?)";
+			params.add(parent_category_id);
+			params.add(deleting_category_id);
+			update(sql, params);
+		}
 	}
 	
 	

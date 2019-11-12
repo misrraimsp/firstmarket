@@ -51,13 +51,28 @@ DELETE FROM catpaths WHERE descendant IN (SELECT descendant FROM catpaths WHERE 
 /* 2-crear enlaces nuevos
 INSERT INTO catpaths (ancestor, descendant, path_length) SELECT supertree.ancestor, subtree.descendant, supertree.path_length+subtree.path_length+1 FROM catpaths AS supertree CROSS JOIN catpaths AS subtree WHERE supertree.descendant=7 AND subtree.ancestor=3;
 
-/********************queries para eliminar una categoria
+/********************queries para eliminar una categoria (SIN subarbol)
 /* 1-disminuir en una unidad el camino de todos los descendientes del nodo que se quiere eliminar
 update catpaths set path_length=path_length-1 where (ancestor,descendant) IN (select aux1.ancestor, aux2.descendant from (select * from catpaths where descendant=? and ancestor!=?) as aux1,(select * from catpaths where descendant!=? and ancestor=?) as aux2);
 /* 2-eliminar conexiones con la categoria a suprimir
 delete from catpaths where (ancestor,descendant) in (select ancestor,descendant from catpaths where ancestor=? or descendant=?)
 /* 3-eliminar la categoria en cuestion de la tabla de categorias
 delete from categories where category_id=?
+
+/********************queries para eliminar una(s) categoria(s) (CON subarbol)
+/* 1-recuperar y guardar en VARIABLE la lista de category_id de las categorias a eliminar
+VARIABLE <-- SELECT descendant FROM catpaths WHERE ancestor=?
+/* 2-eliminar todos los caminos que entran o salen de alguna categoria a eliminar
+DELETE FROM catpaths WHERE (ancestor,descendant) IN (SELECT ancestor,descendant FROM catpaths WHERE ancestor IN (VARIABLE) OR descendant IN (VARIABLE))
+/* 3-eliminar las categorias en cuestion de la tabla de categorias
+DELETE FROM categories WHERE category_id IN (VARIABLE)
+
+
+/********************cambiar la categoria de un grupo de libros (en el contexto de la eliminacion de un nodo del arbol de categorias)
+UPDATE books SET category_id=? WHERE isbn IN (SELECT isbn FROM books WHERE category_id=?)
+
+/********************cambiar la categoria de un grupo de libros (en el contexto de la eliminacion de un subarbol del arbol de categorias)
+UPDATE books SET category_id=? WHERE isbn IN (SELECT isbn FROM books WHERE category_id IN (SELECT descendant FROM catpaths WHERE ancestor=?))
 
 
 *********************************************************************************************************************************************************************
