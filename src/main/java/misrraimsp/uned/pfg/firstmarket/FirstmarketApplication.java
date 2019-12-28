@@ -17,11 +17,19 @@ public class FirstmarketApplication {
     @Bean
     public CommandLineRunner dataLoader(BookRepository bookRepository) {
         //System.out.println("Hola Misrra");
+        Book book1 = new Book();
+        book1.setId("001L");
+        book1.setIsbn("isbn001");
+        book1.setTitle("Libro-1");
+
+        Book book2 = new Book();
+        book2.setId("002L");
+        book2.setIsbn("isbn002");
+        book2.setTitle("Libro-2");
+
         return args -> {
-            bookRepository.save(new Book(001L, "isbn001", "Libro-1"));
-            bookRepository.save(new Book(002L, "isbn002", "Libro-2"));
-            bookRepository.save(new Book(003L, "isbn003", "Libro-3"));
-            bookRepository.save(new Book(004L, "isbn004", "Libro-4"));
+            bookRepository.save(book1);
+            bookRepository.save(book2);
         };
     }
 
