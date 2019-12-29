@@ -16,14 +16,11 @@ public class FirstmarketApplication {
 
     @Bean
     public CommandLineRunner dataLoader(BookRepository bookRepository) {
-        //System.out.println("Hola Misrra");
         Book book1 = new Book();
-        book1.setId("001L");
         book1.setIsbn("isbn001");
         book1.setTitle("Libro-1");
 
         Book book2 = new Book();
-        book2.setId("002L");
         book2.setIsbn("isbn002");
         book2.setTitle("Libro-2");
 

@@ -10,7 +10,6 @@
         <form action="#" th:action="@{/firstmarket/admin/newBook}" th:object="${book}" method="post">
         <fieldset>
             <legend>New Book Form</legend>
-            <span>Id:<input type="text" th:field="*{id}"/></span>
             <span>ISBN:<input type="text" th:field="*{isbn}"/></span>
             <span>Title:<input type="text" th:field="*{title}"/></span>
             <span><input type="submit" value="Save Book"/></span>
