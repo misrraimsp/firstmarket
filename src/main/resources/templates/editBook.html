@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Book Edition Page</title>
+        <link rel="stylesheet" th:href="@{/styles.css}" />
+    </head>
+    <body>
+        <h1>Book Edition Page</h1>
+        <form action="#" th:action="@{/admin/editBook}" th:object="${book}" method="post">
+            <fieldset>
+                <div th:if="${#fields.hasErrors()}">
+                    <span class="validationError">Please correct the problems below and resubmit.</span>
+                </div>
+                <legend>Edit Book</legend>
+                <input type="hidden" th:field="*{id}"/>
+                <div>
+                    <span>ISBN:<input type="text" th:field="*{isbn}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">Error</span>
+                </div>
+                <div>
+                    <span>Title:<input type="text" th:field="*{title}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</span>
+                </div>
+                <div>
+                    <span><input type="submit" value="Update Book"/></span>
+                </div>
+            </fieldset>
+        </form>
+        <p><a th:href="@{/admin/books}">go back</a></p>
+    </body>
+</html>

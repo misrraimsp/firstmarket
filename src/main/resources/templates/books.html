@@ -2,27 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Books Manager</title>
-  </head>
-  <body>
-    <h1>Books Manager</h1>
-    <p><a th:href="@{/admin}">go back</a></p>
-    <p><a th:href="@{/admin/newBook}">new book</a></p>
-    <p>Please, to edit some book just click on the ISBN reference</p>
-    <br/>
-    <table border="1">
-      <tr>
-        <td><b>ISBN</b></td>
-        <td><b>Title</b></td>
-        <!--<td><b>Category</b></td>-->
-        </tr>
-        <tr th:each="book : ${books}">
-          <td><a th:href="@{/admin/editBook(isbn=${book.isbn})}"><span th:text="${book.isbn}">isbn</span></a></td>
-          <td><span th:text="${book.title}">title</span></td>
-          <!--<td><span th:text="${book.category.name}">category name</span></td>-->
-      </tr>
-    </table>
-  </body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Books Manager</title>
+    </head>
+    <body>
+        <h1>Books Manager</h1>
+        <p><a th:href="@{/admin}">go back</a></p>
+        <p><a th:href="@{/admin/newBook}">new book</a></p>
+        <p>Please, to edit some book just click on the ISBN reference</p>
+        <br/>
+        <table border="1">
+            <tr>
+                <td><b>ISBN</b></td>
+                <td><b>Title</b></td>
+                <td/>
+            </tr>
+            <tr th:each="book : ${books}">
+                <td><a th:href="@{/admin/editBook/{id}(id=${book.id})}"><span th:text="${book.isbn}">isbn</span></a></td>
+                <td><span th:text="${book.title}">title</span></td>
+                <td><a th:href="@{/admin/deleteBook/{id}(id=${book.id})}">Delete</a></td>
+            </tr>
+        </table>
+    </body>
 </html>
