@@ -5,16 +5,28 @@
     <head>
         <meta charset="UTF-8">
         <title>New Book</title>
+        <link rel="stylesheet" th:href="@{/styles.css}" />
     </head>
     <body>
-        <form action="#" th:action="@{/firstmarket/admin/newBook}" th:object="${book}" method="post">
+        <form action="#" th:action="@{/admin/newBook}" th:object="${book}" method="post">
         <fieldset>
+            <div th:if="${#fields.hasErrors()}">
+                <span class="validationError">Please correct the problems below and resubmit.</span>
+            </div>
             <legend>New Book Form</legend>
-            <span>ISBN:<input type="text" th:field="*{isbn}"/></span>
-            <span>Title:<input type="text" th:field="*{title}"/></span>
-            <span><input type="submit" value="Save Book"/></span>
+            <div>
+                <span>ISBN:<input type="text" th:field="*{isbn}"/></span>
+                <span class="validationError" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">Error</span>
+            </div>
+            <div>
+                <span>Title:<input type="text" th:field="*{title}"/></span>
+                <span class="validationError" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</span>
+            </div>
+            <div>
+                <span><input type="submit" value="Save Book"/></span>
+            </div>
         </fieldset>
         </form>
-        <p><a th:href="@{firstmarket/admin/books}">go back</a></p>
+        <p><a th:href="@{/admin/books}">go back</a></p>
     </body>
 </html>
