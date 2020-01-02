@@ -2,20 +2,21 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.*;
 
 @Data
 @Entity
-@IdClass(CatPathId.class)
 public class CatPath {
 
 	@Id
-	private String ancestor;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
 
-	@Id
-	private String descendant;
+	@ManyToOne
+	private Category ancestor;
+
+	@ManyToOne
+	private Category descendant;
 
 	private int path_length;
 
