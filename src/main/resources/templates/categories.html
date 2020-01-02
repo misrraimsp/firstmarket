@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Categories Manager</title>
+    </head>
+    <body>
+        <h1>Categories Manager</h1>
+        <p><a th:href="@{/admin}">go back</a></p>
+        <p><a th:href="@{/admin/newCategory}">new category</a></p>
+        <p>Please, to edit some category just click its reference</p>
+        <br/>
+        <table border="1">
+            <tr>
+                <td><b>Id</b></td>
+                <td><b>Name</b></td>
+                <td/>
+            </tr>
+            <tr th:each="category : ${categories}">
+                <td><a th:href="@{/admin/editCategory/{id}(id=${category.id})}"><span th:text="${category.id}">id</span></a></td>
+                <td><span th:text="${category.name}">name</span></td>
+                <td><a th:href="@{/admin/deleteCategory/{id}(id=${category.id})}">Delete</a></td>
+            </tr>
+        </table>
+    </body>
+</html>
