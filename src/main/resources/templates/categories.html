@@ -5,6 +5,8 @@
     <head>
         <meta charset="UTF-8">
         <title>Categories Manager</title>
+        <link rel="stylesheet" th:href="@{/styles.css}" />
+        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">-->
     </head>
     <body>
         <h1>Categories Manager</h1>
@@ -18,10 +20,10 @@
                 <td><b>Name</b></td>
                 <td/>
             </tr>
-            <tr th:each="category : ${categories}">
-                <td><a th:href="@{/admin/editCategory/{id}(id=${category.id})}"><span th:text="${category.id}">id</span></a></td>
-                <td><span th:text="${category.name}">name</span></td>
-                <td><a th:href="@{/admin/deleteCategory/{id}(id=${category.id})}">Delete</a></td>
+            <tr th:each="node : ${rootNode}">
+                <td><a th:href="@{/admin/editCategory/{id}(id=${node.data.id})}"><span th:text="${node.data.id}">id</span></a></td>
+                <td><span th:text="${node.data.name}">name</span></td>
+                <td><a th:href="@{/admin/deleteCategory/{id}(id=${node.data.id})}">Delete</a></td>
             </tr>
         </table>
     </body>

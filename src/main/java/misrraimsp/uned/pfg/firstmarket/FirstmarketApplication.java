@@ -1,15 +1,19 @@
 package misrraimsp.uned.pfg.firstmarket;
 
+import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatPathRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.CatPath;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
+import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.List;
 
 @SpringBootApplication
 public class FirstmarketApplication {
@@ -19,8 +23,10 @@ public class FirstmarketApplication {
     }
 
     @Bean
-    public CommandLineRunner dataLoader(BookRepository bookRepository, CategoryRepository categoryRepository,
-                                        CatPathRepository catPathRepository) {
+    public CommandLineRunner dataLoader(BookRepository bookRepository,
+                                        CategoryRepository categoryRepository,
+                                        CatPathRepository catPathRepository,
+                                        CategoryServer categoryServer) {
 
         return args -> {
 
@@ -125,6 +131,29 @@ public class FirstmarketApplication {
             cp22_22.setDescendant(cat22);
             cp22_22.setPath_length(0);
             catPathRepository.save(cp22_22);
+
+            // populate category tree structure
+            categoryServer.loadCategories();
+
+            // show root category
+            TreeNode<Category> rootNode = categoryServer.getRootCategoryNode();
+            System.out.println("ROOT ID: " + rootNode.getData().getId());
+            System.out.println("ROOT Name: " + rootNode.getData().getName());
+
+            // show root's children categories
+            List<TreeNode<Category>> children = rootNode.getChildren();
+            for (TreeNode<Category> node : children){
+                System.out.println("NODE ID: " + node.getData().getId());
+                System.out.println("NODE Name: " + node.getData().getName());
+            }
+
+            // show full tree
+            System.out.println("full tree:");
+            for (TreeNode<Category> node : rootNode) {
+                String indent = categoryServer.getIndent(node.getLevel());
+                System.out.println(indent + node.getData().getName());
+            }
+
         };
     }
 

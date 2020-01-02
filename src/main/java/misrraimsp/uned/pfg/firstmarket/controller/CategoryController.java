@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
+import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class CategoryController {
 
-    private CategoryRepository categoryRepository;
+    private CategoryServer categoryServer;
 
     @Autowired
-    public CategoryController(CategoryRepository categoryRepository) {
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CategoryServer categoryServer) {
+        this.categoryServer = categoryServer;
     }
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
-        model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("rootNode", categoryServer.getRootCategoryNode());
         return "categories";
     }
 }
