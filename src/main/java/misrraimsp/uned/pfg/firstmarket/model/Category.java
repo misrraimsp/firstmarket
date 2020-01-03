@@ -22,7 +22,6 @@ public class Category {
 	@NotBlank(message = "name cannot be empty")
 	private String name;
 
-
 	/*
 	public Category getParent(){
 		return FrontController.cs.getParent(this);

@@ -8,7 +8,9 @@ import misrraimsp.uned.pfg.firstmarket.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -67,5 +69,16 @@ public class CategoryServer {
 
     public String getCategoriesOnHtml() {
         return categoryViewBuilder.buildHtml(rootCategoryNode);
+    }
+
+    public List<Category> getIndentedCategories(){
+        List<Category> list = new ArrayList<>();
+        for (TreeNode<Category> node : rootCategoryNode) {
+            Category indentedCategory = new Category();
+            indentedCategory.setId(node.getData().getId());
+            indentedCategory.setName(getIndent(node.getLevel()) + node.getData().getName());
+            list.add(indentedCategory);
+        }
+        return list;
     }
 }

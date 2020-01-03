@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>New Category</title>
+        <link rel="stylesheet" th:href="@{/styles.css}" />
+    </head>
+    <body>
+        <form action="#" th:action="@{/admin/newCategory}" th:object="${category}" method="post">
+        <fieldset>
+            <div th:if="${#fields.hasErrors()}">
+                <span class="validationError">Please correct the problems below and resubmit.</span>
+            </div>
+            <legend>New Category Form</legend>
+            <div>
+                <span>Name:<input type="text" th:field="*{name}"/></span>
+                <span class="validationError" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
+            </div>
+            <br/>
+            <div>
+                <span>Nested under:</span>
+                <select th:field="*{id}">
+                    <option th:each="ic : ${indentedCategories}" th:value="${ic.id}" th:text="${ic.name}">
+                    </option>
+                </select>
+            </div>
+            <br/>
+            <div>
+                <span><input type="submit" value="Save Category"/></span>
+            </div>
+        </fieldset>
+        </form>
+        <p><a th:href="@{/admin/categories}">go back</a></p>
+    </body>
+</html>
