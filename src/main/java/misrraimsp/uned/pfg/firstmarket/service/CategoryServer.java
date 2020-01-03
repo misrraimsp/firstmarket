@@ -20,10 +20,15 @@ public class CategoryServer {
     private TreeNode<Category> rootCategoryNode; //root node of category tree
     private Set<CatPath> directPaths; //set of first-order relations among categories
 
+    private CategoryViewBuilder categoryViewBuilder;
+
     @Autowired
-    public CategoryServer(CategoryRepository categoryRepository, CatPathRepository catPathRepository) {
+    public CategoryServer(CategoryRepository categoryRepository,
+                          CatPathRepository catPathRepository,
+                          CategoryViewBuilder categoryViewBuilder) {
         this.categoryRepository = categoryRepository;
         this.catPathRepository = catPathRepository;
+        this.categoryViewBuilder = categoryViewBuilder;
     }
 
     public TreeNode<Category> getRootCategoryNode() {
@@ -58,5 +63,9 @@ public class CategoryServer {
             sb.append('-');
         }
         return sb.toString();
+    }
+
+    public String getCategoriesOnHtml() {
+        return categoryViewBuilder.buildHtml(rootCategoryNode);
     }
 }

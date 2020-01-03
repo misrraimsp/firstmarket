@@ -18,7 +18,8 @@ public class CategoryController {
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
-        model.addAttribute("rootNode", categoryServer.getRootCategoryNode());
+        String html = categoryServer.getCategoriesOnHtml();
+        model.addAttribute("categoriesOnHtml", html);
         return "categories";
     }
 }

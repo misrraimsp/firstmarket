@@ -1,6 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket;
 
-import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatPathRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
@@ -12,8 +11,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-
-import java.util.List;
 
 @SpringBootApplication
 public class FirstmarketApplication {
@@ -135,6 +132,9 @@ public class FirstmarketApplication {
             // populate category tree structure
             categoryServer.loadCategories();
 
+            /**DEBUG
+             *
+             *
             // show root category
             TreeNode<Category> rootNode = categoryServer.getRootCategoryNode();
             System.out.println("ROOT ID: " + rootNode.getData().getId());
@@ -153,6 +153,7 @@ public class FirstmarketApplication {
                 String indent = categoryServer.getIndent(node.getLevel());
                 System.out.println(indent + node.getData().getName());
             }
+            **/
 
         };
     }
