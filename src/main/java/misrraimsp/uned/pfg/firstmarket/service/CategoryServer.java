@@ -9,9 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class CategoryServer {
@@ -20,7 +18,7 @@ public class CategoryServer {
     private CatPathRepository catPathRepository;
 
     private TreeNode<Category> rootCategoryNode; //root node of category tree
-    private Set<CatPath> directPaths; //set of first-order relations among categories
+    private List<CatPath> directPaths; //set of first-order relations among categories
 
     private CategoryViewBuilder categoryViewBuilder;
 
@@ -49,8 +47,8 @@ public class CategoryServer {
         }
     }
 
-    private Set<Category> getChildren(Category c){
-        Set<Category> children = new HashSet<Category>();
+    private List<Category> getChildren(Category c){
+        List<Category> children = new ArrayList<>();
         for (CatPath cp : directPaths) {
             if (c.equals(cp.getAncestor())) {
                 children.add(cp.getDescendant());
@@ -80,5 +78,35 @@ public class CategoryServer {
             list.add(indentedCategory);
         }
         return list;
+    }
+
+    public void saveNewCategory(Long parent_id, String name) {
+        //update category table on database
+        Category newCategory = new Category();
+        newCategory.setName(name);
+        Category savedCategory =  categoryRepository.save(newCategory);
+
+        //update catpath table on database
+        Category parentCategory = new Category();
+        parentCategory.setId(parent_id);
+        List<CatPath> catPaths = catPathRepository.getCatPathsByDescendant(parentCategory);
+        List<CatPath> newCatPaths = new ArrayList<>();
+        CatPath newCatPath = null;
+            //links with ancestors
+        for (CatPath catPath : catPaths){
+            newCatPath = new CatPath();
+            newCatPath.setAncestor(catPath.getAncestor());
+            newCatPath.setDescendant(savedCategory);
+            newCatPath.setPath_length(1 + catPath.getPath_length());
+            newCatPaths.add(newCatPath);
+        }
+            //self link
+        newCatPath = new CatPath();
+        newCatPath.setAncestor(savedCategory);
+        newCatPath.setDescendant(savedCategory);
+        newCatPath.setPath_length(0);
+        newCatPaths.add(newCatPath);
+            //persist
+        catPathRepository.saveAll(newCatPaths);
     }
 }

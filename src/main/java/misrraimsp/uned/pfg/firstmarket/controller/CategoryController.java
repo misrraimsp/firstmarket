@@ -5,7 +5,11 @@ import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import javax.validation.Valid;
 
 @Controller
 public class CategoryController {
@@ -30,4 +34,16 @@ public class CategoryController {
         model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "newCategory";
     }
+
+    @PostMapping("/admin/newCategory")
+    public String processNewCategory(@Valid Category newCategoryInfo, Errors errors, Model model){
+        if (errors.hasErrors()) {
+            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+            return "newCategory";
+        }
+        categoryServer.saveNewCategory(newCategoryInfo.getId(), newCategoryInfo.getName());
+        categoryServer.loadCategories();
+        return "redirect:/admin/categories";
+    }
+
 }

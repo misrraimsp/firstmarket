@@ -29,7 +29,7 @@ public class BookController {
     }
 
     @GetMapping("/admin/newBook")
-    public String showNewBook(Model model){
+    public String showNewBookForm(Model model){
         model.addAttribute("book", new Book());
         return "newBook";
     }
@@ -44,7 +44,7 @@ public class BookController {
     }
 
     @GetMapping("/admin/editBook/{id}")
-    public String showEditBook(@PathVariable("id") Long id, Model model){
+    public String showEditBookForm(@PathVariable("id") Long id, Model model){
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id: " + id));
         model.addAttribute("book", book);
         return "editBook";
