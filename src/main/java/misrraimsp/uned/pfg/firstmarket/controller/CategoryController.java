@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -15,10 +17,12 @@ import javax.validation.Valid;
 public class CategoryController {
 
     private CategoryServer categoryServer;
+    private CategoryRepository categoryRepository;
 
     @Autowired
-    public CategoryController(CategoryServer categoryServer) {
+    public CategoryController(CategoryServer categoryServer, CategoryRepository categoryRepository) {
         this.categoryServer = categoryServer;
+        this.categoryRepository = categoryRepository;
     }
 
     @GetMapping("/admin/categories")
@@ -44,6 +48,14 @@ public class CategoryController {
         categoryServer.saveNewCategory(newCategoryInfo.getId(), newCategoryInfo.getName());
         categoryServer.loadCategories();
         return "redirect:/admin/categories";
+    }
+
+    @GetMapping("/admin/editCategory/{id}")
+    public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
+        Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
+
+        model.addAttribute("category", category);
+        return "editCategory";
     }
 
 }
