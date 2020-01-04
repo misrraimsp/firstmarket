@@ -36,7 +36,7 @@ public class CategoryServer {
     }
 
     public void loadCategories() {
-        rootCategoryNode = new TreeNode<Category>(categoryRepository.getRootCategory());
+        rootCategoryNode = new TreeNode<Category>(this.getRootCategory());
         directPaths = catPathRepository.getDirectPaths();
         populate(rootCategoryNode);
     }
@@ -57,7 +57,7 @@ public class CategoryServer {
         return children;
     }
 
-    public String getIndent(int depth) {
+    private String getIndent(int depth) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < depth; i++) {
             sb.append('-');
@@ -80,33 +80,67 @@ public class CategoryServer {
         return list;
     }
 
-    public void saveNewCategory(Long parent_id, String name) {
+    public void persistNewCategory(Category category) {
         //update category table on database
-        Category newCategory = new Category();
-        newCategory.setName(name);
-        Category savedCategory =  categoryRepository.save(newCategory);
-
-        //update catpath table on database
-        Category parentCategory = new Category();
-        parentCategory.setId(parent_id);
-        List<CatPath> catPaths = catPathRepository.getCatPathsByDescendant(parentCategory);
+        Category savedCategory =  categoryRepository.save(category);
+        //update cat_path table on database
+        List<CatPath> templateCatPaths = catPathRepository.getCatPathsByDescendant(category.getParent());
         List<CatPath> newCatPaths = new ArrayList<>();
-        CatPath newCatPath = null;
+        CatPath catPath = null;
             //links with ancestors
-        for (CatPath catPath : catPaths){
-            newCatPath = new CatPath();
-            newCatPath.setAncestor(catPath.getAncestor());
-            newCatPath.setDescendant(savedCategory);
-            newCatPath.setPath_length(1 + catPath.getPath_length());
-            newCatPaths.add(newCatPath);
+        for (CatPath template : templateCatPaths){
+            catPath = new CatPath();
+            catPath.setAncestor(template.getAncestor());
+            catPath.setDescendant(savedCategory);
+            catPath.setPath_length(1 + template.getPath_length());
+            newCatPaths.add(catPath);
         }
             //self link
-        newCatPath = new CatPath();
-        newCatPath.setAncestor(savedCategory);
-        newCatPath.setDescendant(savedCategory);
-        newCatPath.setPath_length(0);
-        newCatPaths.add(newCatPath);
+        catPath = new CatPath();
+        catPath.setAncestor(savedCategory);
+        catPath.setDescendant(savedCategory);
+        catPath.setPath_length(0);
+        newCatPaths.add(catPath);
             //persist
         catPathRepository.saveAll(newCatPaths);
     }
+
+    /**
+     * ---- Main way of getting root category: Delegating on crafted SQL query
+     *      (see categoryRepository interface)
+     */
+    private Category getRootCategory(){
+        return categoryRepository.getRootCategory();
+    }
+
+    /**
+     * ---- Alternative way of getting root category: Fetching all categories
+     *      and iterating through them until meeting root condition
+     *
+    private Category getRootCategory(){
+        for (Category category : categoryRepository.findAll()){
+            if (category.isRootCategory()){
+               return category;
+            }
+        }
+        return null;
+    }
+    */
+
+    public List<Category> getDescendants(Category category) {
+        List<Category> list = new ArrayList<>();
+        TreeNode<Category> subtreeRoot = null;
+        for (TreeNode<Category> node : rootCategoryNode) {
+            if (node.getData().equals(category)) {
+                subtreeRoot = node;
+                break;
+            }
+        }
+        if (subtreeRoot == null) return null;
+        for (TreeNode<Category> node : subtreeRoot) {
+            list.add(node.getData());
+        }
+        return list;
+    }
+
 }

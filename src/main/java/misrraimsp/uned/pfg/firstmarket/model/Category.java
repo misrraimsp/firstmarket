@@ -1,14 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
-//import java.util.List;
-
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Data
@@ -22,14 +17,39 @@ public class Category {
 	@NotBlank(message = "name cannot be empty")
 	private String name;
 
+	@ManyToOne
+	private Category parent;
+
+	public boolean isRootCategory(){
+		return parent == null;
+	}
+
+	/**
+	 * La igualdad entre categorias se define únicamente a través
+	 * de la iguladad de sus Id's
+	 *
+	 * Esto es así para evitar que una categoría con name indentado
+	 * sea diferente a la misma categoría pero sin indentar
+	 */
+	@Override
+	public boolean equals(final Object o) {
+		if (o == this) return true;
+		if (!(o instanceof Category)) return false;
+		final Category other = (Category) o;
+		//if (!other.canEqual((Object) this)) return false;
+		final Object this$id = this.getId();
+		final Object other$id = other.getId();
+		if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
+		//final Object this$name = this.getName();
+		//final Object other$name = other.getName();
+		//if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+		//final Object this$parent = this.getParent();
+		//final Object other$parent = other.getParent();
+		//if (this$parent == null ? other$parent != null : !this$parent.equals(other$parent)) return false;
+		return true;
+	}
+
 	/*
-	public Category getParent(){
-		return FrontController.cs.getParent(this);
-	}
-	
-	public List<Category> getDescendants(){
-		return FrontController.cs.getDescendants(this);
-	}
 
 	/**
 	 * condition is of the form of a SQL condition: param='value'

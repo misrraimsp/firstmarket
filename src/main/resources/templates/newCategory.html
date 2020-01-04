@@ -21,9 +21,10 @@
             <br/>
             <div>
                 <span>Nested under:</span>
-                <select th:field="*{id}">
-                    <option th:each="ic : ${indentedCategories}" th:value="${ic.id}" th:text="${ic.name}">
-                    </option>
+                <select th:field="*{parent.id}">
+                    <option th:each="ic : ${indentedCategories}"
+                            th:value="${ic.id}"
+                            th:text="${ic.name}"/>
                 </select>
             </div>
             <br/>

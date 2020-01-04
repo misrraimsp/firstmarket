@@ -43,22 +43,27 @@ public class FirstmarketApplication {
 
             Category cat0 = new Category();
             cat0.setName("firstmarket");
+            cat0.setParent(null);
             categoryRepository.save(cat0);
 
             Category cat1 = new Category();
             cat1.setName("cat1");
+            cat1.setParent(cat0);
             categoryRepository.save(cat1);
 
             Category cat2 = new Category();
             cat2.setName("cat2");
+            cat2.setParent(cat0);
             categoryRepository.save(cat2);
 
             Category cat11 = new Category();
             cat11.setName("cat11");
+            cat11.setParent(cat1);
             categoryRepository.save(cat11);
 
             Category cat22 = new Category();
             cat22.setName("cat22");
+            cat22.setParent(cat2);
             categoryRepository.save(cat22);
 
             //CatPaths
@@ -131,29 +136,6 @@ public class FirstmarketApplication {
 
             // populate category tree structure
             categoryServer.loadCategories();
-
-            /**DEBUG
-             *
-             *
-            // show root category
-            TreeNode<Category> rootNode = categoryServer.getRootCategoryNode();
-            System.out.println("ROOT ID: " + rootNode.getData().getId());
-            System.out.println("ROOT Name: " + rootNode.getData().getName());
-
-            // show root's children categories
-            List<TreeNode<Category>> children = rootNode.getChildren();
-            for (TreeNode<Category> node : children){
-                System.out.println("NODE ID: " + node.getData().getId());
-                System.out.println("NODE Name: " + node.getData().getName());
-            }
-
-            // show full tree
-            System.out.println("full tree:");
-            for (TreeNode<Category> node : rootNode) {
-                String indent = categoryServer.getIndent(node.getLevel());
-                System.out.println(indent + node.getData().getName());
-            }
-            **/
 
         };
     }

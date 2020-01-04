@@ -40,12 +40,12 @@ public class CategoryController {
     }
 
     @PostMapping("/admin/newCategory")
-    public String processNewCategory(@Valid Category newCategoryInfo, Errors errors, Model model){
+    public String processNewCategory(@Valid Category category, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
             return "newCategory";
         }
-        categoryServer.saveNewCategory(newCategoryInfo.getId(), newCategoryInfo.getName());
+        categoryServer.persistNewCategory(category);
         categoryServer.loadCategories();
         return "redirect:/admin/categories";
     }
@@ -53,8 +53,9 @@ public class CategoryController {
     @GetMapping("/admin/editCategory/{id}")
     public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
         Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
-
         model.addAttribute("category", category);
+        model.addAttribute("descendants", categoryServer.getDescendants(category));
+        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "editCategory";
     }
 
