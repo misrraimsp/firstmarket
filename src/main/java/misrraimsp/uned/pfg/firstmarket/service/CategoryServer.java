@@ -143,4 +143,21 @@ public class CategoryServer {
         return list;
     }
 
+    public void editCategory(Category modifiedCategory) {
+
+        //comprobar si se ha modificado el padre
+        if (hasCategoryTreeModification(modifiedCategory)){
+            System.out.println("TODO THIS PART");
+        }
+        else {
+            categoryRepository.save(modifiedCategory);
+        }
+
+    }
+
+    private boolean hasCategoryTreeModification(Category modifiedCategory) {
+        Category originalCategory = categoryRepository.findById(modifiedCategory.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + modifiedCategory.getId()));
+        return !(originalCategory.getParent().getId().equals(modifiedCategory.getParent().getId()));
+    }
 }

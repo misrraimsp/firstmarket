@@ -59,4 +59,17 @@ public class CategoryController {
         return "editCategory";
     }
 
+    @PostMapping("/admin/editCategory")
+    public String processEditCategory(@Valid Category category, Errors errors, Model model){
+        if (errors.hasErrors()) {
+            model.addAttribute("descendants", categoryServer.getDescendants(category));
+            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+            return "editCategory";
+        }
+        System.out.println(category);
+        categoryServer.editCategory(category);
+        categoryServer.loadCategories();
+        return "redirect:/admin/categories";
+    }
+
 }
