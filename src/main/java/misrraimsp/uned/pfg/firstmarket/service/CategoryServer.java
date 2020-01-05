@@ -80,7 +80,7 @@ public class CategoryServer {
         return list;
     }
 
-    public void persistNewCategory(Category category) {
+    public void persistCategory(Category category) {
         //update category table on database
         Category savedCategory =  categoryRepository.save(category);
         //update cat_path table on database
@@ -144,15 +144,13 @@ public class CategoryServer {
     }
 
     public void editCategory(Category modifiedCategory) {
-
-        //comprobar si se ha modificado el padre
         if (hasCategoryTreeModification(modifiedCategory)){
-            System.out.println("TODO THIS PART");
+            System.out.println("modificación compleja");
         }
         else {
+            System.out.println("modificación simple");
             categoryRepository.save(modifiedCategory);
         }
-
     }
 
     private boolean hasCategoryTreeModification(Category modifiedCategory) {

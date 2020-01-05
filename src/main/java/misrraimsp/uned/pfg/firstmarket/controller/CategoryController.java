@@ -45,7 +45,7 @@ public class CategoryController {
             model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
             return "newCategory";
         }
-        categoryServer.persistNewCategory(category);
+        categoryServer.persistCategory(category);
         categoryServer.loadCategories();
         return "redirect:/admin/categories";
     }
@@ -66,7 +66,16 @@ public class CategoryController {
             model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
             return "editCategory";
         }
-        System.out.println(category);
+
+        /*
+        System.out.println("categoryRepository.findById(3L): " + categoryRepository.findById(3L));
+        System.out.println("categoryRepository.findById(4L): " + categoryRepository.findById(4L));
+        System.out.println("categoryRepository.findById(5L): " + categoryRepository.findById(5L));
+        System.out.println("categoryRepository.findById(6L): " + categoryRepository.findById(6L));
+        System.out.println("categoryRepository.findById(7L): " + categoryRepository.findById(7L));
+
+        */
+
         categoryServer.editCategory(category);
         categoryServer.loadCategories();
         return "redirect:/admin/categories";

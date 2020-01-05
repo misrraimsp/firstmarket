@@ -16,7 +16,7 @@
                 </div>
                 <legend>Edit Category</legend>
                 <input type="hidden" th:field="*{id}"/>
-                <input type="hidden" th:field="*{parent}"/>
+                <input type="hidden" th:field="*{parent.name}"/>
                 <div>
                     <span>Name:<input type="text" th:field="*{name}"/></span>
                     <span class="validationError" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
