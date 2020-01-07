@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.NonUniqueResultException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -150,14 +149,13 @@ public class CategoryServer {
         if (hasCategoryTreeModification(modifiedCategory)){
             System.out.println("modificación compleja");
             categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
-            try{
-                categoryRepository.deletePaths(modifiedCategory.getId());
-            } catch (NonUniqueResultException e){
-                System.out.println(e.getMessage());
-            }
-
-            //System.out.println("numDeleted: " + numDeleted);
-            //categoryRepository.insertPaths();
+            System.out.println("nombre alterado");
+            categoryRepository.deletePaths(modifiedCategory.getId());
+            System.out.println("caminos eliminados");
+            //List<Object> generatedCatPaths = categoryRepository.generatePaths(modifiedCategory.getParent().getId(), modifiedCategory.getId());
+            List<CatPath> generatedCatPaths = categoryRepository.generatePaths(modifiedCategory.getParent().getId(), modifiedCategory.getId());
+            System.out.println("caminos generados:");
+            System.out.println(generatedCatPaths);
         }
         else {
             System.out.println("modificación simple");

@@ -1,10 +1,13 @@
 package misrraimsp.uned.pfg.firstmarket.data;
 
+import misrraimsp.uned.pfg.firstmarket.model.CatPath;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
+import java.util.List;
 
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
@@ -32,9 +35,8 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     void deletePaths(@Param("id") Long id);
 
 
-
-
-
-
-    //void insertPaths();
+    @Query(value = "SELECT supertree.path_length+subtree.path_length+1, supertree.ancestor, subtree.descendant " +
+            "FROM CatPath supertree, CatPath subtree " +
+            "WHERE supertree.descendant.id = :parent_id AND subtree.ancestor.id = :id")
+    List<CatPath> generatePaths(@Param("parent_id") Long parent_id, @Param("id") Long id);
 }

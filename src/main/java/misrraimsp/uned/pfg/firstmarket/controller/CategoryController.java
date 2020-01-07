@@ -77,7 +77,8 @@ public class CategoryController {
         */
 
         categoryServer.editCategory(category);
-        categoryServer.loadCategories();
+        //categoryServer.loadCategories();
+
         return "redirect:/admin/categories";
     }
 
