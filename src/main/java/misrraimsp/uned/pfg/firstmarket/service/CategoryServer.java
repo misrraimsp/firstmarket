@@ -7,6 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.model.CatPath;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -143,13 +144,15 @@ public class CategoryServer {
         return list;
     }
 
+    @Transactional
     public void editCategory(Category modifiedCategory) {
         if (hasCategoryTreeModification(modifiedCategory)){
             System.out.println("modificación compleja");
+
         }
         else {
             System.out.println("modificación simple");
-            categoryRepository.save(modifiedCategory);
+            categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
         }
     }
 
