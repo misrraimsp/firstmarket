@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NonUniqueResultException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -148,7 +149,15 @@ public class CategoryServer {
     public void editCategory(Category modifiedCategory) {
         if (hasCategoryTreeModification(modifiedCategory)){
             System.out.println("modificación compleja");
+            categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
+            try{
+                categoryRepository.deletePaths(modifiedCategory.getId());
+            } catch (NonUniqueResultException e){
+                System.out.println(e.getMessage());
+            }
 
+            //System.out.println("numDeleted: " + numDeleted);
+            //categoryRepository.insertPaths();
         }
         else {
             System.out.println("modificación simple");

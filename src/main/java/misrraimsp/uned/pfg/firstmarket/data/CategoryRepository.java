@@ -22,4 +22,19 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Category c SET c.name = :name WHERE c.id = :id")
     void updateName(@Param("id") Long id, @Param("name") String name);
+
+
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM CatPath cp WHERE " +
+            "cp.descendant.id IN (SELECT cp1.descendant.id FROM CatPath cp1 WHERE cp1.ancestor.id = :id) AND " +
+            "cp.ancestor.id IN (SELECT cp2.ancestor.id FROM CatPath cp2 WHERE cp2.descendant.id = :id AND " +
+            "cp.ancestor.id <> cp.descendant.id)")
+    void deletePaths(@Param("id") Long id);
+
+
+
+
+
+
+    //void insertPaths();
 }
