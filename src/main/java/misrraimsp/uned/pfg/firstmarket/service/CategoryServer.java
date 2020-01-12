@@ -42,30 +42,6 @@ public class CategoryServer {
         populate(rootCategoryNode);
     }
 
-    private void populate(TreeNode<Category> node) {
-        for (Category c : getChildren(node.getData())) {
-            populate(node.addChild(c));
-        }
-    }
-
-    private List<Category> getChildren(Category c){
-        List<Category> children = new ArrayList<>();
-        for (CatPath cp : directPaths) {
-            if (c.equals(cp.getAncestor())) {
-                children.add(cp.getDescendant());
-            }
-        }
-        return children;
-    }
-
-    private String getIndent(int depth) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < depth; i++) {
-            sb.append('-');
-        }
-        return sb.toString();
-    }
-
     public String getCategoriesOnHtml() {
         return categoryViewBuilder.buildHtml(rootCategoryNode);
     }
@@ -79,31 +55,6 @@ public class CategoryServer {
             list.add(indentedCategory);
         }
         return list;
-    }
-
-    public void persistCategory(Category category) {
-        //update category table on database
-        Category savedCategory =  categoryRepository.save(category);
-        //update cat_path table on database
-        List<CatPath> templateCatPaths = catPathRepository.getCatPathsByDescendant(category.getParent());
-        List<CatPath> newCatPaths = new ArrayList<>();
-        CatPath catPath = null;
-            //links with ancestors
-        for (CatPath template : templateCatPaths){
-            catPath = new CatPath();
-            catPath.setAncestor(template.getAncestor());
-            catPath.setDescendant(savedCategory);
-            catPath.setPath_length(1 + template.getPath_length());
-            newCatPaths.add(catPath);
-        }
-            //self link
-        catPath = new CatPath();
-        catPath.setAncestor(savedCategory);
-        catPath.setDescendant(savedCategory);
-        catPath.setPath_length(0);
-        newCatPaths.add(catPath);
-            //persist
-        catPathRepository.saveAll(newCatPaths);
     }
 
     /**
@@ -145,22 +96,72 @@ public class CategoryServer {
     }
 
     @Transactional
+    public void persistCategory(Category category) {
+        //Update Category info
+        Category savedCategory =  categoryRepository.save(category);
+
+        //Update CatPath info
+        for (CatPath ancestorCP : catPathRepository.getCatPathsByDescendant(category.getParent())){
+            CatPath nuevoCP = new CatPath();
+            nuevoCP.setAncestor(ancestorCP.getAncestor());
+            nuevoCP.setDescendant(savedCategory);
+            nuevoCP.setPath_length(1 + ancestorCP.getPath_length());
+            catPathRepository.save(nuevoCP);
+        }
+        CatPath nuevoCP = new CatPath();
+        nuevoCP.setAncestor(savedCategory);
+        nuevoCP.setDescendant(savedCategory);
+        nuevoCP.setPath_length(0);
+        catPathRepository.save(nuevoCP);
+    }
+
+    @Transactional
     public void editCategory(Category modifiedCategory) {
         if (hasCategoryTreeModification(modifiedCategory)){
-            System.out.println("modificación compleja");
+            //Update Category info
             categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
-            System.out.println("nombre alterado");
-            categoryRepository.deletePaths(modifiedCategory.getId());
-            System.out.println("caminos eliminados");
-            //List<Object> generatedCatPaths = categoryRepository.generatePaths(modifiedCategory.getParent().getId(), modifiedCategory.getId());
-            List<CatPath> generatedCatPaths = categoryRepository.generatePaths(modifiedCategory.getParent().getId(), modifiedCategory.getId());
-            System.out.println("caminos generados:");
-            System.out.println(generatedCatPaths);
+            categoryRepository.updateParent(modifiedCategory.getId(), modifiedCategory.getParent().getId());
+
+            //Update CatPath info
+            catPathRepository.deleteCatPathsFromAncestorsToDescendantsOf(modifiedCategory.getId());
+            for (CatPath ancestorCP : catPathRepository.getCatPathsByDescendant(modifiedCategory.getParent())){
+                for (CatPath descendantCP : catPathRepository.getCatPathsByAncestor(modifiedCategory)){
+                    CatPath nuevoCP = new CatPath();
+                    nuevoCP.setAncestor(ancestorCP.getAncestor());
+                    nuevoCP.setDescendant(descendantCP.getDescendant());
+                    nuevoCP.setPath_length(1 + ancestorCP.getPath_length() + descendantCP.getPath_length());
+                    catPathRepository.save(nuevoCP);
+                }
+            }
         }
         else {
-            System.out.println("modificación simple");
+            //Update Category info
             categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
         }
+    }
+
+    private void populate(TreeNode<Category> node) {
+        for (Category c : getChildren(node.getData())) {
+            populate(node.addChild(c));
+        }
+    }
+
+    private List<Category> getChildren(Category c){
+        List<Category> children = new ArrayList<>();
+        for (CatPath cp : directPaths) {
+            if (c.equals(cp.getAncestor())) {
+                children.add(cp.getDescendant());
+            }
+        }
+        return children;
+    }
+
+    private String getIndent(int depth) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            sb.append('-');
+        }
+        return sb.toString();
     }
 
     private boolean hasCategoryTreeModification(Category modifiedCategory) {

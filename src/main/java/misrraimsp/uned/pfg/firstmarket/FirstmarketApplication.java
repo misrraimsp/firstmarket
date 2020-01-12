@@ -43,7 +43,7 @@ public class FirstmarketApplication {
 
             Category cat0 = new Category();
             cat0.setName("firstmarket");
-            cat0.setParent(null);
+            cat0.setParent(cat0);
             categoryRepository.save(cat0);
 
             Category cat1 = new Category();
