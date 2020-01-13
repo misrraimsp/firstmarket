@@ -36,10 +36,6 @@ public class CategoryServer {
         this.categoryViewBuilder = categoryViewBuilder;
     }
 
-    public TreeNode<Category> getRootCategoryNode() {
-        return rootCategoryNode;
-    }
-
     public void loadCategories() {
         rootCategoryNode = new TreeNode<>(this.getRootCategory());
         directPaths = catPathRepository.getDirectPaths();
@@ -68,20 +64,6 @@ public class CategoryServer {
     private Category getRootCategory(){
         return categoryRepository.getRootCategory();
     }
-
-    /**
-     * ---- Alternative way of getting root category: Fetching all categories
-     *      and iterating through them until meeting root condition
-     *
-    private Category getRootCategory(){
-        for (Category category : categoryRepository.findAll()){
-            if (category.isRootCategory()){
-               return category;
-            }
-        }
-        return null;
-    }
-    */
 
     public List<Category> getDescendants(Category category) {
         List<Category> list = new ArrayList<>();

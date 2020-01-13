@@ -6,7 +6,6 @@ import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.CatPath;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
-import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,8 +21,7 @@ public class FirstmarketApplication {
     @Bean
     public CommandLineRunner dataLoader(BookRepository bookRepository,
                                         CategoryRepository categoryRepository,
-                                        CatPathRepository catPathRepository,
-                                        CategoryServer categoryServer) {
+                                        CatPathRepository catPathRepository) {
 
         return args -> {
 

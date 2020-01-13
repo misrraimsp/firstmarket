@@ -6,8 +6,6 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Data
-//@RequiredArgsConstructor
-//@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 @Entity
 public class Book {
 

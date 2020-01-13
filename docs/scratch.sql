@@ -1,3 +1,17 @@
+    /**
+     * ---- Alternative way of getting root category: Fetching all categories
+     *      and iterating through them until meeting root condition
+     *
+    private Category getRootCategory(){
+        for (Category category : categoryRepository.findAll()){
+            if (category.isRootCategory()){
+               return category;
+            }
+        }
+        return null;
+    }
+    */
+
 
     /**
     * alternative way of determining the root category, without using self-parenthood
