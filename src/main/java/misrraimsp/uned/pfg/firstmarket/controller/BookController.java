@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +17,12 @@ import javax.validation.Valid;
 public class BookController {
 
     private BookRepository bookRepository;
+    private CategoryServer categoryServer;
 
     @Autowired
-    public BookController(BookRepository bookRepository) {
+    public BookController(BookRepository bookRepository, CategoryServer categoryServer) {
         this.bookRepository = bookRepository;
+        this.categoryServer = categoryServer;
     }
 
     @GetMapping("/admin/books")
@@ -31,6 +34,7 @@ public class BookController {
     @GetMapping("/admin/newBook")
     public String showNewBookForm(Model model){
         model.addAttribute("book", new Book());
+        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "newBook";
     }
 
