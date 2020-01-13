@@ -20,10 +20,21 @@
                     <span>ISBN:<input type="text" th:field="*{isbn}"/></span>
                     <span class="validationError" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">Error</span>
                 </div>
+                <br/>
                 <div>
                     <span>Title:<input type="text" th:field="*{title}"/></span>
                     <span class="validationError" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Error</span>
                 </div>
+                <br/>
+                <div>
+                    <span>Category:</span>
+                    <select th:field="*{category.id}">
+                        <option th:each="ic : ${indentedCategories}"
+                                th:value="${ic.id}"
+                                th:text="${ic.name}"/>
+                    </select>
+                </div>
+                <br/>
                 <div>
                     <span><input type="submit" value="Update Book"/></span>
                 </div>

@@ -39,8 +39,9 @@ public class BookController {
     }
 
     @PostMapping("/admin/newBook")
-    public String processNewBook(@Valid Book book, Errors errors){
+    public String processNewBook(@Valid Book book, Errors errors, Model model){
         if (errors.hasErrors()) {
+            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
             return "newBook";
         }
         bookRepository.save(book);
@@ -51,12 +52,14 @@ public class BookController {
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id: " + id));
         model.addAttribute("book", book);
+        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "editBook";
     }
 
     @PostMapping("/admin/editBook")
-    public String processEditBook(@Valid Book book, Errors errors){
+    public String processEditBook(@Valid Book book, Errors errors, Model model){
         if (errors.hasErrors()) {
+            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
             return "editBook";
         }
         bookRepository.save(book);
