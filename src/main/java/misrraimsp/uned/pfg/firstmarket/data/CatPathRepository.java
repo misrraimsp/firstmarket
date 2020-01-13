@@ -44,4 +44,26 @@ public interface CatPathRepository extends CrudRepository<CatPath, Long> {
             "cp.descendant.id IN (SELECT cp2.descendant.id FROM CatPath cp2 WHERE cp2.ancestor.id = :id)")
     void deleteCatPathsFromAncestorsToDescendantsOf(@Param("id") Long id);
 
+    /**
+     * Elimina los caminos que tienen como ancestro ó descendiente la categoría a eliminar
+     *
+     * @param id
+     */
+    @Modifying(clearAutomatically = true)
+    @Query(value = "DELETE FROM CatPath cp WHERE " +
+            "cp.ancestor.id = :id OR cp.descendant.id = :id")
+    void deleteCatPathsOf(@Param("id") Long id);
+
+    /**
+     * Reduce una unidad los caminos que parten desde cada ancestro de la categoría a eliminar (EXcluída ella misma)
+     * hasta cada uno de sus descendientes (INcluída ella misma)
+     *
+     * @param id
+     */
+    @Modifying(clearAutomatically = true)
+    @Query(value = "UPDATE CatPath cp SET cp.path_length = cp.path_length - 1 WHERE " +
+            "cp.ancestor.id IN (SELECT cp1.ancestor.id FROM CatPath cp1 WHERE (cp1.descendant.id = :id AND cp1.ancestor.id <> :id)) AND " +
+            "cp.descendant.id IN (SELECT cp2.descendant.id FROM CatPath cp2 WHERE cp2.ancestor.id = :id)")
+    void reduceCatPathsFromAncestorsToDescendantsOf(@Param("id") Long id);
+
 }

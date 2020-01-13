@@ -77,7 +77,7 @@ public class CategoryController {
 
     @PostMapping("/admin/deleteCategory")
     public String deleteCategory(Category category){
-        categoryServer.deleteCategory(category);
+        categoryServer.deleteCategory(category.getId());
         return "redirect:/admin/loadCategories";
     }
 

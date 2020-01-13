@@ -120,7 +120,7 @@ public class CategoryServer {
         if (hasCategoryTreeModification(modifiedCategory)){
             //Update Category info
             categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
-            categoryRepository.updateParent(modifiedCategory.getId(), modifiedCategory.getParent().getId());
+            categoryRepository.updateParentById(modifiedCategory.getId(), modifiedCategory.getParent().getId());
 
             //Update CatPath info
             catPathRepository.deleteCatPathsFromAncestorsToDescendantsOf(modifiedCategory.getId());
@@ -140,15 +140,22 @@ public class CategoryServer {
         }
     }
 
-    public void deleteCategory(Category category) {
-        System.out.println("delete category TODO");
+    @Transactional
+    public void deleteCategory(Long id) {
+        //reducir -1 los catpath de los ancestros a los descendientes de la categoría a eliminar
+        catPathRepository.reduceCatPathsFromAncestorsToDescendantsOf(id);
+        //eliminar los catpath que tienen a la categoría a eliminar
+        catPathRepository.deleteCatPathsOf(id);
+        //el abuelo de las categorías hijas de la categoría a eliminar pasa a ser su padre
+        Category deletingCategory = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
+        categoryRepository.updateParentByParentId(deletingCategory.getId(), deletingCategory.getParent().getId());
+        //eliminar la categoría
+        categoryRepository.delete(deletingCategory);
+    }
 
-        //en la tabla catpath -1 en los caminos de sus ancestros a sus descendientes
-        //en la tabla catpath eliminar todos los caminos que la tienen como descendiente
-        //en la tabla catpath eliminar todos los caminos que la tienen como ancestro
-
-        //en la tabla category: a todos sus hijos cambiar el padre a su padre
-        //quitarla de la tabla de categorias
+    @Transactional
+    public void deleteCategoryAndDescendants(Category category) {
+        System.out.println("delete category and its descendants TODO");
 
     }
 

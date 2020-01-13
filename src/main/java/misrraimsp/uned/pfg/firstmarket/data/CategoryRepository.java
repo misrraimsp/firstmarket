@@ -8,17 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
-/*
-    @Query(value = "SELECT id,name,parent_id FROM (" +
-                        "SELECT c.id,name,parent_id,COUNT(c.id) AS count " +
-                        "FROM category AS c, cat_path AS cp " +
-                        "WHERE c.id=cp.descendant_id " +
-                        "GROUP BY c.id" +
-                    ") AS aux " +
-                    "WHERE aux.count=1",
-            nativeQuery = true)
-    Category getRootCategory();
-*/
+    //self-parenthood exclusive property of root category
     @Query(value = "SELECT * FROM category WHERE id = parent_id", nativeQuery = true)
     Category getRootCategory();
 
@@ -27,7 +17,10 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     void updateName(@Param("id") Long id, @Param("name") String name);
 
     @Modifying(clearAutomatically = true)
-    @Query("UPDATE Category c SET c.parent.id = :parent_id WHERE c.id = :id")
-    void updateParent(@Param("id") Long id, @Param("parent_id") Long parent_id);
+    @Query("UPDATE Category c SET c.parent.id = :new_parent_id WHERE c.id = :id")
+    void updateParentById(@Param("id") Long id, @Param("new_parent_id") Long new_parent_id);
 
+    @Modifying(clearAutomatically = true)
+    @Query("UPDATE Category c SET c.parent.id = :new_parent_id WHERE c.parent.id = :parent_id")
+    void updateParentByParentId(@Param("parent_id") Long parent_id, @Param("new_parent_id") Long new_parent_id);
 }
