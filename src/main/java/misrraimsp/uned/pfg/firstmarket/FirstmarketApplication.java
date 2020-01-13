@@ -43,7 +43,7 @@ public class FirstmarketApplication {
 
             Category cat0 = new Category();
             cat0.setName("firstmarket");
-            cat0.setParent(cat0);
+            cat0.setParent(cat0); //root category: self-parenthood
             categoryRepository.save(cat0);
 
             Category cat1 = new Category();
@@ -133,10 +133,6 @@ public class FirstmarketApplication {
             cp22_22.setDescendant(cat22);
             cp22_22.setPath_length(0);
             catPathRepository.save(cp22_22);
-
-            // populate category tree structure
-            categoryServer.loadCategories();
-
         };
     }
 

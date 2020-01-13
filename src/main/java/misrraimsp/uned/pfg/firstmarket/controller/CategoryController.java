@@ -25,6 +25,12 @@ public class CategoryController {
         this.categoryRepository = categoryRepository;
     }
 
+    @GetMapping("/admin/loadCategories")
+    public String loadCategories(){
+        categoryServer.loadCategories();
+        return "redirect:/admin/categories";
+    }
+
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
         String html = categoryServer.getCategoriesOnHtml();
@@ -46,8 +52,7 @@ public class CategoryController {
             return "newCategory";
         }
         categoryServer.persistCategory(category);
-        categoryServer.loadCategories();
-        return "redirect:/admin/categories";
+        return "redirect:/admin/loadCategories";
     }
 
     @GetMapping("/admin/editCategory/{id}")
@@ -67,8 +72,13 @@ public class CategoryController {
             return "editCategory";
         }
         categoryServer.editCategory(category);
-        categoryServer.loadCategories();
-        return "redirect:/admin/categories";
+        return "redirect:/admin/loadCategories";
+    }
+
+    @PostMapping("/admin/deleteCategory")
+    public String deleteCategory(Category category){
+        categoryServer.deleteCategory(category);
+        return "redirect:/admin/loadCategories";
     }
 
 }

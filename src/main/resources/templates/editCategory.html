@@ -8,7 +8,7 @@
         <link rel="stylesheet" th:href="@{/styles.css}" />
     </head>
     <body>
-        <h1>Category Edition Page</h1>
+        <h1>Category Page</h1>
         <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="post">
             <fieldset>
                 <div th:if="${#fields.hasErrors()}">
@@ -36,6 +36,16 @@
                 <br/>
                 <div>
                     <span><input type="submit" value="Update Category"/></span>
+                </div>
+            </fieldset>
+        </form>
+        <br/>
+        <form action="#" th:action="@{/admin/deleteCategory}" th:object="${category}" method="post">
+            <fieldset>
+                <legend>Delete Category</legend>
+                <input type="hidden" th:field="*{id}"/>
+                <div>
+                    <span><input type="submit" value="Delete Category"/></span>
                 </div>
             </fieldset>
         </form>

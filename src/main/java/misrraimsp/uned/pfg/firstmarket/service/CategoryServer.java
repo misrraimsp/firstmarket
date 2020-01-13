@@ -37,7 +37,7 @@ public class CategoryServer {
     }
 
     public void loadCategories() {
-        rootCategoryNode = new TreeNode<Category>(this.getRootCategory());
+        rootCategoryNode = new TreeNode<>(this.getRootCategory());
         directPaths = catPathRepository.getDirectPaths();
         populate(rootCategoryNode);
     }
@@ -140,6 +140,18 @@ public class CategoryServer {
         }
     }
 
+    public void deleteCategory(Category category) {
+        System.out.println("delete category TODO");
+
+        //en la tabla catpath -1 en los caminos de sus ancestros a sus descendientes
+        //en la tabla catpath eliminar todos los caminos que la tienen como descendiente
+        //en la tabla catpath eliminar todos los caminos que la tienen como ancestro
+
+        //en la tabla category: a todos sus hijos cambiar el padre a su padre
+        //quitarla de la tabla de categorias
+
+    }
+
     private void populate(TreeNode<Category> node) {
         for (Category c : getChildren(node.getData())) {
             populate(node.addChild(c));
@@ -169,4 +181,5 @@ public class CategoryServer {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + modifiedCategory.getId()));
         return !(originalCategory.getParent().getId().equals(modifiedCategory.getParent().getId()));
     }
+
 }
