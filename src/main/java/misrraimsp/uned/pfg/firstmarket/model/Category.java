@@ -1,6 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
-
 import lombok.Data;
 
 import javax.persistence.*;

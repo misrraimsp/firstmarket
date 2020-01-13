@@ -15,7 +15,7 @@ import javax.validation.Valid;
 @Controller
 public class BookController {
 
-    private final BookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @Autowired
     public BookController(BookRepository bookRepository) {

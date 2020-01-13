@@ -15,14 +15,16 @@
         <br/>
         <table border="1">
             <tr>
+                <td/>
                 <td><b>ISBN</b></td>
                 <td><b>Title</b></td>
-                <td/>
+                <td><b>Category</b></td>
             </tr>
             <tr th:each="book : ${books}">
+                <td><a th:href="@{/admin/deleteBook/{id}(id=${book.id})}">delete</a></td>
                 <td><a th:href="@{/admin/editBook/{id}(id=${book.id})}"><span th:text="${book.isbn}">isbn</span></a></td>
                 <td><span th:text="${book.title}">title</span></td>
-                <td><a th:href="@{/admin/deleteBook/{id}(id=${book.id})}">Delete</a></td>
+                <td><span th:text="${book.category.name}">category</span></td>
             </tr>
         </table>
     </body>

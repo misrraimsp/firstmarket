@@ -27,112 +27,115 @@ public class FirstmarketApplication {
 
         return args -> {
 
-            //Books
-
-            Book book1 = new Book();
-            book1.setIsbn("isbn001");
-            book1.setTitle("Libro-1");
-            bookRepository.save(book1);
-
-            Book book2 = new Book();
-            book2.setIsbn("isbn002");
-            book2.setTitle("Libro-2");
-            bookRepository.save(book2);
-
             //Categories
 
-            Category cat0 = new Category();
-            cat0.setName("firstmarket");
-            cat0.setParent(cat0); //root category: self-parenthood
-            categoryRepository.save(cat0);
+            Category fm = new Category();
+            fm.setName("firstmarket");
+            fm.setParent(fm); //root category: self-parenthood
+            categoryRepository.save(fm);
 
-            Category cat1 = new Category();
-            cat1.setName("cat1");
-            cat1.setParent(cat0);
-            categoryRepository.save(cat1);
+            Category tech = new Category();
+            tech.setName("tech");
+            tech.setParent(fm);
+            categoryRepository.save(tech);
 
-            Category cat2 = new Category();
-            cat2.setName("cat2");
-            cat2.setParent(cat0);
-            categoryRepository.save(cat2);
+            Category art = new Category();
+            art.setName("art");
+            art.setParent(fm);
+            categoryRepository.save(art);
 
-            Category cat11 = new Category();
-            cat11.setName("cat11");
-            cat11.setParent(cat1);
-            categoryRepository.save(cat11);
+            Category computers = new Category();
+            computers.setName("computers");
+            computers.setParent(tech);
+            categoryRepository.save(computers);
 
-            Category cat22 = new Category();
-            cat22.setName("cat22");
-            cat22.setParent(cat2);
-            categoryRepository.save(cat22);
+            Category music = new Category();
+            music.setName("music");
+            music.setParent(art);
+            categoryRepository.save(music);
 
             //CatPaths
 
             CatPath cp0_0 = new CatPath();
-            cp0_0.setAncestor(cat0);
-            cp0_0.setDescendant(cat0);
+            cp0_0.setAncestor(fm);
+            cp0_0.setDescendant(fm);
             cp0_0.setPath_length(0);
             catPathRepository.save(cp0_0);
 
             CatPath cp0_1 = new CatPath();
-            cp0_1.setAncestor(cat0);
-            cp0_1.setDescendant(cat1);
+            cp0_1.setAncestor(fm);
+            cp0_1.setDescendant(tech);
             cp0_1.setPath_length(1);
             catPathRepository.save(cp0_1);
 
             CatPath cp0_2 = new CatPath();
-            cp0_2.setAncestor(cat0);
-            cp0_2.setDescendant(cat2);
+            cp0_2.setAncestor(fm);
+            cp0_2.setDescendant(art);
             cp0_2.setPath_length(1);
             catPathRepository.save(cp0_2);
 
             CatPath cp0_11 = new CatPath();
-            cp0_11.setAncestor(cat0);
-            cp0_11.setDescendant(cat11);
+            cp0_11.setAncestor(fm);
+            cp0_11.setDescendant(computers);
             cp0_11.setPath_length(2);
             catPathRepository.save(cp0_11);
 
             CatPath cp0_22 = new CatPath();
-            cp0_22.setAncestor(cat0);
-            cp0_22.setDescendant(cat22);
+            cp0_22.setAncestor(fm);
+            cp0_22.setDescendant(music);
             cp0_22.setPath_length(2);
             catPathRepository.save(cp0_22);
 
             CatPath cp1_1 = new CatPath();
-            cp1_1.setAncestor(cat1);
-            cp1_1.setDescendant(cat1);
+            cp1_1.setAncestor(tech);
+            cp1_1.setDescendant(tech);
             cp1_1.setPath_length(0);
             catPathRepository.save(cp1_1);
 
             CatPath cp1_11 = new CatPath();
-            cp1_11.setAncestor(cat1);
-            cp1_11.setDescendant(cat11);
+            cp1_11.setAncestor(tech);
+            cp1_11.setDescendant(computers);
             cp1_11.setPath_length(1);
             catPathRepository.save(cp1_11);
 
             CatPath cp2_2 = new CatPath();
-            cp2_2.setAncestor(cat2);
-            cp2_2.setDescendant(cat2);
+            cp2_2.setAncestor(art);
+            cp2_2.setDescendant(art);
             cp2_2.setPath_length(0);
             catPathRepository.save(cp2_2);
 
             CatPath cp2_22 = new CatPath();
-            cp2_22.setAncestor(cat2);
-            cp2_22.setDescendant(cat22);
+            cp2_22.setAncestor(art);
+            cp2_22.setDescendant(music);
             cp2_22.setPath_length(1);
             catPathRepository.save(cp2_22);
 
             CatPath cp11_11 = new CatPath();
-            cp11_11.setAncestor(cat11);
-            cp11_11.setDescendant(cat11);
+            cp11_11.setAncestor(computers);
+            cp11_11.setDescendant(computers);
             cp11_11.setPath_length(0);
             catPathRepository.save(cp11_11);
 
             CatPath cp22_22 = new CatPath();
-            cp22_22.setAncestor(cat22);
-            cp22_22.setDescendant(cat22);
+            cp22_22.setAncestor(music);
+            cp22_22.setDescendant(music);
             cp22_22.setPath_length(0);
             catPathRepository.save(cp22_22);
+
+            //Books
+
+            Book book1 = new Book();
+            book1.setIsbn("isbn001");
+            book1.setTitle("Computer Basics");
+            book1.setCategory(computers);
+            bookRepository.save(book1);
+
+            Book book2 = new Book();
+            book2.setIsbn("isbn002");
+            book2.setTitle("Traditional Music of Spain");
+            book2.setCategory(music);
+            bookRepository.save(book2);
+
         };
     }
 
