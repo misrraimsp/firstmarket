@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
+import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatPathRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.model.CatPath;
@@ -17,6 +18,7 @@ public class CategoryServer {
 
     private CategoryRepository categoryRepository;
     private CatPathRepository catPathRepository;
+    private BookRepository bookRepository;
 
     private TreeNode<Category> rootCategoryNode; //root node of category tree
     private List<CatPath> directPaths; //set of first-order relations among categories
@@ -26,9 +28,11 @@ public class CategoryServer {
     @Autowired
     public CategoryServer(CategoryRepository categoryRepository,
                           CatPathRepository catPathRepository,
+                          BookRepository bookRepository,
                           CategoryViewBuilder categoryViewBuilder) {
         this.categoryRepository = categoryRepository;
         this.catPathRepository = catPathRepository;
+        this.bookRepository = bookRepository;
         this.categoryViewBuilder = categoryViewBuilder;
     }
 
@@ -148,7 +152,9 @@ public class CategoryServer {
         catPathRepository.deleteCatPathsOf(id);
         //el abuelo de las categorías hijas de la categoría a eliminar pasa a ser su padre
         Category deletingCategory = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
-        categoryRepository.updateParentByParentId(deletingCategory.getId(), deletingCategory.getParent().getId());
+        categoryRepository.updateParentByParentId(id, deletingCategory.getParent().getId());
+        //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
+        bookRepository.updateCategoryByCategoryId(id, deletingCategory.getParent().getId());
         //eliminar la categoría
         categoryRepository.delete(deletingCategory);
     }
