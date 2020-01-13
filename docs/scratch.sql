@@ -1,3 +1,31 @@
+
+    /**
+    * alternative way of determining the root category, without using self-parenthood
+    */
+    @Query(value = "SELECT id,name,parent_id FROM (" +
+                        "SELECT c.id,name,parent_id,COUNT(c.id) AS count " +
+                        "FROM category AS c, cat_path AS cp " +
+                        "WHERE c.id=cp.descendant_id " +
+                        "GROUP BY c.id" +
+                    ") AS aux " +
+                    "WHERE aux.count=1",
+            nativeQuery = true)
+    Category getRootCategory();
+
+     /**
+     * Elimina los caminos que parten desde cada ancestro de la categoría a editar (INcluída ella misma)
+     * hasta cada uno de sus descendientes (INcluída ella misma), salvo su propio autocamino
+     *
+     * @param id
+     */
+     @Modifying(clearAutomatically = true)
+     @Query(value = "DELETE FROM CatPath cp WHERE " +
+     "cp.ancestor.id IN (SELECT cp1.ancestor.id FROM CatPath cp1 WHERE cp1.descendant.id = :id) AND " +
+     "cp.descendant.id IN (SELECT cp2.descendant.id FROM CatPath cp2 WHERE cp2.ancestor.id = :id) AND " +
+     "cp.ancestor.id <> cp.descendant.id")
+     void deletePaths(@Param("id") Long id);
+
+
 *********************************
 
 CREATE DATABASE fm;

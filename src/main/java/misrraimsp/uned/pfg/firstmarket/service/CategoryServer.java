@@ -153,12 +153,6 @@ public class CategoryServer {
         categoryRepository.delete(deletingCategory);
     }
 
-    @Transactional
-    public void deleteCategoryAndDescendants(Category category) {
-        System.out.println("delete category and its descendants TODO");
-
-    }
-
     private void populate(TreeNode<Category> node) {
         for (Category c : getChildren(node.getData())) {
             populate(node.addChild(c));

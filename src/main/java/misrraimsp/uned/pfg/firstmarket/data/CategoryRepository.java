@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
-    //self-parenthood exclusive property of root category
+    //self-parenthood root category property
     @Query(value = "SELECT * FROM category WHERE id = parent_id", nativeQuery = true)
     Category getRootCategory();
 
