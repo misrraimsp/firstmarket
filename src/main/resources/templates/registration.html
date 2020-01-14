@@ -7,57 +7,49 @@
         <title>User Registration</title>
         <link rel="stylesheet" th:href="@{/styles.css}" />
     </head>
-
     <body>
         <h1>Register</h1>
+        <p><a th:href="@{/}">go back</a></p>
         <form action="#" th:action="@{/register}" th:object="${registrationInfo}" method="POST" id="registerForm">
             <div th:if="${#fields.hasErrors()}">
                 <span class="validationError">Please correct the problems below and resubmit.</span>
-            </div>
+            </div><br/>
         <fieldset>
             <legend>Registration Form</legend>
             <div>
                 <span>Username: <input type="text" th:field="*{username}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <div>
                 <span>Password: <input type="password" th:field="*{password}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <!-- TODO: confirm password functionality
             <div>
                 <span>Confirm password: <input type="password" th:field="*{confirmPassword}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">confirmPassword Error</span>
-            </div>
+            </div><br/>
             -->
-            <br/>
             <div>
                 <span>Full Name: <input type="text" th:field="*{fullName}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">fullName Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <div>
                 <span>Street: <input type="text" th:field="*{street}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('street')}" th:errors="*{street}">street Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <div>
                 <span>City: <input type="text" th:field="*{city}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">city Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <div>
                 <span>ZIP: <input type="text" th:field="*{zip}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">zip Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <div>
                 <span>Phone Number: <input type="text" th:field="*{phoneNumber}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">phoneNumber Error</span>
-            </div>
-            <br/>
+            </div><br/>
             <div>
                 <span><input type="submit" value="Register"/></span>
             </div>
@@ -65,30 +57,3 @@
         </form>
     </body>
 </html>
-
-<!--
-      <label for="password">Password: </label>
-      <input type="password" name="password"/><br/>
-
-      <label for="confirm">Confirm password: </label>
-      <input type="password" name="confirm"/><br/>
-
-      <label for="fullname">Full name: </label>
-      <input type="text" name="fullname"/><br/>
-
-      <label for="street">Street: </label>
-      <input type="text" name="street"/><br/>
-
-      <label for="city">City: </label>
-      <input type="text" name="city"/><br/>
-
-      <label for="state">State: </label>
-      <input type="text" name="state"/><br/>
-
-      <label for="zip">Zip: </label>
-      <input type="text" name="zip"/><br/>
-
-      <label for="phone">Phone: </label>
-      <input type="text" name="phone"/><br/>
-
-      -->

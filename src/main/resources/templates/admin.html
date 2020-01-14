@@ -12,5 +12,8 @@
         <a th:href="@{/admin/books}">Books Manager</a>
         <br/>
         <a th:href="@{/admin/categories}">Categories Manager</a>
+        <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
+            <input type="submit" value="Logout"/>
+        </form>
     </body>
 </html>

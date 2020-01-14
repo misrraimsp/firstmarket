@@ -9,7 +9,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry viewControllerRegistry) {
-        //viewControllerRegistry.addViewController("/admin").setViewName("admin");
         viewControllerRegistry.addViewController("/admin");
         viewControllerRegistry.addViewController("/login");
     }

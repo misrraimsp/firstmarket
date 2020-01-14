@@ -10,6 +10,10 @@
 
     <body>
         <h2>Welcome to firstmarket, where books belongs</h2>
+        <p> <a th:href="@{/login}">login</a></p>
         <p><a th:href="@{/admin}">admin page</a></p>
+        <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
+            <input type="submit" value="Logout"/>
+        </form>
     </body>
 </html>
