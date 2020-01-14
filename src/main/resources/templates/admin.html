@@ -4,12 +4,13 @@
       lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>FirstMarket</title>
+        <title>Admin</title>
         <link rel="stylesheet" th:href="@{/styles.css}" />
     </head>
-
     <body>
-        <h2>Welcome to firstmarket, where books belongs</h2>
-        <p><a th:href="@{/admin}">admin page</a></p>
+        <h3>welcome to <i>admin</i> main page</h3>
+        <a th:href="@{/admin/books}">Books Manager</a>
+        <br/>
+        <a th:href="@{/admin/categories}">Categories Manager</a>
     </body>
 </html>

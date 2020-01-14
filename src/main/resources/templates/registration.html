@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.thymeleaf.org"
       lang="en">
     <head>
         <meta charset="UTF-8">
@@ -22,13 +22,13 @@
             </div>
             <br/>
             <div>
-                <span>Password: <input type="text" th:field="*{password}"/></span>
+                <span>Password: <input type="password" th:field="*{password}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>
             </div>
             <br/>
             <!-- TODO: confirm password functionality
             <div>
-                <span>Confirm password: <input type="text" th:field="*{confirmPassword}"/></span>
+                <span>Confirm password: <input type="password" th:field="*{confirmPassword}"/></span>
                 <span class="validationError" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">confirmPassword Error</span>
             </div>
             -->

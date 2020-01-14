@@ -18,7 +18,7 @@ public class HomeController {
     @GetMapping("/")
     public String initialSetUp(){
         categoryServer.loadCategories();
-        return  "redirect:/admin";
+        return "home";
     }
 
 }
