@@ -9,7 +9,7 @@
     </head>
     <body>
         <h1>Category Page</h1>
-        <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="post">
+        <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="POST">
             <fieldset>
                 <div th:if="${#fields.hasErrors()}">
                     <span class="validationError">Please correct the problems below and resubmit.</span>
@@ -40,7 +40,7 @@
             </fieldset>
         </form>
         <br/>
-        <form action="#" th:action="@{/admin/deleteCategory}" th:object="${category}" method="post">
+        <form action="#" th:action="@{/admin/deleteCategory}" th:object="${category}" method="POST">
             <fieldset>
                 <legend>Delete Category</legend>
                 <input type="hidden" th:field="*{id}"/>

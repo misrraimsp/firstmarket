@@ -8,7 +8,7 @@
         <link rel="stylesheet" th:href="@{/styles.css}" />
     </head>
     <body>
-        <form action="#" th:action="@{/admin/newCategory}" th:object="${category}" method="post">
+        <form action="#" th:action="@{/admin/newCategory}" th:object="${category}" method="POST">
         <fieldset>
             <div th:if="${#fields.hasErrors()}">
                 <span class="validationError">Please correct the problems below and resubmit.</span>
