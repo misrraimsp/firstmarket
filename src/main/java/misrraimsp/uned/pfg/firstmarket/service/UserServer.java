@@ -2,7 +2,6 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.RoleRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.model.Role;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Service
 public class UserServer implements UserDetailsService {
@@ -36,12 +37,21 @@ public class UserServer implements UserDetailsService {
     }
 
     public void persist(User user){
-        Role role = roleRepository.findByName("ROLE_USER");
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        role.addUser(user);
-        user.addRole(role);
+        //Role role = roleRepository.findByName("ROLE_USER");
+
+        /*
+        List<User> users = role.getUsers();
+        users.add(user);
+        role.setUsers(users);
+         */
+
+        //All new users are set to ROLE_USER
+        /*List<Role> roles = user.getRoles();roles.add(role);user.setRoles(roles);*/
+        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
+
         userRepository.save(user);
-        roleRepository.save(role);
+        //roleRepository.save(role);
     }
 
 }

@@ -1,15 +1,13 @@
 package misrraimsp.uned.pfg.firstmarket;
 
-import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.data.CatPathRepository;
-import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
-import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.CatPath;
-import misrraimsp.uned.pfg.firstmarket.model.Category;
+import misrraimsp.uned.pfg.firstmarket.data.*;
+import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
+import java.util.Arrays;
 
 @SpringBootApplication
 public class FirstmarketApplication {
@@ -21,7 +19,9 @@ public class FirstmarketApplication {
     @Bean
     public CommandLineRunner dataLoader(BookRepository bookRepository,
                                         CategoryRepository categoryRepository,
-                                        CatPathRepository catPathRepository) {
+                                        CatPathRepository catPathRepository,
+                                        RoleRepository roleRepository,
+                                        UserRepository userRepository) {
 
         return args -> {
 
@@ -133,6 +133,45 @@ public class FirstmarketApplication {
             book2.setTitle("Traditional Music of Spain");
             book2.setCategory(music);
             bookRepository.save(book2);
+
+            //Roles
+
+            Role role1 = new Role();
+            role1.setName("ROLE_ADMIN");
+            roleRepository.save(role1);
+
+            Role role2 = new Role();
+            role2.setName("ROLE_USER");
+            roleRepository.save(role2);
+
+            //Users
+
+            User user1 = new User();
+            user1.setUsername("admin");
+            user1.setPassword("admin");
+            user1.setFirstName("adminName");
+            user1.setLastName("adminAp");
+            user1.setEmail("admin@gmail.com");
+            user1.setRoles(Arrays.asList(role1, role2));
+            userRepository.save(user1);
+
+            User user2 = new User();
+            user2.setUsername("misrra");
+            user2.setPassword("misrra");
+            user2.setFirstName("Misrra");
+            user2.setLastName("ApellidoMisrra");
+            user2.setEmail("misrra@gmail.com");
+            user2.setRoles(Arrays.asList(role2));
+            userRepository.save(user2);
+
+            User user3 = new User();
+            user3.setUsername("andrea");
+            user3.setPassword("andrea");
+            user3.setFirstName("Andrea");
+            user3.setLastName("ApellidoAndrea");
+            user3.setEmail("andrea@gmail.com");
+            user3.setRoles(Arrays.asList(role2));
+            userRepository.save(user3);
 
         };
     }
