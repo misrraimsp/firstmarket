@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
-import misrraimsp.uned.pfg.firstmarket.service.UserDetailsServer;
+import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,10 +15,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsServer userDetailsServer;
+    private UserServer userDetailsServer;
 
     @Autowired
-    public SecurityConfig(UserDetailsServer userDetailsServer) {
+    public SecurityConfig(UserServer userDetailsServer) {
         this.userDetailsServer = userDetailsServer;
     }
 

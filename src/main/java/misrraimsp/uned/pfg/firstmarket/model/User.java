@@ -5,12 +5,13 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import java.util.Arrays;
+import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+
+//import java.util.Arrays;
 
 @Entity
 @Data
@@ -20,17 +21,45 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "username cannot be empty")
     private String username;
-    private String password;
-    private String fullName;
-    private String street;
-    private String city;
-    private String zip;
-    private String phoneNumber;
 
+    @NotBlank(message = "password cannot be empty")
+    private String password;
+    // TODO private String confirmPassword;
+
+    @NotBlank(message = "firstName cannot be empty")
+    private String firstName;
+
+    @NotBlank(message = "lastName cannot be empty")
+    private String lastName;
+
+    @NotBlank(message = "email cannot be empty")
+    private String email;
+
+    @ManyToMany
+    private List<Role> roles = new ArrayList<>();
+
+
+    public void addRole(Role role){
+        roles.add(role);
+    }
+
+    /*
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")); }
+    */
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        for (Role r : roles){
+            authorities.add(new SimpleGrantedAuthority(r.getName()));
+        }
+        return authorities;
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;

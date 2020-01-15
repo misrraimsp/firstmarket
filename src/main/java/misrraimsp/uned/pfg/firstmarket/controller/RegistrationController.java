@@ -1,9 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.model.RegistrationInfo;
+import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -17,27 +16,25 @@ import javax.validation.Valid;
 @RequestMapping("/register")
 public class RegistrationController {
 
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
+    private UserServer userServer;
 
     @Autowired
-    public RegistrationController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    public RegistrationController(UserServer userServer) {
+        this.userServer = userServer;
     }
 
     @GetMapping
     public String registerForm(Model model) {
-        model.addAttribute("registrationInfo", new RegistrationInfo());
+        model.addAttribute("user", new User());
         return "registration";
     }
 
     @PostMapping
-    public String processRegistration(@Valid RegistrationInfo registrationInfo, Errors errors) {
+    public String processRegistration(@Valid User user, Errors errors) {
         if (errors.hasErrors()) {
             return "registration";
         }
-        userRepository.save(registrationInfo.toUser(passwordEncoder));
+        userServer.persist(user);
         return "redirect:/login";
     }
 }

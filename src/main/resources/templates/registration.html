@@ -10,7 +10,7 @@
     <body>
         <h1>Register</h1>
         <p><a th:href="@{/}">go back</a></p>
-        <form action="#" th:action="@{/register}" th:object="${registrationInfo}" method="POST" id="registerForm">
+        <form action="#" th:action="@{/register}" th:object="${user}" method="POST" id="registerForm">
             <div th:if="${#fields.hasErrors()}">
                 <span class="validationError">Please correct the problems below and resubmit.</span>
             </div><br/>
@@ -31,24 +31,16 @@
             </div><br/>
             -->
             <div>
-                <span>Full Name: <input type="text" th:field="*{fullName}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">fullName Error</span>
+                <span>Full Name: <input type="text" th:field="*{firstName}"/></span>
+                <span class="validationError" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName Error</span>
             </div><br/>
             <div>
-                <span>Street: <input type="text" th:field="*{street}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('street')}" th:errors="*{street}">street Error</span>
+                <span>Street: <input type="text" th:field="*{lastName}"/></span>
+                <span class="validationError" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</span>
             </div><br/>
             <div>
-                <span>City: <input type="text" th:field="*{city}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('city')}" th:errors="*{city}">city Error</span>
-            </div><br/>
-            <div>
-                <span>ZIP: <input type="text" th:field="*{zip}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('zip')}" th:errors="*{zip}">zip Error</span>
-            </div><br/>
-            <div>
-                <span>Phone Number: <input type="text" th:field="*{phoneNumber}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}">phoneNumber Error</span>
+                <span>City: <input type="text" th:field="*{email}"/></span>
+                <span class="validationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>
             </div><br/>
             <div>
                 <span><input type="submit" value="Register"/></span>
