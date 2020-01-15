@@ -11,15 +11,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-//import java.util.Arrays;
-
 @Entity
 @Data
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    //@Column(name = "id")
     private Long id;
 
     @NotBlank(message = "username cannot be empty")
@@ -44,12 +41,6 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
-
-    /*
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER")); }
-    */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

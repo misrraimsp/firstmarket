@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
@@ -21,7 +22,8 @@ public class FirstmarketApplication {
                                         CategoryRepository categoryRepository,
                                         CatPathRepository catPathRepository,
                                         RoleRepository roleRepository,
-                                        UserRepository userRepository) {
+                                        UserRepository userRepository,
+                                        PasswordEncoder passwordEncoder) {
 
         return args -> {
 
@@ -148,7 +150,7 @@ public class FirstmarketApplication {
 
             User user1 = new User();
             user1.setUsername("admin");
-            user1.setPassword("admin");
+            user1.setPassword(passwordEncoder.encode("admin"));
             user1.setFirstName("adminName");
             user1.setLastName("adminAp");
             user1.setEmail("admin@gmail.com");
@@ -157,7 +159,7 @@ public class FirstmarketApplication {
 
             User user2 = new User();
             user2.setUsername("misrra");
-            user2.setPassword("misrra");
+            user2.setPassword(passwordEncoder.encode("misrra"));
             user2.setFirstName("Misrra");
             user2.setLastName("ApellidoMisrra");
             user2.setEmail("misrra@gmail.com");
@@ -166,7 +168,7 @@ public class FirstmarketApplication {
 
             User user3 = new User();
             user3.setUsername("andrea");
-            user3.setPassword("andrea");
+            user3.setPassword(passwordEncoder.encode("andrea"));
             user3.setFirstName("Andrea");
             user3.setLastName("ApellidoAndrea");
             user3.setEmail("andrea@gmail.com");

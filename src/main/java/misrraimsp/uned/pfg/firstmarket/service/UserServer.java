@@ -16,14 +16,11 @@ import java.util.Arrays;
 public class UserServer implements UserDetailsService {
 
     private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
 
     @Autowired
-    public UserServer(UserRepository userRepository, PasswordEncoder passwordEncoder,
-                      RoleRepository roleRepository) {
+    public UserServer(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
     }
 
@@ -36,22 +33,10 @@ public class UserServer implements UserDetailsService {
         return user;
     }
 
-    public void persist(User user){
+    public void persist(User user, PasswordEncoder passwordEncoder){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        //Role role = roleRepository.findByName("ROLE_USER");
-
-        /*
-        List<User> users = role.getUsers();
-        users.add(user);
-        role.setUsers(users);
-         */
-
-        //All new users are set to ROLE_USER
-        /*List<Role> roles = user.getRoles();roles.add(role);user.setRoles(roles);*/
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-
         userRepository.save(user);
-        //roleRepository.save(role);
     }
 
 }
