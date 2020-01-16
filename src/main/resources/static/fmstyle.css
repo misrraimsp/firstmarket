@@ -1,5 +1,7 @@
 span.validationError {
-	color: red;
+	/*color: red;*/
+	border-left: 6px solid red;
+	background-color: lightgrey;
 }
 
 body {
