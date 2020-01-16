@@ -11,9 +11,9 @@
         <h1>Category Page</h1>
         <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="POST">
             <fieldset>
-                <div th:if="${#fields.hasErrors()}">
-                    <span class="validationError">Please correct the problems below and resubmit.</span>
-                </div>
+                <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
+                    <span>Please correct the problems below and resubmit.</span>
+                </div><br/>
                 <legend>Edit Category</legend>
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{parent.name}"/>

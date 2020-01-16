@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <title>Books Manager</title>
         <link type="text/css" rel="stylesheet" href="http://localhost:8080/firstmarket/fmstyle.css" />
+        <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
     </head>
     <body>
         <h1>Books Manager</h1>
@@ -21,7 +22,7 @@
                 <td><b>Category</b></td>
             </tr>
             <tr th:each="book : ${books}">
-                <td><a th:href="@{/admin/deleteBook/{id}(id=${book.id})}">delete</a></td>
+                <td><a th:href="@{/admin/deleteBook/{id}(id=${book.id})}"><i class='fas fa-trash-alt' style='color:red'></i></a></td>
                 <td><a th:href="@{/admin/editBook/{id}(id=${book.id})}"><span th:text="${book.isbn}">isbn</span></a></td>
                 <td><span th:text="${book.title}">title</span></td>
                 <td><span th:text="${book.category.name}">category</span></td>

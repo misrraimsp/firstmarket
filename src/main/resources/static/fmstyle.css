@@ -1,7 +1,15 @@
+a {
+	text-decoration: none;
+}
+
 span.validationError {
-	/*color: red;*/
 	border-left: 6px solid red;
 	background-color: lightgrey;
+}
+
+div.validationErrorHead {
+	border: 2px solid red;
+	border-radius: 8px;
 }
 
 body {

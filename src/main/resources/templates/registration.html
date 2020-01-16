@@ -11,8 +11,8 @@
         <h1>Register</h1>
         <p><a th:href="@{/}">go back</a></p>
         <form action="#" th:action="@{/register}" th:object="${user}" method="POST" id="registerForm">
-            <div th:if="${#fields.hasErrors()}">
-                <span class="validationError">Please correct the problems below and resubmit.</span>
+            <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
+                <span>Please correct the problems below and resubmit.</span>
             </div><br/>
         <fieldset>
             <legend>Registration Form</legend>

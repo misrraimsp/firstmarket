@@ -10,9 +10,9 @@
     <body>
         <form action="#" th:action="@{/admin/newBook}" th:object="${book}" method="POST">
         <fieldset>
-            <div th:if="${#fields.hasErrors()}">
-                <span class="validationError">Please correct the problems below and resubmit.</span>
-            </div>
+            <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
+                <span>Please correct the problems below and resubmit.</span>
+            </div><br/>
             <legend>New Book Form</legend>
             <div>
                 <span>ISBN:<input type="text" th:field="*{isbn}"/></span>

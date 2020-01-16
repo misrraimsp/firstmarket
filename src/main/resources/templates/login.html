@@ -9,8 +9,8 @@
     </head>
     <body>
         <h2>Login</h2>
-        <div th:if="${error}">
-            <span class="validationError">Unable to login. Check your username and password.</span>
+        <div class="validationErrorHead" th:if="${error}">
+            <span>Unable to login. Check your username and password.</span>
         </div><br/>
         <form action="#" th:action="@{/login}" method="POST" id="loginForm">
             <div>
