@@ -5,7 +5,12 @@
     <head>
         <meta charset="UTF-8">
         <title>Categories Manager</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:8080/firstmarket/fmstyle.css" />
+        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <style>
             body {
@@ -79,13 +84,15 @@
         </style>-->
     </head>
     <body>
-    <div class="sidenav" th:utext="${categoriesOnHtml}"/>
-    <div class="main">
-        <h2>Category Manager</h2>
-        <p><a th:href="@{/admin}">go back</a></p>
-        <p><a th:href="@{/admin/loadCategories}">refresh</a></p>
-        <p><a th:href="@{/admin/newCategory}">new category</a></p>
-        <p>Please, to edit or delete some category just click on its link</p>
+    <div class="container">
+        <div class="sidenav" th:utext="${categoriesOnHtml}"/>
+        <div class="main">
+            <h2>Category Manager</h2>
+            <p><a th:href="@{/admin}">go back</a></p>
+            <p><a th:href="@{/admin/loadCategories}">refresh</a></p>
+            <p><a th:href="@{/admin/newCategory}">new category</a></p>
+            <p>Please, to edit or delete some category just click on its link</p>
+        </div>
     </div>
     <script>
         /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */

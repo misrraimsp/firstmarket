@@ -5,15 +5,26 @@
     <head>
         <meta charset="UTF-8">
         <title>FirstMarket</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:8080/firstmarket/fmstyle.css" />
+        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     </head>
 
     <body>
-        <h2>Welcome to firstmarket, where books belongs</h2>
-        <p> <a th:href="@{/login}">login</a></p>
-        <p><a th:href="@{/admin}">admin page</a></p>
-        <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
-            <input type="submit" value="Logout"/>
-        </form>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h1 class="text-center">Welcome to <span class="font-weight-bold">firstmarket</span><small>, where books belongs</small></h1>
+            </div>
+        </div>
+        <div class="container">
+            <p> <a th:href="@{/login}">login</a></p>
+            <p><a th:href="@{/admin}">admin page</a></p>
+            <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
+                <input type="submit" value="Logout"/>
+            </form>
+        </div>
     </body>
 </html>

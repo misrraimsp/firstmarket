@@ -5,47 +5,54 @@
     <head>
         <meta charset="UTF-8">
         <title>User Registration</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:8080/firstmarket/fmstyle.css" />
+        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h1>Register</h1>
-        <p><a th:href="@{/}">go back</a></p>
-        <form action="#" th:action="@{/register}" th:object="${user}" method="POST" id="registerForm">
-            <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
-                <span>Please correct the problems below and resubmit.</span>
-            </div><br/>
-        <fieldset>
-            <legend>Registration Form</legend>
-            <div>
-                <span>Username: <input type="text" th:field="*{username}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username Error</span>
-            </div><br/>
-            <div>
-                <span>Password: <input type="password" th:field="*{password}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>
-            </div><br/>
-            <!-- TODO: confirm password functionality
-            <div>
-                <span>Confirm password: <input type="password" th:field="*{confirmPassword}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">confirmPassword Error</span>
-            </div><br/>
-            -->
-            <div>
-                <span>Full Name: <input type="text" th:field="*{firstName}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName Error</span>
-            </div><br/>
-            <div>
-                <span>Street: <input type="text" th:field="*{lastName}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</span>
-            </div><br/>
-            <div>
-                <span>City: <input type="text" th:field="*{email}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>
-            </div><br/>
-            <div>
-                <span><input type="submit" value="Register"/></span>
-            </div>
-        </fieldset>
-        </form>
+        <div class="container">
+            <h1>Register</h1>
+            <p><a th:href="@{/}">go back</a></p>
+            <form action="#" th:action="@{/register}" th:object="${user}" method="POST" id="registerForm">
+                <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
+                    <span>Please correct the problems below and resubmit.</span>
+                </div><br/>
+            <fieldset>
+                <legend>Registration Form</legend>
+                <div>
+                    <span>Username: <input type="text" th:field="*{username}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username Error</span>
+                </div><br/>
+                <div>
+                    <span>Password: <input type="password" th:field="*{password}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>
+                </div><br/>
+                <!-- TODO: confirm password functionality
+                <div>
+                    <span>Confirm password: <input type="password" th:field="*{confirmPassword}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}">confirmPassword Error</span>
+                </div><br/>
+                -->
+                <div>
+                    <span>Full Name: <input type="text" th:field="*{firstName}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName Error</span>
+                </div><br/>
+                <div>
+                    <span>Street: <input type="text" th:field="*{lastName}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</span>
+                </div><br/>
+                <div>
+                    <span>City: <input type="text" th:field="*{email}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>
+                </div><br/>
+                <div>
+                    <span><input type="submit" value="Register"/></span>
+                </div>
+            </fieldset>
+            </form>
+        </div>
     </body>
 </html>

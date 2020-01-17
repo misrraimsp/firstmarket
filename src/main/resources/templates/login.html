@@ -5,24 +5,31 @@
     <head>
         <meta charset="UTF-8">
         <title>Login</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:8080/firstmarket/fmstyle.css" />
+        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <h2>Login</h2>
-        <div class="validationErrorHead" th:if="${error}">
-            <span>Unable to login. Check your username and password.</span>
-        </div><br/>
-        <form action="#" th:action="@{/login}" method="POST" id="loginForm">
-            <div>
-                <span>Username: <input type="text" name="username" id="username" /></span>
+        <div class="container">
+            <h2>Login</h2>
+            <div class="validationErrorHead" th:if="${error}">
+                <span>Unable to login. Check your username and password.</span>
             </div><br/>
-            <div>
-                <span>Password: <input type="password" name="password" id="password" /></span>
-            </div><br/>
-            <div>
-                <span><input type="submit" value="Login"/></span>
-            </div>
-        </form><br/>
-        <span>New here? Click <a th:href="@{/register}">here</a> to register.</span>
+            <form action="#" th:action="@{/login}" method="POST" id="loginForm">
+                <div>
+                    <span>Username: <input type="text" name="username" id="username" /></span>
+                </div><br/>
+                <div>
+                    <span>Password: <input type="password" name="password" id="password" /></span>
+                </div><br/>
+                <div>
+                    <span><input type="submit" value="Login"/></span>
+                </div>
+            </form><br/>
+            <span>New here? Click <a th:href="@{/register}">here</a> to register.</span>
+        </div>
     </body>
 </html>

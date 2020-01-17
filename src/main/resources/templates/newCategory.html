@@ -5,34 +5,41 @@
     <head>
         <meta charset="UTF-8">
         <title>New Category</title>
-        <link type="text/css" rel="stylesheet" href="http://localhost:8080/firstmarket/fmstyle.css" />
+        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     </head>
     <body>
-        <form action="#" th:action="@{/admin/newCategory}" th:object="${category}" method="POST">
-        <fieldset>
-            <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
-                <span>Please correct the problems below and resubmit.</span>
-            </div><br/>
-            <legend>New Category Form</legend>
-            <div>
-                <span>Name:<input type="text" th:field="*{name}"/></span>
-                <span class="validationError" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
-            </div>
-            <br/>
-            <div>
-                <span>Nested under:</span>
-                <select th:field="*{parent.id}">
-                    <option th:each="ic : ${indentedCategories}"
-                            th:value="${ic.id}"
-                            th:text="${ic.name}"/>
-                </select>
-            </div>
-            <br/>
-            <div>
-                <span><input type="submit" value="Save Category"/></span>
-            </div>
-        </fieldset>
-        </form>
-        <p><a th:href="@{/admin/categories}">go back</a></p>
+        <div class="container">
+            <form action="#" th:action="@{/admin/newCategory}" th:object="${category}" method="POST">
+            <fieldset>
+                <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
+                    <span>Please correct the problems below and resubmit.</span>
+                </div><br/>
+                <legend>New Category Form</legend>
+                <div>
+                    <span>Name:<input type="text" th:field="*{name}"/></span>
+                    <span class="validationError" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
+                </div>
+                <br/>
+                <div>
+                    <span>Nested under:</span>
+                    <select th:field="*{parent.id}">
+                        <option th:each="ic : ${indentedCategories}"
+                                th:value="${ic.id}"
+                                th:text="${ic.name}"/>
+                    </select>
+                </div>
+                <br/>
+                <div>
+                    <span><input type="submit" value="Save Category"/></span>
+                </div>
+            </fieldset>
+            </form>
+            <p><a th:href="@{/admin/categories}">go back</a></p>
+        </div>
     </body>
 </html>
