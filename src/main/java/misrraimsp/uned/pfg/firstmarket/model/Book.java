@@ -13,10 +13,9 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @NotBlank(message = "isbn cannot be empty")
+    @NotBlank(message = "enter a valid ISBN code") //TODO: proper isbn server-side validation
     private String isbn;
 
-    @NotBlank(message = "title cannot be empty")
     private String title;
 
     @ManyToOne
