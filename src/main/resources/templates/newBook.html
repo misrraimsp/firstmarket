@@ -40,7 +40,8 @@
                     <select th:field="*{category.id}" class="custom-select" id="category" name="category">
                         <option th:each="ic : ${indentedCategories}"
                                 th:value="${ic.id}"
-                                th:text="${ic.name}"/>
+                                th:text="${ic.name}">
+                        </option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Save Book</button>
