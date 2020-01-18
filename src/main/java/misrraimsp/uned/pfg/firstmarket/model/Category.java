@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 
 @Data
 @Entity
@@ -13,7 +12,6 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@NotBlank(message = "name cannot be empty")
 	private String name;
 
 	@ManyToOne
