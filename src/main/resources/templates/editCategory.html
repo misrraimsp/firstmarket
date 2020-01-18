@@ -14,48 +14,61 @@
     </head>
     <body>
         <div class="container">
-            <h1>Category Page</h1>
-            <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="POST">
-                <fieldset>
-                    <div class="validationErrorHead" th:if="${#fields.hasErrors()}">
-                        <span>Please correct the problems below and resubmit.</span>
-                    </div><br/>
-                    <legend>Edit Category</legend>
-                    <input type="hidden" th:field="*{id}"/>
-                    <input type="hidden" th:field="*{parent.name}"/>
-                    <div>
-                        <span>Name:<input type="text" th:field="*{name}"/></span>
-                        <span class="validationError" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</span>
-                    </div>
-                    <br/>
-                    <div>
-                        <span>Nested under:</span>
-                        <select th:field="*{parent.id}">
-                            <option th:each="ic : ${indentedCategories}"
-                                    th:value="${ic.id}"
-                                    th:text="${ic.name}"
-                                    th:selected="${ic.id==category.parent.id}"
-                                    th:disabled="${descendants.contains(ic)}">
-                            </option>
-                        </select>
-                    </div>
-                    <br/>
-                    <div>
-                        <span><input type="submit" value="Update Category"/></span>
-                    </div>
-                </fieldset>
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/categories}">Categories Manager</a></li>
+                <li class="breadcrumb-item active">Edit Category</li>
+            </ul>
+            <h1>Edit Category</h1>
+            <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="POST" class="needs-validation" novalidate>
+                <!--<div class="ServerValidationError" th:if="${#fields.hasErrors()}">
+                    <span>Please correct the problems below and resubmit.</span>
+                </div>-->
+                <input type="hidden" th:field="*{id}"/>
+                <input type="hidden" th:field="*{parent.name}"/>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="enter name" name="name" required>
+                    <div class="invalid-feedback">Please fill out this field.</div>
+                </div>
+                <div class="form-group">
+                    <label for="parent">Nested under:</label>
+                    <select th:field="*{parent.id}" class="custom-select" id="parent" name="parent">
+                        <option th:each="ic : ${indentedCategories}"
+                                th:value="${ic.id}"
+                                th:text="${ic.name}"
+                                th:selected="${ic.id==category.parent.id}"
+                                th:disabled="${descendants.contains(ic)}">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Category</button>
             </form>
             <br/>
             <form action="#" th:action="@{/admin/deleteCategory}" th:object="${category}" method="POST">
-                <fieldset>
-                    <legend>Delete Category</legend>
-                    <input type="hidden" th:field="*{id}"/>
-                    <div>
-                        <span><input type="submit" value="Delete Category"/></span>
-                    </div>
-                </fieldset>
+                <input type="hidden" th:field="*{id}"/>
+                <button type="submit" class="btn btn-outline-danger btn-block">Delete Category</button>
             </form>
-            <p><a th:href="@{/admin/categories}">go back</a></p>
         </div>
+        <script>
+            // Disable form submissions if there are invalid fields
+            (function() {
+                'use strict';
+                window.addEventListener('load', function() {
+                    // Get the forms we want to add validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+        </script>
     </body>
 </html>
