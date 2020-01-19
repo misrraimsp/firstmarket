@@ -36,12 +36,18 @@
                         <td><span th:text="${book.title}">title</span></td>
                         <td><span th:text="${book.category.name}">category</span></td>
                         <td>
-                            <a th:href="@{/admin/editBook/{id}(id=${book.id})}"><i class="fas fa-pen"></i></a>
-                            <a th:href="@{/admin/deleteBook/{id}(id=${book.id})}"><i class='fas fa-trash-alt' style='color:red'></i></a>
+                            <a th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book"><i class="fas fa-pen"></i></a>
+                            <a th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book"><i class='fas fa-trash-alt' style='color:red'></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <!-- This code will enable all tooltips in the document -->
+        <script>
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
     </body>
 </html>
