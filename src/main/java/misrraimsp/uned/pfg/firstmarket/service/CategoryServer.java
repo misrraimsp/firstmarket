@@ -23,17 +23,13 @@ public class CategoryServer {
     private TreeNode<Category> rootCategoryNode; //root node of category tree
     private List<CatPath> directPaths; //set of first-order relations among categories
 
-    private CategoryViewBuilder categoryViewBuilder;
-
     @Autowired
     public CategoryServer(CategoryRepository categoryRepository,
                           CatPathRepository catPathRepository,
-                          BookRepository bookRepository,
-                          CategoryViewBuilder categoryViewBuilder) {
+                          BookRepository bookRepository) {
         this.categoryRepository = categoryRepository;
         this.catPathRepository = catPathRepository;
         this.bookRepository = bookRepository;
-        this.categoryViewBuilder = categoryViewBuilder;
     }
 
     public void loadCategories() {
@@ -42,16 +38,20 @@ public class CategoryServer {
         populate(rootCategoryNode);
     }
 
-    public String getCategoriesOnHtml() {
-        return categoryViewBuilder.buildHtml(rootCategoryNode);
-    }
-
     public List<Category> getIndentedCategories(){
         List<Category> list = new ArrayList<>();
         for (TreeNode<Category> node : rootCategoryNode) {
             Category indentedCategory = new Category();
             indentedCategory.setId(node.getData().getId());
-            indentedCategory.setName(getIndent(node.getLevel()) + node.getData().getName());
+            if (node == rootCategoryNode){
+                indentedCategory.setName(node.getData().getName());
+            }
+            else{
+                indentedCategory.setName("|" +
+                        getIndent(node.getLevel()) +
+                        "> " +
+                        node.getData().getName());
+            }
             list.add(indentedCategory);
         }
         return list;
@@ -159,8 +159,8 @@ public class CategoryServer {
 
     private String getIndent(int depth) {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < depth; i++) {
-            sb.append('-');
+        for (int i = 0; i < Math.pow(2,depth); i++) {
+            sb.append("-");
         }
         return sb.toString();
     }

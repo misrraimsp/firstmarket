@@ -33,8 +33,7 @@ public class CategoryController {
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
-        String html = categoryServer.getCategoriesOnHtml();
-        model.addAttribute("categoriesOnHtml", html);
+        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "categories";
     }
 
@@ -77,9 +76,9 @@ public class CategoryController {
         return "redirect:/admin/loadCategories";
     }
 
-    @PostMapping("/admin/deleteCategory")
-    public String deleteCategory(Category category){
-        categoryServer.deleteCategory(category.getId());
+    @GetMapping("/admin/deleteCategory/{id}")
+    public String deleteCategory(@PathVariable("id") Long id){
+        categoryServer.deleteCategory(id);
         return "redirect:/admin/loadCategories";
     }
 

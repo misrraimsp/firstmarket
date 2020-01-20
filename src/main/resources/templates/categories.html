@@ -2,115 +2,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Categories Manager</title>
-        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-        <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <style>
-            body {
-                font-family: "Lato", sans-serif;
-            }
-
-            /* Fixed sidenav, full height */
-            .sidenav {
-                height: 100%;
-                width: 250px;
-                position: fixed;
-                z-index: 1;
-                top: 0;
-                left: 0;
-                background-color: #111;
-                overflow-x: hidden;
-                padding-top: 20px;
-            }
-
-            /* Style the sidenav links and the dropdown button */
-            .sidenav a, .dropdown-btn {
-                padding: 6px 8px 6px 16px;
-                text-decoration: none;
-                font-size: 15px;
-                color: #818181;
-                display: block;
-                border: none;
-                background: none;
-                width: 100%;
-                text-align: left;
-                cursor: pointer;
-                outline: none;
-            }
-
-            /* On mouse-over */
-            .sidenav a:hover, .dropdown-btn:hover {
-                color: #f1f1f1;
-            }
-
-            /* Main content */
-            .main {
-                margin-left: 250px; /* Same as the width of the sidenav */
-                font-size: 20px; /* Increased text to enable scrolling */
-                padding: 0px 10px;
-            }
-
-            /* Add an active class to the active dropdown button */
-            .active {
-                background-color: green;
-                color: white;
-            }
-
-            /* Dropdown container (hidden by default). Optional: add a lighter background color and some left padding to change the design of the dropdown content */
-            .dropdown-container {
-                display: none;
-                background-color: #262626;
-                padding-left: 8px;
-            }
-
-            /* Optional: Style the caret down icon */
-            .fa-caret-down {
-                float: right;
-                padding-right: 8px;
-            }
-
-            /* Some media queries for responsiveness */
-            @media screen and (max-height: 450px) {
-                .sidenav {padding-top: 15px;}
-                .sidenav a {font-size: 18px;}
-            }
-        </style>-->
+    <head th:replace="fragments::head">
     </head>
     <body>
+    <header th:replace="fragments::header"></header>
     <div class="container">
-        <div class="sidenav" th:utext="${categoriesOnHtml}"/>
-        <div class="main">
-            <h2>Category Manager</h2>
-            <p><a th:href="@{/admin}">go back</a></p>
-            <p><a th:href="@{/admin/loadCategories}">refresh</a></p>
-            <p><a th:href="@{/admin/newCategory}">new category</a></p>
-            <p>Please, to edit or delete some category just click on its link</p>
-        </div>
+        <h1>Categories Manager</h1>
+        <ul class="breadcrumb">
+            <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
+            <li class="breadcrumb-item active">Categories Manager</li>
+        </ul>
+        <p><a class="btn btn-primary" th:href="@{/admin/newCategory}">new category</a></p>
+        <table class="table">
+            <thead class="thead-light">
+            <tr>
+                <th>Name</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ic : ${indentedCategories}">
+                <td><span th:text="${ic.name}">name</span></td>
+                <td th:if="${ic.name!='firstmarket'}">
+                    <a th:href="@{/admin/editCategory/{id}(id=${ic.id})}" data-toggle="tooltip" title="Edit Category"><i class="fas fa-pen"></i></a>
+                    <a th:href="@{/admin/deleteCategory/{id}(id=${ic.id})}" data-toggle="tooltip" title="Delete Category"><i class='fas fa-trash-alt' style='color:red'></i></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
-    <script>
-        /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
-        var dropdown = document.getElementsByClassName("dropdown-btn");
-        var i;
-
-        for (i = 0; i < dropdown.length; i++) {
-            dropdown[i].addEventListener("click", function() {
-                this.classList.toggle("active");
-                var dropdownContent = this.nextElementSibling;
-                if (dropdownContent.style.display === "block") {
-                    dropdownContent.style.display = "none";
-                }
-                else {
-                    dropdownContent.style.display = "block";
-                }
-            });
-        }
-    </script>
+    <footer th:replace="fragments::footer"></footer>
+    <script th:replace="fragments::enableTooltips"></script>
     </body>
 </html>

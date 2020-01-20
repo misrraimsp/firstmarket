@@ -36,11 +36,6 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Update Category</button>
             </form>
-            <br/>
-            <form action="#" th:action="@{/admin/deleteCategory}" th:object="${category}" method="POST">
-                <input type="hidden" th:field="*{id}"/>
-                <button type="submit" class="btn btn-outline-danger btn-block">Delete Category</button>
-            </form>
         </div>
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
