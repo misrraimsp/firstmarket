@@ -40,6 +40,7 @@ public class CategoryController {
 
     @GetMapping("/admin/newCategory")
     public String showNewCategoryForm(Model model){
+        model.addAttribute("title", "New Category");
         model.addAttribute("category", new Category());
         model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "newCategory";
@@ -58,6 +59,7 @@ public class CategoryController {
     @GetMapping("/admin/editCategory/{id}")
     public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
         Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
+        model.addAttribute("title", "Edit Category");
         model.addAttribute("category", category);
         model.addAttribute("descendants", categoryServer.getDescendants(category));
         model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());

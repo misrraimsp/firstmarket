@@ -15,19 +15,20 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/register")
-public class RegistrationController {
+public class UserController {
 
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    public RegistrationController(UserServer userServer, PasswordEncoder passwordEncoder) {
+    public UserController(UserServer userServer, PasswordEncoder passwordEncoder) {
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping
-    public String registerForm(Model model) {
+    public String showRegisterForm(Model model) {
+        model.addAttribute("title", "User Registration");
         model.addAttribute("user", new User());
         return "registration";
     }

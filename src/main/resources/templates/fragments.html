@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
+    <head th:fragment="head">
+        <meta charset="UTF-8">
+        <title th:text="${title}"></title>
+        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+
+        <header th:fragment="header">
+            <h1 class="bg-light text-center">HEADER</h1>
+            <!--<nav class="navbar navbar-expand-lg navbar-dark bg-light">
+                <a class="navbar-brand" href="#">
+                    <img th:src="@{fm.png}" width="30" height="30" alt="">
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" th:href="@{/productos/lista}">Productos</a>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Buscar..." aria-label="Search">
+                        <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Buscar</button>
+                    </form>
+                </div>
+            </nav>-->
+        </header>
+
+        <div class="container">
+        </div>
+
+        <footer th:fragment="footer" class="bg-light text-center fixed-bottom">
+            <span class="info-copyrigth"><a href="https://github.com/misrraimsp/firstmarket">firstmarket</a> © 2020</span>
+        </footer>
+
+        <!-- Enable all tooltips in the document -->
+        <script th:fragment="enableTooltips">
+            $(document).ready(function(){
+                $('[data-toggle="tooltip"]').tooltip();
+            });
+        </script>
+
+        <!-- Disable form submissions if there are invalid fields -->
+        <script th:fragment="disableFormSubmissionOnInvalidField">
+            (function() {
+                'use strict';
+                window.addEventListener('load', function() {
+                    // Get the forms we want to add validation styles to
+                    var forms = document.getElementsByClassName('needs-validation');
+                    // Loop over them and prevent submission
+                    var validation = Array.prototype.filter.call(forms, function(form) {
+                        form.addEventListener('submit', function(event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+        </script>
+
+    </body>
+
+</html>

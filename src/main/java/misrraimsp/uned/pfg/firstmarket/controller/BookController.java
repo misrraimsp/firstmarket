@@ -27,12 +27,14 @@ public class BookController {
 
     @GetMapping("/admin/books")
     public String showBooks(Model model){
+        model.addAttribute("title", "Books Manager");
         model.addAttribute("books", bookRepository.findAll());
         return "books";
     }
 
     @GetMapping("/admin/newBook")
     public String showNewBookForm(Model model){
+        model.addAttribute("title", "New Book");
         model.addAttribute("book", new Book());
         model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "newBook";
@@ -51,6 +53,7 @@ public class BookController {
     @GetMapping("/admin/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
         Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id: " + id));
+        model.addAttribute("title", "Edit Book");
         model.addAttribute("book", book);
         model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
         return "editBook";

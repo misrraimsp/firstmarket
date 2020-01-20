@@ -2,17 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Book Edition</title>
-        <!--<link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />-->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    </head>
+    <head th:replace="fragments::head"></head>
     <body>
+        <header th:replace="fragments::header"></header>
         <div class="container">
             <ul class="breadcrumb">
                 <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
@@ -41,31 +33,14 @@
                     <select th:field="*{category.id}" class="custom-select" id="category" name="category">
                         <option th:each="ic : ${indentedCategories}"
                                 th:value="${ic.id}"
-                                th:text="${ic.name}"/>
+                                th:text="${ic.name}">
+                        </option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Update Book</button>
             </form>
         </div>
-        <script>
-            // Disable form submissions if there are invalid fields
-            (function() {
-                'use strict';
-                window.addEventListener('load', function() {
-                    // Get the forms we want to add validation styles to
-                    var forms = document.getElementsByClassName('needs-validation');
-                    // Loop over them and prevent submission
-                    var validation = Array.prototype.filter.call(forms, function(form) {
-                        form.addEventListener('submit', function(event) {
-                            if (form.checkValidity() === false) {
-                                event.preventDefault();
-                                event.stopPropagation();
-                            }
-                            form.classList.add('was-validated');
-                        }, false);
-                    });
-                }, false);
-            })();
-        </script>
+        <footer th:replace="fragments::footer"></footer>
+        <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
     </body>
 </html>
