@@ -33,7 +33,7 @@ public class UserServer implements UserDetailsService {
         return user;
     }
 
-    public void persist(User user, PasswordEncoder passwordEncoder){
+    public void persistUser(User user, PasswordEncoder passwordEncoder){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
         userRepository.save(user);

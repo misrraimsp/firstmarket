@@ -12,7 +12,7 @@
                 <li class="breadcrumb-item active">New Book</li>
             </ul>
             <h1>New Book</h1>
-            <form action="#" th:action="@{/admin/newBook}" th:object="${book}" method="POST" class="needs-validation" novalidate>
+            <form action="#" th:action="@{/admin/newBook}" th:object="${book}" method="POST" enctype="multipart/form-data" class="needs-validation" novalidate>
                 <!--<div class="ServerValidationError" th:if="${#fields.hasErrors()}">
                     <span>Please correct the problems below and resubmit.</span>
                 </div>-->
@@ -35,6 +35,10 @@
                                 th:text="${ic.name}">
                         </option>
                     </select>
+                </div>
+                <div class="form-group">
+                    <label for="image">Book image to upload:</label>
+                    <input type="file" class="form-control" id="image" name="image" required/>
                 </div>
                 <button type="submit" class="btn btn-primary">Save Book</button>
             </form>

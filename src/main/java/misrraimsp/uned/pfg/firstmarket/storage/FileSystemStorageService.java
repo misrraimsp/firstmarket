@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.storage;
+/*package misrraimsp.uned.pfg.firstmarket.storage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -102,3 +102,5 @@ public class FileSystemStorageService implements StorageService {
 		}
 	}
 }
+
+ */

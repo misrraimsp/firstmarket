@@ -38,7 +38,7 @@ public class UserController {
         if (errors.hasErrors()) {
             return "registration";
         }
-        userServer.persist(user, passwordEncoder);
+        userServer.persistUser(user, passwordEncoder);
         return "redirect:/login";
     }
 }

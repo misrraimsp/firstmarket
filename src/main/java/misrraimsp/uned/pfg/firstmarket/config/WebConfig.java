@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
+import misrraimsp.uned.pfg.firstmarket.converter.MultipartFileToImageConverter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -12,4 +14,10 @@ public class WebConfig implements WebMvcConfigurer {
         //viewControllerRegistry.addViewController("/admin");
         //viewControllerRegistry.addViewController("/login");
     }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new MultipartFileToImageConverter());
+    }
+
 }

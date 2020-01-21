@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.storage;
+/*package misrraimsp.uned.pfg.firstmarket.storage;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
@@ -7,7 +7,7 @@ public class StorageProperties {
 
 	/**
 	 * Folder location for storing files
-	 */
+
 	private String location = "src/main/resources/static/img";
 
 	public String getLocation() {
@@ -19,3 +19,4 @@ public class StorageProperties {
 	}
 
 }
+*/

@@ -21,4 +21,7 @@ public class Book {
     @ManyToOne
     private Category category;
 
+    @OneToOne
+    private Image image;
+
 }
