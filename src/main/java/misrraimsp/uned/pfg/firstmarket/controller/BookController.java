@@ -52,7 +52,7 @@ public class BookController {
             return "newBook";
         }
         Image savedImage = imageRepository.save(book.getImage());
-        book.setImage(savedImage);
+        book.setImage(savedImage);// savedImage has id field properly set
         bookRepository.save(book);
         return "redirect:/admin/books";
     }

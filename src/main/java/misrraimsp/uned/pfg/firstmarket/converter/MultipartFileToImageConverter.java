@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
+import misrraimsp.uned.pfg.firstmarket.exception.StorageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.storage.StorageException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;

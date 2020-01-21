@@ -10,12 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 
-//import misrraimsp.uned.pfg.firstmarket.storage.StorageProperties;
-//import misrraimsp.uned.pfg.firstmarket.storage.StorageService;
-//import org.springframework.boot.context.properties.EnableConfigurationProperties;
-
 @SpringBootApplication
-//@EnableConfigurationProperties(StorageProperties.class)
 public class FirstmarketApplication {
 
     public static void main(String[] args) {
@@ -28,14 +23,9 @@ public class FirstmarketApplication {
                                         CatPathRepository catPathRepository,
                                         RoleRepository roleRepository,
                                         UserRepository userRepository,
-                                        PasswordEncoder passwordEncoder//,
-                                        //StorageService storageService
-                                        ) {
+                                        PasswordEncoder passwordEncoder) {
 
         return args -> {
-
-            //storageService.deleteAll();
-            //storageService.init();
 
             //Categories
 

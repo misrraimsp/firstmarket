@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.storage;
+package misrraimsp.uned.pfg.firstmarket.exception;
 
 public class StorageException extends RuntimeException {
 
