@@ -41,4 +41,16 @@ public class Category {
 		//if (this$parent == null ? other$parent != null : !this$parent.equals(other$parent)) return false;
 		return true;
 	}
+
+	public int hashCode() {
+		final int PRIME = 59;
+		int result = 1;
+		final Object $id = this.getId();
+		result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+		final Object $name = this.getName();
+		result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+		final Object $parent = this.getParent();
+		result = result * PRIME + ($parent == null ? 43 : $parent.hashCode());
+		return result;
+	}
 }

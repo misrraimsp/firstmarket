@@ -47,9 +47,9 @@ public class CategoryServer {
                 indentedCategory.setName(node.getData().getName());
             }
             else{
-                indentedCategory.setName("|" +
+                indentedCategory.setName("" +
                         getIndent(node.getLevel()) +
-                        "> " +
+                        "" +
                         node.getData().getName());
             }
             list.add(indentedCategory);
