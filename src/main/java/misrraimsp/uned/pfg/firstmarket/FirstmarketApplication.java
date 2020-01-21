@@ -8,6 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -23,9 +26,26 @@ public class FirstmarketApplication {
                                         CatPathRepository catPathRepository,
                                         RoleRepository roleRepository,
                                         UserRepository userRepository,
-                                        PasswordEncoder passwordEncoder) {
+                                        PasswordEncoder passwordEncoder,
+                                        ImageRepository imageRepository) {
 
         return args -> {
+
+            //Images
+
+            Image img1 = new Image();
+            Path path1 = Paths.get("img/rojo.jpg");
+            img1.setData(Files.readAllBytes(path1));
+            img1.setName(path1.getFileName().toString());
+            img1.setMimeType(Files.probeContentType(path1));
+            Image savedImg1 = imageRepository.save(img1);
+
+            Image img2 = new Image();
+            Path path2 = Paths.get("img/azul.jpg");
+            img2.setData(Files.readAllBytes(path2));
+            img2.setName(path2.getFileName().toString());
+            img2.setMimeType(Files.probeContentType(path2));
+            Image savedImg2 = imageRepository.save(img2);
 
             //Categories
 
@@ -128,12 +148,14 @@ public class FirstmarketApplication {
             book1.setIsbn("isbn001");
             book1.setTitle("Computer Basics");
             book1.setCategory(computers);
+            book1.setImage(savedImg1);
             bookRepository.save(book1);
 
             Book book2 = new Book();
             book2.setIsbn("isbn002");
             book2.setTitle("Traditional Music of Spain");
             book2.setCategory(music);
+            book2.setImage(savedImg2);
             bookRepository.save(book2);
 
             //Roles
