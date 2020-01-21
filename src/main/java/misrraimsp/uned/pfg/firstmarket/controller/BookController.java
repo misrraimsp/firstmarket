@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -51,8 +50,7 @@ public class BookController {
             model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
             return "newBook";
         }
-        Image savedImage = imageRepository.save(book.getImage());
-        book.setImage(savedImage);// savedImage has id field properly set
+        imageRepository.save(book.getImage());
         bookRepository.save(book);
         return "redirect:/admin/books";
     }
