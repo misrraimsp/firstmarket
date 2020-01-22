@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments::head"></head>
+    <body>
+        <header th:replace="fragments::header"></header>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="id : ${ids}">
+                    <div class="card">
+                        <img class="card-img-top" th:src="@{/image/{id}(id=${id})}">
+                        <div class="card-body">
+                            <h5 class="card-title">card-title</h5>
+                            <p class="card-text">card-text</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer th:replace="fragments::footer"></footer>
+    </body>
+</html>
