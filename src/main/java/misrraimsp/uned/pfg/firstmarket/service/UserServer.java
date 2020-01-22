@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.data.RoleRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
+import misrraimsp.uned.pfg.firstmarket.model.Role;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,17 +11,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class UserServer implements UserDetailsService {
 
     private UserRepository userRepository;
-    private RoleRepository roleRepository;
+    private RoleServer roleServer;
 
     @Autowired
-    public UserServer(UserRepository userRepository, RoleRepository roleRepository) {
+    public UserServer(UserRepository userRepository, RoleServer roleServer) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleServer = roleServer;
     }
 
     @Override
@@ -33,10 +34,14 @@ public class UserServer implements UserDetailsService {
         return user;
     }
 
-    public void persistUser(User user, PasswordEncoder passwordEncoder){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList(roleRepository.findByName("ROLE_USER")));
-        userRepository.save(user);
+    //if role is not specified it is by default assigned to ROLE_USER
+    public User persistUser(User user, PasswordEncoder passwordEncoder){
+        return this.persistUser(user, passwordEncoder, Arrays.asList(roleServer.findByName("ROLE_USER")));
     }
 
+    public User persistUser(User user, PasswordEncoder passwordEncoder, List<Role> roles){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roles);
+        return userRepository.save(user);
+    }
 }

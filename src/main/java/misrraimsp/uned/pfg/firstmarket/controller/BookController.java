@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
+import misrraimsp.uned.pfg.firstmarket.service.BookServer;
+import misrraimsp.uned.pfg.firstmarket.service.CatServer;
+import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,22 +17,21 @@ import javax.validation.Valid;
 @Controller
 public class BookController {
 
-    private BookRepository bookRepository;
-    private CategoryServer categoryServer;
-    private ImageRepository imageRepository;
+    private BookServer bookServer;
+    private CatServer catServer;
+    private ImageServer imageServer;
 
     @Autowired
-    public BookController(BookRepository bookRepository, CategoryServer categoryServer,
-                          ImageRepository imageRepository) {
-        this.bookRepository = bookRepository;
-        this.categoryServer = categoryServer;
-        this.imageRepository= imageRepository;
+    public BookController(BookServer bookServer, CatServer catServer, ImageServer imageServer) {
+        this.bookServer = bookServer;
+        this.catServer = catServer;
+        this.imageServer = imageServer;
     }
 
     @GetMapping("/admin/books")
     public String showBooks(Model model){
         model.addAttribute("title", "Books Manager");
-        model.addAttribute("books", bookRepository.findAll());
+        model.addAttribute("books", bookServer.findAll());
         return "books";
     }
 
@@ -40,43 +39,43 @@ public class BookController {
     public String showNewBookForm(Model model){
         model.addAttribute("title", "New Book");
         model.addAttribute("book", new Book());
-        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "newBook";
     }
 
     @PostMapping("/admin/newBook")
     public String processNewBook(@Valid Book book, Errors errors, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "newBook";
         }
-        imageRepository.save(book.getImage());
-        bookRepository.save(book);
+        book.setImage(imageServer.persistImage(book.getImage()));
+        bookServer.persistBook(book);
         return "redirect:/admin/books";
     }
 
     @GetMapping("/admin/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
-        Book book = bookRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid book Id: " + id));
+        Book book = bookServer.findById(id);
         model.addAttribute("title", "Edit Book");
         model.addAttribute("book", book);
-        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "editBook";
     }
 
     @PostMapping("/admin/editBook")
     public String processEditBook(@Valid Book book, Errors errors, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "editBook";
         }
-        bookRepository.save(book);
+        bookServer.persistBook(book);
         return "redirect:/admin/books";
     }
 
     @GetMapping("/admin/deleteBook/{id}")
     public String deleteBook(@PathVariable("id") Long id){
-        bookRepository.deleteById(id);
+        bookServer.deleteById(id);
         return "redirect:/admin/books";
     }
 

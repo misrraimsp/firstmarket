@@ -1,10 +1,11 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.StorageFileNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+//import misrraimsp.uned.pfg.firstmarket.exception.StorageFileNotFoundException;
 
 @Service
 public class ImageServer {
@@ -16,13 +17,26 @@ public class ImageServer {
         this.imageRepository = imageRepository;
     }
 
+    /**
+     * Este método está pensado para asegurar que en la base de datos
+     * no exista dos imágenes iguales, en el sentido de la igualdad
+     * de su byte[]
+     *
+     * @param image
+     * @return image or repositoryImage
+     */
     public Image persistImage(Image image) {
-        return imageRepository.save(image);
+        Image repositoryImage = imageRepository.findByData(image.getData());
+        if (repositoryImage == null){
+            return imageRepository.save(image);
+        }
+        return repositoryImage;
     }
 
+    /*
     public Image findImage(Long id) {
         return imageRepository.findById(id)
                 .orElseThrow(() -> new StorageFileNotFoundException("File not found with id " + id));
     }
-
+     */
 }

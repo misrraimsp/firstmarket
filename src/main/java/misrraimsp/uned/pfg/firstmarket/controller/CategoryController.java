@@ -1,8 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
-import misrraimsp.uned.pfg.firstmarket.service.CategoryServer;
+import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,24 +15,22 @@ import javax.validation.Valid;
 @Controller
 public class CategoryController {
 
-    private CategoryServer categoryServer;
-    private CategoryRepository categoryRepository;
+    private CatServer catServer;
 
     @Autowired
-    public CategoryController(CategoryServer categoryServer, CategoryRepository categoryRepository) {
-        this.categoryServer = categoryServer;
-        this.categoryRepository = categoryRepository;
+    public CategoryController(CatServer catServer) {
+        this.catServer = catServer;
     }
 
     @GetMapping("/admin/loadCategories")
     public String loadCategories(){
-        categoryServer.loadCategories();
+        catServer.loadCategories();
         return "redirect:/admin/categories";
     }
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
-        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "categories";
     }
 
@@ -41,44 +38,44 @@ public class CategoryController {
     public String showNewCategoryForm(Model model){
         model.addAttribute("title", "New Category");
         model.addAttribute("category", new Category());
-        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "newCategory";
     }
 
     @PostMapping("/admin/newCategory")
     public String processNewCategory(@Valid Category category, Errors errors, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "newCategory";
         }
-        categoryServer.persistCategory(category);
+        catServer.persistCategory(category);
         return "redirect:/admin/loadCategories";
     }
 
     @GetMapping("/admin/editCategory/{id}")
     public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
-        Category category = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
+        Category category = catServer.findById(id);
         model.addAttribute("title", "Edit Category");
         model.addAttribute("category", category);
-        model.addAttribute("descendants", categoryServer.getDescendants(category));
-        model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+        model.addAttribute("descendants", catServer.getDescendants(category));
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "editCategory";
     }
 
     @PostMapping("/admin/editCategory")
     public String processEditCategory(@Valid Category category, Errors errors, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("descendants", categoryServer.getDescendants(category));
-            model.addAttribute("indentedCategories", categoryServer.getIndentedCategories());
+            model.addAttribute("descendants", catServer.getDescendants(category));
+            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "editCategory";
         }
-        categoryServer.editCategory(category);
+        catServer.editCategory(category);
         return "redirect:/admin/loadCategories";
     }
 
     @GetMapping("/admin/deleteCategory/{id}")
     public String deleteCategory(@PathVariable("id") Long id){
-        categoryServer.deleteCategory(id);
+        catServer.deleteById(id);
         return "redirect:/admin/loadCategories";
     }
 

@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket;
 
-import misrraimsp.uned.pfg.firstmarket.data.*;
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,126 +21,145 @@ public class FirstmarketApplication {
     }
 
     @Bean
-    public CommandLineRunner dataLoader(BookRepository bookRepository,
-                                        CategoryRepository categoryRepository,
-                                        CatPathRepository catPathRepository,
-                                        RoleRepository roleRepository,
-                                        UserRepository userRepository,
+    public CommandLineRunner dataLoader(BookServer bookServer,
+                                        CatServer catServer,
+                                        RoleServer roleServer,
+                                        UserServer userServer,
                                         PasswordEncoder passwordEncoder,
-                                        ImageRepository imageRepository) {
+                                        ImageServer imageServer) {
 
         return args -> {
 
             //Images
 
+            Image img0 = new Image();
+            Path path0 = Paths.get("img/fm.png");
+            img0.setDefault(true);
+            img0.setData(Files.readAllBytes(path0));
+            img0.setName(path0.getFileName().toString());
+            img0.setMimeType(Files.probeContentType(path0));
+            imageServer.persistImage(img0);
+
             Image img1 = new Image();
             Path path1 = Paths.get("img/rojo.jpg");
+            img1.setDefault(false);
             img1.setData(Files.readAllBytes(path1));
             img1.setName(path1.getFileName().toString());
             img1.setMimeType(Files.probeContentType(path1));
-            imageRepository.save(img1);
+            imageServer.persistImage(img1);
 
             Image img2 = new Image();
             Path path2 = Paths.get("img/azul.jpg");
+            img2.setDefault(false);
             img2.setData(Files.readAllBytes(path2));
             img2.setName(path2.getFileName().toString());
             img2.setMimeType(Files.probeContentType(path2));
-            imageRepository.save(img2);
+            imageServer.persistImage(img2);
+
+            /*
+            Image img3 = new Image();
+            Path path3 = Paths.get("img/fmcopy.png");
+            img3.setDefault(true);
+            img3.setData(Files.readAllBytes(path3));
+            img3.setName(path3.getFileName().toString());
+            img3.setMimeType(Files.probeContentType(path3));
+            imageServer.persistImage(img3);
+             */
 
             //Categories
 
             Category fm = new Category();
             fm.setName("firstmarket");
             fm.setParent(fm); //root category: self-parenthood
-            categoryRepository.save(fm);
+            catServer.save(fm);
 
             Category tech = new Category();
             tech.setName("tech");
             tech.setParent(fm);
-            categoryRepository.save(tech);
+            catServer.save(tech);
 
             Category art = new Category();
             art.setName("art");
             art.setParent(fm);
-            categoryRepository.save(art);
+            catServer.save(art);
 
             Category computers = new Category();
             computers.setName("computers");
             computers.setParent(tech);
-            categoryRepository.save(computers);
+            catServer.save(computers);
 
             Category music = new Category();
             music.setName("music");
             music.setParent(art);
-            categoryRepository.save(music);
+            catServer.save(music);
 
             //CatPaths
 
-            CatPath cp0_0 = new CatPath();
+            Catpath cp0_0 = new Catpath();
             cp0_0.setAncestor(fm);
             cp0_0.setDescendant(fm);
-            cp0_0.setPath_length(0);
-            catPathRepository.save(cp0_0);
+            cp0_0.setSize(0);
+            catServer.save(cp0_0);
 
-            CatPath cp0_1 = new CatPath();
+            Catpath cp0_1 = new Catpath();
             cp0_1.setAncestor(fm);
             cp0_1.setDescendant(tech);
-            cp0_1.setPath_length(1);
-            catPathRepository.save(cp0_1);
+            cp0_1.setSize(1);
+            catServer.save(cp0_1);
 
-            CatPath cp0_2 = new CatPath();
+            Catpath cp0_2 = new Catpath();
             cp0_2.setAncestor(fm);
             cp0_2.setDescendant(art);
-            cp0_2.setPath_length(1);
-            catPathRepository.save(cp0_2);
+            cp0_2.setSize(1);
+            catServer.save(cp0_2);
 
-            CatPath cp0_11 = new CatPath();
+            Catpath cp0_11 = new Catpath();
             cp0_11.setAncestor(fm);
             cp0_11.setDescendant(computers);
-            cp0_11.setPath_length(2);
-            catPathRepository.save(cp0_11);
+            cp0_11.setSize(2);
+            catServer.save(cp0_11);
 
-            CatPath cp0_22 = new CatPath();
+            Catpath cp0_22 = new Catpath();
             cp0_22.setAncestor(fm);
             cp0_22.setDescendant(music);
-            cp0_22.setPath_length(2);
-            catPathRepository.save(cp0_22);
+            cp0_22.setSize(2);
+            catServer.save(cp0_22);
 
-            CatPath cp1_1 = new CatPath();
+            Catpath cp1_1 = new Catpath();
             cp1_1.setAncestor(tech);
             cp1_1.setDescendant(tech);
-            cp1_1.setPath_length(0);
-            catPathRepository.save(cp1_1);
+            cp1_1.setSize(0);
+            catServer.save(cp1_1);
 
-            CatPath cp1_11 = new CatPath();
+            Catpath cp1_11 = new Catpath();
             cp1_11.setAncestor(tech);
             cp1_11.setDescendant(computers);
-            cp1_11.setPath_length(1);
-            catPathRepository.save(cp1_11);
+            cp1_11.setSize(1);
+            catServer.save(cp1_11);
 
-            CatPath cp2_2 = new CatPath();
+            Catpath cp2_2 = new Catpath();
             cp2_2.setAncestor(art);
             cp2_2.setDescendant(art);
-            cp2_2.setPath_length(0);
-            catPathRepository.save(cp2_2);
+            cp2_2.setSize(0);
+            catServer.save(cp2_2);
 
-            CatPath cp2_22 = new CatPath();
+            Catpath cp2_22 = new Catpath();
             cp2_22.setAncestor(art);
             cp2_22.setDescendant(music);
-            cp2_22.setPath_length(1);
-            catPathRepository.save(cp2_22);
+            cp2_22.setSize(1);
+            catServer.save(cp2_22);
 
-            CatPath cp11_11 = new CatPath();
+            Catpath cp11_11 = new Catpath();
             cp11_11.setAncestor(computers);
             cp11_11.setDescendant(computers);
-            cp11_11.setPath_length(0);
-            catPathRepository.save(cp11_11);
+            cp11_11.setSize(0);
+            catServer.save(cp11_11);
 
-            CatPath cp22_22 = new CatPath();
+            Catpath cp22_22 = new Catpath();
             cp22_22.setAncestor(music);
             cp22_22.setDescendant(music);
-            cp22_22.setPath_length(0);
-            catPathRepository.save(cp22_22);
+            cp22_22.setSize(0);
+            catServer.save(cp22_22);
 
             //Books
 
@@ -149,53 +168,50 @@ public class FirstmarketApplication {
             book1.setTitle("Computer Basics");
             book1.setCategory(computers);
             book1.setImage(img1);
-            bookRepository.save(book1);
+            bookServer.persistBook(book1);
 
             Book book2 = new Book();
             book2.setIsbn("isbn002");
             book2.setTitle("Traditional Music of Spain");
             book2.setCategory(music);
             book2.setImage(img2);
-            bookRepository.save(book2);
+            bookServer.persistBook(book2);
 
             //Roles
 
             Role role1 = new Role();
             role1.setName("ROLE_ADMIN");
-            roleRepository.save(role1);
+            roleServer.persistRole(role1);
 
             Role role2 = new Role();
             role2.setName("ROLE_USER");
-            roleRepository.save(role2);
+            roleServer.persistRole(role2);
 
             //Users
 
             User user1 = new User();
             user1.setUsername("admin");
-            user1.setPassword(passwordEncoder.encode("admin"));
+            user1.setPassword("admin");
             user1.setFirstName("adminName");
             user1.setLastName("adminAp");
             user1.setEmail("admin@gmail.com");
-            user1.setRoles(Arrays.asList(role1, role2));
-            userRepository.save(user1);
+            userServer.persistUser(user1, passwordEncoder, Arrays.asList(role1));
 
             User user2 = new User();
             user2.setUsername("misrra");
-            user2.setPassword(passwordEncoder.encode("misrra"));
+            user2.setPassword("misrra");
             user2.setFirstName("Misrra");
             user2.setLastName("ApellidoMisrra");
             user2.setEmail("misrra@gmail.com");
-            user2.setRoles(Arrays.asList(role2));
-            userRepository.save(user2);
+            userServer.persistUser(user2, passwordEncoder);
 
             User user3 = new User();
             user3.setUsername("andrea");
-            user3.setPassword(passwordEncoder.encode("andrea"));
+            user3.setPassword("andrea");
             user3.setFirstName("Andrea");
             user3.setLastName("ApellidoAndrea");
             user3.setEmail("andrea@gmail.com");
-            user3.setRoles(Arrays.asList(role2));
-            userRepository.save(user3);
+            userServer.persistUser(user3, passwordEncoder);
 
         };
     }

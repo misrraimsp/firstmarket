@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Data
 @Entity
-public class CatPath {
+public class Catpath {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,6 +18,6 @@ public class CatPath {
 	@ManyToOne
 	private Category descendant;
 
-	private int path_length;
+	private int size;
 
 }

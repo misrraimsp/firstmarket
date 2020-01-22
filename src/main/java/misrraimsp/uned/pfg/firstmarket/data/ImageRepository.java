@@ -4,4 +4,5 @@ import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.data.repository.CrudRepository;
 
 public interface ImageRepository extends CrudRepository<Image, Long> {
+    Image findByData(byte[] data);
 }

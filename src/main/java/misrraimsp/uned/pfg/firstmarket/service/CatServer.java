@@ -1,11 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
-import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.data.CatPathRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
-import misrraimsp.uned.pfg.firstmarket.model.CatPath;
+import misrraimsp.uned.pfg.firstmarket.data.CatpathRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
+import misrraimsp.uned.pfg.firstmarket.model.Catpath;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,28 +12,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class implements CATegory and CATpath service layer abstraction
+ */
 @Service
-public class CategoryServer {
+public class CatServer {
 
     private CategoryRepository categoryRepository;
-    private CatPathRepository catPathRepository;
-    private BookRepository bookRepository;
+    private CatpathRepository catpathRepository;
+    private BookServer bookServer;
 
     private TreeNode<Category> rootCategoryNode; //root node of category tree
-    private List<CatPath> directPaths; //set of first-order relations among categories
+    private List<Catpath> directPaths; //set of first-order relations among categories
 
     @Autowired
-    public CategoryServer(CategoryRepository categoryRepository,
-                          CatPathRepository catPathRepository,
-                          BookRepository bookRepository) {
+    public CatServer(CategoryRepository categoryRepository, CatpathRepository catpathRepository, BookServer bookServer) {
         this.categoryRepository = categoryRepository;
-        this.catPathRepository = catPathRepository;
-        this.bookRepository = bookRepository;
+        this.catpathRepository = catpathRepository;
+        this.bookServer = bookServer;
     }
 
     public void loadCategories() {
         rootCategoryNode = new TreeNode<>(this.getRootCategory());
-        directPaths = catPathRepository.getDirectPaths();
+        directPaths = catpathRepository.getDirectPaths();
         populate(rootCategoryNode);
     }
 
@@ -57,10 +57,6 @@ public class CategoryServer {
         return list;
     }
 
-    /**
-     * ---- Main way of getting root category: Delegating on crafted SQL query
-     *      (see categoryRepository interface)
-     */
     private Category getRootCategory(){
         return categoryRepository.getRootCategory();
     }
@@ -81,24 +77,32 @@ public class CategoryServer {
         return list;
     }
 
+    public Catpath save(Catpath catpath) {
+        return catpathRepository.save(catpath);
+    }
+
+    public Category save(Category category) {
+        return categoryRepository.save(category);
+    }
+
     @Transactional
     public void persistCategory(Category category) {
         //Update Category info
-        Category savedCategory =  categoryRepository.save(category);
+        Category savedCategory =  this.save(category);
 
-        //Update CatPath info
-        for (CatPath ancestorCP : catPathRepository.getCatPathsByDescendant(category.getParent())){
-            CatPath nuevoCP = new CatPath();
+        //Update Catpath info
+        for (Catpath ancestorCP : catpathRepository.getCatpathsByDescendant(category.getParent())){
+            Catpath nuevoCP = new Catpath();
             nuevoCP.setAncestor(ancestorCP.getAncestor());
             nuevoCP.setDescendant(savedCategory);
-            nuevoCP.setPath_length(1 + ancestorCP.getPath_length());
-            catPathRepository.save(nuevoCP);
+            nuevoCP.setSize(1 + ancestorCP.getSize());
+            this.save(nuevoCP);
         }
-        CatPath nuevoCP = new CatPath();
+        Catpath nuevoCP = new Catpath();
         nuevoCP.setAncestor(savedCategory);
         nuevoCP.setDescendant(savedCategory);
-        nuevoCP.setPath_length(0);
-        catPathRepository.save(nuevoCP);
+        nuevoCP.setSize(0);
+        this.save(nuevoCP);
     }
 
     @Transactional
@@ -108,15 +112,15 @@ public class CategoryServer {
             categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());
             categoryRepository.updateParentById(modifiedCategory.getId(), modifiedCategory.getParent().getId());
 
-            //Update CatPath info
-            catPathRepository.deleteCatPathsFromAncestorsToDescendantsOf(modifiedCategory.getId());
-            for (CatPath ancestorCP : catPathRepository.getCatPathsByDescendant(modifiedCategory.getParent())){
-                for (CatPath descendantCP : catPathRepository.getCatPathsByAncestor(modifiedCategory)){
-                    CatPath nuevoCP = new CatPath();
+            //Update Catpath info
+            catpathRepository.deleteCatpathsFromAncestorsToDescendantsOf(modifiedCategory.getId());
+            for (Catpath ancestorCP : catpathRepository.getCatpathsByDescendant(modifiedCategory.getParent())){
+                for (Catpath descendantCP : catpathRepository.getCatpathsByAncestor(modifiedCategory)){
+                    Catpath nuevoCP = new Catpath();
                     nuevoCP.setAncestor(ancestorCP.getAncestor());
                     nuevoCP.setDescendant(descendantCP.getDescendant());
-                    nuevoCP.setPath_length(1 + ancestorCP.getPath_length() + descendantCP.getPath_length());
-                    catPathRepository.save(nuevoCP);
+                    nuevoCP.setSize(1 + ancestorCP.getSize() + descendantCP.getSize());
+                    this.save(nuevoCP);
                 }
             }
         }
@@ -127,18 +131,23 @@ public class CategoryServer {
     }
 
     @Transactional
-    public void deleteCategory(Long id) {
+    public void deleteById(Long id) {
         //reducir -1 los catpath de los ancestros a los descendientes de la categoría a eliminar
-        catPathRepository.reduceCatPathsFromAncestorsToDescendantsOf(id);
+        catpathRepository.reduceCatpathsFromAncestorsToDescendantsOf(id);
         //eliminar los catpath que tienen a la categoría a eliminar
-        catPathRepository.deleteCatPathsOf(id);
+        catpathRepository.deleteCatpathsOf(id);
         //el abuelo de las categorías hijas de la categoría a eliminar pasa a ser su padre
         Category deletingCategory = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
         categoryRepository.updateParentByParentId(id, deletingCategory.getParent().getId());
         //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
-        bookRepository.updateCategoryByCategoryId(id, deletingCategory.getParent().getId());
+        bookServer.updateCategoryIdByCategoryId(id, deletingCategory.getParent().getId());
         //eliminar la categoría
         categoryRepository.delete(deletingCategory);
+    }
+
+    public Category findById(Long id) {
+        return categoryRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
     }
 
     private void populate(TreeNode<Category> node) {
@@ -149,7 +158,7 @@ public class CategoryServer {
 
     private List<Category> getChildren(Category c){
         List<Category> children = new ArrayList<>();
-        for (CatPath cp : directPaths) {
+        for (Catpath cp : directPaths) {
             if (c.equals(cp.getAncestor())) {
                 children.add(cp.getDescendant());
             }
