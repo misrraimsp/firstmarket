@@ -27,7 +27,7 @@ public class ImageController {
     @GetMapping("/admin/images")
     public String showImages(Model model){
         model.addAttribute("title", "Images Manager");
-        model.addAttribute("ids", imageServer.getIds());
+        model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
         return "images";
     }
 

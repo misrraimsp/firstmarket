@@ -39,7 +39,7 @@ public class ImageServer {
                 .orElseThrow(() -> new StorageFileNotFoundException("File not found with id " + id));
     }
 
-    public List<Long> getIds() {
-        return imageRepository.getIds();
+    public List<Image> getAllMetaInfo() {
+        return imageRepository.getAllMetaInfo();
     }
 }

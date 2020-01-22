@@ -7,12 +7,13 @@
         <header th:replace="fragments::header"></header>
         <div class="container">
             <div class="row">
-                <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="id : ${ids}">
+                <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="mi : ${allMetaInfo}">
                     <div class="card">
-                        <img class="card-img-top" th:src="@{/image/{id}(id=${id})}">
+                        <img class="card-img-top" th:src="@{/image/{id}(id=${mi.id})}">
                         <div class="card-body">
-                            <h5 class="card-title">card-title</h5>
-                            <p class="card-text">card-text</p>
+                            <h5 class="card-title" th:text="${mi.name}">Image name</h5>
+                            <p class="card-text" th:text="${mi.mimeType}">Image MIME type</p>
+                            <p class="card-text" th:text="${mi.default}">isDefault</p>
                         </div>
                     </div>
                 </div>

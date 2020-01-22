@@ -10,6 +10,6 @@ public interface ImageRepository extends CrudRepository<Image, Long> {
 
     Image findByData(byte[] data);
 
-    @Query(value = "SELECT id FROM image", nativeQuery = true)
-    List<Long> getIds();
+    @Query(value = "SELECT id,null AS data,is_default,mime_type,name FROM image ", nativeQuery = true)
+    List<Image> getAllMetaInfo();
 }
