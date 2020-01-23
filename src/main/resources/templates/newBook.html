@@ -37,13 +37,24 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="image">Book image to upload:</label>
-                    <input type="file" th:field="*{image}" class="form-control" id="image" name="image" required/>
+                    <label for="input1">Image:</label>
+                    <select class="custom-select" id="input1" name="storedImageId">
+                        <option th:each="imageInfo : ${imagesInfo}"
+                                th:value="${imageInfo.id}"
+                                th:text="${imageInfo.name}">
+                        </option>
+                    </select>
                 </div>
-                <button type="submit" class="btn btn-primary">Save Book</button>
+                <div class="form-group">
+                    <label for="switch">select new image:</label>
+                    <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
+                    <input class="form-control" type="file" th:field="*{image}" id="input2" disabled required/>
+                </div>
+                <button class="btn btn-primary" type="submit">Save Book</button>
             </form>
         </div>
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <script th:replace="fragments::binaryInputSwitch"></script>
     </body>
 </html>

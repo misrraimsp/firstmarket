@@ -42,4 +42,8 @@ public class ImageServer {
     public List<Image> getAllMetaInfo() {
         return imageRepository.getAllMetaInfo();
     }
+
+    public Image getDefaultImage() {
+        return imageRepository.findByIsDefaultIsTrue();
+    }
 }

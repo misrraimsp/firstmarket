@@ -40,16 +40,23 @@ public class BookController {
         model.addAttribute("title", "New Book");
         model.addAttribute("book", new Book());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         return "newBook";
     }
 
     @PostMapping("/admin/newBook")
-    public String processNewBook(@Valid Book book, Errors errors, Model model){
+    public String processNewBook(@Valid Book book, Long storedImageId, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             return "newBook";
         }
-        book.setImage(imageServer.persistImage(book.getImage()));
+        if (storedImageId == null){ //new image upload
+            book.setImage(imageServer.persistImage(book.getImage()));
+        }
+        else {
+            book.setImage(imageServer.findById(storedImageId));
+        }
         bookServer.persistBook(book);
         return "redirect:/admin/books";
     }
