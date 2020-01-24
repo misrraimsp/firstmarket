@@ -11,4 +11,6 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Book b SET b.category.id = :new_category_id WHERE b.category.id = :category_id")
     void updateCategoryIdByCategoryId(@Param("category_id") Long category_id, @Param("new_category_id") Long new_category_id);
+
+    Iterable<? extends Book> findByImageId(Long id);
 }

@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -27,6 +29,7 @@ public class ImageController {
     @GetMapping("/admin/images")
     public String showImages(Model model){
         model.addAttribute("title", "Images Manager");
+        model.addAttribute("image", new Image());
         model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
         return "images";
     }
@@ -37,5 +40,17 @@ public class ImageController {
         response.setContentType(image.getMimeType());
         InputStream is = new ByteArrayInputStream(image.getData());
         IOUtils.copy(is, response.getOutputStream());
+    }
+
+    @PostMapping("/admin/newImage")
+    public String processNewImage(@RequestParam Image image){
+        imageServer.persistImage(image);
+        return "redirect:/admin/images";
+    }
+
+    @GetMapping("/admin/deleteImage/{id}")
+    public String deleteImage(@PathVariable("id") Long id){
+        imageServer.deleteById(id);
+        return "redirect:/admin/images";
     }
 }

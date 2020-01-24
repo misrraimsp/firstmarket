@@ -49,6 +49,7 @@
                     <label for="switch">select new image:</label>
                     <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
                     <input class="form-control" type="file" th:field="*{image}" id="input2" disabled required/>
+                    <div class="invalid-feedback">Please select an image.</div>
                 </div>
                 <button class="btn btn-primary" type="submit">Save Book</button>
             </form>

@@ -11,19 +11,41 @@
                 <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
                 <li class="breadcrumb-item active">Images Manager</li>
             </ul>
-            <div class="row">
-                <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="mi : ${allMetaInfo}">
-                    <div class="card">
-                        <img class="card-img-top" th:src="@{/image/{id}(id=${mi.id})}">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${mi.name}">Image name</h5>
-                            <p class="card-text" th:text="${mi.mimeType}">Image MIME type</p>
-                            <p class="card-text" th:text="${mi.default}">isDefault</p>
-                        </div>
-                    </div>
+            <form class="needs-validation" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
+                <div class="form-group">
+                    <input class="form-control" type="file" th:name="image" required/>
+                    <div class="invalid-feedback">Please select an image.</div>
                 </div>
-            </div>
+                <button class="btn btn-primary btn-sm" type="submit">Save Image</button>
+            </form>
+            <br/>
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>Name</th>
+                    <th>MIME type</th>
+                    <th>is Default</th>
+                    <th>Image</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="mi : ${allMetaInfo}">
+                    <td><span th:text="${mi.name}">name</span></td>
+                    <td><span th:text="${mi.mimeType}">mimeType</span></td>
+                    <td><span th:text="${mi.default}">isDefault</span></td>
+                    <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
+                    <td th:if="${!mi.default}">
+                        <a th:href="@{/admin/deleteImage/{id}(id=${mi.id})}" data-toggle="tooltip" title="Delete Image">
+                            <i class='fas fa-trash-alt' style='color:red'></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
         </div>
         <footer th:replace="fragments::footer"></footer>
+        <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <script th:replace="fragments::enableTooltips"></script>
     </body>
 </html>

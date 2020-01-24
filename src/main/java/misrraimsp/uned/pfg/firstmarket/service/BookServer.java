@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +35,12 @@ public class BookServer {
 
     public void updateCategoryIdByCategoryId(Long category_id, Long new_category_id) {
         bookRepository.updateCategoryIdByCategoryId(category_id, new_category_id);
+    }
+
+    public void setImagesTo(Long old_image_id, Image new_image) {
+        for (Book book : bookRepository.findByImageId(old_image_id)){
+            book.setImage(new_image);
+            bookRepository.save(book);
+        }
     }
 }
