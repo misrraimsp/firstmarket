@@ -18,7 +18,7 @@
                         <th>ISBN</th>
                         <th>Title</th>
                         <th>Category</th>
-                        <th>Image Name</th>
+                        <th>Image</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -27,7 +27,7 @@
                         <td><span th:text="${book.isbn}">isbn</span></td>
                         <td><span th:text="${book.title}">title</span></td>
                         <td><span th:text="${book.category.name}">category</span></td>
-                        <td><span th:text="${book.image.name}">imageName</span></td>
+                        <td><img th:src="@{/image/{id}(id=${book.image.id})}" style="width:64px;height:64px;"></td>
                         <td>
                             <a th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book"><i class="fas fa-pen"></i></a>
                             <a th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book"><i class='fas fa-trash-alt' style='color:red'></i></a>
