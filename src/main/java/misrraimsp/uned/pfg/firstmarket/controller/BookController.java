@@ -63,18 +63,25 @@ public class BookController {
 
     @GetMapping("/admin/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
-        Book book = bookServer.findById(id);
         model.addAttribute("title", "Edit Book");
-        model.addAttribute("book", book);
+        model.addAttribute("book", bookServer.findById(id));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         return "editBook";
     }
 
     @PostMapping("/admin/editBook")
-    public String processEditBook(@Valid Book book, Errors errors, Model model){
+    public String processEditBook(@Valid Book book, Long storedImageId, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             return "editBook";
+        }
+        if (storedImageId == null){ //new image upload
+            book.setImage(imageServer.persistImage(book.getImage()));
+        }
+        else {
+            book.setImage(imageServer.findById(storedImageId));
         }
         bookServer.persistBook(book);
         return "redirect:/admin/books";

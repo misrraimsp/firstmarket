@@ -12,35 +12,51 @@
                 <li class="breadcrumb-item active">Edit Book</li>
             </ul>
             <h1>Edit Book</h1>
-            <form action="#" th:action="@{/admin/editBook}" th:object="${book}" method="POST" class="needs-validation" novalidate>
+            <form class="needs-validation" novalidate th:action="@{/admin/editBook}" th:object="${book}" method="POST" enctype="multipart/form-data" action="#">
                 <!--<div class="ServerValidationError" th:if="${#fields.hasErrors()}">
                     <span>Please correct the problems below and resubmit.</span>
                 </div>-->
                 <input type="hidden" th:field="*{id}"/>
                 <div class="form-group">
                     <label for="isbn">ISBN:</label>
-                    <input type="text" th:field="*{isbn}" class="form-control" id="isbn" placeholder="enter isbn" name="isbn" required>
+                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required>
                     <div class="invalid-feedback">Please fill out this field.</div>
                     <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('isbn')}" th:errors="*{isbn}">Error</span>-->
                 </div>
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input type="text" th:field="*{title}" class="form-control" id="title" placeholder="enter title" name="title" required>
+                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" required>
                     <div class="invalid-feedback">Please fill out this field.</div>
                 </div>
                 <div class="form-group">
                     <label for="category">Category:</label>
-                    <select th:field="*{category.id}" class="custom-select" id="category" name="category">
+                    <select class="custom-select" th:field="*{category.id}" id="category">
                         <option th:each="ic : ${indentedCategories}"
                                 th:value="${ic.id}"
                                 th:text="${ic.name}">
                         </option>
                     </select>
                 </div>
+                <div class="form-group">
+                    <label for="input1">Image:</label>
+                    <select class="custom-select" id="input1" name="storedImageId">
+                        <option th:each="imageInfo : ${imagesInfo}"
+                                th:value="${imageInfo.id}"
+                                th:text="${imageInfo.name}"
+                                th:selected="${imageInfo.id==book.image.id}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="switch">select new image:</label>
+                    <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
+                    <input class="form-control" type="file" th:field="*{image}" id="input2" disabled required/>
+                </div>
                 <button type="submit" class="btn btn-primary">Update Book</button>
             </form>
         </div>
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <script th:replace="fragments::binaryInputSwitch"></script>
     </body>
 </html>
