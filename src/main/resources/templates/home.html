@@ -10,28 +10,35 @@
             </div>
         </div>
         <div class="container">
-            <p> <a th:href="@{/login}">login</a></p>
-            <p><a th:href="@{/admin}">admin page</a></p>
-            <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
-                <input type="submit" value="Logout"/>
-            </form>
 
-            <!--
+            <div th:replace="fragments::header"></div>
+
             <div class="row">
-                <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="mi : ${allMetaInfo}">
-                    <div class="card">
-                        <img class="card-img-top" th:src="@{/image/{id}(id=${mi.id})}">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${mi.name}">Image name</h5>
-                            <p class="card-text" th:text="${mi.mimeType}">Image MIME type</p>
-                            <p class="card-text" th:text="${mi.default}">isDefault</p>
+                <div class="col-lg-2">
+                    <p> <a th:href="@{/login}">login</a></p>
+                    <p><a th:href="@{/admin}">admin page</a></p>
+                    <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
+                        <input type="submit" value="Logout"/>
+                    </form>
+                </div>
+                <div class="col-lg-10">
+                    <div class="row">
+                        <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="book : ${books}">
+                            <div class="card">
+                                <img class="card-img-top" th:src="@{/image/{id}(id=${book.image.id})}">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${book.isbn}">isbn</h5>
+                                    <p class="card-text" th:text="${book.title}">title</p>
+                                    <p class="card-text" th:text="${book.category.name}">category</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-            -->
+
+            <div th:replace="fragments::footer"></div>
 
         </div>
-        <footer th:replace="fragments::footer"></footer>
     </body>
 </html>

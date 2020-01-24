@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,16 +11,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class HomeController {
 
     private CatServer catServer;
+    private BookServer bookServer;
 
     @Autowired
-    public HomeController(CatServer catServer) {
+    public HomeController(CatServer catServer, BookServer bookServer) {
         this.catServer = catServer;
+        this.bookServer = bookServer;
     }
 
     @GetMapping("/")
     public String initialSetUp(Model model){
         catServer.loadCategories();
         model.addAttribute("title", "FirstMarket");
+        model.addAttribute("books", bookServer.findAll());
         return "home";
     }
 
