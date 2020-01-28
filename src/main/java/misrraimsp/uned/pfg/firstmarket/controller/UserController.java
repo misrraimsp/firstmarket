@@ -9,12 +9,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/register")
 public class UserController {
 
     private UserServer userServer;
@@ -26,19 +24,19 @@ public class UserController {
         this.passwordEncoder = passwordEncoder;
     }
 
-    @GetMapping
-    public String showRegisterForm(Model model) {
-        model.addAttribute("title", "User Registration");
+    @GetMapping("/newUser")
+    public String showNewUserForm(Model model) {
+        model.addAttribute("title", "New User");
         model.addAttribute("user", new User());
-        return "registration";
+        return "newUser";
     }
 
-    @PostMapping
-    public String processRegistration(@Valid User user, Errors errors) {
+    @PostMapping("/newUser")
+    public String processNewUser(@Valid User user, Errors errors) {
         if (errors.hasErrors()) {
-            return "registration";
+            return "newUser";
         }
-        userServer.persistUser(user, passwordEncoder);
+        userServer.persist(user, passwordEncoder);
         return "redirect:/login";
     }
 }

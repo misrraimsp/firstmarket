@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
     <head th:replace="fragments::head"></head>
     <body>
+        <div th:replace="fragments::header"></div>
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
-                <h1 class="text-center">Welcome to <span class="font-weight-bold">firstmarket</span><small>, where books belongs</small></h1>
+                <h1 class="text-center">
+                    Welcome to <span class="font-weight-bold">firstmarket</span><small>, where books belongs</small>
+                </h1>
+                <div sec:authorize="hasRole('ADMIN')" class="text-center">
+                    <h6><code class="text-info font-italic">
+                        - a great power comes with a great responsibility -
+                    </code></h6>
+                </div>
             </div>
         </div>
         <div class="container">
-
-            <div th:replace="fragments::header"></div>
-
             <div class="row">
-                <div class="col-lg-2">
-                    <p> <a th:href="@{/login}">login</a></p>
-                    <p><a th:href="@{/admin}">admin page</a></p>
-                    <form  action="#" th:action="@{/logout}" method="POST" id="logoutForm">
-                        <input type="submit" value="Logout"/>
-                    </form>
+                <div class="col-lg-2 bg-dark">
+                    Categories
                 </div>
                 <div class="col-lg-10">
                     <div class="row">
@@ -36,9 +38,7 @@
                     </div>
                 </div>
             </div>
-
-            <div th:replace="fragments::footer"></div>
-
         </div>
+        <div th:replace="fragments::footer"></div>
     </body>
 </html>

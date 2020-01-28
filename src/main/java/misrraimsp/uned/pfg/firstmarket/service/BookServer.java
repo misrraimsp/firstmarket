@@ -16,7 +16,7 @@ public class BookServer {
         this.bookRepository = bookRepository;
     }
 
-    public Book persistBook(Book book) {
+    public Book persist(Book book) {
         return bookRepository.save(book);
     }
 
@@ -37,10 +37,11 @@ public class BookServer {
         bookRepository.updateCategoryIdByCategoryId(category_id, new_category_id);
     }
 
-    public void setImagesTo(Long old_image_id, Image new_image) {
-        for (Book book : bookRepository.findByImageId(old_image_id)){
-            book.setImage(new_image);
-            bookRepository.save(book);
-        }
+    public void updateImageByImageId(Long old_image_id, Image new_image) {
+        bookRepository.findByImageId(old_image_id).forEach(
+                book -> {
+                    book.setImage(new_image);
+                    bookRepository.save(book);
+                });
     }
 }

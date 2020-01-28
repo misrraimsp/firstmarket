@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
+import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,30 +13,28 @@ public class HomeController {
 
     private CatServer catServer;
     private BookServer bookServer;
+    private ImageServer imageServer;
 
     @Autowired
-    public HomeController(CatServer catServer, BookServer bookServer) {
+    public HomeController(CatServer catServer, BookServer bookServer, ImageServer imageServer) {
         this.catServer = catServer;
         this.bookServer = bookServer;
+        this.imageServer = imageServer;
     }
 
-    @GetMapping("/")
+    @GetMapping({"/", "/home"})
     public String initialSetUp(Model model){
         catServer.loadCategories();
         model.addAttribute("title", "FirstMarket");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("books", bookServer.findAll());
         return "home";
-    }
-
-    @GetMapping("/admin")
-    public String showAdmin(Model model){
-        model.addAttribute("title", "Admin");
-        return "admin";
     }
 
     @GetMapping("/login")
     public String showLogin(Model model){
         model.addAttribute("title", "Login");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         return "login";
     }
 

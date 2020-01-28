@@ -35,11 +35,11 @@ public class UserServer implements UserDetailsService {
     }
 
     //if role is not specified it is by default assigned to ROLE_USER
-    public User persistUser(User user, PasswordEncoder passwordEncoder){
-        return this.persistUser(user, passwordEncoder, Arrays.asList(roleServer.findByName("ROLE_USER")));
+    public User persist(User user, PasswordEncoder passwordEncoder){
+        return this.persist(user, passwordEncoder, Arrays.asList(roleServer.findByName("ROLE_USER")));
     }
 
-    public User persistUser(User user, PasswordEncoder passwordEncoder, List<Role> roles){
+    public User persist(User user, PasswordEncoder passwordEncoder, List<Role> roles){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRoles(roles);
         return userRepository.save(user);

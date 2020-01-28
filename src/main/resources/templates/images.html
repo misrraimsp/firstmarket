@@ -6,19 +6,14 @@
     <body>
         <header th:replace="fragments::header"></header>
         <div class="container">
-            <h1>Images Manager</h1>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-                <li class="breadcrumb-item active">Images Manager</li>
-            </ul>
-            <form class="needs-validation" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
+            <div th:replace="fragments::underHead('Images')"></div>
+            <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
                 <div class="form-group">
                     <input class="form-control" type="file" th:name="image" required/>
                     <div class="invalid-feedback">Please select an image.</div>
                 </div>
-                <button class="btn btn-primary btn-sm" type="submit">Save Image</button>
+                <button th:replace="fragments::saveButton"></button>
             </form>
-            <br/>
             <table class="table">
                 <thead class="thead-light">
                 <tr>

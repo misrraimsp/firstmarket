@@ -6,11 +6,7 @@
     <body>
         <header th:replace="fragments::header"></header>
         <div class="container">
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-                <li class="breadcrumb-item active">Login</li>
-            </ul>
-            <h1>Login</h1>
+            <h3>Login</h3>
             <form action="#" th:action="@{/login}" method="POST" id="loginForm" class="needs-validation" novalidate>
                 <div class="form-group">
                     <label for="username">Username:</label>
@@ -25,7 +21,7 @@
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
             <br/>
-            <span>New? Click <a th:href="@{/register}">here</a> to register.</span>
+            <span>New? Click <a th:href="@{/newUser}">here</a> to register.</span>
         </div>
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>

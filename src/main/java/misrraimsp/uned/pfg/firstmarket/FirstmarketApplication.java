@@ -38,7 +38,7 @@ public class FirstmarketApplication {
             img0.setData(Files.readAllBytes(path0));
             img0.setName(path0.getFileName().toString());
             img0.setMimeType(Files.probeContentType(path0));
-            imageServer.persistImage(img0);
+            imageServer.persist(img0);
 
             Image img1 = new Image();
             Path path1 = Paths.get("img/rojo.jpg");
@@ -46,7 +46,7 @@ public class FirstmarketApplication {
             img1.setData(Files.readAllBytes(path1));
             img1.setName(path1.getFileName().toString());
             img1.setMimeType(Files.probeContentType(path1));
-            imageServer.persistImage(img1);
+            imageServer.persist(img1);
 
             Image img2 = new Image();
             Path path2 = Paths.get("img/azul.jpg");
@@ -54,7 +54,7 @@ public class FirstmarketApplication {
             img2.setData(Files.readAllBytes(path2));
             img2.setName(path2.getFileName().toString());
             img2.setMimeType(Files.probeContentType(path2));
-            imageServer.persistImage(img2);
+            imageServer.persist(img2);
 
             /*
             Image img3 = new Image();
@@ -168,24 +168,24 @@ public class FirstmarketApplication {
             book1.setTitle("Computer Basics");
             book1.setCategory(computers);
             book1.setImage(img1);
-            bookServer.persistBook(book1);
+            bookServer.persist(book1);
 
             Book book2 = new Book();
             book2.setIsbn("isbn002");
             book2.setTitle("Traditional Music of Spain");
             book2.setCategory(music);
             book2.setImage(img2);
-            bookServer.persistBook(book2);
+            bookServer.persist(book2);
 
             //Roles
 
             Role role1 = new Role();
             role1.setName("ROLE_ADMIN");
-            roleServer.persistRole(role1);
+            roleServer.persist(role1);
 
             Role role2 = new Role();
             role2.setName("ROLE_USER");
-            roleServer.persistRole(role2);
+            roleServer.persist(role2);
 
             //Users
 
@@ -195,7 +195,7 @@ public class FirstmarketApplication {
             user1.setFirstName("adminName");
             user1.setLastName("adminAp");
             user1.setEmail("admin@gmail.com");
-            userServer.persistUser(user1, passwordEncoder, Arrays.asList(role1));
+            userServer.persist(user1, passwordEncoder, Arrays.asList(role1));
 
             User user2 = new User();
             user2.setUsername("misrra");
@@ -203,7 +203,7 @@ public class FirstmarketApplication {
             user2.setFirstName("Misrra");
             user2.setLastName("ApellidoMisrra");
             user2.setEmail("misrra@gmail.com");
-            userServer.persistUser(user2, passwordEncoder);
+            userServer.persist(user2, passwordEncoder);
 
             User user3 = new User();
             user3.setUsername("andrea");
@@ -211,7 +211,7 @@ public class FirstmarketApplication {
             user3.setFirstName("Andrea");
             user3.setLastName("ApellidoAndrea");
             user3.setEmail("andrea@gmail.com");
-            userServer.persistUser(user3, passwordEncoder);
+            userServer.persist(user3, passwordEncoder);
 
         };
     }

@@ -6,12 +6,8 @@
     <body>
         <header th:replace="fragments::header"></header>
         <div class="container">
-            <h1>Books Manager</h1>
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-                <li class="breadcrumb-item active">Books Manager</li>
-            </ul>
-            <p><a class="btn btn-primary" th:href="@{/admin/newBook}">new book</a></p>
+            <div th:replace="fragments::underHead('Books')"></div>
+            <div th:replace="fragments::addButton('newBook')"></div>
             <table class="table">
                 <thead class="thead-light">
                     <tr>

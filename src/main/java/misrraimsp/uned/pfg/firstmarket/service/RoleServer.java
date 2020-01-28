@@ -19,7 +19,7 @@ public class RoleServer {
         return roleRepository.findByName(role_name);
     }
 
-    public Role persistRole(Role role) {
+    public Role persist(Role role) {
         return roleRepository.save(role);
     }
 }

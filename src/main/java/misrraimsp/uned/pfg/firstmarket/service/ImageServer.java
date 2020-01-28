@@ -28,7 +28,7 @@ public class ImageServer {
      * @param image
      * @return image or repositoryImage
      */
-    public Image persistImage(Image image) {
+    public Image persist(Image image) {
         Image repositoryImage = imageRepository.findByData(image.getData());
         if (repositoryImage == null){
             return imageRepository.save(image);
@@ -46,7 +46,11 @@ public class ImageServer {
     }
 
     public void deleteById(Long id) {
-        bookServer.setImagesTo(id, imageRepository.findByIsDefaultIsTrue());
+        bookServer.updateImageByImageId(id, imageRepository.findByIsDefaultIsTrue());
         imageRepository.deleteById(id);
+    }
+
+    public Long getDefaultImageId() {
+        return imageRepository.findIdByIsDefaultIsTrue();
     }
 }

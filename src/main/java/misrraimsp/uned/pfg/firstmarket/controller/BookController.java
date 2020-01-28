@@ -11,10 +11,12 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
 @Controller
+@RequestMapping("/admin")
 public class BookController {
 
     private BookServer bookServer;
@@ -28,23 +30,25 @@ public class BookController {
         this.imageServer = imageServer;
     }
 
-    @GetMapping("/admin/books")
+    @GetMapping("/books")
     public String showBooks(Model model){
-        model.addAttribute("title", "Books Manager");
+        model.addAttribute("title", "Books");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("books", bookServer.findAll());
         return "books";
     }
 
-    @GetMapping("/admin/newBook")
+    @GetMapping("/newBook")
     public String showNewBookForm(Model model){
         model.addAttribute("title", "New Book");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("book", new Book());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         return "newBook";
     }
 
-    @PostMapping("/admin/newBook")
+    @PostMapping("/newBook")
     public String processNewBook(@Valid Book book, Long storedImageId, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
@@ -52,25 +56,26 @@ public class BookController {
             return "newBook";
         }
         if (storedImageId == null){ //new image upload
-            book.setImage(imageServer.persistImage(book.getImage()));
+            book.setImage(imageServer.persist(book.getImage()));
         }
         else {
             book.setImage(imageServer.findById(storedImageId));
         }
-        bookServer.persistBook(book);
+        bookServer.persist(book);
         return "redirect:/admin/books";
     }
 
-    @GetMapping("/admin/editBook/{id}")
+    @GetMapping("/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
         model.addAttribute("title", "Edit Book");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("book", bookServer.findById(id));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         return "editBook";
     }
 
-    @PostMapping("/admin/editBook")
+    @PostMapping("/editBook")
     public String processEditBook(@Valid Book book, Long storedImageId, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
@@ -78,16 +83,16 @@ public class BookController {
             return "editBook";
         }
         if (storedImageId == null){ //new image upload
-            book.setImage(imageServer.persistImage(book.getImage()));
+            book.setImage(imageServer.persist(book.getImage()));
         }
         else {
             book.setImage(imageServer.findById(storedImageId));
         }
-        bookServer.persistBook(book);
+        bookServer.persist(book);
         return "redirect:/admin/books";
     }
 
-    @GetMapping("/admin/deleteBook/{id}")
+    @GetMapping("/deleteBook/{id}")
     public String deleteBook(@PathVariable("id") Long id){
         bookServer.deleteById(id);
         return "redirect:/admin/books";

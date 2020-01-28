@@ -86,7 +86,7 @@ public class CatServer {
     }
 
     @Transactional
-    public void persistCategory(Category category) {
+    public void persist(Category category) {
         //Update Category info
         Category savedCategory =  this.save(category);
 
@@ -106,7 +106,7 @@ public class CatServer {
     }
 
     @Transactional
-    public void editCategory(Category modifiedCategory) {
+    public void edit(Category modifiedCategory) {
         if (hasCategoryTreeModification(modifiedCategory)){
             //Update Category info
             categoryRepository.updateName(modifiedCategory.getId(), modifiedCategory.getName());

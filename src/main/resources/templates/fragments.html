@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
 
     <head th:fragment="head">
@@ -22,37 +23,69 @@
             <div class="row" th:fragment="header">
                 <div class="col-lg-12">
                     <header>
-                        <h1 class="bg-light text-center">HEADER</h1>
-                        <!--<nav class="navbar navbar-expand-lg navbar-dark bg-light">
-                            <a class="navbar-brand" href="#">
-                                <img th:src="@{fm.png}" width="30" height="30" alt="">
+                        <!-- NavBar -->
+                        <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+                            <!-- Brand -->
+                            <a class="navbar-brand" th:href="@{/home}">
+                                <img th:src="@{/image/{id}(id=${logoId})}" style="width:32px;height:32px;">
                             </a>
-                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+                            <!-- Toggler/collapsibe Button -->
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
 
-                            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <!-- Navbar links -->
+                            <div class="collapse navbar-collapse" id="#collapsibleNavbar">
                                 <ul class="navbar-nav mr-auto">
-                                    <li class="nav-item active">
-                                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                                    </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" th:href="@{/productos/lista}">Productos</a>
+                                        <a class="nav-link" th:href="@{/home}">Home</a>
                                     </li>
+                                    <div sec:authorize="!isAuthenticated()">
+                                        <li class="nav-item">
+                                            <a class="nav-link" th:href="@{/login}">Login</a>
+                                        </li>
+                                    </div>
+                                    <!-- Dropdown -->
+                                    <div sec:authorize="hasRole('ADMIN')">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle text-info" href="#" id="navbardrop" data-toggle="dropdown">Admin</a>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item text-info" th:href="@{/admin/books}">Books</a>
+                                                <a class="dropdown-item text-info" th:href="@{/admin/categories}">Categories</a>
+                                                <a class="dropdown-item text-info" th:href="@{/admin/images}">Images</a>
+                                            </div>
+                                        </li>
+                                    </div>
                                 </ul>
-                                <form class="form-inline my-2 my-lg-0">
-                                    <input class="form-control mr-sm-2" type="search" placeholder="Buscar..." aria-label="Search">
-                                    <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Buscar</button>
-                                </form>
+                                <div sec:authorize="isAuthenticated()">
+                                    <div class="navbar-text p-2">Hi <span sec:authentication="name"/>!</div>
+                                </div>
+                                <div sec:authorize="isAuthenticated()">
+                                    <form class="form-inline my-2 my-lg-0 p-2" action="#" th:action="@{/logout}" method="POST" id="logoutForm">
+                                        <input class="btn btn-outline-info btn-sm" type="submit" value="Logout"/>
+                                    </form>
+                                </div>
                             </div>
-                        </nav>-->
+                        </nav>
                     </header>
                 </div>
             </div>
 
+            <div th:fragment="underHead(text)">
+                <h2 class="text-center my-2" th:text="${text}"></h2>
+            </div>
+
+            <button th:fragment="saveButton" class="btn btn-outline-info btn-sm mb-2 px-5 float-right" type="submit">
+                Save
+            </button>
+
+            <div th:fragment="addButton(action)">
+                <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>
+            </div>
 
             <div class="row" th:fragment="footer">
-                <div class="col-lg-12">
+                <div class="col-sm-12">
                     <footer class="bg-light text-center">
                         <span class="info-copyrigth"><a href="https://github.com/misrraimsp/firstmarket">firstmarket</a> © 2020</span>
                     </footer>

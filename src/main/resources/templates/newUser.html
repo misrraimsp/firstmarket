@@ -6,12 +6,12 @@
     <body>
         <header th:replace="fragments::header"></header>
         <div class="container">
-            <ul class="breadcrumb">
+            <ul class="breadcrumb my-2">
                 <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-                <li class="breadcrumb-item active">Registration</li>
+                <li class="breadcrumb-item active">New User</li>
             </ul>
-            <h1>Registration</h1>
-            <form action="#" th:action="@{/register}" th:object="${user}" method="POST" id="registerForm" class="needs-validation" novalidate>
+            <h3>New User</h3>
+            <form action="#" th:action="@{/newUser}" th:object="${user}" method="POST" id="registerForm" class="needs-validation" novalidate>
                 <!--<div class="ServerValidationError" th:if="${#fields.hasErrors()}">
                     <span>Please correct the problems below and resubmit.</span>
                 </div>-->
@@ -46,7 +46,7 @@
                     <div class="invalid-feedback">Please fill out this field.</div>
                     <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>-->
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button th:replace="fragments::saveButton"></button>
             </form>
         </div>
         <footer th:replace="fragments::footer"></footer>

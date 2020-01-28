@@ -28,7 +28,8 @@ public class ImageController {
 
     @GetMapping("/admin/images")
     public String showImages(Model model){
-        model.addAttribute("title", "Images Manager");
+        model.addAttribute("title", "Images");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("image", new Image());
         model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
         return "images";
@@ -44,7 +45,7 @@ public class ImageController {
 
     @PostMapping("/admin/newImage")
     public String processNewImage(@RequestParam Image image){
-        imageServer.persistImage(image);
+        imageServer.persist(image);
         return "redirect:/admin/images";
     }
 

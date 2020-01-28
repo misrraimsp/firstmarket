@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
+import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +17,12 @@ import javax.validation.Valid;
 public class CategoryController {
 
     private CatServer catServer;
+    private ImageServer imageServer;
 
     @Autowired
-    public CategoryController(CatServer catServer) {
+    public CategoryController(CatServer catServer, ImageServer imageServer) {
         this.catServer = catServer;
+        this.imageServer = imageServer;
     }
 
     @GetMapping("/admin/loadCategories")
@@ -30,6 +33,8 @@ public class CategoryController {
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
+        model.addAttribute("title", "Categories");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "categories";
     }
@@ -37,6 +42,7 @@ public class CategoryController {
     @GetMapping("/admin/newCategory")
     public String showNewCategoryForm(Model model){
         model.addAttribute("title", "New Category");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("category", new Category());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "newCategory";
@@ -48,7 +54,7 @@ public class CategoryController {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "newCategory";
         }
-        catServer.persistCategory(category);
+        catServer.persist(category);
         return "redirect:/admin/loadCategories";
     }
 
@@ -56,6 +62,7 @@ public class CategoryController {
     public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
         Category category = catServer.findById(id);
         model.addAttribute("title", "Edit Category");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("category", category);
         model.addAttribute("descendants", catServer.getDescendants(category));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
@@ -69,7 +76,7 @@ public class CategoryController {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "editCategory";
         }
-        catServer.editCategory(category);
+        catServer.edit(category);
         return "redirect:/admin/loadCategories";
     }
 

@@ -6,12 +6,12 @@
     <body>
         <header th:replace="fragments::header"></header>
         <div class="container">
-            <ul class="breadcrumb">
-                <li class="breadcrumb-item"><a th:href="@{/admin}">Admin</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/admin/books}">Books Manager</a></li>
+            <ul class="breadcrumb my-2">
+                <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                <li class="breadcrumb-item"><a th:href="@{/admin/books}">Books</a></li>
                 <li class="breadcrumb-item active">Edit Book</li>
             </ul>
-            <h1>Edit Book</h1>
+            <h3>Edit Book</h3>
             <form class="needs-validation" novalidate th:action="@{/admin/editBook}" th:object="${book}" method="POST" enctype="multipart/form-data" action="#">
                 <!--<div class="ServerValidationError" th:if="${#fields.hasErrors()}">
                     <span>Please correct the problems below and resubmit.</span>
@@ -52,7 +52,7 @@
                     <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
                     <input class="form-control" type="file" th:field="*{image}" id="input2" disabled required/>
                 </div>
-                <button type="submit" class="btn btn-primary">Update Book</button>
+                <button th:replace="fragments::saveButton"></button>
             </form>
         </div>
         <footer th:replace="fragments::footer"></footer>
