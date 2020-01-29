@@ -29,9 +29,9 @@
                             <div class="card">
                                 <img class="card-img-top" th:src="@{/image/{id}(id=${book.image.id})}">
                                 <div class="card-body">
-                                    <h5 class="card-title" th:text="${book.isbn}">isbn</h5>
-                                    <p class="card-text" th:text="${book.title}">title</p>
-                                    <p class="card-text" th:text="${book.category.name}">category</p>
+                                    <h5 class="card-title" th:text="${book.title}">title</h5>
+                                    <p class="card-text">Category: <span th:text="${book.category.name}">category</span></p>
+                                    <p class="card-text">ISBN: <span th:text="${book.isbn}">isbn</span></p>
                                 </div>
                             </div>
                         </div>

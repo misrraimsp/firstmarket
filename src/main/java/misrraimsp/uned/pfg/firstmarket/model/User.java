@@ -22,7 +22,7 @@ public class User implements UserDetails {
     @NotBlank(message = "username cannot be empty")
     private String username;
 
-    @NotBlank(message = "password cannot be empty")
+    //TODO validation
     private String password;
     // TODO private String confirmPassword;
 
@@ -41,6 +41,12 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
     private List<Role> roles = new ArrayList<>();
+
+    @OneToOne
+    private Cart cart;
+
+    @OneToMany
+    private List<Purchase> purchases = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

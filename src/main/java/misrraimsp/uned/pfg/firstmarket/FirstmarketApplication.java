@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -26,7 +27,9 @@ public class FirstmarketApplication {
                                         RoleServer roleServer,
                                         UserServer userServer,
                                         PasswordEncoder passwordEncoder,
-                                        ImageServer imageServer) {
+                                        ImageServer imageServer,
+                                        ItemServer itemServer,
+                                        CartServer cartServer) {
 
         return args -> {
 
@@ -55,16 +58,6 @@ public class FirstmarketApplication {
             img2.setName(path2.getFileName().toString());
             img2.setMimeType(Files.probeContentType(path2));
             imageServer.persist(img2);
-
-            /*
-            Image img3 = new Image();
-            Path path3 = Paths.get("img/fmcopy.png");
-            img3.setDefault(true);
-            img3.setData(Files.readAllBytes(path3));
-            img3.setName(path3.getFileName().toString());
-            img3.setMimeType(Files.probeContentType(path3));
-            imageServer.persistImage(img3);
-             */
 
             //Categories
 
@@ -161,6 +154,10 @@ public class FirstmarketApplication {
             cp22_22.setSize(0);
             catServer.save(cp22_22);
 
+            //load categories
+
+            catServer.loadCategories();
+
             //Books
 
             Book book1 = new Book();
@@ -176,6 +173,49 @@ public class FirstmarketApplication {
             book2.setCategory(music);
             book2.setImage(img2);
             bookServer.persist(book2);
+
+            Book book3 = new Book();
+            book3.setIsbn("isbn003");
+            book3.setTitle("Compilers");
+            book3.setCategory(computers);
+            book3.setImage(img1);
+            bookServer.persist(book3);
+
+            Book book4 = new Book();
+            book4.setIsbn("isbn004");
+            book4.setTitle("Computer Networking");
+            book4.setCategory(computers);
+            book4.setImage(img1);
+            bookServer.persist(book4);
+
+            //Items
+
+            Item item1 = new Item();
+            item1.setBook(book1);
+            item1.setQuantity(1);
+            itemServer.persist(item1);
+
+            Item item2 = new Item();
+            item2.setBook(book4);
+            item2.setQuantity(2);
+            itemServer.persist(item2);
+
+            //Carts
+
+            Cart cart1 = new Cart();
+            cart1.setLastModified(LocalDateTime.now());
+            cartServer.persist(cart1);
+
+            /*
+            Cart cart2 = new Cart();
+            cart2.setLastModified(LocalDateTime.now());
+            cartServer.persist(cart2);
+             */
+
+            Cart cart3 = new Cart();
+            cart3.setItems(Arrays.asList(item1, item2));
+            cart3.setLastModified(LocalDateTime.now());
+            cartServer.persist(cart3);
 
             //Roles
 
@@ -195,7 +235,7 @@ public class FirstmarketApplication {
             user1.setFirstName("adminName");
             user1.setLastName("adminAp");
             user1.setEmail("admin@gmail.com");
-            userServer.persist(user1, passwordEncoder, Arrays.asList(role1));
+            userServer.persist(user1, passwordEncoder, Arrays.asList(role1), cart1);
 
             User user2 = new User();
             user2.setUsername("misrra");
@@ -211,7 +251,7 @@ public class FirstmarketApplication {
             user3.setFirstName("Andrea");
             user3.setLastName("ApellidoAndrea");
             user3.setEmail("andrea@gmail.com");
-            userServer.persist(user3, passwordEncoder);
+            userServer.persist(user3, passwordEncoder, Arrays.asList(role2), cart3);
 
         };
     }

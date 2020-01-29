@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/admin/**")
                 .access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/", "/**")
+                .antMatchers("/user/**")
+                .access("hasRole('ROLE_USER')")
+                .antMatchers("/", "/home", "/login", "/newUser")
                 .access("permitAll")
 
                 .and()
@@ -37,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/home")
 
                 // Make H2-Console non-secured; for debug purposes
                 .and()

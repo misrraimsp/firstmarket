@@ -41,15 +41,21 @@
                                     <li class="nav-item">
                                         <a class="nav-link" th:href="@{/home}">Home</a>
                                     </li>
-                                    <div sec:authorize="!isAuthenticated()">
-                                        <li class="nav-item">
-                                            <a class="nav-link" th:href="@{/login}">Login</a>
+                                    <!-- Dropdown (not Admin) -->
+                                    <div sec:authorize="!hasRole('ADMIN')">
+                                        <li class="nav-item dropdown">
+                                            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">My FirstMarket</a><!--id="navbardrop"-->
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" th:href="@{/user/editUser}">Edit Profile</a>
+                                                <a class="dropdown-item" th:href="@{/user/changePass}">Change Password</a>
+                                                <a class="dropdown-item" th:href="@{/user/cart}">View Cart</a>
+                                            </div>
                                         </li>
                                     </div>
-                                    <!-- Dropdown -->
+                                    <!-- Dropdown (Admin) -->
                                     <div sec:authorize="hasRole('ADMIN')">
                                         <li class="nav-item dropdown">
-                                            <a class="nav-link dropdown-toggle text-info" href="#" id="navbardrop" data-toggle="dropdown">Admin</a>
+                                            <a class="nav-link dropdown-toggle text-info" href="#" data-toggle="dropdown">Admin</a><!--id="navbardrop"-->
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item text-info" th:href="@{/admin/books}">Books</a>
                                                 <a class="dropdown-item text-info" th:href="@{/admin/categories}">Categories</a>
@@ -58,6 +64,9 @@
                                         </li>
                                     </div>
                                 </ul>
+                                <div sec:authorize="!isAuthenticated()">
+                                    <a class="btn btn-outline-info btn-sm" th:href="@{/login}">Login</a>
+                                </div>
                                 <div sec:authorize="isAuthenticated()">
                                     <div class="navbar-text p-2">Hi <span sec:authentication="name"/>!</div>
                                 </div>
