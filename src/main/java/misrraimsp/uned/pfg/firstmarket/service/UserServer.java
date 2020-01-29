@@ -53,11 +53,15 @@ public class UserServer implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public void edit(User editedUser, User currentUser) {
-        editedUser.setId(currentUser.getId());
-        editedUser.setPassword(currentUser.getPassword());
-        editedUser.setCart(currentUser.getCart());
-        editedUser.setPurchases(currentUser.getPurchases());
+    public void edit(User editedUser, User authUser) {
+        editedUser.setId(authUser.getId());
+        editedUser.setPassword(authUser.getPassword());
+        editedUser.setCart(authUser.getCart());
+        editedUser.setPurchases(authUser.getPurchases());
         userRepository.save(editedUser);
+    }
+
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
     }
 }

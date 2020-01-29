@@ -46,10 +46,10 @@ public class UserController {
     }
 
     @GetMapping("/user/editUser")
-    public String showEditUserForm(Model model, @AuthenticationPrincipal User user){
+    public String showEditUserForm(Model model, @AuthenticationPrincipal User authUser){
         model.addAttribute("title", "Edit Profile");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
-        model.addAttribute("user", user);
+        model.addAttribute("user", userServer.getUserById(authUser.getId()));
         return "editUser";
     }
 
@@ -57,13 +57,13 @@ public class UserController {
     public String processEditUser(@Valid User editedUser,
                                   Errors errors,
                                   Model model,
-                                  @AuthenticationPrincipal User currentUser) {
+                                  @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Edit Profile");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "editUser";
         }
-        userServer.edit(editedUser, currentUser);
+        userServer.edit(editedUser, authUser);
         return "redirect:/home";
     }
 }
