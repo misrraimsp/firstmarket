@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +18,7 @@ public class Cart {
     private Long id;
 
     @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Item> items = new ArrayList<>();
 
     private LocalDateTime lastModified;

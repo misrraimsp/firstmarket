@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments::head"></head>
+    <body>
+        <header th:replace="fragments::header"></header>
+        <div class="container">
+            <ul class="breadcrumb my-2">
+                <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
+                <li class="breadcrumb-item active">Cart</li>
+            </ul>
+            <h3>Cart</h3>
+            <table class="table">
+                <thead class="thead-light">
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Image</th>
+                    <th>Quantity</th>
+                    <!--<th></th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="item : ${items}">
+                    <td><span th:text="${item.book.isbn}">isbn</span></td>
+                    <td><span th:text="${item.book.title}">title</span></td>
+                    <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
+                    <td><span th:text="${item.quantity}">quantity</span></td>
+                    <!--
+                    <td>
+                        <a th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book"><i class="fas fa-pen"></i></a>
+                        <a th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book"><i class='fas fa-trash-alt' style='color:red'></i></a>
+                    </td>
+                    -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <footer th:replace="fragments::footer"></footer>
+        <!--<script th:replace="fragments::enableTooltips"></script>-->
+    </body>
+</html>
