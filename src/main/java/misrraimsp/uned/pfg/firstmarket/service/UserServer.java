@@ -70,14 +70,27 @@ public class UserServer implements UserDetailsService {
     }
 
     public void addCartItem(Long userId, Book book) {
-        //create new item and persist it
-        Item item = itemServer.create(book);
-        //get user entity from db
+        //get user, cart and item entities from db
         User user = this.getUserById(userId);
-        //update and persist cart
         Cart cart = user.getCart();
         List<Item> items = cart.getItems();
-        items.add(item);
+        //check if any item already exist on user cart
+        boolean alreadyExists = false;
+        for (Item i : items) {
+            if (i.getBook().getId().equals(book.getId())) {
+                //update and persist item
+                i.setQuantity(1 + i.getQuantity());
+                itemServer.persist(i);
+                alreadyExists = true;
+                break;
+            }
+        }
+        if(!alreadyExists){
+            //create and persist item
+            Item newItem = itemServer.create(book);
+            items.add(newItem);
+        }
+        //update and persist cart
         cart.setItems(items);
         cart.setLastModified(LocalDateTime.now());
         cartServer.persist(cart);
