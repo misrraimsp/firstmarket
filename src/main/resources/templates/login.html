@@ -6,12 +6,12 @@
     <body>
         <header th:replace="fragments::header"></header>
         <div class="container">
-            <h3>Login</h3>
-            <form action="#" th:action="@{/login}" method="POST" id="loginForm" class="needs-validation" novalidate>
+            <div th:replace="fragments::underHead('Login')"></div>
+            <form class="needs-validation" novalidate th:action="@{/login}" method="POST" action="#">
                 <div class="form-group">
-                    <label for="username">Username:</label>
-                    <input type="text" class="form-control" id="username" placeholder="enter username" name="username" required>
-                    <div class="invalid-feedback">Please fill out this field.</div>
+                    <label for="email">E-mail:</label>
+                    <input type="email" class="form-control" id="email" placeholder="enter email" name="username" required>
+                    <div class="invalid-feedback">Please fill out this field with your email.</div>
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>

@@ -17,8 +17,8 @@
                 </div>-->
                 <div class="form-group">
                     <label for="email">E-mail:</label>
-                    <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="enter email" required>
-                    <div class="invalid-feedback">Please fill out this field.</div>
+                    <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="enter email" required>
+                    <div class="invalid-feedback">Please fill out this field with your email.</div>
                     <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>-->
                 </div>
                 <div class="form-group">

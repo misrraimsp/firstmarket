@@ -230,21 +230,21 @@ public class FirstmarketApplication {
             //Users
 
             User user1 = new User();
-            user1.setEmail("amail");
+            user1.setEmail("admin@fm.com");
             user1.setPassword("admin");
             user1.setFirstName("adminName");
             user1.setLastName("adminAp");
             userServer.persist(user1, passwordEncoder, Arrays.asList(role1), cart1);
 
             User user2 = new User();
-            user2.setEmail("mmail");
+            user2.setEmail("misrra@fm.com");
             user2.setPassword("misrra");
             user2.setFirstName("Misrra");
             user2.setLastName("ApellidoMisrra");
             userServer.persist(user2, passwordEncoder);
 
             User user3 = new User();
-            user3.setEmail("cmail");
+            user3.setEmail("andrea@fm.com");
             user3.setPassword("andrea");
             user3.setFirstName("Andrea");
             user3.setLastName("ApellidoAndrea");
