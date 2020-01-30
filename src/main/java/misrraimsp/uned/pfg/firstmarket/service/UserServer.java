@@ -1,9 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.model.Cart;
-import misrraimsp.uned.pfg.firstmarket.model.Role;
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -21,12 +19,18 @@ public class UserServer implements UserDetailsService {
     private UserRepository userRepository;
     private RoleServer roleServer;
     private CartServer cartServer;
+    private ItemServer itemServer;
 
     @Autowired
-    public UserServer(UserRepository userRepository, RoleServer roleServer, CartServer cartServer) {
+    public UserServer(UserRepository userRepository,
+                      RoleServer roleServer,
+                      CartServer cartServer,
+                      ItemServer itemServer) {
+
         this.userRepository = userRepository;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
+        this.itemServer = itemServer;
     }
 
     @Override
@@ -63,5 +67,22 @@ public class UserServer implements UserDetailsService {
 
     public User getUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
+    }
+
+    public void addCartItem(Long userId, Book book) {
+        //create new item and persist it
+        Item item = itemServer.create(book);
+        //get user entity from db
+        User user = this.getUserById(userId);
+        //update and persist cart
+        Cart cart = user.getCart();
+        List<Item> items = cart.getItems();
+        items.add(item);
+        cart.setItems(items);
+        cart.setLastModified(LocalDateTime.now());
+        cartServer.persist(cart);
+        //update and persist user
+        user.setCart(cart);
+        userRepository.save(user);
     }
 }
