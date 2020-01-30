@@ -18,7 +18,7 @@
                     <th>Title</th>
                     <th>Image</th>
                     <th>Quantity</th>
-                    <!--<th></th>-->
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -27,17 +27,16 @@
                     <td><span th:text="${item.book.title}">title</span></td>
                     <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
                     <td><span th:text="${item.quantity}">quantity</span></td>
-                    <!--
                     <td>
-                        <a th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book"><i class="fas fa-pen"></i></a>
-                        <a th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book"><i class='fas fa-trash-alt' style='color:red'></i></a>
+                        <a th:href="@{/user/incrementItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Increment Quantity"><i class="far fa-plus-square"></i></a><br/>
+                        <a th:href="@{/user/decrementItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Decrement Quantity"><i class="far fa-minus-square"></i></a><br/>
+                        <a th:href="@{/user/deleteItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Delete Item"><i class='fas fa-trash-alt' style='color:red'></i></a>
                     </td>
-                    -->
                 </tr>
                 </tbody>
             </table>
         </div>
         <footer th:replace="fragments::footer"></footer>
-        <!--<script th:replace="fragments::enableTooltips"></script>-->
+        <script th:replace="fragments::enableTooltips"></script>
     </body>
 </html>
