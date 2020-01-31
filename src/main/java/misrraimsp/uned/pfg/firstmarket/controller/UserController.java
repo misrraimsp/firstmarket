@@ -82,4 +82,10 @@ public class UserController {
         return "redirect:/user/cart";
     }
 
+    @GetMapping("/user/removeBook/{id}")
+    public String processRemoveBook(@AuthenticationPrincipal User authUser, @PathVariable("id") Long bookId){
+        userServer.removeBookFromCart(authUser.getId(), bookId);
+        return "redirect:/user/cart";
+    }
+
 }

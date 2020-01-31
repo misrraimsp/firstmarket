@@ -52,4 +52,36 @@ public class CartServer {
         cart.setLastModified(LocalDateTime.now());
         cartRepository.save(cart);
     }
+
+    /**
+     * coded for nothings happens if bookId do not match any item.book.id
+     * by means of putting "cart.setLastModified(LocalDateTime.now());"
+     * in appropriate position
+     */
+    @Transactional
+    public void removeBook(Cart cart, Long bookId) {
+        List<Item> items = cart.getItems();
+        Item deletingItem = null;
+        for (Item i : items) {
+            if (i.getBook().getId().equals(bookId)) {
+                //check item deletion condition
+                if (i.getQuantity() > 1){//simple decrement item
+                    itemServer.decrement(i.getId());
+                    cart.setLastModified(LocalDateTime.now());
+                }
+                else {//delete item
+                    deletingItem = i;
+                    itemServer.deleteById(i.getId());
+                }
+                break;
+            }
+        }
+        if(deletingItem != null){
+            //update cart
+            items.remove(deletingItem);
+            cart.setItems(items);
+            cart.setLastModified(LocalDateTime.now());
+        }
+        cartRepository.save(cart);
+    }
 }

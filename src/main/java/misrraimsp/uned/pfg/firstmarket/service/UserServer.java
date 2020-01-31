@@ -73,4 +73,7 @@ public class UserServer implements UserDetailsService {
         cartServer.addBook(this.findById(userId).getCart(), bookId);
     }
 
+    public void removeBookFromCart(Long userId, Long bookId) {
+        cartServer.removeBook(this.findById(userId).getCart(), bookId);
+    }
 }

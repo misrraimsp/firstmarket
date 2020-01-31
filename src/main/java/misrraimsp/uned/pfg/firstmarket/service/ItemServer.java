@@ -36,4 +36,15 @@ public class ItemServer {
         item.setQuantity(1 + item.getQuantity());
         itemRepository.save(item);
     }
+
+    public void decrement(Long id) {
+        Item item = itemRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid item Id: " + id));
+        item.setQuantity(item.getQuantity() - 1);
+        itemRepository.save(item);
+    }
+
+    public void deleteById(Long id) {
+        itemRepository.deleteById(id);
+    }
 }
