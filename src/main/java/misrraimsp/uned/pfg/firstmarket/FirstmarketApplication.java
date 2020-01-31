@@ -244,8 +244,10 @@ public class FirstmarketApplication {
             userServer.persist(user2, passwordEncoder);
 
             User user3 = new User();
-            user3.setEmail("andrea@fm.com");
-            user3.setPassword("andrea");
+            //user3.setEmail("andrea@fm.com");
+            //user3.setPassword("andrea");
+            user3.setEmail("a");
+            user3.setPassword("a");
             user3.setFirstName("Andrea");
             user3.setLastName("ApellidoAndrea");
             userServer.persist(user3, passwordEncoder, Arrays.asList(role2), cart3);

@@ -1,7 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.ItemRepository;
-import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,19 +9,23 @@ import org.springframework.stereotype.Service;
 public class ItemServer {
 
     private ItemRepository itemRepository;
+    private BookServer bookServer;
 
     @Autowired
-    public ItemServer(ItemRepository itemRepository) {
+    public ItemServer(ItemRepository itemRepository,
+                      BookServer bookServer) {
+
         this.itemRepository = itemRepository;
+        this.bookServer = bookServer;
     }
 
     public Item persist(Item item) {
         return itemRepository.save(item);
     }
 
-    public Item create(Book book) {
+    public Item create(Long bookId) {
         Item item = new Item();
-        item.setBook(book);
+        item.setBook(bookServer.findById(bookId));
         item.setQuantity(1);
         return itemRepository.save(item);
     }

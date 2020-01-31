@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -49,7 +50,7 @@ public class UserController {
     public String showEditUserForm(Model model, @AuthenticationPrincipal User authUser){
         model.addAttribute("title", "Edit Profile");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
-        model.addAttribute("user", userServer.getUserById(authUser.getId()));
+        model.addAttribute("user", userServer.findById(authUser.getId()));
         return "editUser";
     }
 
@@ -66,4 +67,19 @@ public class UserController {
         userServer.edit(editedUser, authUser);
         return "redirect:/home";
     }
+
+    @GetMapping("/user/cart")
+    public String showCart(@AuthenticationPrincipal User authUser, Model model){
+        model.addAttribute("title", "Cart");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
+        model.addAttribute("items", userServer.findById(authUser.getId()).getCart().getItems());
+        return "cart";
+    }
+
+    @GetMapping("/user/addBook/{id}")
+    public String processAddBook(@AuthenticationPrincipal User authUser, @PathVariable("id") Long bookId){
+        userServer.addBookToCart(authUser.getId(), bookId);
+        return "redirect:/user/cart";
+    }
+
 }

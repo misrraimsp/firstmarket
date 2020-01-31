@@ -1,7 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.Cart;
+import misrraimsp.uned.pfg.firstmarket.model.Role;
+import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,18 +21,15 @@ public class UserServer implements UserDetailsService {
     private UserRepository userRepository;
     private RoleServer roleServer;
     private CartServer cartServer;
-    private ItemServer itemServer;
 
     @Autowired
     public UserServer(UserRepository userRepository,
                       RoleServer roleServer,
-                      CartServer cartServer,
-                      ItemServer itemServer) {
+                      CartServer cartServer) {
 
         this.userRepository = userRepository;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
-        this.itemServer = itemServer;
     }
 
     @Override
@@ -65,37 +64,13 @@ public class UserServer implements UserDetailsService {
         userRepository.save(editedUser);
     }
 
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
+    public User findById(Long id) {
+        return userRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
     }
 
-    public void addCartItem(Long userId, Book book) {
-        //get user, cart and item entities from db
-        User user = this.getUserById(userId);
-        Cart cart = user.getCart();
-        List<Item> items = cart.getItems();
-        //check if any item already exist on user cart
-        boolean alreadyExists = false;
-        for (Item i : items) {
-            if (i.getBook().getId().equals(book.getId())) {
-                //update and persist item
-                i.setQuantity(1 + i.getQuantity());
-                itemServer.persist(i);
-                alreadyExists = true;
-                break;
-            }
-        }
-        if(!alreadyExists){
-            //create and persist item
-            Item newItem = itemServer.create(book);
-            items.add(newItem);
-        }
-        //update and persist cart
-        cart.setItems(items);
-        cart.setLastModified(LocalDateTime.now());
-        cartServer.persist(cart);
-        //update and persist user
-        user.setCart(cart);
-        userRepository.save(user);
+    public void addBookToCart(Long userId, Long bookId) {
+        cartServer.addBook(this.findById(userId).getCart(), bookId);
     }
+
 }

@@ -36,10 +36,9 @@
                                     <p class="card-text">ISBN: <span th:text="${book.isbn}">isbn</span></p>
                                 </div>
                                 <div class="card-footer">
-                                    <form th:action="@{/user/addItem}" method="POST" action="#">
-                                        <input type="hidden" th:name="bookId" th:value="${book.id}"/>
-                                        <input class="btn btn-outline-dark btn-sm" type="submit" value="Add to Cart"/>
-                                    </form>
+                                    <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add Book to Cart">
+                                        <i class="far fa-plus-square mr-2"></i>Add to Cart
+                                    </a>
                                 </div>
                             </div>
                         </div>

@@ -28,7 +28,7 @@
                     <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
                     <td><span th:text="${item.quantity}">quantity</span></td>
                     <td>
-                        <a th:href="@{/user/incrementItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Increment Quantity"><i class="far fa-plus-square"></i></a><br/>
+                        <a th:href="@{/user/addBook/{id}(id=${item.book.id})}" data-toggle="tooltip" title="Increment Quantity"><i class="far fa-plus-square"></i></a><br/>
                         <a th:href="@{/user/decrementItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Decrement Quantity"><i class="far fa-minus-square"></i></a><br/>
                         <a th:href="@{/user/deleteItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Delete Item"><i class='fas fa-trash-alt' style='color:red'></i></a>
                     </td>
