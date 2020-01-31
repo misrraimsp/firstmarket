@@ -88,4 +88,10 @@ public class UserController {
         return "redirect:/user/cart";
     }
 
+    @GetMapping("/user/removeItem/{id}")
+    public String processRemoveItem(@AuthenticationPrincipal User authUser, @PathVariable("id") Long itemId){
+        userServer.removeItemFromCart(authUser.getId(), itemId);
+        return "redirect:/user/cart";
+    }
+
 }

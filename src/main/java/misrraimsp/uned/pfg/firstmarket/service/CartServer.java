@@ -71,7 +71,7 @@ public class CartServer {
                 }
                 else {//delete item
                     deletingItem = i;
-                    itemServer.deleteById(i.getId());
+                    itemServer.delete(i);
                 }
                 break;
             }
@@ -83,5 +83,17 @@ public class CartServer {
             cart.setLastModified(LocalDateTime.now());
         }
         cartRepository.save(cart);
+    }
+
+    public void removeItem(Cart cart, Long itemId) {
+        //update cart
+        Item deletingItem = itemServer.findById(itemId);
+        List<Item> items = cart.getItems();
+        items.remove(deletingItem);
+        cart.setItems(items);
+        cart.setLastModified(LocalDateTime.now());
+        cartRepository.save(cart);
+        //delete item
+        itemServer.delete(deletingItem);
     }
 }

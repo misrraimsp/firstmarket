@@ -76,4 +76,8 @@ public class UserServer implements UserDetailsService {
     public void removeBookFromCart(Long userId, Long bookId) {
         cartServer.removeBook(this.findById(userId).getCart(), bookId);
     }
+
+    public void removeItemFromCart(Long userId, Long itemId) {
+        cartServer.removeItem(this.findById(userId).getCart(), itemId);
+    }
 }

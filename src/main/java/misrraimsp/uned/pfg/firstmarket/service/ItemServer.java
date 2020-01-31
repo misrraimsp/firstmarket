@@ -44,7 +44,12 @@ public class ItemServer {
         itemRepository.save(item);
     }
 
-    public void deleteById(Long id) {
-        itemRepository.deleteById(id);
+    public void delete(Item item) {
+        itemRepository.delete(item);
+    }
+
+    public Item findById(Long id) {
+        return itemRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid item Id: " + id));
     }
 }

@@ -30,7 +30,7 @@
                     <td>
                         <a th:href="@{/user/addBook/{id}(id=${item.book.id})}" data-toggle="tooltip" title="Increment Quantity"><i class="far fa-plus-square"></i></a><br/>
                         <a th:href="@{/user/removeBook/{id}(id=${item.book.id})}" data-toggle="tooltip" title="Decrement Quantity"><i class="far fa-minus-square"></i></a><br/>
-                        <a th:href="@{/user/removeAllBooks}" data-toggle="tooltip" title="Delete Item"><i class='fas fa-trash-alt' style='color:red'></i></a>
+                        <a th:href="@{/user/removeItem/{id}(id=${item.id})}" data-toggle="tooltip" title="Delete Item"><i class='fas fa-trash-alt' style='color:red'></i></a>
                     </td>
                 </tr>
                 </tbody>
