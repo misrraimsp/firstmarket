@@ -49,6 +49,7 @@
                                                 <a class="dropdown-item" th:href="@{/user/editUser}">Edit Profile</a>
                                                 <a class="dropdown-item" th:href="@{/user/changePass}">Change Password</a>
                                                 <a class="dropdown-item" th:href="@{/user/cart}">View Cart</a>
+                                                <a class="dropdown-item" th:href="@{/user/purchases}">My Purchases</a>
                                             </div>
                                         </li>
                                     </div>
@@ -60,6 +61,8 @@
                                                 <a class="dropdown-item text-info" th:href="@{/admin/books}">Books</a>
                                                 <a class="dropdown-item text-info" th:href="@{/admin/categories}">Categories</a>
                                                 <a class="dropdown-item text-info" th:href="@{/admin/images}">Images</a>
+                                                <a class="dropdown-item text-info" th:href="@{/admin/users}">Users</a>
+                                                <a class="dropdown-item text-info" th:href="@{/admin/purchases}">Purchases</a>
                                             </div>
                                         </li>
                                     </div>
@@ -91,6 +94,10 @@
 
             <div th:fragment="addButton(action)">
                 <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>
+            </div>
+
+            <div th:fragment="purchaseButton(subject,action)">
+                <a class="btn btn-outline-info btn-sm my-2 btn-block" th:href="@{/{param1}/{param2}(param1=${subject},param2=${action})}">Purchase</a>
             </div>
 
             <div class="row" th:fragment="footer">

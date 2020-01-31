@@ -10,7 +10,7 @@
                 <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
                 <li class="breadcrumb-item active">Cart</li>
             </ul>
-            <h3>Cart</h3>
+            <div th:replace="fragments::underHead('Cart')"></div>
             <table class="table">
                 <thead class="thead-light">
                 <tr>
@@ -35,6 +35,7 @@
                 </tr>
                 </tbody>
             </table>
+            <div th:replace="fragments::purchaseButton('user','addPurchase')"></div>
         </div>
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::enableTooltips"></script>

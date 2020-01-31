@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Cart;
+import misrraimsp.uned.pfg.firstmarket.model.Purchase;
 import misrraimsp.uned.pfg.firstmarket.model.Role;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -21,15 +23,18 @@ public class UserServer implements UserDetailsService {
     private UserRepository userRepository;
     private RoleServer roleServer;
     private CartServer cartServer;
+    private PurchaseServer purchaseServer;
 
     @Autowired
     public UserServer(UserRepository userRepository,
                       RoleServer roleServer,
-                      CartServer cartServer) {
+                      CartServer cartServer,
+                      PurchaseServer purchaseServer) {
 
         this.userRepository = userRepository;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
+        this.purchaseServer = purchaseServer;
     }
 
     @Override
@@ -79,5 +84,18 @@ public class UserServer implements UserDetailsService {
 
     public void removeItemFromCart(Long userId, Long itemId) {
         cartServer.removeItem(this.findById(userId).getCart(), itemId);
+    }
+
+    @Transactional
+    public void addPurchase(Long userId) {
+        User user = this.findById(userId);
+        Purchase newPurchase = purchaseServer.create(cartServer.emptyCart(user.getCart()));
+        if (newPurchase == null){
+            return;
+        }
+        List<Purchase> purchases = user.getPurchases();
+        purchases.add(newPurchase);
+        user.setPurchases(purchases);
+        userRepository.save(user);
     }
 }

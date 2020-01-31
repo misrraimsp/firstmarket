@@ -94,4 +94,10 @@ public class UserController {
         return "redirect:/user/cart";
     }
 
+    @GetMapping("/user/addPurchase")
+    public String processAddPurchase(@AuthenticationPrincipal User authUser){
+        userServer.addPurchase(authUser.getId());
+        return "redirect:/home";
+    }
+
 }

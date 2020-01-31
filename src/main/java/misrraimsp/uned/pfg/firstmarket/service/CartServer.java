@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -85,6 +86,7 @@ public class CartServer {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void removeItem(Cart cart, Long itemId) {
         //update cart
         Item deletingItem = itemServer.findById(itemId);
@@ -95,5 +97,12 @@ public class CartServer {
         cartRepository.save(cart);
         //delete item
         itemServer.delete(deletingItem);
+    }
+
+    public List<Item> emptyCart(Cart cart) {
+        List<Item> items = cart.getItems();
+        cart.setItems(new ArrayList<>());
+        cartRepository.save(cart);
+        return items;
     }
 }
