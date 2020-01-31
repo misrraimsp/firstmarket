@@ -24,6 +24,13 @@ public class ItemServer {
         Item item = new Item();
         item.setBook(book);
         item.setQuantity(1);
-        return this.persist(item);
+        return itemRepository.save(item);
+    }
+
+    public void increment(Long id) {
+        Item item = itemRepository.findById(id).
+                orElseThrow(() -> new IllegalArgumentException("Invalid item Id: " + id));
+        item.setQuantity(1 + item.getQuantity());
+        itemRepository.save(item);
     }
 }
