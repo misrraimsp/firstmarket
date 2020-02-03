@@ -1,0 +1,36 @@
+server:
+   servlet:
+      context-path: /firstmarket
+
+spring:
+   profiles:
+      #active: dev-h2
+      active: dev-mariadb
+   servlet:
+      multipart:
+         max-file-size: 128KB
+         max-request-size: 128KB
+   jpa:
+      show-sql: true
+
+---
+
+spring:
+   profiles: dev-h2
+   h2:
+      console:
+         enabled: true
+
+---
+
+spring:
+   profiles: dev-mariadb
+   datasource:
+      url: jdbc:mariadb://localhost:3306/fm?serverTimezone=UTC
+      username: root
+      password: misrra
+      driver-class-name: org.mariadb.jdbc.Driver
+      initialization-mode: always
+   jpa:
+      hibernate:
+         ddl-auto: none

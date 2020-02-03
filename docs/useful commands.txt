@@ -1,3 +1,15 @@
+** TOMCAT
 /usr/local/Tomcat/bin/startup.sh
-
 /usr/local/Tomcat/bin/shutdown.sh
+
+** MARIADB
+    ** start
+    mysql.server start
+    ** login
+    mysql -u root -p
+    ** show all databases
+    show databases;
+    ** set {db-name} as current db
+    use {db-name};
+    ** show all tables on current db
+    show tables;
