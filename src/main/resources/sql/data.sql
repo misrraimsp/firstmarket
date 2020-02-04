@@ -1,4 +1,10 @@
 
+/*
+don't forget update sequence initial number XXX on schema.sql:
+**create sequence hibernate_sequence start with XXX increment by 1;**
+ */
+
+
 INSERT INTO category (id,name,parent_id) VALUES (1,'fm',1);
 INSERT INTO category (id,name,parent_id) VALUES (2,'Computers & Tech',1);
 INSERT INTO category (id,name,parent_id) VALUES (3,'Databases',2);

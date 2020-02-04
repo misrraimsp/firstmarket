@@ -100,4 +100,12 @@ public class UserController {
         return "redirect:/home";
     }
 
+    @GetMapping("/user/purchases")
+    public String showPurchases(@AuthenticationPrincipal User authUser, Model model){
+        model.addAttribute("title", "Purchases");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
+        model.addAttribute("purchases", userServer.findById(authUser.getId()).getPurchases());
+        return "purchases";
+    }
+
 }
