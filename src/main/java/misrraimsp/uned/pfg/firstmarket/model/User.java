@@ -1,29 +1,40 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidEmail;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Data
+@PasswordMatches
 public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    //TODO validation
+    @ValidEmail
+    @NotNull
+    @NotEmpty
     private String email;
 
-    //TODO validation
+    @NotNull
+    @NotEmpty
     private String password;
-    //TODO private String confirmPassword;
+
+    @NotNull
+    @NotEmpty
+    private String matchingPassword;
 
     private String firstName;
 
