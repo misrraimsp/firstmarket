@@ -4,8 +4,9 @@ server:
 
 spring:
    profiles:
-      #active: dev-h2
-      active: dev-mariadb
+      active:
+         - dev-mariadb
+         #- dev-h2
    servlet:
       multipart:
          max-file-size: 128KB
@@ -31,6 +32,8 @@ spring:
       password: misrra
       driver-class-name: org.mariadb.jdbc.Driver
       initialization-mode: always
+      schema: classpath:sql/schema.sql
+      data: classpath:sql/data.sql
    jpa:
       hibernate:
          ddl-auto: none

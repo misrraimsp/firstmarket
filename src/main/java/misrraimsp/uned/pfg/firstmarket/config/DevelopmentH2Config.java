@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 @Profile("dev-h2")
 @Configuration
-public class DevelopmentConfig {
+public class DevelopmentH2Config {
 
     @Bean
     public CommandLineRunner dataLoader(BookServer bookServer,
@@ -29,6 +29,7 @@ public class DevelopmentConfig {
                                         CartServer cartServer) {
 
         return args -> {
+            System.out.println("CommandLineRunner on dev-h2");
 
             //Images
 
