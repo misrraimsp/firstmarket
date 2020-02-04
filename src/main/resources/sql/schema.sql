@@ -16,7 +16,7 @@ drop table if exists category;
 
 
 drop sequence if exists hibernate_sequence;
-create sequence hibernate_sequence start with 23 increment by 1;
+create sequence hibernate_sequence start with 97 increment by 1;
 
 create table book (id bigint not null, isbn varchar(255), title varchar(255), category_id bigint, image_id bigint, primary key (id));
 create table cart (id bigint not null, last_modified timestamp, primary key (id));
