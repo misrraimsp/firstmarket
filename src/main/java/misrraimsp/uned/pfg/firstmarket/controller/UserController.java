@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.FormUser;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
@@ -10,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,15 +42,28 @@ public class UserController {
     }
 
     @PostMapping("/newUser")
-    public String processNewUser(@Valid FormUser formUser, Errors errors, Model model) {
+    public String processNewUser(@Valid FormUser formUser,
+                                 Errors errors,
+                                 Model model,
+                                 BindingResult result) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "newUser";
         }
-        userServer.persist(formUser, passwordEncoder, null, null);
+        try {
+            userServer.persist(formUser, passwordEncoder, null, null);
+        }
+        catch (EmailAlreadyExistsException e) {
+            result.rejectValue("email", "message.emailExists");
+            model.addAttribute("title", "New User");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
+            return "newUser";
+        }
         return "redirect:/login";
     }
+
+
 
     @GetMapping("/user/editProfile")
     public String showEditUserForm(Model model, @AuthenticationPrincipal User authUser){

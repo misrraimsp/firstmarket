@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -48,24 +49,33 @@ public class UserServer implements UserDetailsService {
 
     //if role is not specified it is by default assigned to ROLE_USER
     //if cart is not specified it is created a new one
-    public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart){
-        if (roles == null){
-            roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
+    public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) throws EmailAlreadyExistsException {
+        if (this.emailExists(formUser.getEmail())){
+            throw new EmailAlreadyExistsException("There is an account with that email adress: " +  formUser.getEmail());
         }
-        if (cart == null){
-            cart = new Cart();
-            cart.setLastModified(LocalDateTime.now());
+        else {
+            if (roles == null){
+                roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
+            }
+            if (cart == null){
+                cart = new Cart();
+                cart.setLastModified(LocalDateTime.now());
+            }
+            Profile profile = new Profile();
+            profile.setFirstName(formUser.getFirstName());
+            profile.setLastName(formUser.getLastName());
+            User user = new User();
+            user.setEmail(formUser.getEmail());
+            user.setPassword(passwordEncoder.encode(formUser.getPassword()));
+            user.setProfile(profileServer.persist(profile));
+            user.setRoles(roles);
+            user.setCart(cartServer.persist(cart));
+            return userRepository.save(user);
         }
-        Profile profile = new Profile();
-        profile.setFirstName(formUser.getFirstName());
-        profile.setLastName(formUser.getLastName());
-        User user = new User();
-        user.setEmail(formUser.getEmail());
-        user.setPassword(passwordEncoder.encode(formUser.getPassword()));
-        user.setProfile(profileServer.persist(profile));
-        user.setRoles(roles);
-        user.setCart(cartServer.persist(cart));
-        return userRepository.save(user);
+    }
+
+    private boolean emailExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
 
     public void editProfile(Long userId, Profile newProfile) {
