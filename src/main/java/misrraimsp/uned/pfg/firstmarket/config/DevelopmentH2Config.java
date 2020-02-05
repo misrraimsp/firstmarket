@@ -227,18 +227,13 @@ public class DevelopmentH2Config {
 
             //Users
 
-            System.out.println("before persisting admin");
-
             FormUser formUser1 = new FormUser();
             formUser1.setEmail("admin@fm.com");
-            //formUser1.setEmail("a");
             formUser1.setPassword("admin");
             formUser1.setMatchingPassword("admin");
             formUser1.setFirstName("ad");
             formUser1.setLastName("ad");
             userServer.persist(formUser1, passwordEncoder, Arrays.asList(role1), cart1);
-
-            System.out.println("before persisting misrra");
 
             FormUser formUser2 = new FormUser();
             formUser2.setEmail("misrra@fm.com");
@@ -246,16 +241,12 @@ public class DevelopmentH2Config {
             formUser2.setMatchingPassword("misrra");
             formUser2.setFirstName("mis");
             formUser2.setLastName("mis");
-            userServer.persist(formUser2, passwordEncoder);
-
-            System.out.println("before persisting andrea");
+            userServer.persist(formUser2, passwordEncoder, null, null);
 
             FormUser formUser3 = new FormUser();
             formUser3.setEmail("andrea@fm.com");
             formUser3.setPassword("andrea");
             formUser3.setMatchingPassword("andrea");
-            //formUser3.setEmail("a");
-            //formUser3.setPassword("a");
             formUser3.setFirstName("andre");
             formUser3.setLastName("andre");
             userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);

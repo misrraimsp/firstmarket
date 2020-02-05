@@ -48,23 +48,23 @@ public class UserServer implements UserDetailsService {
 
     //if role is not specified it is by default assigned to ROLE_USER
     //if cart is not specified it is created a new one
-    public User persist(FormUser formUser, PasswordEncoder passwordEncoder){
-        Cart cart = new Cart();
-        cart.setLastModified(LocalDateTime.now());
-        return this.persist(formUser, passwordEncoder, Arrays.asList(roleServer.findByName("ROLE_USER")), cartServer.persist(cart));
-    }
-
     public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart){
+        if (roles == null){
+            roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
+        }
+        if (cart == null){
+            cart = new Cart();
+            cart.setLastModified(LocalDateTime.now());
+        }
         Profile profile = new Profile();
         profile.setFirstName(formUser.getFirstName());
         profile.setLastName(formUser.getLastName());
         User user = new User();
-        user.setProfile(profileServer.persist(profile));
         user.setEmail(formUser.getEmail());
         user.setPassword(passwordEncoder.encode(formUser.getPassword()));
+        user.setProfile(profileServer.persist(profile));
         user.setRoles(roles);
-        user.setCart(cart);
-        System.out.println("before persisting admin on userServer");
+        user.setCart(cartServer.persist(cart));
         return userRepository.save(user);
     }
 

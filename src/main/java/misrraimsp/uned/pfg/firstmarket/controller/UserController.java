@@ -46,7 +46,7 @@ public class UserController {
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "newUser";
         }
-        userServer.persist(formUser, passwordEncoder);
+        userServer.persist(formUser, passwordEncoder, null, null);
         return "redirect:/login";
     }
 
