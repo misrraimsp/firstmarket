@@ -227,28 +227,39 @@ public class DevelopmentH2Config {
 
             //Users
 
-            User user1 = new User();
-            user1.setEmail("admin@fm.com");
-            user1.setPassword("admin");
-            user1.setFirstName("adminName");
-            user1.setLastName("adminAp");
-            userServer.persist(user1, passwordEncoder, Arrays.asList(role1), cart1);
+            System.out.println("before persisting admin");
 
-            User user2 = new User();
-            user2.setEmail("misrra@fm.com");
-            user2.setPassword("misrra");
-            user2.setFirstName("Misrra");
-            user2.setLastName("ApellidoMisrra");
-            userServer.persist(user2, passwordEncoder);
+            FormUser formUser1 = new FormUser();
+            formUser1.setEmail("admin@fm.com");
+            //formUser1.setEmail("a");
+            formUser1.setPassword("admin");
+            formUser1.setMatchingPassword("admin");
+            formUser1.setFirstName("ad");
+            formUser1.setLastName("ad");
+            userServer.persist(formUser1, passwordEncoder, Arrays.asList(role1), cart1);
 
-            User user3 = new User();
-            //user3.setEmail("andrea@fm.com");
-            //user3.setPassword("andrea");
-            user3.setEmail("a");
-            user3.setPassword("a");
-            user3.setFirstName("Andrea");
-            user3.setLastName("ApellidoAndrea");
-            userServer.persist(user3, passwordEncoder, Arrays.asList(role2), cart3);
+            System.out.println("before persisting misrra");
+
+            FormUser formUser2 = new FormUser();
+            formUser2.setEmail("misrra@fm.com");
+            formUser2.setPassword("misrra");
+            formUser2.setMatchingPassword("misrra");
+            formUser2.setFirstName("mis");
+            formUser2.setLastName("mis");
+            userServer.persist(formUser2, passwordEncoder);
+
+            System.out.println("before persisting andrea");
+
+            FormUser formUser3 = new FormUser();
+            formUser3.setEmail("andrea@fm.com");
+            formUser3.setPassword("andrea");
+            formUser3.setMatchingPassword("andrea");
+            //formUser3.setEmail("a");
+            //formUser3.setPassword("a");
+            formUser3.setFirstName("andre");
+            formUser3.setLastName("andre");
+            userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);
+
 
         };
     }

@@ -1,7 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidEmail;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,7 +15,6 @@ import java.util.List;
 
 @Entity
 @Data
-@PasswordMatches
 public class User implements UserDetails {
 
     @Id
@@ -25,16 +23,12 @@ public class User implements UserDetails {
 
     @ValidEmail
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "email cannot be empty")
     private String email;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "password cannot be empty")
     private String password;
-
-    @NotNull
-    @NotEmpty
-    private String matchingPassword;
 
     private String firstName;
 

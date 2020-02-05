@@ -1,10 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.model.Cart;
-import misrraimsp.uned.pfg.firstmarket.model.Purchase;
-import misrraimsp.uned.pfg.firstmarket.model.Role;
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -48,16 +45,21 @@ public class UserServer implements UserDetailsService {
 
     //if role is not specified it is by default assigned to ROLE_USER
     //if cart is not specified it is created a new one
-    public User persist(User user, PasswordEncoder passwordEncoder){
+    public User persist(FormUser formUser, PasswordEncoder passwordEncoder){
         Cart cart = new Cart();
         cart.setLastModified(LocalDateTime.now());
-        return this.persist(user, passwordEncoder, Arrays.asList(roleServer.findByName("ROLE_USER")), cartServer.persist(cart));
+        return this.persist(formUser, passwordEncoder, Arrays.asList(roleServer.findByName("ROLE_USER")), cartServer.persist(cart));
     }
 
-    public User persist(User user, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart){
+        User user = new User();
+        user.setEmail(formUser.getEmail());
+        user.setPassword(passwordEncoder.encode(formUser.getPassword()));
+        user.setFirstName(formUser.getFirstName());
+        user.setLastName(formUser.getLastName());
         user.setRoles(roles);
         user.setCart(cart);
+        System.out.println("before persisting admin on userServer");
         return userRepository.save(user);
     }
 

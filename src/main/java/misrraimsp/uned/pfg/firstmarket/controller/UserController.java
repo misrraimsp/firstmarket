@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.model.FormUser;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
@@ -33,16 +34,18 @@ public class UserController {
     public String showNewUserForm(Model model) {
         model.addAttribute("title", "New User");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
-        model.addAttribute("user", new User());
+        model.addAttribute("formUser", new FormUser());
         return "newUser";
     }
 
     @PostMapping("/newUser")
-    public String processNewUser(@Valid User user, Errors errors) {
+    public String processNewUser(@Valid FormUser formUser, Errors errors, Model model) {
         if (errors.hasErrors()) {
+            model.addAttribute("title", "New User");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "newUser";
         }
-        userServer.persist(user, passwordEncoder);
+        userServer.persist(formUser, passwordEncoder);
         return "redirect:/login";
     }
 

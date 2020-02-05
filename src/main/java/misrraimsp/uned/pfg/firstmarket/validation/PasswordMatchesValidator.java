@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.FormUser;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -12,8 +12,8 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext context){
-        User user = (User) object;
-        return user.getPassword().equals(user.getMatchingPassword());
+        FormUser formUser = (FormUser) object;
+        return formUser.getPassword().equals(formUser.getMatchingPassword());
     }
 
 }

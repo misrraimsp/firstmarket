@@ -11,39 +11,75 @@
                 <li class="breadcrumb-item active">New User</li>
             </ul>
             <h3>New User</h3>
-            <form action="#" th:action="@{/newUser}" th:object="${user}" method="POST" class="needs-validation" novalidate>
-                <!--<div class="ServerValidationError" th:if="${#fields.hasErrors()}">
+
+
+            <form action="#" th:action="@{/newUser}" th:object="${formUser}" method="POST">
+                <div th:if="${#fields.hasErrors()}">
                     <span>Please correct the problems below and resubmit.</span>
-                </div>-->
+                </div>
+                <div class="form-group">
+                    <label for="email">E-mail:</label>
+                    <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="enter email">
+                    <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password:</label>
+                    <input type="text" th:field="*{password}" class="form-control" id="password" placeholder="enter password">
+                    <span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>
+                </div>
+                <div class="form-group">
+                    <label for="matchingPassword">Confirm Password:</label>
+                    <input type="text" th:field="*{matchingPassword}" class="form-control" id="matchingPassword" placeholder="confirm password">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name:</label>
+                    <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="enter firstName">
+                    <span th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName Error</span>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="enter lastName">
+                    <span th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</span>
+                </div>
+                <button th:replace="fragments::saveButton"></button>
+            </form>
+
+
+            <!--<form action="#" th:action="@{/newUser}" th:object="${user}" method="POST" class="needs-validation" novalidate>
+                <div class="ServerValidationError" th:if="${#fields.hasErrors()}">
+                    <span>Please correct the problems below and resubmit.</span>
+                </div>
                 <div class="form-group">
                     <label for="email">E-mail:</label>
                     <input type="email" th:field="*{email}" class="form-control" id="email" placeholder="enter email" required>
                     <div class="invalid-feedback">Please fill out this field with your email.</div>
-                    <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>-->
+                    <span class="ServerValidationError" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">email Error</span>
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
                     <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="enter password" required>
                     <div class="invalid-feedback">Please fill out this field.</div>
-                    <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>-->
+                    <span class="ServerValidationError" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password Error</span>
                 </div>
-                <!-- TODO: confirm password functionality -->
+                 TODO: confirm password functionality
                 <div class="form-group">
                     <label for="firstName">First Name:</label>
                     <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="enter firstName" required>
                     <div class="invalid-feedback">Please fill out this field.</div>
-                    <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName Error</span>-->
+                    <span class="ServerValidationError" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">firstName Error</span>
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last Name:</label>
                     <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="enter lastName" required>
                     <div class="invalid-feedback">Please fill out this field.</div>
-                    <!--<span class="ServerValidationError" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</span>-->
+                    <span class="ServerValidationError" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">lastName Error</span>
                 </div>
                 <button th:replace="fragments::saveButton"></button>
-            </form>
+            </form>-->
+
+
         </div>
         <footer th:replace="fragments::footer"></footer>
-        <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <!--<script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>-->
     </body>
 </html>
