@@ -30,9 +30,8 @@ public class User implements UserDetails {
     @NotEmpty(message = "password cannot be empty")
     private String password;
 
-    private String firstName;
-
-    private String lastName;
+    @OneToOne
+    private Profile profile;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

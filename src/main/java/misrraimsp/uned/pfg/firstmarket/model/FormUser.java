@@ -19,13 +19,10 @@ public class FormUser {
     @NotNull
     @NotEmpty(message = "password cannot be empty")
     private String password;
+
     private String matchingPassword;
 
-    @NotNull
-    @NotEmpty(message = "first name cannot be empty")
     private String firstName;
 
-    @NotNull
-    @NotEmpty(message = "last name cannot be empty")
     private String lastName;
 }

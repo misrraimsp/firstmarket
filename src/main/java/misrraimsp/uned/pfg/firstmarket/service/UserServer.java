@@ -18,17 +18,20 @@ import java.util.List;
 public class UserServer implements UserDetailsService {
 
     private UserRepository userRepository;
+    private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
     private PurchaseServer purchaseServer;
 
     @Autowired
     public UserServer(UserRepository userRepository,
+                      ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
                       PurchaseServer purchaseServer) {
 
         this.userRepository = userRepository;
+        this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
         this.purchaseServer = purchaseServer;
@@ -52,23 +55,21 @@ public class UserServer implements UserDetailsService {
     }
 
     public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart){
+        Profile profile = new Profile();
+        profile.setFirstName(formUser.getFirstName());
+        profile.setLastName(formUser.getLastName());
         User user = new User();
+        user.setProfile(profileServer.persist(profile));
         user.setEmail(formUser.getEmail());
         user.setPassword(passwordEncoder.encode(formUser.getPassword()));
-        user.setFirstName(formUser.getFirstName());
-        user.setLastName(formUser.getLastName());
         user.setRoles(roles);
         user.setCart(cart);
         System.out.println("before persisting admin on userServer");
         return userRepository.save(user);
     }
 
-    public void edit(User editedUser, User authUser) {
-        editedUser.setId(authUser.getId());
-        editedUser.setPassword(authUser.getPassword());
-        editedUser.setCart(authUser.getCart());
-        editedUser.setPurchases(authUser.getPurchases());
-        userRepository.save(editedUser);
+    public void editProfile(Long userId, Profile newProfile) {
+        profileServer.edit(this.findById(userId).getProfile().getId(), newProfile);
     }
 
     public User findById(Long id) {

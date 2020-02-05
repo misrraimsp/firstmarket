@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.model.FormUser;
+import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
@@ -49,25 +50,25 @@ public class UserController {
         return "redirect:/login";
     }
 
-    @GetMapping("/user/editUser")
+    @GetMapping("/user/editProfile")
     public String showEditUserForm(Model model, @AuthenticationPrincipal User authUser){
         model.addAttribute("title", "Edit Profile");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
-        model.addAttribute("user", userServer.findById(authUser.getId()));
-        return "editUser";
+        model.addAttribute("profile", userServer.findById(authUser.getId()).getProfile());
+        return "editProfile";
     }
 
-    @PostMapping("/user/editUser")
-    public String processEditUser(@Valid User editedUser,
+    @PostMapping("/user/editProfile")
+    public String processEditUser(@Valid Profile profile,
                                   Errors errors,
                                   Model model,
                                   @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Edit Profile");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
-            return "editUser";
+            return "editProfile";
         }
-        userServer.edit(editedUser, authUser);
+        userServer.editProfile(authUser.getId(), profile);
         return "redirect:/home";
     }
 
