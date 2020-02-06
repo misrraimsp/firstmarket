@@ -52,7 +52,6 @@ public class UserController {
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
                         errors.rejectValue("matchingPassword", "message.matchingPassword", objectError.getDefaultMessage());
-                        errors.rejectValue("password", "message.matchingPassword", objectError.getDefaultMessage());
                     }
                     else{//debug
                         System.out.println(objectError);
@@ -155,7 +154,6 @@ public class UserController {
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
                         errors.rejectValue("matchingPassword", "message.matchingPassword", objectError.getDefaultMessage());
-                        errors.rejectValue("password", "message.matchingPassword", objectError.getDefaultMessage());
                     }
                     else{//debug
                         System.out.println(objectError);
