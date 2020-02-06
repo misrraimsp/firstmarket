@@ -30,6 +30,7 @@
                 <div class="form-group">
                     <label for="matchingPassword">Confirm Password:</label>
                     <input type="text" th:field="*{matchingPassword}" class="form-control" id="matchingPassword" placeholder="confirm password">
+                    <span th:if="${#fields.hasErrors('matchingPassword')}" th:errors="*{matchingPassword}">matchingPassword Error</span>
                 </div>
                 <div class="form-group">
                     <label for="firstName">First Name:</label>

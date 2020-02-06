@@ -11,8 +11,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,9 +44,19 @@ public class UserController {
     @PostMapping("/newUser")
     public String processNewUser(@Valid FormUser formUser,
                                  Errors errors,
-                                 Model model,
-                                 BindingResult result) {
+                                 Model model) {
         if (errors.hasErrors()) {
+            if (errors.hasGlobalErrors()){
+                for (ObjectError objectError : errors.getGlobalErrors()){
+                    if (objectError.getCode().equals("PasswordMatches")){
+                        errors.rejectValue("matchingPassword", "message.matchingPassword", objectError.getDefaultMessage());
+                        errors.rejectValue("password", "message.matchingPassword", objectError.getDefaultMessage());
+                    }
+                    else{//debug
+                        System.out.println(objectError);
+                    }
+                }
+            }
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "newUser";
@@ -55,15 +65,13 @@ public class UserController {
             userServer.persist(formUser, passwordEncoder, null, null);
         }
         catch (EmailAlreadyExistsException e) {
-            result.rejectValue("email", "message.emailExists");
+            errors.rejectValue("email", "message.emailExists");
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "newUser";
         }
         return "redirect:/login";
     }
-
-
 
     @GetMapping("/user/editProfile")
     public String showEditUserForm(Model model, @AuthenticationPrincipal User authUser){
