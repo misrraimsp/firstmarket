@@ -11,17 +11,15 @@ import javax.validation.constraints.NotNull;
 @PasswordMatches
 public class FormUser implements MatchingPassword{
 
-    @ValidEmail
+    @ValidEmail(message = "{email.notValid}")
     @NotNull
-    @NotEmpty(message = "email cannot be empty")
+    @NotEmpty(message = "{email.notEmpty}")
     private String email;
 
     @NotNull
-    @NotEmpty(message = "password cannot be empty")
+    @NotEmpty(message = "{password.notEmpty}")
     private String password;
 
-    @NotNull
-    @NotEmpty(message = "confirm password cannot be empty")
     private String matchingPassword;
 
     private String firstName;

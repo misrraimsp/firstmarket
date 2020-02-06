@@ -11,14 +11,12 @@ import javax.validation.constraints.NotNull;
 public class FormPassword implements MatchingPassword{
 
     @NotNull
-    @NotEmpty(message = "current password cannot be empty")
+    @NotEmpty(message = "{password.notEmpty}")
     private String currentPassword;
 
     @NotNull
-    @NotEmpty(message = "new password cannot be empty")
+    @NotEmpty(message = "{password.notEmpty}")
     private String password;
 
-    @NotNull
-    @NotEmpty(message = "confirm password cannot be empty")
     private String matchingPassword;
 }

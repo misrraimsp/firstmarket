@@ -51,7 +51,7 @@ public class UserController {
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
-                        errors.rejectValue("matchingPassword", "message.matchingPassword", objectError.getDefaultMessage());
+                        errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
                     }
                     else{//debug
                         System.out.println(objectError);
@@ -66,7 +66,7 @@ public class UserController {
             userServer.persist(formUser, passwordEncoder, null, null);
         }
         catch (EmailAlreadyExistsException e) {
-            errors.rejectValue("email", "message.emailExists");
+            errors.rejectValue("email", "email.notUnique");
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "newUser";
@@ -153,7 +153,7 @@ public class UserController {
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
-                        errors.rejectValue("matchingPassword", "message.matchingPassword", objectError.getDefaultMessage());
+                        errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
                     }
                     else{//debug
                         System.out.println(objectError);
@@ -168,7 +168,7 @@ public class UserController {
             userServer.changePassword(authUser.getId(), passwordEncoder, formPassword);
         }
         catch (InvalidPasswordException e){
-            errors.rejectValue("currentPassword", "message.badPassword");
+            errors.rejectValue("currentPassword", "password.invalid");
             model.addAttribute("title", "Change Password");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             return "changePassword";

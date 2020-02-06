@@ -21,13 +21,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @ValidEmail
+    @ValidEmail(message = "{email.notValid}")
     @NotNull
-    @NotEmpty(message = "email cannot be empty")
+    @NotEmpty(message = "{email.notEmpty}")
     private String email;
 
     @NotNull
-    @NotEmpty(message = "password cannot be empty")
+    @NotEmpty(message = "{password.notEmpty}")
     private String password;
 
     @OneToOne
