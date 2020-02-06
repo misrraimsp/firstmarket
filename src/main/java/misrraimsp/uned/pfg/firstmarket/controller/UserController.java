@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.model.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.model.FormUser;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
@@ -133,6 +134,31 @@ public class UserController {
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("purchases", userServer.findById(authUser.getId()).getPurchases());
         return "purchases";
+    }
+
+    @GetMapping("/user/changePass")
+    public String showChangePassForm(Model model){
+        model.addAttribute("title", "Change Password");
+        model.addAttribute("logoId", imageServer.getDefaultImageId());
+        model.addAttribute("formPassword", new FormPassword());
+        return "changePass";
+    }
+
+    @PostMapping("/user/changePass")
+    public String processChangePass(@Valid FormPassword formPassword,
+                                    Errors errors,
+                                    Model model
+                                  //@AuthenticationPrincipal User authUser
+    ) {
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Change Password");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
+            return "changePass";
+        }
+        System.out.println("current: " + formPassword.getCurrentPassword());
+        System.out.println("new: " + formPassword.getPassword());
+        System.out.println("confirm: " + formPassword.getMatchingPassword());
+        return "redirect:/home";
     }
 
 }
