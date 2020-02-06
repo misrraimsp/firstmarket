@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -111,4 +112,14 @@ public class UserServer implements UserDetailsService {
         user.setPurchases(purchases);
         userRepository.save(user);
     }
+
+    public void changePassword(Long id, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
+        User user = this.findById(id);
+        if (!passwordEncoder.matches(formPassword.getCurrentPassword(), user.getPassword())){
+            throw new InvalidPasswordException("incorrect password for user: " + user.getUsername());
+        }
+        user.setPassword(passwordEncoder.encode(formPassword.getPassword()));
+        userRepository.save(user);
+    }
+
 }

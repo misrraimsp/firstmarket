@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.model.FormUser;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -136,28 +137,44 @@ public class UserController {
         return "purchases";
     }
 
-    @GetMapping("/user/changePass")
+    @GetMapping("/user/changePassword")
     public String showChangePassForm(Model model){
         model.addAttribute("title", "Change Password");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("formPassword", new FormPassword());
-        return "changePass";
+        return "changePassword";
     }
 
-    @PostMapping("/user/changePass")
+    @PostMapping("/user/changePassword")
     public String processChangePass(@Valid FormPassword formPassword,
                                     Errors errors,
-                                    Model model
-                                  //@AuthenticationPrincipal User authUser
-    ) {
+                                    Model model,
+                                    @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
+            if (errors.hasGlobalErrors()){
+                for (ObjectError objectError : errors.getGlobalErrors()){
+                    if (objectError.getCode().equals("PasswordMatches")){
+                        errors.rejectValue("matchingPassword", "message.matchingPassword", objectError.getDefaultMessage());
+                        errors.rejectValue("password", "message.matchingPassword", objectError.getDefaultMessage());
+                    }
+                    else{//debug
+                        System.out.println(objectError);
+                    }
+                }
+            }
             model.addAttribute("title", "Change Password");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
-            return "changePass";
+            return "changePassword";
         }
-        System.out.println("current: " + formPassword.getCurrentPassword());
-        System.out.println("new: " + formPassword.getPassword());
-        System.out.println("confirm: " + formPassword.getMatchingPassword());
+        try{
+            userServer.changePassword(authUser.getId(), passwordEncoder, formPassword);
+        }
+        catch (InvalidPasswordException e){
+            errors.rejectValue("currentPassword", "message.badPassword");
+            model.addAttribute("title", "Change Password");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
+            return "changePassword";
+        }
         return "redirect:/home";
     }
 
