@@ -14,7 +14,7 @@
 
             <!-- BACKEND-ONLY VALIDATION -->
 
-            <form action="#" th:action="@{/newUser}" th:object="${formUser}" method="POST">
+            <form th:action="@{/newUser}" th:object="${formUser}" method="POST" action="#">
                 <div class="form-group">
                     <label for="email">E-mail:</label>
                     <input type="text" th:field="*{email}" class="form-control" id="email" placeholder="enter email">
@@ -22,12 +22,12 @@
                 </div>
                 <div class="form-group">
                     <label for="password">Password:</label>
-                    <input type="text" th:field="*{password}" class="form-control" id="password" placeholder="enter password">
+                    <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="enter password">
                     <div th:replace="fragments::backendValidationErrors('password')"></div>
                 </div>
                 <div class="form-group">
                     <label for="matchingPassword">Confirm Password:</label>
-                    <input type="text" th:field="*{matchingPassword}" class="form-control" id="matchingPassword" placeholder="confirm password">
+                    <input type="password" th:field="*{matchingPassword}" class="form-control" id="matchingPassword" placeholder="confirm password">
                     <div th:replace="fragments::backendValidationErrors('matchingPassword')"></div>
                 </div>
                 <div class="form-group">

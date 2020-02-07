@@ -1,17 +1,20 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import misrraimsp.uned.pfg.firstmarket.config.Patterns;
 
 import javax.persistence.*;
+import javax.validation.constraints.Pattern;
 
 @Data
 @Entity
-public class Category {
+public class Category implements Patterns {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
+	@Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$}")
 	private String name;
 
 	@ManyToOne

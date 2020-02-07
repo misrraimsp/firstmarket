@@ -10,12 +10,13 @@ public interface Patterns {
     String PASSWORD_PATTERN = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
 
     /**
-     * This field must have zero to thirty simple characters (underscore (_), letters or numbers)
+     * This field must have zero to thirty characters between:
+     * middle hyphen (-), space, underscore (_), letters or numbers
      */
-    String TEXT_BASIC_PATTERN = "^[\\w ]{0,30}$";
+    String W_0_30_$ = "^[ \\w-]{0,30}$";
 
     /**
      * provisional isbn pattern
      */
-    String ISBN_PATTERN = TEXT_BASIC_PATTERN;
+    String ISBN_PATTERN = W_0_30_$;
 }

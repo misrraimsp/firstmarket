@@ -17,11 +17,9 @@ public class Profile implements Patterns {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @Pattern(regexp = TEXT_BASIC_PATTERN,
-            message = "{text.basic.invalidFormat}")
+    @Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$")
     private String firstName;
 
-    @Pattern(regexp = TEXT_BASIC_PATTERN,
-            message = "{text.basic.invalidFormat}")
+    @Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$")
     private String lastName;
 }

@@ -51,6 +51,8 @@ public class CategoryController {
     @PostMapping("/admin/newCategory")
     public String processNewCategory(@Valid Category category, Errors errors, Model model){
         if (errors.hasErrors()) {
+            model.addAttribute("title", "New Category");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "newCategory";
         }
@@ -72,6 +74,8 @@ public class CategoryController {
     @PostMapping("/admin/editCategory")
     public String processEditCategory(@Valid Category category, Errors errors, Model model){
         if (errors.hasErrors()) {
+            model.addAttribute("title", "Edit Category");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("descendants", catServer.getDescendants(category));
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             return "editCategory";
