@@ -19,7 +19,11 @@ public class FormUser implements MatchingPassword, Patterns {
     private String password;
     private String matchingPassword;
 
+    @Pattern(regexp = TEXT_BASIC_PATTERN,
+            message = "{text.basic.invalidFormat}")
     private String firstName;
 
+    @Pattern(regexp = TEXT_BASIC_PATTERN,
+            message = "{text.basic.invalidFormat}")
     private String lastName;
 }
