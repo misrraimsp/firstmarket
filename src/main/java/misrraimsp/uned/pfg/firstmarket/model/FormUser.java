@@ -4,22 +4,18 @@ import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidEmail;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 @Data
 @PasswordMatches
 public class FormUser implements MatchingPassword{
 
-    @ValidEmail(message = "{email.notValid}")
-    @NotNull
-    @NotEmpty(message = "{email.notEmpty}")
+    @ValidEmail(message = "{email.invalidFormat}")
     private String email;
 
-    @NotNull
-    @NotEmpty(message = "{password.notEmpty}")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$",
+            message = "{password.invalidFormat}")
     private String password;
-
     private String matchingPassword;
 
     private String firstName;

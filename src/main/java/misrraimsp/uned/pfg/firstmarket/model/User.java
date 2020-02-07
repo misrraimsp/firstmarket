@@ -1,14 +1,11 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.validation.ValidEmail;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,13 +18,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    @ValidEmail(message = "{email.notValid}")
-    @NotNull
-    @NotEmpty(message = "{email.notEmpty}")
     private String email;
 
-    @NotNull
-    @NotEmpty(message = "{password.notEmpty}")
     private String password;
 
     @OneToOne
