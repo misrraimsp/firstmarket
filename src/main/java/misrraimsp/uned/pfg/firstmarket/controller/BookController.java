@@ -49,8 +49,10 @@ public class BookController {
     }
 
     @PostMapping("/newBook")
-    public String processNewBook(@Valid Book book, Long storedImageId, Errors errors, Model model){
+    public String processNewBook(@Valid Book book, Errors errors, Long storedImageId, Model model){
         if (errors.hasErrors()) {
+            model.addAttribute("title", "New Book");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             return "newBook";
@@ -67,17 +69,23 @@ public class BookController {
 
     @GetMapping("/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
+        Book book = bookServer.findById(id);
         model.addAttribute("title", "Edit Book");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
-        model.addAttribute("book", bookServer.findById(id));
+        model.addAttribute("book", book);
+        //model.addAttribute("book", bookServer.findById(id));
+        model.addAttribute("bookImageId", book.getImage().getId());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         return "editBook";
     }
 
     @PostMapping("/editBook")
-    public String processEditBook(@Valid Book book, Long storedImageId, Errors errors, Model model){
+    public String processEditBook(@Valid Book book, Errors errors, Long storedImageId, Model model){
         if (errors.hasErrors()) {
+            model.addAttribute("title", "Edit Book");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
+            model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             return "editBook";

@@ -12,5 +12,10 @@ public interface Patterns {
     /**
      * This field must have zero to thirty simple characters (underscore (_), letters or numbers)
      */
-    String TEXT_BASIC_PATTERN = "^[\\w]{0,30}$";
+    String TEXT_BASIC_PATTERN = "^[\\w ]{0,30}$";
+
+    /**
+     * provisional isbn pattern
+     */
+    String ISBN_PATTERN = TEXT_BASIC_PATTERN;
 }
