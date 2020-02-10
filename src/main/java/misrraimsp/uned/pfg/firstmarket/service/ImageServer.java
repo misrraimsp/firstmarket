@@ -13,6 +13,7 @@ public class ImageServer {
 
     private ImageRepository imageRepository;
     private BookServer bookServer;
+    private Long defaultImageId;
 
     @Autowired
     public ImageServer(ImageRepository imageRepository, BookServer bookServer) {
@@ -50,7 +51,11 @@ public class ImageServer {
         imageRepository.deleteById(id);
     }
 
+    public void loadDefaultImageId(){
+        defaultImageId = imageRepository.findIdByIsDefaultIsTrue();
+    }
+
     public Long getDefaultImageId() {
-        return imageRepository.findIdByIsDefaultIsTrue();
+        return defaultImageId;
     }
 }

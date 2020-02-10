@@ -57,6 +57,10 @@ public class DevelopmentH2Config {
             img2.setMimeType(Files.probeContentType(path2));
             imageServer.persist(img2);
 
+            //load defaultImageId
+
+            imageServer.loadDefaultImageId();
+
             //Categories
 
             Category fm = new Category();
