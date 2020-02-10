@@ -73,7 +73,6 @@ public class BookController {
         model.addAttribute("title", "Edit Book");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("book", book);
-        //model.addAttribute("book", bookServer.findById(id));
         model.addAttribute("bookImageId", book.getImage().getId());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());

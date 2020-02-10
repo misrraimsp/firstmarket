@@ -159,28 +159,28 @@ public class DevelopmentH2Config {
             //Books
 
             Book book1 = new Book();
-            book1.setIsbn("isbn001");
+            book1.setIsbn("3-04-013341-1");
             book1.setTitle("Computer Basics");
             book1.setCategory(computers);
             book1.setImage(img1);
             bookServer.persist(book1);
 
             Book book2 = new Book();
-            book2.setIsbn("isbn002");
+            book2.setIsbn("ISBN-13: 978-0-596-52068-7");
             book2.setTitle("Traditional Music of Spain");
             book2.setCategory(music);
             book2.setImage(img2);
             bookServer.persist(book2);
 
             Book book3 = new Book();
-            book3.setIsbn("isbn003");
+            book3.setIsbn("ISBN-10 0-596-52068-9");
             book3.setTitle("Compilers");
             book3.setCategory(computers);
             book3.setImage(img1);
             bookServer.persist(book3);
 
             Book book4 = new Book();
-            book4.setIsbn("isbn004");
+            book4.setIsbn("043942089X");
             book4.setTitle("Computer Networking");
             book4.setCategory(computers);
             book4.setImage(img1);
