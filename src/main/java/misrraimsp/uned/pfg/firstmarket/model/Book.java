@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.model;
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.Patterns;
 import misrraimsp.uned.pfg.firstmarket.validation.Isbn;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
@@ -26,6 +27,7 @@ public class Book implements Patterns {
     private Category category;
 
     @ManyToOne
+    @ValidImage(message = "{image.error}")
     private Image image;
 
     public void setIsbnNumbers(String isbn){

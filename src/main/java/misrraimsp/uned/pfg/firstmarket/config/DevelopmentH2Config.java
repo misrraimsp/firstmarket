@@ -50,7 +50,7 @@ public class DevelopmentH2Config {
             imageServer.persist(img1);
 
             Image img2 = new Image();
-            Path path2 = Paths.get("img/azul.jpg");
+            Path path2 = Paths.get("img/amarillo.jpg");
             img2.setDefault(false);
             img2.setData(Files.readAllBytes(path2));
             img2.setName(path2.getFileName().toString());

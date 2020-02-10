@@ -48,6 +48,7 @@
                     <label for="switch">select new image:</label>
                     <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
                     <input class="form-control" type="file" th:field="*{image}" id="input2" disabled />
+                    <div th:replace="fragments::backendValidationErrors('image')"></div>
                 </div>
                 <button th:replace="fragments::saveButton"></button>
             </form>

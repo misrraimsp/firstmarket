@@ -1,12 +1,13 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import misrraimsp.uned.pfg.firstmarket.config.Patterns;
 
 import javax.persistence.*;
 
 @Data
 @Entity
-public class Image {
+public class Image implements Patterns {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
