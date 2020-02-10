@@ -13,4 +13,6 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     void updateCategoryIdByCategoryId(@Param("category_id") Long category_id, @Param("new_category_id") Long new_category_id);
 
     Iterable<? extends Book> findByImageId(Long id);
+
+    Book findByIsbnNumbers(String isbnNumbers);
 }

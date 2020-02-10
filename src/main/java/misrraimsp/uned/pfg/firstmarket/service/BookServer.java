@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,18 @@ public class BookServer {
         this.bookRepository = bookRepository;
     }
 
-    public Book persist(Book book) {
-        return bookRepository.save(book);
+    public Book persist(Book book) throws IsbnAlreadyExistsException {
+        book.setIsbnNumbers(book.getIsbn());
+        if (this.isbnExists(book.getIsbnNumbers())){
+            throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
+        }
+        else {
+            return bookRepository.save(book);
+        }
+    }
+
+    private boolean isbnExists(String isbnNumbers) {
+        return bookRepository.findByIsbnNumbers(isbnNumbers) != null;
     }
 
     public Iterable<Book> findAll() {

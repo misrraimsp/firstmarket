@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -63,7 +64,17 @@ public class BookController {
         else {
             book.setImage(imageServer.findById(storedImageId));
         }
-        bookServer.persist(book);
+        try {
+            bookServer.persist(book);
+        }
+        catch (IsbnAlreadyExistsException e) {
+            errors.rejectValue("isbn", "isbn.notUnique");
+            model.addAttribute("title", "New Book");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
+            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+            return "newBook";
+        }
         return "redirect:/admin/books";
     }
 
@@ -95,7 +106,18 @@ public class BookController {
         else {
             book.setImage(imageServer.findById(storedImageId));
         }
-        bookServer.persist(book);
+        try {
+            bookServer.persist(book);
+        }
+        catch (IsbnAlreadyExistsException e) {
+            errors.rejectValue("isbn", "isbn.notUnique");
+            model.addAttribute("title", "Edit Book");
+            model.addAttribute("logoId", imageServer.getDefaultImageId());
+            model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
+            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+            return "editBook";
+        }
         return "redirect:/admin/books";
     }
 
