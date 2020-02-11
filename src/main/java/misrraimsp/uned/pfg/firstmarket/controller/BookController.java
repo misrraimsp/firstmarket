@@ -107,7 +107,7 @@ public class BookController {
             book.setImage(imageServer.findById(storedImageId));
         }
         try {
-            bookServer.persist(book);
+            bookServer.edit(book);
         }
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");

@@ -22,9 +22,17 @@ public class BookServer {
         if (this.isbnExists(book.getIsbnNumbers())){
             throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
         }
-        else {
-            return bookRepository.save(book);
+        return bookRepository.save(book);
+    }
+
+    public Book edit(Book book) throws IsbnAlreadyExistsException {
+        book.setIsbnNumbers(book.getIsbn());
+        if (!this.findById(book.getId()).getIsbnNumbers().equals(book.getIsbnNumbers())){
+            if (this.isbnExists(book.getIsbnNumbers())){
+                throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
+            }
         }
+        return bookRepository.save(book);
     }
 
     private boolean isbnExists(String isbnNumbers) {
