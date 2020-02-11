@@ -14,7 +14,7 @@ public class Category implements Patterns {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$}")
+	@Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
 	private String name;
 
 	@ManyToOne

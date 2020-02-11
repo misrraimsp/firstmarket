@@ -19,7 +19,7 @@ public class Book implements Patterns {
     @Isbn(message = "{isbn.error}")
     private String isbn;
 
-    @Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$")
+    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String title;
 
     @ManyToOne

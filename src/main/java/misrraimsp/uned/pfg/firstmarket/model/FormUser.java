@@ -10,16 +10,16 @@ import javax.validation.constraints.Pattern;
 @PasswordMatches
 public class FormUser implements MatchingPassword, Patterns {
 
-    @Pattern(regexp = EMAIL_PATTERN, message = "{email.invalidFormat}")
+    @Pattern(regexp = EMAIL, message = "{email.invalidFormat}")
     private String email;
 
-    @Pattern(regexp = PASSWORD_PATTERN, message = "{password.invalidFormat}")
+    @Pattern(regexp = PASSWORD, message = "{password.invalidFormat}")
     private String password;
     private String matchingPassword;
 
-    @Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$")
+    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String firstName;
 
-    @Pattern(regexp = W_0_30_$, message = "{text.W_0_30_$")
+    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String lastName;
 }

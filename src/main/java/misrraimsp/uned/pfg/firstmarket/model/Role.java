@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-//import java.util.ArrayList;
-//import java.util.List;
 
 @Data
 @Entity
@@ -18,8 +16,5 @@ public class Role {
     private Long id;
 
     private String name;
-
-    //@ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
-    //private List<User> users = new ArrayList<>();
 
 }

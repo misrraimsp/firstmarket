@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.config.Patterns;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
@@ -18,7 +19,7 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
-public class BookController {
+public class BookController implements Patterns {
 
     private BookServer bookServer;
     private CatServer catServer;
@@ -46,6 +47,8 @@ public class BookController {
         model.addAttribute("book", new Book());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+        model.addAttribute("isbnPattern", ISBN);
+        model.addAttribute("basicTextPattern", TEXT_BASIC);
         return "newBook";
     }
 
@@ -56,6 +59,8 @@ public class BookController {
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+            model.addAttribute("isbnPattern", ISBN);
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "newBook";
         }
         if (storedImageId == null){ //new image upload
@@ -73,6 +78,8 @@ public class BookController {
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+            model.addAttribute("isbnPattern", ISBN);
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "newBook";
         }
         return "redirect:/admin/books";
@@ -87,6 +94,8 @@ public class BookController {
         model.addAttribute("bookImageId", book.getImage().getId());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+        model.addAttribute("isbnPattern", ISBN);
+        model.addAttribute("basicTextPattern", TEXT_BASIC);
         return "editBook";
     }
 
@@ -98,6 +107,8 @@ public class BookController {
             model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+            model.addAttribute("isbnPattern", ISBN);
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "editBook";
         }
         if (storedImageId == null){ //new image upload
@@ -116,6 +127,8 @@ public class BookController {
             model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+            model.addAttribute("isbnPattern", ISBN);
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "editBook";
         }
         return "redirect:/admin/books";

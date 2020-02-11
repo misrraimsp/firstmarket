@@ -32,7 +32,6 @@ public class ImageController {
     public String showImages(Model model){
         model.addAttribute("title", "Images");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
-        model.addAttribute("image", new Image());
         model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
         return "images";
     }
@@ -59,7 +58,6 @@ public class ImageController {
                 ConstraintViolationException cve = (ConstraintViolationException) t;
                 model.addAttribute("title", "Images");
                 model.addAttribute("logoId", imageServer.getDefaultImageId());
-                model.addAttribute("image", new Image());
                 model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
                 model.addAttribute("constraintViolations", cve.getConstraintViolations());
                 return "images";

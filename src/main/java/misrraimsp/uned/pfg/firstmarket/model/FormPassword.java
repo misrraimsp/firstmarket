@@ -12,7 +12,7 @@ public class FormPassword implements MatchingPassword, Patterns {
 
     private String currentPassword;
 
-    @Pattern(regexp = PASSWORD_PATTERN, message = "{password.invalidFormat}")
+    @Pattern(regexp = PASSWORD, message = "{password.invalidFormat}")
     private String password;
     private String matchingPassword;
 }
