@@ -29,17 +29,4 @@ public class Book implements Patterns {
     @ValidImage(message = "{image.error}")
     private Image image;
 
-    public void setIsbn(String isbn){
-        String isbnNumbers = isbn.replaceAll("X", "10").replaceAll("[^\\d]", "");
-        int size = isbnNumbers.length();
-        if (size != 10 && size != 11 && size != 13){//cut numbers on isbn head
-            isbnNumbers = isbnNumbers.substring(2);
-            size -= 2;
-        }
-        if (size == 11){//substitute ...10 by ...X
-            isbnNumbers = isbnNumbers.substring(0,9);
-            isbnNumbers += "X";
-        }
-        this.isbn = isbnNumbers;
-    }
 }

@@ -18,6 +18,7 @@ public class BookServer {
     }
 
     public Book persist(Book book) throws IsbnAlreadyExistsException {
+        book.setIsbn(this.trimIsbn(book.getIsbn()));
         if (this.isbnExists(book.getIsbn())){
             throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
         }
@@ -25,12 +26,27 @@ public class BookServer {
     }
 
     public Book edit(Book book) throws IsbnAlreadyExistsException {
+        book.setIsbn(this.trimIsbn(book.getIsbn()));
         if (!this.findById(book.getId()).getIsbn().equals(book.getIsbn())){
             if (this.isbnExists(book.getIsbn())){
                 throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
             }
         }
         return bookRepository.save(book);
+    }
+
+    private String trimIsbn(String isbn) {
+        String isbnNumbers = isbn.replaceAll("X", "10").replaceAll("[^\\d]", "");
+        int size = isbnNumbers.length();
+        if (size != 10 && size != 11 && size != 13){//cut numbers on isbn head
+            isbnNumbers = isbnNumbers.substring(2);
+            size -= 2;
+        }
+        if (size == 11){//substitute ...10 by ...X
+            isbnNumbers = isbnNumbers.substring(0,9);
+            isbnNumbers += "X";
+        }
+        return isbnNumbers;
     }
 
     private boolean isbnExists(String isbn) {
