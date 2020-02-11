@@ -18,25 +18,23 @@ public class BookServer {
     }
 
     public Book persist(Book book) throws IsbnAlreadyExistsException {
-        book.setIsbnNumbers(book.getIsbn());
-        if (this.isbnExists(book.getIsbnNumbers())){
+        if (this.isbnExists(book.getIsbn())){
             throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
         }
         return bookRepository.save(book);
     }
 
     public Book edit(Book book) throws IsbnAlreadyExistsException {
-        book.setIsbnNumbers(book.getIsbn());
-        if (!this.findById(book.getId()).getIsbnNumbers().equals(book.getIsbnNumbers())){
-            if (this.isbnExists(book.getIsbnNumbers())){
+        if (!this.findById(book.getId()).getIsbn().equals(book.getIsbn())){
+            if (this.isbnExists(book.getIsbn())){
                 throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
             }
         }
         return bookRepository.save(book);
     }
 
-    private boolean isbnExists(String isbnNumbers) {
-        return bookRepository.findByIsbnNumbers(isbnNumbers) != null;
+    private boolean isbnExists(String isbn) {
+        return bookRepository.findByIsbn(isbn) != null;
     }
 
     public Iterable<Book> findAll() {

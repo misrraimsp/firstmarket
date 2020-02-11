@@ -14,5 +14,5 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     Iterable<? extends Book> findByImageId(Long id);
 
-    Book findByIsbnNumbers(String isbnNumbers);
+    Book findByIsbn(String isbn);
 }
