@@ -18,6 +18,7 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object>, 
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
+        if (object == null) return true; //needed in case of using a stored image on newBook and editBook workflow
         Image image = (Image) object;
         return (this.validateMimeType(image.getMimeType()) &&
                 this.validateSize(image.getData()) &&
