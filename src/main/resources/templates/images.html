@@ -7,13 +7,32 @@
         <header th:replace="fragments::header"></header>
         <div class="container">
             <div th:replace="fragments::underHead('Images')"></div>
-            <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
-                <div class="form-group">
-                    <input class="form-control" type="file" th:name="image" required/>
-                    <div class="invalid-feedback">Please select an image.</div>
+
+            <!-- BACKEND-ONLY VALIDATION -->
+
+            <form class="my-2" th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
+                <div class="form-group my-2">
+                    <input class="form-control" type="file" th:name="image" />
                 </div>
+                <!-- backend validation-->
+                <div class="alert alert-danger alert-dismissible fade show my-2" th:each="cv : ${constraintViolations}">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    <strong>Error: </strong><span th:text="#{image.error}"></span>
+                </div>
+                <!---->
                 <button th:replace="fragments::saveButton"></button>
-            </form>
+             </form>
+
+             <!--
+             <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
+                 <div class="form-group">
+                     <input class="form-control" type="file" th:name="image" required/>
+                     <div class="invalid-feedback">Please select an image.</div>
+                 </div>
+                 <button th:replace="fragments::saveButton"></button>
+             </form>
+             -->
+
             <table class="table">
                 <thead class="thead-light">
                 <tr>

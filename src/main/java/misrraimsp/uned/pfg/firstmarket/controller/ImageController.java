@@ -5,6 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,8 +46,25 @@ public class ImageController {
     }
 
     @PostMapping("/admin/newImage")
-    public String processNewImage(@RequestParam Image image){
-        imageServer.persist(image);
+    public String processNewImage(@RequestParam Image image, Model model){
+        try {
+            imageServer.persist(image);
+        }
+        catch (TransactionSystemException e) {
+            Throwable t = e.getCause();
+            while ((t != null) && !(t instanceof ConstraintViolationException)) {
+                t = t.getCause();
+            }
+            if (t instanceof ConstraintViolationException) {
+                ConstraintViolationException cve = (ConstraintViolationException) t;
+                model.addAttribute("title", "Images");
+                model.addAttribute("logoId", imageServer.getDefaultImageId());
+                model.addAttribute("image", new Image());
+                model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
+                model.addAttribute("constraintViolations", cve.getConstraintViolations());
+                return "images";
+            }
+        }
         return "redirect:/admin/images";
     }
 
