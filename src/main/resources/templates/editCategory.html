@@ -12,6 +12,7 @@
                 <li class="breadcrumb-item active">Edit Category</li>
             </ul>
             <h3>Edit Category</h3>
+            <!-- BACKEND-ONLY VALIDATION
             <form th:action="@{/admin/editCategory}" th:object="${category}" method="POST" action="#">
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{parent.name}"/>
@@ -32,34 +33,19 @@
                     </select>
                 </div>
                 <button th:replace="fragments::saveButton"></button>
-            </form>
-        </div>
-        <footer th:replace="fragments::footer"></footer>
-        <!--<script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>-->
-    </body>
-
-
-<!--
-<body>
-        <header th:replace="fragments::header"></header>
-        <div class="container">
-            <ul class="breadcrumb my-2">
-                <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-                <li class="breadcrumb-item"><a th:href="@{/admin/categories}">Categories</a></li>
-                <li class="breadcrumb-item active">Edit Category</li>
-            </ul>
-            <h3>Edit Category</h3>
-            <form action="#" th:action="@{/admin/editCategory}" th:object="${category}" method="POST" class="needs-validation" novalidate>
+            </form>-->
+            <form class="needs-validation" novalidate th:action="@{/admin/editCategory}" th:object="${category}" method="POST" action="#">
                 <input type="hidden" th:field="*{id}"/>
                 <input type="hidden" th:field="*{parent.name}"/>
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="enter name" name="name" required>
-                    <div class="invalid-feedback">Please fill out this field.</div>
+                    <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${basicTextPattern}">
+                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                    <div th:replace="fragments::backendValidationErrors('name')"></div>
                 </div>
                 <div class="form-group">
                     <label for="parent">Nested under:</label>
-                    <select th:field="*{parent.id}" class="custom-select" id="parent" name="parent">
+                    <select class="custom-select" th:field="*{parent.id}" id="parent" >
                         <option th:each="ic : ${indentedCategories}"
                                 th:value="${ic.id}"
                                 th:text="${ic.name}"
@@ -74,7 +60,4 @@
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
     </body>
-
--->
-
 </html>

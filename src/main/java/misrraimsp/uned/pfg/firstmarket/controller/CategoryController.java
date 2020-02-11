@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.config.Patterns;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-public class CategoryController {
+public class CategoryController implements Patterns {
 
     private CatServer catServer;
     private ImageServer imageServer;
@@ -45,6 +46,7 @@ public class CategoryController {
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("category", new Category());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("basicTextPattern", TEXT_BASIC);
         return "newCategory";
     }
 
@@ -54,6 +56,7 @@ public class CategoryController {
             model.addAttribute("title", "New Category");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "newCategory";
         }
         catServer.persist(category);
@@ -68,6 +71,7 @@ public class CategoryController {
         model.addAttribute("category", category);
         model.addAttribute("descendants", catServer.getDescendants(category));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("basicTextPattern", TEXT_BASIC);
         return "editCategory";
     }
 
@@ -78,6 +82,7 @@ public class CategoryController {
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("descendants", catServer.getDescendants(category));
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "editCategory";
         }
         catServer.edit(category);
