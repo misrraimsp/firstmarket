@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.config.Patterns;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.FormPassword;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-public class UserController {
+public class UserController implements Patterns {
 
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
@@ -40,6 +41,8 @@ public class UserController {
         model.addAttribute("title", "New User");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("formUser", new FormUser());
+        model.addAttribute("emailPattern", EMAIL);
+        model.addAttribute("basicTextPattern", TEXT_BASIC);
         return "newUser";
     }
 
@@ -60,6 +63,8 @@ public class UserController {
             }
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
+            model.addAttribute("emailPattern", EMAIL);
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "newUser";
         }
         try {
@@ -69,27 +74,31 @@ public class UserController {
             errors.rejectValue("email", "email.notUnique");
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
+            model.addAttribute("emailPattern", EMAIL);
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "newUser";
         }
         return "redirect:/login";
     }
 
     @GetMapping("/user/editProfile")
-    public String showEditUserForm(Model model, @AuthenticationPrincipal User authUser){
+    public String showEditProfileForm(Model model, @AuthenticationPrincipal User authUser){
         model.addAttribute("title", "Edit Profile");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("profile", userServer.findById(authUser.getId()).getProfile());
+        model.addAttribute("basicTextPattern", TEXT_BASIC);
         return "editProfile";
     }
 
     @PostMapping("/user/editProfile")
-    public String processEditUser(@Valid Profile profile,
-                                  Errors errors,
-                                  Model model,
-                                  @AuthenticationPrincipal User authUser) {
+    public String processEditProfile(@Valid Profile profile,
+                                     Errors errors,
+                                     Model model,
+                                     @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Edit Profile");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
+            model.addAttribute("basicTextPattern", TEXT_BASIC);
             return "editProfile";
         }
         userServer.editProfile(authUser.getId(), profile);

@@ -14,12 +14,14 @@
             <form class="needs-validation" novalidate th:action="@{/user/editProfile}" th:object="${profile}" method="POST" action="#">
                 <div class="form-group">
                     <label for="firstName">First Name:</label>
-                    <input type="text" th:field="*{firstName}" class="form-control" id="firstName" placeholder="enter firstName">
+                    <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${basicTextPattern}">
+                    <div class="invalid-feedback">Please fill out this field correctly</div>
                     <div th:replace="fragments::backendValidationErrors('firstName')"></div>
                 </div>
                 <div class="form-group">
                     <label for="lastName">Last Name:</label>
-                    <input type="text" th:field="*{lastName}" class="form-control" id="lastName" placeholder="enter lastName">
+                    <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${basicTextPattern}">
+                    <div class="invalid-feedback">Please fill out this field correctly</div>
                     <div th:replace="fragments::backendValidationErrors('lastName')"></div>
                 </div>
                 <button th:replace="fragments::saveButton"></button>
