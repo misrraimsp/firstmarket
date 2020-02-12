@@ -42,7 +42,8 @@ public class UserController implements Patterns {
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("formUser", new FormUser());
         model.addAttribute("emailPattern", EMAIL);
-        model.addAttribute("basicTextPattern", TEXT_BASIC);
+        model.addAttribute("textBasicPattern", TEXT_BASIC);
+        model.addAttribute("passwordPattern", PASSWORD);
         return "newUser";
     }
 
@@ -64,7 +65,8 @@ public class UserController implements Patterns {
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("emailPattern", EMAIL);
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAttribute("passwordPattern", PASSWORD);
             return "newUser";
         }
         try {
@@ -75,7 +77,8 @@ public class UserController implements Patterns {
             model.addAttribute("title", "New User");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("emailPattern", EMAIL);
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAttribute("passwordPattern", PASSWORD);
             return "newUser";
         }
         return "redirect:/login";
@@ -86,7 +89,7 @@ public class UserController implements Patterns {
         model.addAttribute("title", "Edit Profile");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("profile", userServer.findById(authUser.getId()).getProfile());
-        model.addAttribute("basicTextPattern", TEXT_BASIC);
+        model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editProfile";
     }
 
@@ -98,7 +101,7 @@ public class UserController implements Patterns {
         if (errors.hasErrors()) {
             model.addAttribute("title", "Edit Profile");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editProfile";
         }
         userServer.editProfile(authUser.getId(), profile);
@@ -145,19 +148,20 @@ public class UserController implements Patterns {
         return "purchases";
     }
 
-    @GetMapping("/user/changePassword")
-    public String showChangePassForm(Model model){
-        model.addAttribute("title", "Change Password");
+    @GetMapping("/user/editPassword")
+    public String showEditPasswordForm(Model model){
+        model.addAttribute("title", "Edit Password");
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("formPassword", new FormPassword());
-        return "changePassword";
+        model.addAttribute("passwordPattern", PASSWORD);
+        return "editPassword";
     }
 
-    @PostMapping("/user/changePassword")
-    public String processChangePass(@Valid FormPassword formPassword,
-                                    Errors errors,
-                                    Model model,
-                                    @AuthenticationPrincipal User authUser) {
+    @PostMapping("/user/editPassword")
+    public String processEditPassword(@Valid FormPassword formPassword,
+                                      Errors errors,
+                                      Model model,
+                                      @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
@@ -169,18 +173,20 @@ public class UserController implements Patterns {
                     }
                 }
             }
-            model.addAttribute("title", "Change Password");
+            model.addAttribute("title", "Edit Password");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
-            return "changePassword";
+            model.addAttribute("passwordPattern", PASSWORD);
+            return "editPassword";
         }
         try{
-            userServer.changePassword(authUser.getId(), passwordEncoder, formPassword);
+            userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
         }
         catch (InvalidPasswordException e){
             errors.rejectValue("currentPassword", "password.invalid");
-            model.addAttribute("title", "Change Password");
+            model.addAttribute("title", "Edit Password");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
-            return "changePassword";
+            model.addAttribute("passwordPattern", PASSWORD);
+            return "editPassword";
         }
         return "redirect:/home";
     }

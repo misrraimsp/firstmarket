@@ -48,7 +48,7 @@ public class BookController implements Patterns {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         model.addAttribute("isbnPattern", ISBN);
-        model.addAttribute("basicTextPattern", TEXT_BASIC);
+        model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "newBook";
     }
 
@@ -60,7 +60,7 @@ public class BookController implements Patterns {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "newBook";
         }
         if (storedImageId == null){ //new image upload
@@ -79,7 +79,7 @@ public class BookController implements Patterns {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "newBook";
         }
         return "redirect:/admin/books";
@@ -95,7 +95,7 @@ public class BookController implements Patterns {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         model.addAttribute("isbnPattern", ISBN);
-        model.addAttribute("basicTextPattern", TEXT_BASIC);
+        model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editBook";
     }
 
@@ -108,7 +108,7 @@ public class BookController implements Patterns {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editBook";
         }
         if (storedImageId == null){ //new image upload
@@ -128,7 +128,7 @@ public class BookController implements Patterns {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editBook";
         }
         return "redirect:/admin/books";

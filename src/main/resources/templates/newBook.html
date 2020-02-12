@@ -60,7 +60,7 @@
                 </div>
                 <div class="form-group">
                     <label for="title">Title:</label>
-                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" th:pattern="${basicTextPattern}">
+                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" th:pattern="${textBasicPattern}">
                     <div class="invalid-feedback">Please fill out this field correctly</div>
                     <div th:replace="fragments::backendValidationErrors('title')"></div>
                 </div>

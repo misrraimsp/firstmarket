@@ -7,7 +7,7 @@ public interface Patterns {
     /**
      * The password must be at least 8 characters, with at least one lowercase, one uppercase and one number
      */
-    String PASSWORD = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+    String PASSWORD = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
 
     /**
      * This field must have zero to thirty characters between:

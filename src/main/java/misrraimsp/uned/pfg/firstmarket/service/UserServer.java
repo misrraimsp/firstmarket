@@ -113,7 +113,7 @@ public class UserServer implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void changePassword(Long id, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
+    public void editPassword(Long id, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
         User user = this.findById(id);
         if (!passwordEncoder.matches(formPassword.getCurrentPassword(), user.getPassword())){
             throw new InvalidPasswordException("incorrect password for user: " + user.getUsername());

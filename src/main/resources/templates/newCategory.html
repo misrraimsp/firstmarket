@@ -33,7 +33,7 @@
             <form class="needs-validation" novalidate th:action="@{/admin/newCategory}" th:object="${category}" method="POST" action="#">
                 <div class="form-group">
                     <label for="name">Name:</label>
-                    <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${basicTextPattern}">
+                    <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${textBasicPattern}">
                     <div class="invalid-feedback">Please fill out this field correctly</div>
                     <div th:replace="fragments::backendValidationErrors('name')"></div>
                 </div>

@@ -47,7 +47,7 @@
                                             <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">My FirstMarket</a><!--id="navbardrop"-->
                                             <div class="dropdown-menu">
                                                 <a class="dropdown-item" th:href="@{/user/editProfile}">Edit Profile</a>
-                                                <a class="dropdown-item" th:href="@{/user/changePassword}">Change Password</a>
+                                                <a class="dropdown-item" th:href="@{/user/editPassword}">Edit Password</a>
                                                 <a class="dropdown-item" th:href="@{/user/cart}">View Cart</a>
                                                 <a class="dropdown-item" th:href="@{/user/purchases}">My Purchases</a>
                                             </div>
@@ -101,7 +101,7 @@
             </div>
 
 
-            <!--backend errors-->
+            <!-- backend errors -->
             <div th:fragment="backendValidationErrors(field)" class="mt-1" th:if="${#fields.hasErrors(field)}">
                 <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors(field)}">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -109,7 +109,7 @@
                 </div>
             </div>
 
-
+            <!-- footer -->
             <div class="row" th:fragment="footer">
                 <div class="col-sm-12">
                     <footer class="bg-light text-center">
@@ -146,6 +146,15 @@
                     });
                 }, false);
             })();
+        </script>
+
+        <!-- always set newPasswordConfirm pattern equals to newPassword value -->
+        <script th:fragment="matchingPasswords">
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("newPassword").addEventListener("change", function() {
+                document.getElementById("newPasswordConfirm").pattern = document.getElementById("newPassword").value;
+            }, false);
+        }, false);
         </script>
 
         <!-- Checkbox based switch to enable/disable two input tags mutexly.

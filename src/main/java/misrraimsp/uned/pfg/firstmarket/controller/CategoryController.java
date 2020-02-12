@@ -46,7 +46,7 @@ public class CategoryController implements Patterns {
         model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("category", new Category());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("basicTextPattern", TEXT_BASIC);
+        model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "newCategory";
     }
 
@@ -56,7 +56,7 @@ public class CategoryController implements Patterns {
             model.addAttribute("title", "New Category");
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "newCategory";
         }
         catServer.persist(category);
@@ -71,7 +71,7 @@ public class CategoryController implements Patterns {
         model.addAttribute("category", category);
         model.addAttribute("descendants", catServer.getDescendants(category));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("basicTextPattern", TEXT_BASIC);
+        model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editCategory";
     }
 
@@ -82,7 +82,7 @@ public class CategoryController implements Patterns {
             model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("descendants", catServer.getDescendants(category));
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("basicTextPattern", TEXT_BASIC);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editCategory";
         }
         catServer.edit(category);
