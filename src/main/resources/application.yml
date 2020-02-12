@@ -7,11 +7,6 @@ spring:
       active:
          #- dev-mariadb
          - dev-h2
-   #servlet:
-    #  multipart:
-     #    max-file-size: 128KB
-      #   max-request-size: 128KB
-
    #jpa:
       #show-sql: true
 

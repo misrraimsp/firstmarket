@@ -12,24 +12,6 @@
                 <li class="breadcrumb-item active">New Category</li>
             </ul>
             <h3>New Category</h3>
-            <!-- BACKEND-ONLY VALIDATION
-            <form th:action="@{/admin/newCategory}" th:object="${category}" method="POST" action="#">
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" th:field="*{name}" class="form-control" id="name" placeholder="enter name" />
-                    <div th:replace="fragments::backendValidationErrors('name')"></div>
-                </div>
-                <div class="form-group">
-                    <label for="parent">Nested under:</label>
-                    <select th:field="*{parent.id}" class="custom-select" id="parent">
-                        <option th:each="ic : ${indentedCategories}"
-                                th:value="${ic.id}"
-                                th:text="${ic.name}">
-                        </option>
-                    </select>
-                </div>
-                <button th:replace="fragments::saveButton"></button>
-            </form>-->
             <form class="needs-validation" novalidate th:action="@{/admin/newCategory}" th:object="${category}" method="POST" action="#">
                 <div class="form-group">
                     <label for="name">Name:</label>
