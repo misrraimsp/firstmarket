@@ -52,7 +52,7 @@
                 </div>
                 <button th:replace="fragments::saveButton"></button>
             </form>-->
-            <form class="needs-validation" novalidate th:action="@{/admin/editBook}" th:object="${book}" method="POST" enctype="multipart/form-data" action="#">
+            <form class="needs-validation" novalidate id="isbnForm" th:action="@{/admin/editBook}" th:object="${book}" method="POST" enctype="multipart/form-data" action="#">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="form-group">
                     <label for="isbn">ISBN:</label>
@@ -97,6 +97,7 @@
         </div>
         <footer th:replace="fragments::footer"></footer>
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <script th:replace="fragments::isbnChecksum"></script>
         <script th:replace="fragments::binaryInputSwitch"></script>
     </body>
 </html>

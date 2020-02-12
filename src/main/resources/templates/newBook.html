@@ -51,10 +51,10 @@
                 <button th:replace="fragments::saveButton"></button>
             </form>
             -->
-            <form class="needs-validation" novalidate th:action="@{/admin/newBook}" th:object="${book}" method="POST" enctype="multipart/form-data" action="#">
+            <form class="needs-validation" novalidate id="isbnForm" th:action="@{/admin/newBook}" th:object="${book}" method="POST" enctype="multipart/form-data" action="#">
                 <div class="form-group">
                     <label for="isbn">ISBN:</label>
-                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" th:pattern="${isbnPattern}" required>
+                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required th:pattern="${isbnPattern}">
                     <div class="invalid-feedback">Please fill out this field with a valid ISBN</div>
                     <div th:replace="fragments::backendValidationErrors('isbn')"></div>
                 </div>
@@ -93,7 +93,9 @@
             </form>
         </div>
         <footer th:replace="fragments::footer"></footer>
+
         <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <script th:replace="fragments::isbnChecksum"></script>
         <script th:replace="fragments::binaryInputSwitch"></script>
     </body>
 </html>
