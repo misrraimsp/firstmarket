@@ -42,23 +42,16 @@ public class IsbnValidator implements ConstraintValidator<Isbn, String>, Pattern
     }
 
     private List<Integer> getNumbers(String isbn) {
-        String isbnDigits = isbn.replaceAll("X", "10").replaceAll("[^\\d]", "");
-        int size = isbnDigits.length();
-        if (size != 10 && size != 11 && size != 13){//cut numbers on isbn head
-            isbnDigits = isbnDigits.substring(2);
-            size -= 2;
-        }
+        String filtered = isbn.replaceAll(ISBN_FILTER, "");
         List<Integer> numbers = new ArrayList<>();
-        if (size == 11){ // X has been substituted by 10
-            for (int i = 0; i < size - 2; i++) {
-                numbers.add(Integer.parseInt(isbnDigits.substring(i, i + 1)));
-            }
+        for (int i = 0; i < filtered.length() - 1; i++) {
+            numbers.add(Integer.parseInt(filtered.substring(i, i + 1)));
+        }
+        if (filtered.contains("X")){
             numbers.add(10);
         }
         else {
-            for (int i = 0; i < size; i++) {
-                numbers.add(Integer.parseInt(isbnDigits.substring(i, i + 1)));
-            }
+            numbers.add(Integer.parseInt(filtered.substring(filtered.length() - 1)));
         }
         return numbers;
     }
