@@ -26,7 +26,9 @@ public class DevelopmentH2Config {
                                         PasswordEncoder passwordEncoder,
                                         ImageServer imageServer,
                                         ItemServer itemServer,
-                                        CartServer cartServer) {
+                                        CartServer cartServer,
+                                        AuthorServer authorServer,
+                                        PublisherServer publisherServer) {
 
         return args -> {
             System.out.println("CommandLineRunner on dev-h2");
@@ -160,6 +162,46 @@ public class DevelopmentH2Config {
 
             catServer.loadCategories();
 
+            //Authors
+
+            Author author1 = new Author();
+            author1.setFirstName("Julio");
+            author1.setLastName("Verne");
+            authorServer.persist(author1);
+
+            Author author2 = new Author();
+            author2.setFirstName("Miguel");
+            author2.setLastName("Delibes");
+            authorServer.persist(author2);
+
+            Author author3 = new Author();
+            author3.setFirstName("Pablo");
+            author3.setLastName("Iglesias");
+            authorServer.persist(author3);
+
+            Author author4 = new Author();
+            author4.setFirstName("Antonio");
+            author4.setLastName("Escohotado");
+            authorServer.persist(author4);
+
+            //Publishers
+
+            Publisher publisher1 = new Publisher();
+            publisher1.setName("Anaya");
+            publisherServer.persist(publisher1);
+
+            Publisher publisher2 = new Publisher();
+            publisher2.setName("Manning");
+            publisherServer.persist(publisher2);
+
+            Publisher publisher3 = new Publisher();
+            publisher3.setName("Cabildo de Gran Canaria");
+            publisherServer.persist(publisher3);
+
+            Publisher publisher4 = new Publisher();
+            publisher4.setName("Planeta");
+            publisherServer.persist(publisher4);
+
             //Books
 
             Book book1 = new Book();
@@ -167,6 +209,14 @@ public class DevelopmentH2Config {
             book1.setTitle("Computer Basics");
             book1.setCategory(computers);
             book1.setImage(img1);
+            book1.setAuthors(Arrays.asList(author1));
+            book1.setPublisher(publisher1);
+            book1.setLanguage(Language.ESPAÑOL);
+            book1.setNumPages(123);
+            book1.setSummary("Este es un libro que trata acerca de los fundamentos" +
+                    "en los que se basa las construcción de ordenadores modernos");
+            book1.setPrice(19.99);
+            book1.setStock(100);
             bookServer.persist(book1);
 
             Book book2 = new Book();
@@ -174,6 +224,14 @@ public class DevelopmentH2Config {
             book2.setTitle("Traditional Music of Spain");
             book2.setCategory(music);
             book2.setImage(img2);
+            book2.setAuthors(Arrays.asList(author1, author2));
+            book2.setPublisher(publisher2);
+            book2.setLanguage(Language.ENGLISH);
+            book2.setNumPages(100);
+            book2.setSummary("En este libro se recogen las principales" +
+                    "características de la música tradicional española");
+            book2.setPrice(59.89);
+            book2.setStock(100);
             bookServer.persist(book2);
 
             Book book3 = new Book();
@@ -181,6 +239,14 @@ public class DevelopmentH2Config {
             book3.setTitle("Compilers");
             book3.setCategory(computers);
             book3.setImage(img1);
+            book3.setAuthors(Arrays.asList(author2, author3));
+            book3.setPublisher(publisher3);
+            book3.setLanguage(Language.DEUTSCH);
+            book3.setNumPages(422);
+            book3.setSummary("Recorrido por los principales aspectos del análisis, " +
+                    "diseño y construcción de compiladores modernos");
+            book3.setPrice(0);
+            book3.setStock(100);
             bookServer.persist(book3);
 
             Book book4 = new Book();
@@ -188,6 +254,14 @@ public class DevelopmentH2Config {
             book4.setTitle("Computer Networking");
             book4.setCategory(computers);
             book4.setImage(img1);
+            book4.setAuthors(Arrays.asList(author4));
+            book4.setPublisher(publisher4);
+            book4.setLanguage(Language.FRANÇAISE);
+            book4.setNumPages(111);
+            book4.setSummary("Breve comentario sobre los principales" +
+                    "temas relacionados con la conectividad de computadores");
+            book4.setPrice(129.99);
+            book4.setStock(100);
             bookServer.persist(book4);
 
             //Items
