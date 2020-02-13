@@ -9,36 +9,50 @@
         <div class="jumbotron jumbotron-fluid">
             <div class="container">
                 <h1 class="text-center">
-                    Welcome to <span class="font-weight-bold">firstmarket</span><small>, where books belongs</small>
+                    Welcome to <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
                 </h1>
-                <div sec:authorize="hasRole('ADMIN')" class="text-center">
+                <div class="text-center" sec:authorize="hasRole('ADMIN')">
                     <h6><code class="text-info font-italic">
                         - a great power comes with a great responsibility -
                     </code></h6>
                 </div>
             </div>
         </div>
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-2 bg-dark">
-                    Categories
+                <div class="col-xs-12 col-sm-2 bg-secondary">
+                    Search
                 </div>
-                <div class="col-lg-10">
-                    <div class="row">
-                        <div class="col-sm-3 my-2 d-flex align-content-stretch flex-wrap" th:each="book : ${books}">
-                            <div class="card">
-                                <div class="card-header">
-                                    <img class="card-img-top" th:src="@{/image/{id}(id=${book.image.id})}" />
+                <div class="col-xs-12 col-sm-10">
+                    <div class="row d-flex align-content-stretch justify-content-around flex-wrap bg-light">
+                        <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
+                            <div class="card-header">
+                                <img class="card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}" />
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title text-responsive" th:text="${book.title}">title</h6>
+                                <h6 class="card-title" th:text="${book.title}">title</h6>
+                                <div class="card-text">
+                                    <small th:each="author : ${book.authors}">
+                                        <span th:text="${author.lastName}">lastName</span>,
+                                        <span th:text="${author.firstName}">firstName</span>
+                                        <br/>
+                                    </small>
                                 </div>
-                                <div class="card-body">
-                                    <h5 class="card-title" th:text="${book.title}">title</h5>
-                                    <p class="card-text">Category: <span th:text="${book.category.name}">category</span></p>
-                                    <p class="card-text">ISBN: <span th:text="${book.isbn}">isbn</span></p>
+                            </div>
+                            <div class="card-footer d-flex align-items-baseline">
+                                <div class="card-text mr-auto">
+                                    <strong>
+                                        <span th:text="${book.price}">price</span>€
+                                    </strong>
                                 </div>
-                                <div class="card-footer">
+                                <div>
+                                    <!--
                                     <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add Book to Cart">
                                         <i class="far fa-plus-square mr-2"></i>Add to Cart
                                     </a>
+                                    -->
+                                    <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" title="Add Book to Cart">Add to Cart</a>
                                 </div>
                             </div>
                         </div>

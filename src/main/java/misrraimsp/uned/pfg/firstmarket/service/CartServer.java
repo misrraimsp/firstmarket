@@ -105,4 +105,12 @@ public class CartServer {
         cartRepository.save(cart);
         return items;
     }
+
+    public double getTotalPrice(Cart cart){
+        double sum = 0;
+        for (Item item : cart.getItems()){
+            sum += item.getQuantity() * item.getBook().getPrice();
+        }
+        return sum;
+    }
 }

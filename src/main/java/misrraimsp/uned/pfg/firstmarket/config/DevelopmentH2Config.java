@@ -264,6 +264,79 @@ public class DevelopmentH2Config {
             book4.setStock(100);
             bookServer.persist(book4);
 
+            Book book5 = new Book();
+            book5.setIsbn("9788417761967");
+            book5.setTitle("EL VAGON DE LAS MUJERES");
+            book5.setCategory(computers);
+            book5.setImage(img1);
+            book5.setAuthors(Arrays.asList(author1));
+            book5.setPublisher(publisher1);
+            book5.setLanguage(Language.ESPAÑOL);
+            book5.setNumPages(128);
+            book5.setSummary("Este es un libro que trata acerca de los fundamentos" +
+                    "en los que se basa las construcción de ordenadores modernos");
+            book5.setPrice(19.99);
+            book5.setStock(100);
+            bookServer.persist(book5);
+
+            Book book6 = new Book();
+            book6.setIsbn("ISBN-13: 9788498385472");
+            book6.setTitle("COMETAS EN EL CIELO");
+            book6.setCategory(music);
+            book6.setImage(img2);
+            book6.setAuthors(Arrays.asList(author1, author2));
+            book6.setPublisher(publisher2);
+            book6.setLanguage(Language.ENGLISH);
+            book6.setNumPages(100);
+            book6.setSummary("En este libro se recogen las principales" +
+                    "características de la música tradicional española");
+            book6.setPrice(59.89);
+            book6.setStock(100);
+            bookServer.persist(book6);
+
+            Book book7 = new Book();
+            book7.setIsbn("9788420675657");
+            book7.setTitle("LA HIJA DE LA CRIADA");
+            book7.setCategory(computers);
+            book7.setImage(img1);
+            book7.setAuthors(Arrays.asList(author2, author3));
+            book7.setPublisher(publisher3);
+            book7.setLanguage(Language.DEUTSCH);
+            book7.setNumPages(422);
+            book7.setSummary("Recorrido por los principales aspectos del análisis, " +
+                    "diseño y construcción de compiladores modernos");
+            book7.setPrice(0);
+            book7.setStock(100);
+            bookServer.persist(book7);
+
+            Book book8 = new Book();
+            book8.setIsbn("9788415532767");
+            book8.setTitle("LA ISLA DE LAS MARIPOSAS");
+            book8.setCategory(computers);
+            book8.setImage(img1);
+            book8.setAuthors(Arrays.asList(author4));
+            book8.setPublisher(publisher4);
+            book8.setLanguage(Language.FRANÇAISE);
+            book8.setNumPages(111);
+            book8.setSummary("El mismo día en que descubre que su marido le es infiel, la joven abogada Diana recibe la noticia de que su adorada tía abuela Emmely está muy enferma. Sin pensárselo dos veces, Diana toma el primer vuelo a Inglaterra para despedirse de ella.");
+            book8.setPrice(129.99);
+            book8.setStock(100);
+            bookServer.persist(book8);
+
+            Book book9 = new Book();
+            book9.setIsbn("9788417708344");
+            book9.setTitle("LA HERENCIA DE AGNETA");
+            book9.setCategory(computers);
+            book9.setImage(img1);
+            book9.setAuthors(Arrays.asList(author4));
+            book9.setPublisher(publisher4);
+            book9.setLanguage(Language.FRANÇAISE);
+            book9.setNumPages(111);
+            book9.setSummary("Estocolmo, 1913. Agneta, la descendiente de una familia que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
+            book9.setPrice(129.99);
+            book9.setStock(100);
+            bookServer.persist(book9);
+
             //Items
 
             Item item1 = new Item();

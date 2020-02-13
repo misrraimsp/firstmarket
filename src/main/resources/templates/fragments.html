@@ -7,6 +7,7 @@
     <head th:fragment="head">
         <meta charset="UTF-8">
         <title th:text="${title}"></title>
+        <link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -73,7 +74,7 @@
                                     <div class="navbar-text p-2">Hi <span sec:authentication="name"/>!</div>
                                 </div>
                                 <div sec:authorize="isAuthenticated()">
-                                    <form class="form-inline my-2 my-lg-0 p-2" action="#" th:action="@{/logout}" method="POST" id="logoutForm">
+                                    <form class="form-inline my-2 my-lg-0 p-2" th:action="@{/logout}" method="POST" id="logoutForm" action="#">
                                         <input class="btn btn-outline-info btn-sm" type="submit" value="Logout"/>
                                     </form>
                                 </div>

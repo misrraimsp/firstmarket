@@ -46,18 +46,18 @@ public class Book implements Patterns {
     @Pattern(regexp = TEXT_LONG, message = "{text.long}")
     private String summary;
 
-    @Min(value = 1, message = "{number.outOfRange}")
-    @Max(value = 5000, message = "{number.outOfRange}")
+    @Min(value = 1, message = "{number.range}")
+    @Max(value = 5000, message = "{number.range}")
     private int numPages;
 
     private Language language;
 
-    @Min(value = 0, message = "{number.outOfRange}")
-    @Max(value = 1000000, message = "{number.outOfRange}")
+    @Min(value = 0, message = "{number.range}")
+    @Max(value = 1000000, message = "{number.range}")
     private double price;
 
-    @Min(value = 0, message = "{number.outOfRange}")
-    @Max(value = 100000000, message = "{number.outOfRange}")
+    @Min(value = 0, message = "{number.range}")
+    @Max(value = 100000000, message = "{number.range}")
     private int stock;
 
 }

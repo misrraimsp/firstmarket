@@ -16,6 +16,6 @@ public class Item {
     @OneToOne
     private Book book;
 
-    @Positive(message = "quantity must be greater than zero")
+    @Positive(message = "{number.positive}")
     private int quantity;
 }

@@ -5,6 +5,7 @@ import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,5 +22,6 @@ public class Cart {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Item> items = new ArrayList<>();
 
+    @PastOrPresent(message = "{date.notValid}")
     private LocalDateTime lastModified;
 }
