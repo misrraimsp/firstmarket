@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+
+    <head th:fragment="head">
+        <meta charset="UTF-8">
+        <title th:text="${title}"></title>
+        <link type="text/css" rel="stylesheet" th:href="@{fmstyle.css}" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+
+        <div class="container-fluid">
+
+            <div class="row" th:fragment="header">
+                <div class="col-xl-12 bg-info">
+                    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+                        <!-- Brand -->
+                        <a class="navbar-brand" th:href="@{/home}">
+                            <img th:src="@{/image/{id}(id=${logoId})}" style="width:32px;height:32px;">
+                        </a>
+
+                        <!-- Toggler/collapsibe Button -->
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <!-- Navbar links -->
+                        <div class="collapse navbar-collapse" id="#collapsibleNavbar">
+                            <ul class="navbar-nav mr-auto">
+                                <li class="nav-item">
+                                    <a class="nav-link" th:href="@{/home}">Home</a>
+                                </li>
+                                <!-- Dropdown (not Admin) -->
+                                <div sec:authorize="!hasRole('ADMIN')">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">My FirstMarket</a><!--id="navbardrop"-->
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" th:href="@{/user/editProfile}">Edit Profile</a>
+                                            <a class="dropdown-item" th:href="@{/user/editPassword}">Edit Password</a>
+                                            <a class="dropdown-item" th:href="@{/user/cart}">View Cart</a>
+                                            <a class="dropdown-item" th:href="@{/user/purchases}">My Purchases</a>
+                                        </div>
+                                    </li>
+                                </div>
+                                <!-- Dropdown (Admin) -->
+                                <div sec:authorize="hasRole('ADMIN')">
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle text-info" href="#" data-toggle="dropdown">Admin</a><!--id="navbardrop"-->
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item text-info" th:href="@{/admin/books}">Books</a>
+                                            <a class="dropdown-item text-info" th:href="@{/admin/categories}">Categories</a>
+                                            <a class="dropdown-item text-info" th:href="@{/admin/images}">Images</a>
+                                            <a class="dropdown-item text-info" th:href="@{/admin/users}">Users</a>
+                                            <a class="dropdown-item text-info" th:href="@{/admin/purchases}">Purchases</a>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
+                            <div sec:authorize="!isAuthenticated()">
+                                <a class="btn btn-outline-info btn-sm" th:href="@{/login}">Login</a>
+                            </div>
+                            <div sec:authorize="isAuthenticated()">
+                                <div class="navbar-text p-2">Hi <span sec:authentication="name"/>!</div>
+                            </div>
+                            <div sec:authorize="isAuthenticated()">
+                                <form class="form-inline my-2 my-lg-0 p-2" th:action="@{/logout}" method="POST" id="logoutForm" action="#">
+                                    <input class="btn btn-outline-info btn-sm" type="submit" value="Logout"/>
+                                </form>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="row" th:fragment="jumbotron">
+                <div class="col-xl-12 bg-warning">
+                    <div class="jumbotron jumbotron-fluid mb-0">
+                        <h1 class="text-center">
+                            <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
+                        </h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12 bg-info">
+                    <p>Sugerencias especiales</p>
+                    <p>Sugerencias especiales</p>
+                    <p>Sugerencias especiales</p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-4 col-lg-2 d-flex flex-column p-2 bg-secondary">
+                    <form class="bg-primary p-2 m-2">
+                        <div class="form-group">
+                            <label for="category">Category:</label>
+                            <select class="custom-select" id="category">
+                                <option th:each="ic : ${indentedCategories}"
+                                        th:value="${ic.id}"
+                                        th:text="${ic.name}">
+                                </option>
+                            </select>
+                        </div>
+                        <input type="submit" value="Search">
+                    </form>
+                    <div class="bg-primary p-2 m-2">
+                        <p>Autor</p>
+                        <form>
+                            <input type="text">
+                            <input type="text">
+                            <input type="submit">
+                        </form>
+                    </div>
+                    <div class="bg-primary p-2 m-2">
+                        <p>Título</p>
+                        <form>
+                            <input type="text">
+                            <input type="submit">
+                        </form>
+                    </div>
+                    <div class="bg-primary p-2 m-2">
+                        <p>Precio</p>
+                        <form>
+                            <input type="text">
+                            <input type="text">
+                            <input type="submit">
+                        </form>
+                    </div>
+
+                </div>
+                <div class="col-sm-8 col-lg-10 bg-success">
+                    <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
+                        <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
+                            <img class="card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}" />
+                            <div class="card-body">
+                                <p class="card-title text-responsive" th:text="${book.title}">title</p>
+                                <div class="card-text">
+                                    <small th:each="author : ${book.authors}">
+                                        <span th:text="${author.lastName}">lastName</span>,
+                                        <span th:text="${author.firstName}">firstName</span>
+                                        <br/>
+                                    </small>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex align-items-baseline">
+                                <div class="card-text mr-auto">
+                                    <strong>
+                                        <span th:text="${book.price}">price</span>€
+                                    </strong>
+                                </div>
+                                <div>
+
+                                    <!--<a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add Book to Cart">
+                                        <i class="far fa-plus-square mr-2"></i>Add to Cart
+                                    </a>-->
+
+                                    <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" title="Add Book to Cart">Add to Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" th:fragment="footer">
+                <div class="col-xl-12 bg-danger">
+                    <footer class="bg-light text-center">
+                        <span class="info-copyrigth"><a href="https://github.com/misrraimsp/firstmarket">firstmarket</a> © 2020</span>
+                    </footer>
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </body>
+
+</html>
