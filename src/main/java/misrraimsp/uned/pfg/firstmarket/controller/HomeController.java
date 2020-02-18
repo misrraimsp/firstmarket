@@ -1,8 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,11 +22,9 @@ public class HomeController {
     }
 
     @GetMapping({"/", "/home"})
-    public String showHome(Model model
-            //, @AuthenticationPrincipal User authUser
-    ){
+    public String showHome(Model model, @AuthenticationPrincipal User authUser){
        // String userName = (authUser != null) ? authUser.getProfile().getFirstName() : "";
-       // model.addAttribute("userName", userName);
+        model.addAttribute("user", authUser);
         model.addAttribute("books", bookServer.findAll());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "home";

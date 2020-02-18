@@ -4,7 +4,7 @@
       lang="en">
     <head th:replace="fragments/layout::head('FirstMarket')"></head>
     <body>
-        <div th:replace="fragments/layout::header"></div>
+        <div th:replace="fragments/layout::header(${user.profile.firstName}, ${user.cart.items.size()})"></div>
         <div th:replace="fragments/layout::jumbotron"></div>
 
         <div class="row">
