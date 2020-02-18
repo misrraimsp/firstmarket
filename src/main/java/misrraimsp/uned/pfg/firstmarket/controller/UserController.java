@@ -7,7 +7,6 @@ import misrraimsp.uned.pfg.firstmarket.model.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.model.FormUser;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,19 +26,15 @@ public class UserController implements Patterns {
 
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
-    private ImageServer imageServer;
 
     @Autowired
-    public UserController(UserServer userServer, PasswordEncoder passwordEncoder, ImageServer imageServer) {
+    public UserController(UserServer userServer, PasswordEncoder passwordEncoder) {
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
-        this.imageServer = imageServer;
     }
 
     @GetMapping("/newUser")
     public String showNewUserForm(Model model) {
-        model.addAttribute("title", "New User");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("formUser", new FormUser());
         model.addAttribute("emailPattern", EMAIL);
         model.addAttribute("textBasicPattern", TEXT_BASIC);
@@ -62,8 +57,6 @@ public class UserController implements Patterns {
                     }
                 }
             }
-            model.addAttribute("title", "New User");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("emailPattern", EMAIL);
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             model.addAttribute("passwordPattern", PASSWORD);
@@ -74,8 +67,6 @@ public class UserController implements Patterns {
         }
         catch (EmailAlreadyExistsException e) {
             errors.rejectValue("email", "email.notUnique");
-            model.addAttribute("title", "New User");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("emailPattern", EMAIL);
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             model.addAttribute("passwordPattern", PASSWORD);
@@ -86,8 +77,6 @@ public class UserController implements Patterns {
 
     @GetMapping("/user/editProfile")
     public String showEditProfileForm(Model model, @AuthenticationPrincipal User authUser){
-        model.addAttribute("title", "Edit Profile");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("profile", userServer.findById(authUser.getId()).getProfile());
         model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editProfile";
@@ -99,8 +88,6 @@ public class UserController implements Patterns {
                                      Model model,
                                      @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Edit Profile");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editProfile";
         }
@@ -110,8 +97,6 @@ public class UserController implements Patterns {
 
     @GetMapping("/user/cart")
     public String showCart(@AuthenticationPrincipal User authUser, Model model){
-        model.addAttribute("title", "Cart");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("items", userServer.findById(authUser.getId()).getCart().getItems());
         return "cart";
     }
@@ -142,16 +127,12 @@ public class UserController implements Patterns {
 
     @GetMapping("/user/purchases")
     public String showPurchases(@AuthenticationPrincipal User authUser, Model model){
-        model.addAttribute("title", "Purchases");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("purchases", userServer.findById(authUser.getId()).getPurchases());
         return "purchases";
     }
 
     @GetMapping("/user/editPassword")
     public String showEditPasswordForm(Model model){
-        model.addAttribute("title", "Edit Password");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("formPassword", new FormPassword());
         model.addAttribute("passwordPattern", PASSWORD);
         return "editPassword";
@@ -173,8 +154,6 @@ public class UserController implements Patterns {
                     }
                 }
             }
-            model.addAttribute("title", "Edit Password");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("passwordPattern", PASSWORD);
             return "editPassword";
         }
@@ -183,8 +162,6 @@ public class UserController implements Patterns {
         }
         catch (InvalidPasswordException e){
             errors.rejectValue("currentPassword", "password.invalid");
-            model.addAttribute("title", "Edit Password");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("passwordPattern", PASSWORD);
             return "editPassword";
         }

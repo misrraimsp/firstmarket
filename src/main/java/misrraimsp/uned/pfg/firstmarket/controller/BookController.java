@@ -34,16 +34,12 @@ public class BookController implements Patterns {
 
     @GetMapping("/books")
     public String showBooks(Model model){
-        model.addAttribute("title", "Books");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("books", bookServer.findAll());
         return "books";
     }
 
     @GetMapping("/newBook")
     public String showNewBookForm(Model model){
-        model.addAttribute("title", "New Book");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("book", new Book());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
@@ -55,8 +51,6 @@ public class BookController implements Patterns {
     @PostMapping("/newBook")
     public String processNewBook(@Valid Book book, Errors errors, Long storedImageId, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("title", "New Book");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAttribute("isbnPattern", ISBN);
@@ -74,8 +68,6 @@ public class BookController implements Patterns {
         }
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
-            model.addAttribute("title", "New Book");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAttribute("isbnPattern", ISBN);
@@ -88,8 +80,6 @@ public class BookController implements Patterns {
     @GetMapping("/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
         Book book = bookServer.findById(id);
-        model.addAttribute("title", "Edit Book");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("book", book);
         model.addAttribute("bookImageId", book.getImage().getId());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
@@ -102,8 +92,6 @@ public class BookController implements Patterns {
     @PostMapping("/editBook")
     public String processEditBook(@Valid Book book, Errors errors, Long storedImageId, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Edit Book");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
@@ -122,8 +110,6 @@ public class BookController implements Patterns {
         }
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
-            model.addAttribute("title", "Edit Book");
-            model.addAttribute("logoId", imageServer.getDefaultImageId());
             model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());

@@ -59,6 +59,22 @@ public class DevelopmentH2Config {
             img2.setMimeType(Files.probeContentType(path2));
             imageServer.persist(img2);
 
+            Image img3 = new Image();
+            Path path3 = Paths.get("img/12.png");
+            img3.setDefault(false);
+            img3.setData(Files.readAllBytes(path3));
+            img3.setName(path3.getFileName().toString());
+            img3.setMimeType(Files.probeContentType(path3));
+            imageServer.persist(img3);
+
+            Image img4 = new Image();
+            Path path4 = Paths.get("img/3.png");
+            img4.setDefault(false);
+            img4.setData(Files.readAllBytes(path4));
+            img4.setName(path4.getFileName().toString());
+            img4.setMimeType(Files.probeContentType(path4));
+            imageServer.persist(img4);
+
             //load defaultImageId
 
             imageServer.loadDefaultImageId();
@@ -238,7 +254,7 @@ public class DevelopmentH2Config {
             book3.setIsbn("ISBN-10 0-596-52068-9");
             book3.setTitle("Compilers");
             book3.setCategory(computers);
-            book3.setImage(img1);
+            book3.setImage(img3);
             book3.setAuthors(Arrays.asList(author2, author3));
             book3.setPublisher(publisher3);
             book3.setLanguage(Language.DEUTSCH);
@@ -253,7 +269,7 @@ public class DevelopmentH2Config {
             book4.setIsbn("043942089X");
             book4.setTitle("Computer Networking");
             book4.setCategory(computers);
-            book4.setImage(img1);
+            book4.setImage(img4);
             book4.setAuthors(Arrays.asList(author4));
             book4.setPublisher(publisher4);
             book4.setLanguage(Language.FRANÇAISE);
@@ -268,7 +284,7 @@ public class DevelopmentH2Config {
             book5.setIsbn("9788417761967");
             book5.setTitle("EL VAGON DE LAS MUJERES");
             book5.setCategory(computers);
-            book5.setImage(img1);
+            book5.setImage(img0);
             book5.setAuthors(Arrays.asList(author1));
             book5.setPublisher(publisher1);
             book5.setLanguage(Language.ESPAÑOL);

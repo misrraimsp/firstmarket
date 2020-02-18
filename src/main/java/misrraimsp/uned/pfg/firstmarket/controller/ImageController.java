@@ -30,8 +30,6 @@ public class ImageController {
 
     @GetMapping("/admin/images")
     public String showImages(Model model){
-        model.addAttribute("title", "Images");
-        model.addAttribute("logoId", imageServer.getDefaultImageId());
         model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
         return "images";
     }
@@ -56,8 +54,6 @@ public class ImageController {
             }
             if (t instanceof ConstraintViolationException) {
                 ConstraintViolationException cve = (ConstraintViolationException) t;
-                model.addAttribute("title", "Images");
-                model.addAttribute("logoId", imageServer.getDefaultImageId());
                 model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
                 model.addAttribute("constraintViolations", cve.getConstraintViolations());
                 return "images";

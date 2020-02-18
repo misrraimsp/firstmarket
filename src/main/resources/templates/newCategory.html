@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments::head"></head>
+    <head th:replace="fragments/layout::head('New Category')"></head>
     <body>
-        <header th:replace="fragments::header"></header>
+        <header th:replace="fragments/layout::header"></header>
         <div class="container">
             <ul class="breadcrumb my-2">
                 <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
@@ -17,7 +17,7 @@
                     <label for="name">Name:</label>
                     <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${textBasicPattern}">
                     <div class="invalid-feedback">Please fill out this field correctly</div>
-                    <div th:replace="fragments::backendValidationErrors('name')"></div>
+                    <div th:replace="fragments/components::backendValidationErrors('name')"></div>
                 </div>
                 <div class="form-group">
                     <label for="parent">Nested under:</label>
@@ -28,10 +28,10 @@
                         </option>
                     </select>
                 </div>
-                <button th:replace="fragments::saveButton"></button>
+                <button th:replace="fragments/components::saveButton"></button>
             </form>
         </div>
-        <footer th:replace="fragments::footer"></footer>
-        <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <footer th:replace="fragments/layout::footer"></footer>
+        <script th:replace="fragments/scripts::disableFormSubmissionOnInvalidField"></script>
     </body>
 </html>

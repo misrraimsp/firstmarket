@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments::head"></head>
+    <head th:replace="fragments/layout::head('Books')"></head>
     <body>
-        <header th:replace="fragments::header"></header>
+        <header th:replace="fragments/layout::header"></header>
         <div class="container">
-            <div th:replace="fragments::underHead('Books')"></div>
-            <div th:replace="fragments::addButton('newBook')"></div>
+            <div th:replace="fragments/layout::underHead('Books')"></div>
+            <div th:replace="fragments/components::addButton('newBook')"></div>
             <table class="table">
                 <thead class="thead-light">
                     <tr>
@@ -32,7 +32,7 @@
                 </tbody>
             </table>
         </div>
-        <footer th:replace="fragments::footer"></footer>
-        <script th:replace="fragments::enableTooltips"></script>
+        <footer th:replace="fragments/layout::footer"></footer>
+        <script th:replace="fragments/scripts::enableTooltips"></script>
     </body>
 </html>

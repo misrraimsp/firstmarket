@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+
+    <body>
+
+        <button th:fragment="saveButton" class="btn btn-outline-info btn-sm mb-2 px-5 float-right" type="submit">
+            Save
+        </button>
+
+        <div th:fragment="addButton(action)">
+            <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>
+        </div>
+
+        <div th:fragment="purchaseButton(subject,action)">
+            <a class="btn btn-outline-info btn-sm my-2 btn-block" th:href="@{/{param1}/{param2}(param1=${subject},param2=${action})}">Purchase</a>
+        </div>
+
+        <!-- backend errors -->
+        <div th:fragment="backendValidationErrors(field)" class="mt-1" th:if="${#fields.hasErrors(field)}">
+            <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors(field)}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Error: </strong><span th:text="${error}"></span>
+            </div>
+        </div>
+
+    </body>
+
+</html>

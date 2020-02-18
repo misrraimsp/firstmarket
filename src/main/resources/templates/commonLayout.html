@@ -15,11 +15,8 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
     </head>
-
     <body>
-
         <div class="container-fluid">
-
             <div class="row" th:fragment="header">
                 <div class="col-xl-12 bg-info">
                     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
@@ -87,6 +84,11 @@
                         <h1 class="text-center">
                             <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
                         </h1>
+                        <div class="text-center" sec:authorize="hasRole('ADMIN')">
+                            <h6><code class="text-info font-italic">
+                                - a great power comes with a great responsibility -
+                            </code></h6>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -100,7 +102,7 @@
             </div>
 
             <div class="row">
-                <div class="col-sm-4 col-lg-2 d-flex flex-column p-2 bg-secondary">
+                <div class="col-sm-4 col-lg-3 d-flex flex-column p-2 bg-secondary">
                     <form class="bg-primary p-2 m-2">
                         <div class="form-group">
                             <label for="category">Category:</label>
@@ -138,7 +140,7 @@
                     </div>
 
                 </div>
-                <div class="col-sm-8 col-lg-10 bg-success">
+                <div class="col-sm-8 col-lg-9 bg-success">
                     <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
                         <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
                             <img class="card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}" />

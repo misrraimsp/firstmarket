@@ -1,65 +1,90 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
-    <head th:replace="fragments::head"></head>
+    <head th:replace="fragments/layout::head('FirstMarket')"></head>
     <body>
-        <div th:replace="fragments::header"></div>
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <h1 class="text-center">
-                    Welcome to <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
-                </h1>
-                <div class="text-center" sec:authorize="hasRole('ADMIN')">
-                    <h6><code class="text-info font-italic">
-                        - a great power comes with a great responsibility -
-                    </code></h6>
-                </div>
+        <div th:replace="fragments/layout::header"></div>
+        <div th:replace="fragments/layout::jumbotron"></div>
+
+        <div class="row">
+            <div class="col-lg-12 bg-info">
+                <p>Sugerencias especiales</p>
+                <p>Sugerencias especiales</p>
+                <p>Sugerencias especiales</p>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xs-12 col-sm-2 bg-secondary">
-                    Search
+
+        <div class="row">
+            <div class="col-sm-4 col-lg-3 d-flex flex-column p-2 bg-secondary">
+                <form class="bg-primary p-2 m-2">
+                    <div class="form-group">
+                        <label for="category">Category:</label>
+                        <select class="custom-select" id="category">
+                            <option th:each="ic : ${indentedCategories}"
+                                    th:value="${ic.id}"
+                                    th:text="${ic.name}">
+                            </option>
+                        </select>
+                    </div>
+                    <input type="submit" value="Search">
+                </form>
+                <div class="bg-primary p-2 m-2">
+                    <p>Autor</p>
+                    <form>
+                        <input type="text">
+                        <input type="text">
+                        <input type="submit">
+                    </form>
                 </div>
-                <div class="col-xs-12 col-sm-10">
-                    <div class="row d-flex align-content-stretch justify-content-around flex-wrap bg-light">
-                        <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
-                            <div class="card-header">
-                                <img class="card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}" />
+                <div class="bg-primary p-2 m-2">
+                    <p>Título</p>
+                    <form>
+                        <input type="text">
+                        <input type="submit">
+                    </form>
+                </div>
+                <div class="bg-primary p-2 m-2">
+                    <p>Precio</p>
+                    <form>
+                        <input type="text">
+                        <input type="text">
+                        <input type="submit">
+                    </form>
+                </div>
+
+            </div>
+            <div class="col-sm-8 col-lg-9 bg-success">
+                <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
+                    <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
+                        <img class="card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}" />
+                        <div class="card-body">
+                            <p class="card-title text-responsive" th:text="${book.title}">title</p>
+                            <div class="card-text">
+                                <small th:each="author : ${book.authors}">
+                                    <span th:text="${author.lastName}">lastName</span>,
+                                    <span th:text="${author.firstName}">firstName</span>
+                                    <br/>
+                                </small>
                             </div>
-                            <div class="card-body">
-                                <h6 class="card-title text-responsive" th:text="${book.title}">title</h6>
-                                <h6 class="card-title" th:text="${book.title}">title</h6>
-                                <div class="card-text">
-                                    <small th:each="author : ${book.authors}">
-                                        <span th:text="${author.lastName}">lastName</span>,
-                                        <span th:text="${author.firstName}">firstName</span>
-                                        <br/>
-                                    </small>
-                                </div>
+                        </div>
+                        <div class="card-footer d-flex align-items-baseline">
+                            <div class="card-text mr-auto">
+                                <strong>
+                                    <span th:text="${book.price}">price</span>€
+                                </strong>
                             </div>
-                            <div class="card-footer d-flex align-items-baseline">
-                                <div class="card-text mr-auto">
-                                    <strong>
-                                        <span th:text="${book.price}">price</span>€
-                                    </strong>
-                                </div>
-                                <div>
-                                    <!--
-                                    <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add Book to Cart">
-                                        <i class="far fa-plus-square mr-2"></i>Add to Cart
-                                    </a>
-                                    -->
-                                    <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" title="Add Book to Cart">Add to Cart</a>
-                                </div>
+                            <div>
+                                <a class="btn btn-outline-dark btn-sm" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add to Cart">
+                                    <i class="fas fa-cart-plus mx-3"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div th:replace="fragments::footer"></div>
+
+        <div th:replace="fragments/layout::footer"></div>
     </body>
 </html>

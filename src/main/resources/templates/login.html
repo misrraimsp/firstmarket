@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments::head"></head>
+    <head th:replace="fragments/layout::head('Login')"></head>
     <body>
-        <header th:replace="fragments::header"></header>
+        <header th:replace="fragments/layout::header"></header>
         <div class="container">
-            <div th:replace="fragments::underHead('Login')"></div>
+            <div th:replace="fragments/layout::underHead('Login')"></div>
             <form class="needs-validation" novalidate th:action="@{/login}" method="POST" action="#">
                 <div class="form-group">
                     <label for="email">E-mail:</label>
@@ -23,7 +23,7 @@
             <br/>
             <span>New? Click <a th:href="@{/newUser}">here</a> to register.</span>
         </div>
-        <footer th:replace="fragments::footer"></footer>
-        <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
+        <footer th:replace="fragments/layout::footer"></footer>
+        <script th:replace="fragments/scripts::disableFormSubmissionOnInvalidField"></script>
     </body>
 </html>

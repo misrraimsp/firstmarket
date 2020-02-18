@@ -32,7 +32,7 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object>, 
     }
 
     private boolean validateSize(byte[] data) {
-        return data.length < 128000;
+        return data.length < 500000;
     }
 
     private boolean validateMimeType(String mimeType) {

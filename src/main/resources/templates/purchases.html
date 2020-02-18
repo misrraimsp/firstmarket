@@ -2,15 +2,15 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments::head"></head>
+    <head th:replace="fragments/layout::head('Purchases')"></head>
     <body>
-        <header th:replace="fragments::header"></header>
+        <header th:replace="fragments/layout::header"></header>
         <div class="container">
             <ul class="breadcrumb my-2">
                 <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
                 <li class="breadcrumb-item active">My Purchases</li>
             </ul>
-            <div th:replace="fragments::underHead('My Purchases')"></div>
+            <div th:replace="fragments/layout::underHead('My Purchases')"></div>
             <table class="table" th:each="purchase : ${purchases}">
                 <thead class="thead-light">
                 <tr>
@@ -32,6 +32,6 @@
                 </tbody>
             </table>
         </div>
-        <footer th:replace="fragments::footer"></footer>
+        <footer th:replace="fragments/layout::footer"></footer>
     </body>
 </html>

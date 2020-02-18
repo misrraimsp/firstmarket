@@ -2,11 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments::head"></head>
+    <head th:replace="fragments/layout::head('Images')"></head>
     <body>
-        <header th:replace="fragments::header"></header>
+        <header th:replace="fragments/layout::header"></header>
         <div class="container">
-            <div th:replace="fragments::underHead('Images')"></div>
+            <div th:replace="fragments/layout::underHead('Images')"></div>
             <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
                 <div class="form-group my-2">
                     <input class="form-control" type="file" th:name="image" accept="image/*" required/>
@@ -16,7 +16,7 @@
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
                     <strong>Error: </strong><span th:text="#{image.error}"></span>
                 </div>
-                <button th:replace="fragments::saveButton"></button>
+                <button th:replace="fragments/components::saveButton"></button>
             </form>
             <table class="table">
                 <thead class="thead-light">
@@ -43,8 +43,8 @@
                 </tbody>
             </table>
         </div>
-        <footer th:replace="fragments::footer"></footer>
-        <script th:replace="fragments::disableFormSubmissionOnInvalidField"></script>
-        <script th:replace="fragments::enableTooltips"></script>
+        <footer th:replace="fragments/layout::footer"></footer>
+        <script th:replace="fragments/scripts::disableFormSubmissionOnInvalidField"></script>
+        <script th:replace="fragments/scripts::enableTooltips"></script>
     </body>
 </html>
