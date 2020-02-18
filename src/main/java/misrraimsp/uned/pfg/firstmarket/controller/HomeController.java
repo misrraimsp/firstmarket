@@ -20,7 +20,11 @@ public class HomeController {
     }
 
     @GetMapping({"/", "/home"})
-    public String showHome(Model model){
+    public String showHome(Model model
+            //, @AuthenticationPrincipal User authUser
+    ){
+       // String userName = (authUser != null) ? authUser.getProfile().getFirstName() : "";
+       // model.addAttribute("userName", userName);
         model.addAttribute("books", bookServer.findAll());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         return "home";

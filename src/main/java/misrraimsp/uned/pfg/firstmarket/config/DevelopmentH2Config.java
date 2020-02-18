@@ -75,9 +75,12 @@ public class DevelopmentH2Config {
             img4.setMimeType(Files.probeContentType(path4));
             imageServer.persist(img4);
 
+            /*
             //load defaultImageId
 
             imageServer.loadDefaultImageId();
+
+             */
 
             //Categories
 
