@@ -4,9 +4,6 @@
     font-size: calc(75% + .25vw + 0vh);
 }
 
-/*
-$shopping-cart-red: #DF0000;
- */
 
 .fa-stack[data-count]::after{
     position:absolute;

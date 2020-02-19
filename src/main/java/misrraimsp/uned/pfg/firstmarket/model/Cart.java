@@ -24,4 +24,12 @@ public class Cart {
 
     @PastOrPresent(message = "{date.notValid}")
     private LocalDateTime lastModified;
+
+    public int getCartSize(){
+        int sum = 0;
+        for (Item i : items){
+            sum += i.getQuantity();
+        }
+        return sum;
+    }
 }

@@ -77,7 +77,10 @@ public class UserController implements Patterns {
 
     @GetMapping("/user/editProfile")
     public String showEditProfileForm(Model model, @AuthenticationPrincipal User authUser){
-        model.addAttribute("profile", userServer.findById(authUser.getId()).getProfile());
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("profile", user.getProfile());
         model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editProfile";
     }
@@ -88,6 +91,9 @@ public class UserController implements Patterns {
                                      Model model,
                                      @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editProfile";
         }
@@ -97,7 +103,10 @@ public class UserController implements Patterns {
 
     @GetMapping("/user/cart")
     public String showCart(@AuthenticationPrincipal User authUser, Model model){
-        model.addAttribute("items", userServer.findById(authUser.getId()).getCart().getItems());
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("items", user.getCart().getItems());
         return "cart";
     }
 
@@ -127,12 +136,18 @@ public class UserController implements Patterns {
 
     @GetMapping("/user/purchases")
     public String showPurchases(@AuthenticationPrincipal User authUser, Model model){
-        model.addAttribute("purchases", userServer.findById(authUser.getId()).getPurchases());
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("purchases", user.getPurchases());
         return "purchases";
     }
 
     @GetMapping("/user/editPassword")
-    public String showEditPasswordForm(Model model){
+    public String showEditPasswordForm(Model model, @AuthenticationPrincipal User authUser){
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("formPassword", new FormPassword());
         model.addAttribute("passwordPattern", PASSWORD);
         return "editPassword";
@@ -154,6 +169,9 @@ public class UserController implements Patterns {
                     }
                 }
             }
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("passwordPattern", PASSWORD);
             return "editPassword";
         }
@@ -162,6 +180,9 @@ public class UserController implements Patterns {
         }
         catch (InvalidPasswordException e){
             errors.rejectValue("currentPassword", "password.invalid");
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());;
             model.addAttribute("passwordPattern", PASSWORD);
             return "editPassword";
         }

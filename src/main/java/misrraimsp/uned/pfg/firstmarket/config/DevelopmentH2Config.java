@@ -417,7 +417,7 @@ public class DevelopmentH2Config {
             formUser3.setEmail("andrea@fm.com");
             formUser3.setPassword("andrea");
             formUser3.setMatchingPassword("andrea");
-            formUser3.setFirstName("andre");
+            formUser3.setFirstName("Andrea");
             formUser3.setLastName("andre");
             userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);
 
