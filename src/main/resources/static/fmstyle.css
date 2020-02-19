@@ -4,6 +4,15 @@
     font-size: calc(75% + .25vw + 0vh);
 }
 
+.card-image {
+    width: calc(75% + .25vw + 0vh);
+    height: 150px;
+}
+
+.book-detail-image {
+    width: auto;
+    height: auto;
+}
 
 .fa-stack[data-count]::after{
     position:absolute;

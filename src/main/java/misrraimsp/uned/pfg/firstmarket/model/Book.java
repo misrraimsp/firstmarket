@@ -60,4 +60,12 @@ public class Book implements Patterns {
     @Max(value = 100000000, message = "{number.range}")
     private int stock;
 
+
+    public String getAuthorsString(){
+        String str = "";
+        for (Author author : authors){
+            str += " " + author.getLastName() + ", " + author.getFirstName() + ".";
+        }
+        return str;
+    }
 }

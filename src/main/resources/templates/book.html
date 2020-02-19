@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="en">
+    <head th:replace="fragments/layout::head('Book Details')"></head>
+    <body>
+        <div class="container-fluid">
+            <div th:replace="fragments/layout::header"></div>
+            <div th:replace="fragments/layout::jumbotron"></div>
+            <div class="row my-2">
+                <div class="col-sm-1 bg-white" >
+
+                </div>
+                <div class="col-sm-3 bg-white">
+                    <img class="img-fluid" th:src="@{/image/{id}(id=${book.image.id})}"/>
+                </div>
+                <div class="col-sm-6 bg-white">
+                    <div class="row">
+                        <div class="col-sm-6" >
+                            <p><strong>Title: </strong><span th:text="${book.title}"></span></p>
+                            <p><strong>Authors: </strong><span th:text="${book.authorsString}"></span></p>
+                            <p><strong>ISBN: </strong><span th:text="${book.isbn}"></span></p>
+                            <p><strong>Category: </strong><span th:text="${book.category.name}"></span></p>
+                        </div>
+                        <div class="col-sm-6" >
+                            <p><strong>Publisher: </strong><span th:text="${book.publisher.name}"></span></p>
+                            <p><strong>Language: </strong><span th:text="${book.language}"></span></p>
+                            <p><strong>Pages: </strong><span th:text="${book.numPages}"></span></p>
+                            <p><strong>Price: </strong><span th:text="${book.price}"></span>€</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12" >
+                            <p><strong>Summary: </strong><span th:text="${book.summary}"></span></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2 bg-white" >
+                    <div sec:authorize="!hasRole('ADMIN')">
+                        <a class="btn btn-outline-primary btn-xl align-center" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add to Cart">
+                            Add to Cart<i class="fas fa-cart-plus fa-3x"></i>
+                        </a>
+                    </div>
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-outline-primary btn-xl align-center" th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                            Edit Book<i class="fas fa-pen fa-2x ml-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div th:replace="fragments/layout::footer"></div>
+        </div>
+    </body>
+</html>
