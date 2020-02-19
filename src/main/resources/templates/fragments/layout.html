@@ -24,7 +24,7 @@
                     <nav class="navbar navbar-expand-sm bg-dark"><!--navbar-dark-->
                         <!-- Brand -->
                         <a class="navbar-brand" th:href="@{/home}">
-                            <img th:src="@{/images/logo.png}" style="width:32px;height:32px;">
+                            <img class="rounded-circle" th:src="@{/images/logo.png}" style="width:32px;height:32px;">
                         </a>
                         <!-- Toggler/collapsibe Button -->
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -34,66 +34,65 @@
                         <div class="collapse navbar-collapse" id="#collapsibleNavbar">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item">
-                                    <a class="nav-link font-weight-bold" th:href="@{/home}">Home</a>
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/home}">Home</a>
                                 </li>
-                                <!-- Dropdown (not Admin) -->
-                                <div sec:authorize="!hasRole('ADMIN')"><!--<div sec:authorize="isAuthenticated() && !hasRole('ADMIN')">-->
-                                    <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle font-weight-bold" href="#" data-toggle="dropdown">My Account</a><!--id="navbardrop"-->
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" th:href="@{/user/editProfile}">Profile</a>
-                                            <a class="dropdown-item" th:href="@{/user/purchases}">Purchases</a>
-                                            <a class="dropdown-item" th:href="@{/user/editPassword}">Edit Password</a>
-                                        </div>
-                                    </li>
-                                </div>
+                                <!--user dropdown-->
+                                <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
+                                    <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" data-toggle="dropdown">My Account</a><!--id="navbardrop"-->
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" th:href="@{/user/editProfile}">Profile</a>
+                                        <a class="dropdown-item" th:href="@{/user/purchases}">Purchases</a>
+                                        <a class="dropdown-item" th:href="@{/user/editPassword}">Edit Password</a>
+                                    </div>
+                                </li>
+                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/books}">Books</a>
+                                </li>
+                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/categories}">Categories</a>
+                                </li>
+                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/images}">Images</a>
+                                </li>
+                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/users}">Users</a>
+                                </li>
+                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/purchases}">Purchases</a>
+                                </li>
                             </ul>
-                            <div sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
-                                <div class="navbar-text p-2 text-primary">
-                                    Hi, <span th:text="${firstName}"/>!
-                                </div>
-                            </div>
-                            <div sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
-                                <a th:href="@{/user/cart}" data-toggle="tooltip" title="View Cart">
-                                    <span class="fa-stack has-badge mx-2" th:data-count="${cartSize}">
-                                        <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
-                                        <i class="fa fa-shopping-cart fa-stack-2x primary-over-dark"></i>
-                                    </span>
-                                </a>
-                            </div>
-                            <div sec:authorize="isAuthenticated()">
-                                <form class="form-inline my-2 my-lg-0 p-2" th:action="@{/logout}" method="POST" id="logoutForm" action="#">
-                                    <button class="btn btn-outline-primary btn-sm font-weight-bold mx-2" type="submit" data-toggle="tooltip" title="Logout">
-                                        Logout<i class="fas fa-sign-out-alt ml-2"></i>
-                                    </button>
-                                </form>
-                            </div>
-                            <div sec:authorize="!isAuthenticated()">
-                                <a class="btn btn-outline-primary btn-sm font-weight-bold mx-2" th:href="@{/login}" data-toggle="tooltip" title="Login">
-                                    Login<i class="fas fa-sign-in-alt ml-2"></i>
-                                </a>
-                            </div>
+                            <ul class="navbar-nav">
+                                <!--cart-->
+                                <li class="nav-item" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
+                                    <a class="nav-link" th:href="@{/user/cart}" data-toggle="tooltip" title="View Cart">
+                                        <span class="fa-stack has-badge mx-2" th:data-count="${cartSize}">
+                                            <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                                            <i class="fa fa-shopping-cart fa-stack-2x info-over-dark"></i>
+                                        </span>
+                                    </a>
+                                </li>
+                                <!--user greeting-->
+                                <li class="navbar-text" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
+                                    <small class="text-info font-weight-bold">Hi, <span th:text="${firstName}"/>!</small>
+                                </li>
+                                <!--admin greeting-->
+                                <li class="navbar-text" sec:authorize="hasRole('ADMIN')">
+                                    <small class="text-info font-weight-bold">Admin</small>
+                                </li>
+                            </ul>
+                            <!--logout-->
+                            <form class="form-inline p-2" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="POST" id="logoutForm" action="#">
+                                <button class="btn btn-outline-info btn-sm mx-2" type="submit">
+                                    <small class="font-weight-bold text-white">Logout<i class="fas fa-sign-out-alt ml-2"></i></small>
+                                </button>
+                            </form>
+                            <!--login-->
+                            <a class="btn btn-outline-info btn-sm mx-2" sec:authorize="!isAuthenticated()" th:href="@{/login}">
+                                <small class="font-weight-bold text-white">Login<i class="fas fa-sign-in-alt ml-2"></i></small>
+                            </a>
                         </div>
                     </nav>
                 </header>
-            </div>
-            <div class="col-sm-12" sec:authorize="hasRole('ADMIN')">
-                <nav class="navbar navbar-expand-sm bg-info">
-                    <!-- Toggler/collapsibe Button -->
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleAdminNavbar">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <!-- Navbar links -->
-                    <div class="collapse navbar-collapse" id="#collapsibleAdminNavbar">
-                        <ul class="navbar-nav">
-                            <li class="nav-item"><a class="nav-link text-white font-weight-bold" th:href="@{/admin/books}">Books</a></li>
-                            <li class="nav-item"><a class="nav-link text-white font-weight-bold" th:href="@{/admin/categories}">Categories</a></li>
-                            <li class="nav-item"><a class="nav-link text-white font-weight-bold" th:href="@{/admin/images}">Images</a></li>
-                            <li class="nav-item"><a class="nav-link text-white font-weight-bold" th:href="@{/admin/users}">Users</a></li>
-                            <li class="nav-item"><a class="nav-link text-white font-weight-bold" th:href="@{/admin/purchases}">Purchases</a></li>
-                        </ul>
-                    </div>
-                </nav>
             </div>
         </div>
 
@@ -105,7 +104,7 @@
                     </h1>
                     <div class="text-center" sec:authorize="hasRole('ADMIN')">
                         <h6><code class="text-info font-italic">
-                            - a great power comes with a great responsibility -
+                            <strong>< ADMIN - a great power comes with a great responsibility ></strong>
                         </code></h6>
                     </div>
                 </div>
