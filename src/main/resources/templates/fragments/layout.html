@@ -97,7 +97,7 @@
         </div>
 
         <div class="row" th:fragment="jumbotron">
-            <div class="col-lg-12 bg-warning">
+            <div class="col-sm-12 bg-white">
                 <div class="jumbotron jumbotron-fluid mb-0">
                     <h1 class="text-center">
                         <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
@@ -111,8 +111,10 @@
             </div>
         </div>
 
-        <div th:fragment="underHead(text)">
-            <h2 class="text-center my-2" th:text="${text}"></h2>
+        <div class="row" th:fragment="underHead(text)">
+            <div class="col-sm-12 bg-white">
+                <h2 class="text-center my-4" th:text="${text}"></h2>
+            </div>
         </div>
 
         <div class="row" th:fragment="footer">

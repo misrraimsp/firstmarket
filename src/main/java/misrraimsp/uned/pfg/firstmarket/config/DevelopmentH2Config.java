@@ -8,10 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.Arrays;
 
 @Profile("dev-h2")
@@ -232,10 +234,11 @@ public class DevelopmentH2Config {
             book1.setPublisher(publisher1);
             book1.setLanguage(Language.ESPAÑOL);
             book1.setNumPages(123);
-            book1.setSummary("Este es un libro que trata acerca de los fundamentos" +
+            book1.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
-            book1.setPrice(19.99);
+            book1.setPrice(BigDecimal.valueOf(19.99));
             book1.setStock(100);
+            book1.setYear(Year.now());
             bookServer.persist(book1);
 
             Book book2 = new Book();
@@ -247,10 +250,11 @@ public class DevelopmentH2Config {
             book2.setPublisher(publisher2);
             book2.setLanguage(Language.ENGLISH);
             book2.setNumPages(100);
-            book2.setSummary("En este libro se recogen las principales" +
+            book2.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
-            book2.setPrice(59.89);
+            book2.setPrice(BigDecimal.valueOf(59.89));
             book2.setStock(100);
+            book2.setYear(Year.of(1990));
             bookServer.persist(book2);
 
             Book book3 = new Book();
@@ -262,10 +266,11 @@ public class DevelopmentH2Config {
             book3.setPublisher(publisher3);
             book3.setLanguage(Language.DEUTSCH);
             book3.setNumPages(422);
-            book3.setSummary("Recorrido por los principales aspectos del análisis, " +
+            book3.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
-            book3.setPrice(0);
+            book3.setPrice(BigDecimal.valueOf(0));
             book3.setStock(100);
+            book3.setYear(Year.of(1998));
             bookServer.persist(book3);
 
             Book book4 = new Book();
@@ -277,10 +282,11 @@ public class DevelopmentH2Config {
             book4.setPublisher(publisher4);
             book4.setLanguage(Language.FRANÇAISE);
             book4.setNumPages(111);
-            book4.setSummary("Breve comentario sobre los principales" +
+            book4.setDescription("Breve comentario sobre los principales " +
                     "temas relacionados con la conectividad de computadores");
-            book4.setPrice(129.99);
+            book4.setPrice(BigDecimal.valueOf(0.01));
             book4.setStock(100);
+            book4.setYear(Year.of(2007));
             bookServer.persist(book4);
 
             Book book5 = new Book();
@@ -292,10 +298,11 @@ public class DevelopmentH2Config {
             book5.setPublisher(publisher1);
             book5.setLanguage(Language.ESPAÑOL);
             book5.setNumPages(128);
-            book5.setSummary("Este es un libro que trata acerca de los fundamentos" +
+            book5.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
-            book5.setPrice(19.99);
+            book5.setPrice(BigDecimal.valueOf(19.99));
             book5.setStock(100);
+            book5.setYear(Year.of(2014));
             bookServer.persist(book5);
 
             Book book6 = new Book();
@@ -307,10 +314,11 @@ public class DevelopmentH2Config {
             book6.setPublisher(publisher2);
             book6.setLanguage(Language.ENGLISH);
             book6.setNumPages(100);
-            book6.setSummary("En este libro se recogen las principales" +
+            book6.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
-            book6.setPrice(59.89);
+            book6.setPrice(BigDecimal.valueOf(55));
             book6.setStock(100);
+            book6.setYear(Year.of(1987));
             bookServer.persist(book6);
 
             Book book7 = new Book();
@@ -322,10 +330,11 @@ public class DevelopmentH2Config {
             book7.setPublisher(publisher3);
             book7.setLanguage(Language.DEUTSCH);
             book7.setNumPages(422);
-            book7.setSummary("Recorrido por los principales aspectos del análisis, " +
+            book7.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
-            book7.setPrice(0);
+            book7.setPrice(BigDecimal.valueOf(100.05));
             book7.setStock(100);
+            book7.setYear(Year.of(2019));
             bookServer.persist(book7);
 
             Book book8 = new Book();
@@ -337,9 +346,10 @@ public class DevelopmentH2Config {
             book8.setPublisher(publisher4);
             book8.setLanguage(Language.FRANÇAISE);
             book8.setNumPages(111);
-            book8.setSummary("El mismo día en que descubre que su marido le es infiel, la joven abogada Diana recibe la noticia de que su adorada tía abuela Emmely está muy enferma. Sin pensárselo dos veces, Diana toma el primer vuelo a Inglaterra para despedirse de ella.");
-            book8.setPrice(129.99);
+            book8.setDescription("El mismo día en que descubre que su marido le es infiel, la joven abogada Diana recibe la noticia de que su adorada tía abuela Emmely está muy enferma. Sin pensárselo dos veces, Diana toma el primer vuelo a Inglaterra para despedirse de ella.");
+            book8.setPrice(BigDecimal.valueOf(99.99));;
             book8.setStock(100);
+            book8.setYear(Year.of(2002));
             bookServer.persist(book8);
 
             Book book9 = new Book();
@@ -351,9 +361,10 @@ public class DevelopmentH2Config {
             book9.setPublisher(publisher4);
             book9.setLanguage(Language.FRANÇAISE);
             book9.setNumPages(111);
-            book9.setSummary("Estocolmo, 1913. Agneta, la descendiente de una familia que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
-            book9.setPrice(129.99);
+            book9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
+            book9.setPrice(BigDecimal.valueOf(14.95));
             book9.setStock(100);
+            book9.setYear(Year.of(2020));
             bookServer.persist(book9);
 
             //Items

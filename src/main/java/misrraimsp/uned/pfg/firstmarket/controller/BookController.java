@@ -1,8 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.model.FormBook;
+import misrraimsp.uned.pfg.firstmarket.model.Language;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-public class BookController implements Patterns {
+public class BookController implements Constants {
 
     private BookServer bookServer;
     private CatServer catServer;
@@ -54,38 +56,41 @@ public class BookController implements Patterns {
 
     @GetMapping("/admin/newBook")
     public String showNewBookForm(Model model){
-        model.addAttribute("book", new Book());
+        model.addAttribute("formBook", new FormBook());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("isbnPattern", ISBN);
-        model.addAttribute("textBasicPattern", TEXT_BASIC);
+        model.addAllAttributes(patterns);
+        model.addAllAttributes(numbers);
+        model.addAttribute("languages", Language.values());
         return "newBook";
     }
 
     @PostMapping("/admin/newBook")
-    public String processNewBook(@Valid Book book, Errors errors, Long storedImageId, Model model){
+    public String processNewBook(@Valid FormBook formBook, Errors errors, Long storedImageId, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAllAttributes(patterns);
+            model.addAllAttributes(numbers);
+            model.addAttribute("languages", Language.values());
             return "newBook";
         }
         if (storedImageId == null){ //new image upload
-            book.setImage(imageServer.persist(book.getImage()));
+            formBook.setImage(imageServer.persist(formBook.getImage()));
         }
         else {
-            book.setImage(imageServer.findById(storedImageId));
+            formBook.setImage(imageServer.findById(storedImageId));
         }
         try {
-            bookServer.persist(book);
+            bookServer.persist(formBook);
         }
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAllAttributes(patterns);
+            model.addAllAttributes(numbers);
+            model.addAttribute("languages", Language.values());
             return "newBook";
         }
         return "redirect:/admin/books";

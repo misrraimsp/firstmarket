@@ -1,21 +1,26 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.model.FormBook;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class BookServer implements Patterns {
+public class BookServer implements Constants {
 
     private BookRepository bookRepository;
 
     @Autowired
     public BookServer(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
+    }
+
+    public void persist(FormBook formBook) {
+        System.out.println("persisting FormBook: " + formBook);
     }
 
     public Book persist(Book book) throws IsbnAlreadyExistsException {

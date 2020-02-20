@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
 
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IsbnValidator implements ConstraintValidator<Isbn, String>, Patterns {
+public class IsbnValidator implements ConstraintValidator<Isbn, String>, Constants {
 
     private Pattern pattern;
     private Matcher matcher;

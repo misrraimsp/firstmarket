@@ -5,7 +5,7 @@
 
     <body>
 
-        <button th:fragment="saveButton" class="btn btn-outline-info btn-sm mb-2 px-5 float-right" type="submit">
+        <button th:fragment="saveButton" class="btn btn-outline-info btn-block font-weight-bold" type="submit">
             Save
         </button>
 
@@ -18,7 +18,15 @@
         </div>
 
         <!-- backend errors -->
-        <div th:fragment="backendValidationErrors(field)" class="mt-1" th:if="${#fields.hasErrors(field)}">
+        <div th:fragment="backendValidationErrors" class="mt-1" th:if="${#fields.hasErrors()}">
+            <div class="alert alert-danger alert-dismissible fade show mb-2">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <strong>Server Validation Error: </strong><span th:text="#{validation.generic}"></span>
+            </div>
+        </div>
+
+        <!-- backend field errors -->
+        <div th:fragment="backendValidationFieldErrors(field)" class="mt-n2" th:if="${#fields.hasErrors(field)}">
             <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors(field)}">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 <strong>Error: </strong><span th:text="${error}"></span>

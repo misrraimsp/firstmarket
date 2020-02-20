@@ -1,14 +1,14 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
 
 import javax.validation.constraints.Pattern;
 
 @Data
 @PasswordMatches
-public class FormUser implements MatchingPassword, Patterns {
+public class FormUser implements MatchingPassword, Constants {
 
     @Pattern(regexp = EMAIL, message = "{email.invalidFormat}")
     private String email;

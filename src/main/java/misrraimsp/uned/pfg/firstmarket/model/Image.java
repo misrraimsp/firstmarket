@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 
 import javax.persistence.*;
@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @ValidImage(message = "{image.error}")
-public class Image implements Patterns {
+public class Image implements Constants {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

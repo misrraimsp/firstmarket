@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 
 import javax.validation.ConstraintValidator;
@@ -8,7 +8,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ImageValidator implements ConstraintValidator<ValidImage, Object>, Patterns {
+public class ImageValidator implements ConstraintValidator<ValidImage, Object>, Constants {
 
     private Pattern pattern;
     private Matcher matcher;

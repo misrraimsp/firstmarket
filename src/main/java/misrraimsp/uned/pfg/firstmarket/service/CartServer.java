@@ -109,7 +109,7 @@ public class CartServer {
     public double getTotalPrice(Cart cart){
         double sum = 0;
         for (Item item : cart.getItems()){
-            sum += item.getQuantity() * item.getBook().getPrice();
+            sum += item.getQuantity() * item.getBook().getPrice().doubleValue();
         }
         return sum;
     }

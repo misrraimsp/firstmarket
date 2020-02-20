@@ -1,20 +1,20 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.validation.Isbn;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
+import java.math.BigDecimal;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
-public class Book implements Patterns {
+public class Book implements Constants {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,27 +38,30 @@ public class Book implements Patterns {
             name = "books_authors",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"))
+    @Size(max = MAX_NUM_AUTHORS, message = "{array.overSize}")
     private List<Author> authors = new ArrayList<>();
 
     @ManyToOne
     private Publisher publisher;
 
     @Pattern(regexp = TEXT_LONG, message = "{text.long}")
-    private String summary;
+    private String description;
 
-    @Min(value = 1, message = "{number.range}")
-    @Max(value = 5000, message = "{number.range}")
+    @Min(value = MIN_NUM_PAGES, message = "{number.range}")
+    @Max(value = MAX_NUM_PAGES, message = "{number.range}")
     private int numPages;
 
     private Language language;
 
-    @Min(value = 0, message = "{number.range}")
-    @Max(value = 1000000, message = "{number.range}")
-    private double price;
+    @Digits(integer = MAX_INTEGER_PRICE, fraction = MAX_FRACTION_PRICE)
+    private BigDecimal price;
 
-    @Min(value = 0, message = "{number.range}")
-    @Max(value = 100000000, message = "{number.range}")
+    @Min(value = MIN_NUM_STOCK, message = "{number.range}")
+    @Max(value = MAX_NUM_STOCK, message = "{number.range}")
     private int stock;
+
+    @PastOrPresent(message = "{year.notValid}")
+    private Year year;
 
 
     public String getAuthorsString(){

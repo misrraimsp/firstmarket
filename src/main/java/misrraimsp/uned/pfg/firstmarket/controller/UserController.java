@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.FormPassword;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import javax.validation.Valid;
 
 @Controller
-public class UserController implements Patterns {
+public class UserController implements Constants {
 
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;

@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Patterns;
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
 
 @Entity
 @Data
-public class Profile implements Patterns {
+public class Profile implements Constants {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
