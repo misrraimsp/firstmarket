@@ -6,7 +6,6 @@
     <body>
         <div class="container-fluid">
             <div th:replace="fragments/layout::header"></div>
-            <!--<div th:replace="fragments/layout::jumbotron"></div>-->
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="breadcrumb rounded-0 my-0">
@@ -19,18 +18,20 @@
             </div>
             <div th:replace="fragments/layout::underHead('New Book')"></div>
             <div class="row">
-                <div class="col-sm-1 bg-white"></div>
-                <div class="col-sm-10 bg-light">
+                <div class="col-sm-2 bg-white"></div>
+                <div class="col-sm-8 bg-light">
                     <form class="needs-validation" novalidate id="isbnForm" th:action="@{/admin/newBook}" th:object="${formBook}" method="POST" enctype="multipart/form-data" action="#">
                         <div th:replace="fragments/components::backendValidationErrors"></div>
                         <div class="form-row">
                             <div class="col-sm-6">
+                                <!-------------------------------------------------------------------------Title-->
                                 <div class="form-group">
                                     <label for="title">Title:</label>
                                     <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" th:pattern="${TEXT_BASIC}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendValidationFieldErrors('title')"></div>
+                                <!-------------------------------------------------------------------------Category-->
                                 <div class="form-group">
                                     <label for="category">Category:</label>
                                     <select class="custom-select" th:field="*{category.id}" id="category">
@@ -40,6 +41,7 @@
                                         </option>
                                     </select>
                                 </div>
+                                <!-------------------------------------------------------------------------Image-->
                                 <div class="form-group">
                                     <label for="input1">Image:</label>
                                     <select class="custom-select" id="input1" name="storedImageId">
@@ -56,12 +58,14 @@
                                     <div class="invalid-feedback">Please select an image</div>
                                 </div>
                                 <div th:replace="fragments/components::backendValidationFieldErrors('image')"></div>
+                                <!-------------------------------------------------------------------------Description-->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
                                     <textarea class="form-control" rows="4" th:field="*{description}" id="description" placeholder="enter description" th:pattern="${TEXT_LONG}"></textarea>
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendValidationFieldErrors('description')"></div>
+                                <!-------------------------------------------------------------------------Language-->
                                 <div class="form-group">
                                     <label for="language">Language:</label>
                                     <select class="custom-select" th:field="*{language}" id="language">
@@ -71,6 +75,56 @@
                                         </option>
                                     </select>
                                 </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-------------------------------------------------------------------------ISBN-->
+                                <div class="form-group">
+                                    <label for="isbn">ISBN:</label>
+                                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required th:pattern="${ISBN}">
+                                    <div class="invalid-feedback">Please fill out this field with a valid ISBN</div>
+                                </div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('isbn')"></div>
+                                <!-------------------------------------------------------------------------Publisher-->
+                                <div class="form-group">
+                                    <label for="publisher">Publisher:</label>
+                                    <input class="form-control" type="text" th:field="*{publisherName}" id="publisher" placeholder="enter publisher name" th:pattern="${TEXT_BASIC}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('publisherName')"></div>
+                                <!-------------------------------------------------------------------------Author-->
+                                <label for="authorFirstName1">Author:</label>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Author</span>
+                                    </div>
+                                    <input class="form-control" type="text" th:field="*{authorFirstName1}" id="authorFirstName1" placeholder="First Name" th:pattern="${TEXT_BASIC}">
+                                    <input class="form-control" type="text" th:field="*{authorLastName1}" id="authorLastName1" placeholder="Last Name" th:pattern="${TEXT_BASIC}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('authorFirstName1')"></div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('authorLastName1')"></div>
+                                <!-------------------------------------------------------------------------Pages-->
+                                <div class="form-group">
+                                    <label for="numPages">Number of Pages:</label>
+                                    <input class="form-control" type="number" th:field="*{numPages}" id="numPages" placeholder="enter number of pages" value="1" th:min="${MIN_NUM_PAGES}" th:max="${MAX_NUM_PAGES}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('numPages')"></div>
+                                <!-------------------------------------------------------------------------Year-->
+                                <div class="form-group">
+                                    <label for="year">Year of Publication:</label>
+                                    <input class="form-control" type="text" th:field="*{year}" id="year" placeholder="enter year" th:pattern="${YEAR}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('year')"></div>
+                                <!-------------------------------------------------------------------------Stock-->
+                                <div class="form-group">
+                                    <label for="stock">Units in Stock:</label>
+                                    <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${MIN_NUM_STOCK}" th:max="${MAX_NUM_STOCK}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendValidationFieldErrors('stock')"></div>
+                                <!-------------------------------------------------------------------------Price-->
                                 <label for="price">Price:</label>
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="text" th:field="*{price}" id="price" placeholder="enter price" th:pattern="${PRICE}">
@@ -81,57 +135,13 @@
                                 </div>
                                 <div th:replace="fragments/components::backendValidationFieldErrors('price')"></div>
                             </div>
-                            <div class="col-sm-6">
-                                <div class="form-group">
-                                    <label for="isbn">ISBN:</label>
-                                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required th:pattern="${ISBN}">
-                                    <div class="invalid-feedback">Please fill out this field with a valid ISBN</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('isbn')"></div>
-                                <div class="form-group">
-                                    <label for="publisher">Publisher:</label>
-                                    <input class="form-control" type="text" th:field="*{publisherName}" id="publisher" placeholder="enter publisher name" th:pattern="${TEXT_BASIC}">
-                                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('publisherName')"></div>
-                                <div class="form-group">
-                                    <label for="authorFirstName1">Author First Name:</label>
-                                    <input class="form-control" type="text" th:field="*{authorFirstName1}" id="authorFirstName1" placeholder="enter author first name" th:pattern="${TEXT_BASIC}">
-                                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('authorFirstName1')"></div>
-                                <div class="form-group">
-                                    <label for="authorLastName1">Author Last Name:</label>
-                                    <input class="form-control" type="text" th:field="*{authorLastName1}" id="authorLastName1" placeholder="enter author last name" th:pattern="${TEXT_BASIC}">
-                                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('authorLastName1')"></div>
-                                <div class="form-group">
-                                    <label for="numPages">Number of Pages:</label>
-                                    <input class="form-control" type="number" th:field="*{numPages}" id="numPages" placeholder="enter number of pages" value="1" th:min="${MIN_NUM_PAGES}" th:max="${MAX_NUM_PAGES}">
-                                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('numPages')"></div>
-                                <div class="form-group">
-                                    <label for="year">Year of Publication:</label>
-                                    <input class="form-control" type="text" th:field="*{year}" id="year" placeholder="enter year" th:pattern="${YEAR}">
-                                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('year')"></div>
-                                <div class="form-group">
-                                    <label for="stock">Units in Stock:</label>
-                                    <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${MIN_NUM_STOCK}" th:max="${MAX_NUM_STOCK}">
-                                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                                </div>
-                                <div th:replace="fragments/components::backendValidationFieldErrors('stock')"></div>
-                            </div>
                             <div class="col-sm-12">
                                 <button th:replace="fragments/components::saveButton"></button>
                             </div>
                         </div>
                     </form>
                 </div>
-                <div class="col-sm-1 bg-white"></div>
+                <div class="col-sm-2 bg-white"></div>
             </div>
             <footer th:replace="fragments/layout::footer"></footer>
         </div>
