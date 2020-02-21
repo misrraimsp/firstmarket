@@ -66,7 +66,7 @@ public class BookController implements Constants {
     }
 
     @PostMapping("/admin/newBook")
-    public String processNewBook(@Valid FormBook formBook, Errors errors, Long storedImageId, Model model){
+    public String processNewBook(@Valid FormBook formBook, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
@@ -74,12 +74,6 @@ public class BookController implements Constants {
             model.addAllAttributes(numbers);
             model.addAttribute("languages", Languages.values());
             return "newBook";
-        }
-        if (storedImageId == null){ //new image upload
-            formBook.setImage(imageServer.persist(formBook.getImage()));
-        }
-        else {
-            formBook.setImage(imageServer.findById(storedImageId));
         }
         try {
             bookServer.persist(formBook);

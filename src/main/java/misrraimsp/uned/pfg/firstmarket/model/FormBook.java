@@ -26,6 +26,8 @@ public class FormBook implements Constants {
     @ValidImage(message = "{image.error}")
     private Image image;
 
+    private Long storedImageId;
+
     @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String authorFirstName1;
 
@@ -77,4 +79,19 @@ public class FormBook implements Constants {
 
     @PastOrPresent(message = "{year.notValid}")
     private Year year;
+
+
+    public String getAuthors(){
+        String authors = "";
+        authors += format(authorFirstName1, authorLastName1);
+        authors += format(authorFirstName2, authorLastName2);
+        authors += format(authorFirstName3, authorLastName3);
+        authors += format(authorFirstName4, authorLastName4);
+        authors += format(authorFirstName5, authorLastName5);
+        return authors;
+    }
+
+    private String format(String firstName, String lastName) {
+        return (firstName == "" && lastName == "") ? "" : (firstName + "," + lastName + ";");
+    }
 }

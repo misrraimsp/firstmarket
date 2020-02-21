@@ -55,19 +55,20 @@
                                         </option>
                                     </select>
                                 </div>
-                                <!-------------------------------------------------------------------------Image-->
+                                <!-------------------------------------------------------------------------Stored Image-->
                                 <div class="form-group">
                                     <label for="input1">Image:</label>
-                                    <select class="custom-select" id="input1" name="storedImageId">
+                                    <select class="custom-select" id="input1" th:field="*{storedImageId}">
                                         <option th:each="imageInfo : ${imagesInfo}"
                                                 th:value="${imageInfo.id}"
                                                 th:text="${imageInfo.name}">
                                         </option>
                                     </select>
                                 </div>
+                                <!-------------------------------------------------------------------------New Image-->
                                 <div class="form-group">
-                                    <label for="switch">select new image:</label>
                                     <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
+                                    <label for="switch">Select New Image:</label>
                                     <input class="form-control" type="file" th:field="*{image}" id="input2" disabled accept="image/*" required/>
                                     <div class="invalid-feedback">Please select an image</div>
                                 </div>

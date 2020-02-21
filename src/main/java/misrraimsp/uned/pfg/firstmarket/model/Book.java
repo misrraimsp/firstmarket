@@ -9,7 +9,6 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,8 +60,8 @@ public class Book implements Constants {
     @Max(value = MAX_NUM_STOCK, message = "{number.range}")
     private int stock;
 
-    @PastOrPresent(message = "{year.notValid}")
-    private Year year;
+    //@PastOrPresent(message = "{year.notValid}")
+    private int year;
 
 
     public String getAuthorsString(){
