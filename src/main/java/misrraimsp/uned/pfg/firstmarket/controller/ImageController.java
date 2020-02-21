@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.model.Image;
+import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,12 @@ import java.io.InputStream;
 public class ImageController {
 
     ImageServer imageServer;
+    private BookServer bookServer;
 
     @Autowired
-    public ImageController(ImageServer imageServer) {
+    public ImageController(ImageServer imageServer, BookServer bookServer) {
         this.imageServer = imageServer;
+        this.bookServer = bookServer;
     }
 
     @GetMapping("/admin/images")
@@ -64,6 +67,7 @@ public class ImageController {
 
     @GetMapping("/admin/deleteImage/{id}")
     public String deleteImage(@PathVariable("id") Long id){
+        bookServer.updateImageByImageId(id, imageServer.findByIsDefaultIsTrue());
         imageServer.deleteById(id);
         return "redirect:/admin/images";
     }

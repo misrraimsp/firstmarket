@@ -18,4 +18,8 @@ public class PublisherServer {
     public Publisher persist(Publisher publisher) {
         return publisherRepository.save(publisher);
     }
+
+    public Publisher findByName(String publisherName) {
+        return publisherRepository.findByName(publisherName);
+    }
 }

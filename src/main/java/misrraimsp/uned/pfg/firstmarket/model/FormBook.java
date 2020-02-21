@@ -21,7 +21,7 @@ public class FormBook implements Constants {
     @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String title;
 
-    private Category category;
+    private Long categoryId;
 
     @ValidImage(message = "{image.error}")
     private Image image;
@@ -92,6 +92,6 @@ public class FormBook implements Constants {
     }
 
     private String format(String firstName, String lastName) {
-        return (firstName == "" && lastName == "") ? "" : (firstName + "," + lastName + ";");
+        return (firstName.isBlank() && lastName.isBlank()) ? "" : (firstName + "," + lastName + ";");
     }
 }

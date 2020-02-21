@@ -18,4 +18,8 @@ public class AuthorServer {
     public Author persist(Author author) {
         return authorRepository.save(author);
     }
+
+    public Author findByFirstNameAndLastName(String firstName, String lastName) {
+        return authorRepository.findByFirstNameAndLastName(firstName, lastName);
+    }
 }

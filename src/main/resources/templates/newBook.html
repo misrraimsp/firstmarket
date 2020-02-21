@@ -48,7 +48,7 @@
                                 <!-------------------------------------------------------------------------Category-->
                                 <div class="form-group">
                                     <label for="category">Category:</label>
-                                    <select class="custom-select" th:field="*{category.id}" id="category">
+                                    <select class="custom-select" th:field="*{categoryId}" id="category">
                                         <option th:each="ic : ${indentedCategories}"
                                                 th:value="${ic.id}"
                                                 th:text="${ic.name}">

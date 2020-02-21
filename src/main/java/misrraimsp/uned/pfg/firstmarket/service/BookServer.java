@@ -10,28 +10,39 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BookServer implements Constants {
 
     private BookRepository bookRepository;
+    private CatServer catServer;
     private ImageServer imageServer;
+    private PublisherServer publisherServer;
+    private AuthorServer authorServer;
 
     @Autowired
-    public BookServer(BookRepository bookRepository, ImageServer imageServer) {
+    public BookServer(BookRepository bookRepository,
+                      CatServer catServer,
+                      ImageServer imageServer,
+                      PublisherServer publisherServer,
+                      AuthorServer authorServer) {
+
         this.bookRepository = bookRepository;
+        this.catServer = catServer;
         this.imageServer = imageServer;
+        this.publisherServer = publisherServer;
+        this.authorServer = authorServer;
     }
 
     @Transactional
     public Book persist(FormBook formBook) throws IsbnAlreadyExistsException {
-        //System.out.println("persisting FormBook: " + formBook);
         // check for isbn uniqueness
         if (this.isbnExists(formBook.getIsbn().replaceAll(ISBN_FILTER, ""))){
             throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  formBook.getIsbn());
         }
-        //convert (and save if necessary)
+        //convert (and persist if necessary)
         Book book = this.convertFormBook(formBook);
         // save
         return bookRepository.save(book);
@@ -44,7 +55,7 @@ public class BookServer implements Constants {
         // set title
         book.setTitle(formBook.getTitle());
         //set category
-        book.setCategory(formBook.getCategory());
+        book.setCategory(this.convertFormBookCategoryId(formBook.getCategoryId()));
         // set image
         book.setImage(this.convertFormBookImage(formBook.getStoredImageId(), formBook.getImage()));
         //set authors
@@ -66,6 +77,10 @@ public class BookServer implements Constants {
         return book;
     }
 
+    private Category convertFormBookCategoryId(Long categoryId) {
+        return catServer.findCategoryById(categoryId);
+    }
+
     private String convertFormBookIsbn(String isbn) {
         return isbn.replaceAll(ISBN_FILTER, "");
     }
@@ -73,21 +88,49 @@ public class BookServer implements Constants {
     private Image convertFormBookImage(Long storedImageId, Image image) {
         return (storedImageId == null) ? imageServer.persist(image) : imageServer.findById(storedImageId);
     }
-    //TODO
-    private List<Author> convertFormBookAuthors(String authors) {
-        return null;
+
+    private List<Author> convertFormBookAuthors(String formBookAuthors) {
+        //System.out.println("formBookAuthors: " + formBookAuthors);
+        List<Author> authors = new ArrayList<>();
+        if (formBookAuthors.isBlank()) {
+            return authors;
+        }
+        for (String formBookAuthor : formBookAuthors.split(";")){
+            //System.out.println("formBookAuthor: " + formBookAuthor);
+            String [] authorParts = formBookAuthor.split(",");
+            //System.out.println("authorParts[0]: " + authorParts[0]);
+            //System.out.println("authorParts[1]: " + authorParts[1]);
+            Author author = authorServer.findByFirstNameAndLastName(authorParts[0], authorParts[1]);
+            if (author == null){
+                author = new Author();
+                author.setFirstName(authorParts[0]);
+                author.setLastName(authorParts[1]);
+                author = authorServer.persist(author);
+            }
+            if (!authors.contains(author)) authors.add(author); // avoiding books with author repeated
+        }
+        return authors;
     }
-    //TODO
+
     private Publisher convertFormBookPublisher(String publisherName) {
-        return null;
+        if (publisherName.isBlank()){
+            return null;
+        }
+        Publisher publisher = publisherServer.findByName(publisherName);
+        if (publisher == null) {
+            publisher = new Publisher();
+            publisher.setName(publisherName);
+            return publisherServer.persist(publisher); // new publisher
+        }
+        return publisher; // publisher already exist
     }
-    //TODO
+
     private BigDecimal convertFormBookPrice(String price) {
-        return BigDecimal.ZERO;
+        return (price.isBlank()) ? BigDecimal.ZERO : new BigDecimal(price);
     }
-    //TODO
+
     private int convertFormBookYear(Year year) {
-        return 0;
+        return (year == null) ? 0 : year.getValue();
     }
 
     public Book persist(Book book) throws IsbnAlreadyExistsException {

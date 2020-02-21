@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
+import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,10 +18,12 @@ import javax.validation.Valid;
 public class CategoryController implements Constants {
 
     private CatServer catServer;
+    private BookServer bookServer;
 
     @Autowired
-    public CategoryController(CatServer catServer) {
+    public CategoryController(CatServer catServer, BookServer bookServer) {
         this.catServer = catServer;
+        this.bookServer = bookServer;
     }
 
     @GetMapping("/admin/loadCategories")
@@ -56,7 +59,7 @@ public class CategoryController implements Constants {
 
     @GetMapping("/admin/editCategory/{id}")
     public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
-        Category category = catServer.findById(id);
+        Category category = catServer.findCategoryById(id);
         model.addAttribute("category", category);
         model.addAttribute("descendants", catServer.getDescendants(category));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
@@ -78,7 +81,10 @@ public class CategoryController implements Constants {
 
     @GetMapping("/admin/deleteCategory/{id}")
     public String deleteCategory(@PathVariable("id") Long id){
+        Category deletingCategory = catServer.findCategoryById(id);
         catServer.deleteById(id);
+        //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
+        bookServer.updateCategoryIdByCategoryId(id, deletingCategory.getParent().getId());
         return "redirect:/admin/loadCategories";
     }
 

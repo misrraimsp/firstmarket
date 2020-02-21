@@ -12,12 +12,11 @@ import java.util.List;
 public class ImageServer {
 
     private ImageRepository imageRepository;
-    private BookServer bookServer;
+
 
     @Autowired
-    public ImageServer(ImageRepository imageRepository, BookServer bookServer) {
+    public ImageServer(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
-        this.bookServer = bookServer;
     }
 
     /**
@@ -46,8 +45,11 @@ public class ImageServer {
     }
 
     public void deleteById(Long id) {
-        bookServer.updateImageByImageId(id, imageRepository.findByIsDefaultIsTrue());
         imageRepository.deleteById(id);
+    }
+
+    public Image findByIsDefaultIsTrue() {
+        return imageRepository.findByIsDefaultIsTrue();
     }
 
     /*

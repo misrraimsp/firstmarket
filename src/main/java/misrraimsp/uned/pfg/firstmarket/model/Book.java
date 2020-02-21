@@ -60,7 +60,6 @@ public class Book implements Constants {
     @Max(value = MAX_NUM_STOCK, message = "{number.range}")
     private int stock;
 
-    //@PastOrPresent(message = "{year.notValid}")
     private int year;
 
 

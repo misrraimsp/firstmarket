@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.converter.MultipartFileToImageConverter;
+import misrraimsp.uned.pfg.firstmarket.converter.StringToYearConverter;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addConverter(new MultipartFileToImageConverter());
+        registry.addConverter(new StringToYearConverter());
     }
 
     @Bean

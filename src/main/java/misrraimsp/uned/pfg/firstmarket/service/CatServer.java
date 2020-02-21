@@ -20,16 +20,14 @@ public class CatServer {
 
     private CategoryRepository categoryRepository;
     private CatpathRepository catpathRepository;
-    private BookServer bookServer;
 
     private TreeNode<Category> rootCategoryNode; //root node of category tree
     private List<Catpath> directPaths; //set of first-order relations among categories
 
     @Autowired
-    public CatServer(CategoryRepository categoryRepository, CatpathRepository catpathRepository, BookServer bookServer) {
+    public CatServer(CategoryRepository categoryRepository, CatpathRepository catpathRepository) {
         this.categoryRepository = categoryRepository;
         this.catpathRepository = catpathRepository;
-        this.bookServer = bookServer;
     }
 
     public void loadCategories() {
@@ -137,15 +135,13 @@ public class CatServer {
         //eliminar los catpath que tienen a la categoría a eliminar
         catpathRepository.deleteCatpathsOf(id);
         //el abuelo de las categorías hijas de la categoría a eliminar pasa a ser su padre
-        Category deletingCategory = categoryRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
+        Category deletingCategory = this.findCategoryById(id);
         categoryRepository.updateParentByParentId(id, deletingCategory.getParent().getId());
-        //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
-        bookServer.updateCategoryIdByCategoryId(id, deletingCategory.getParent().getId());
         //eliminar la categoría
         categoryRepository.delete(deletingCategory);
     }
 
-    public Category findById(Long id) {
+    public Category findCategoryById(Long id) {
         return categoryRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
     }
