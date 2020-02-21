@@ -232,7 +232,7 @@ public class DevelopmentH2Config {
             book1.setImage(img1);
             book1.setAuthors(Arrays.asList(author1));
             book1.setPublisher(publisher1);
-            book1.setLanguage(Language.ESPAÑOL);
+            book1.setLanguage(Languages.ESPAÑOL);
             book1.setNumPages(123);
             book1.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
@@ -248,7 +248,7 @@ public class DevelopmentH2Config {
             book2.setImage(img2);
             book2.setAuthors(Arrays.asList(author1, author2));
             book2.setPublisher(publisher2);
-            book2.setLanguage(Language.ENGLISH);
+            book2.setLanguage(Languages.ENGLISH);
             book2.setNumPages(100);
             book2.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
@@ -264,7 +264,7 @@ public class DevelopmentH2Config {
             book3.setImage(img3);
             book3.setAuthors(Arrays.asList(author2, author3));
             book3.setPublisher(publisher3);
-            book3.setLanguage(Language.DEUTSCH);
+            book3.setLanguage(Languages.DEUTSCH);
             book3.setNumPages(422);
             book3.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
@@ -280,7 +280,7 @@ public class DevelopmentH2Config {
             book4.setImage(img4);
             book4.setAuthors(Arrays.asList(author4));
             book4.setPublisher(publisher4);
-            book4.setLanguage(Language.FRANÇAISE);
+            book4.setLanguage(Languages.FRANÇAISE);
             book4.setNumPages(111);
             book4.setDescription("Breve comentario sobre los principales " +
                     "temas relacionados con la conectividad de computadores");
@@ -296,7 +296,7 @@ public class DevelopmentH2Config {
             book5.setImage(img0);
             book5.setAuthors(Arrays.asList(author1));
             book5.setPublisher(publisher1);
-            book5.setLanguage(Language.ESPAÑOL);
+            book5.setLanguage(Languages.ESPAÑOL);
             book5.setNumPages(128);
             book5.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
@@ -312,7 +312,7 @@ public class DevelopmentH2Config {
             book6.setImage(img2);
             book6.setAuthors(Arrays.asList(author1, author2));
             book6.setPublisher(publisher2);
-            book6.setLanguage(Language.ENGLISH);
+            book6.setLanguage(Languages.ENGLISH);
             book6.setNumPages(100);
             book6.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
@@ -328,7 +328,7 @@ public class DevelopmentH2Config {
             book7.setImage(img1);
             book7.setAuthors(Arrays.asList(author2, author3));
             book7.setPublisher(publisher3);
-            book7.setLanguage(Language.DEUTSCH);
+            book7.setLanguage(Languages.DEUTSCH);
             book7.setNumPages(422);
             book7.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
@@ -344,7 +344,7 @@ public class DevelopmentH2Config {
             book8.setImage(img1);
             book8.setAuthors(Arrays.asList(author4));
             book8.setPublisher(publisher4);
-            book8.setLanguage(Language.FRANÇAISE);
+            book8.setLanguage(Languages.FRANÇAISE);
             book8.setNumPages(111);
             book8.setDescription("El mismo día en que descubre que su marido le es infiel, la joven abogada Diana recibe la noticia de que su adorada tía abuela Emmely está muy enferma. Sin pensárselo dos veces, Diana toma el primer vuelo a Inglaterra para despedirse de ella.");
             book8.setPrice(BigDecimal.valueOf(99.99));;
@@ -359,7 +359,7 @@ public class DevelopmentH2Config {
             book9.setImage(img1);
             book9.setAuthors(Arrays.asList(author4));
             book9.setPublisher(publisher4);
-            book9.setLanguage(Language.FRANÇAISE);
+            book9.setLanguage(Languages.FRANÇAISE);
             book9.setNumPages(111);
             book9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
             book9.setPrice(BigDecimal.valueOf(14.95));

@@ -1,10 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.FormBook;
-import misrraimsp.uned.pfg.firstmarket.model.Language;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -61,7 +61,7 @@ public class BookController implements Constants {
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         model.addAllAttributes(patterns);
         model.addAllAttributes(numbers);
-        model.addAttribute("languages", Language.values());
+        model.addAttribute("languages", Languages.values());
         return "newBook";
     }
 
@@ -72,7 +72,7 @@ public class BookController implements Constants {
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAllAttributes(patterns);
             model.addAllAttributes(numbers);
-            model.addAttribute("languages", Language.values());
+            model.addAttribute("languages", Languages.values());
             return "newBook";
         }
         if (storedImageId == null){ //new image upload
@@ -90,7 +90,7 @@ public class BookController implements Constants {
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAllAttributes(patterns);
             model.addAllAttributes(numbers);
-            model.addAttribute("languages", Language.values());
+            model.addAttribute("languages", Languages.values());
             return "newBook";
         }
         return "redirect:/admin/books";

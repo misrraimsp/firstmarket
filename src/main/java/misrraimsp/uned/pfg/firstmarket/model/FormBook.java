@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.validation.Isbn;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 
@@ -65,7 +66,7 @@ public class FormBook implements Constants {
     @Max(value = MAX_NUM_PAGES, message = "{number.range}")
     private int numPages;
 
-    private Language language;
+    private Languages language;
 
     @Pattern(regexp = PRICE, message = "{price.notValid}")
     private String price;
