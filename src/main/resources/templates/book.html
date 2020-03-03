@@ -9,9 +9,7 @@
             <div th:replace="fragments/layout::header"></div>
             <div th:replace="fragments/layout::jumbotron"></div>
             <div class="row my-2">
-                <div class="col-sm-1 bg-white" >
-
-                </div>
+                <div class="col-sm-1 bg-white"></div>
                 <div class="col-sm-3 bg-white">
                     <img class="img-fluid" th:src="@{/image/{id}(id=${book.image.id})}"/>
                 </div>
@@ -19,12 +17,13 @@
                     <div class="row">
                         <div class="col-sm-6" >
                             <p><strong>Title: </strong><span th:text="${book.title}"></span></p>
-                            <p><strong>Authors: </strong><span th:text="${book.authorsString}"></span></p>
-                            <p><strong>ISBN: </strong><span th:text="${book.isbn}"></span></p>
+                            <p><strong>Publisher: </strong><span th:text="${book.publisher.name}"></span></p>
+                            <p><strong>Year: </strong><span th:text="${book.year}"></span></p>
                             <p><strong>Category: </strong><span th:text="${book.category.name}"></span></p>
                         </div>
                         <div class="col-sm-6" >
-                            <p><strong>Publisher: </strong><span th:text="${book.publisher.name}"></span></p>
+                            <p><strong>Authors: </strong><span th:text="${book.authorsString}"></span></p>
+                            <p><strong>ISBN: </strong><span th:text="${book.isbn}"></span></p>
                             <p><strong>Language: </strong><span th:text="${book.language}"></span></p>
                             <p><strong>Pages: </strong><span th:text="${book.numPages}"></span></p>
                             <p><strong>Price: </strong><span th:text="${book.price}"></span>€</p>
@@ -32,7 +31,7 @@
                     </div>
                     <div class="row">
                         <div class="col-sm-12" >
-                            <p><strong>Summary: </strong><span th:text="${book.summary}"></span></p>
+                            <p><strong>Description: </strong><span th:text="${book.description}"></span></p>
                         </div>
                     </div>
                 </div>
