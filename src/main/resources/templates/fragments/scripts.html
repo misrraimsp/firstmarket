@@ -116,11 +116,28 @@
 
                 var speed = 250;
 
+                $("#showAuthor1").click(function(){
+                    $("#showAuthor1").hide(speed);
+                    $("#author1").show(speed);
+                    $("#hideAuthor1").show(speed);
+                    $("#showAuthor2").show(speed);
+                });
+
+                $("#hideAuthor1").click(function(){
+                    $("#showAuthor2").hide(speed);
+                    $("#hideAuthor1").hide(speed);
+                    $("#author1").hide(speed);
+                    $("#authorFirstName1").val("");
+                    $("#authorLastName1").val("");
+                    $("#showAuthor1").show(speed);
+                });
+
                 $("#showAuthor2").click(function(){
                     $("#showAuthor2").hide(speed);
+                    $("#hideAuthor1").hide(speed);
                     $("#author2").show(speed);
-                    $("#hideAuthor2").show(speed);
                     $("#showAuthor3").show(speed);
+                    $("#hideAuthor2").show(speed);
                 });
 
                 $("#hideAuthor2").click(function(){
@@ -130,6 +147,7 @@
                     $("#authorFirstName2").val("");
                     $("#authorLastName2").val("");
                     $("#showAuthor2").show(speed);
+                    $("#hideAuthor1").show(speed);
                 });
 
                 $("#showAuthor3").click(function(){
@@ -138,6 +156,7 @@
                     $("#author3").show(speed);
                     $("#showAuthor4").show(speed);
                     $("#hideAuthor3").show(speed);
+
                 });
 
                 $("#hideAuthor3").click(function(){
@@ -154,13 +173,10 @@
                     $("#showAuthor4").hide(speed);
                     $("#hideAuthor3").hide(speed);
                     $("#author4").show(speed);
-                    $("#showAuthor5").show(speed);
                     $("#hideAuthor4").show(speed);
-
                 });
 
                 $("#hideAuthor4").click(function(){
-                    $("#showAuthor5").hide(speed);
                     $("#hideAuthor4").hide(speed);
                     $("#author4").hide(speed);
                     $("#authorFirstName4").val("");
@@ -169,42 +185,26 @@
                     $("#hideAuthor3").show(speed);
                 });
 
-                $("#showAuthor5").click(function(){
-                    $("#showAuthor5").hide(speed);
-                    $("#hideAuthor4").hide(speed);
-                    $("#author5").show(speed);
-                    $("#hideAuthor5").show(speed);
-                });
-
-                $("#hideAuthor5").click(function(){
-                    $("#hideAuthor5").hide(speed);
-                    $("#author5").hide(speed);
-                    $("#authorFirstName5").val("");
-                    $("#authorLastName5").val("");
-                    $("#showAuthor5").show(speed);
-                    $("#hideAuthor4").show(speed);
-                });
-
-                if (document.getElementById('authorFirstName5').value != "" || document.getElementById('authorLastName5').value != "") {
+                if (document.getElementById('authorFirstName4').value != "" || document.getElementById('authorLastName4').value != "") {
+                    document.getElementById('showAuthor1').click();
                     document.getElementById('showAuthor2').click();
                     document.getElementById('showAuthor3').click();
                     document.getElementById('showAuthor4').click();
-                    document.getElementById('showAuthor5').click();
                 }
                 else {
-                    if (document.getElementById('authorFirstName4').value != "" || document.getElementById('authorLastName4').value != "") {
+                    if (document.getElementById('authorFirstName3').value != "" || document.getElementById('authorLastName3').value != "") {
+                        document.getElementById('showAuthor1').click();
                         document.getElementById('showAuthor2').click();
                         document.getElementById('showAuthor3').click();
-                        document.getElementById('showAuthor4').click();
                     }
                     else {
-                        if (document.getElementById('authorFirstName3').value != "" || document.getElementById('authorLastName3').value != "") {
+                        if (document.getElementById('authorFirstName2').value != "" || document.getElementById('authorLastName2').value != "") {
+                            document.getElementById('showAuthor1').click();
                             document.getElementById('showAuthor2').click();
-                            document.getElementById('showAuthor3').click();
                         }
                         else {
-                            if (document.getElementById('authorFirstName2').value != "" || document.getElementById('authorLastName2').value != "") {
-                                document.getElementById('showAuthor2').click();
+                            if (document.getElementById('authorFirstName1').value != "" || document.getElementById('authorLastName1').value != "") {
+                                document.getElementById('showAuthor1').click();
                             }
                         }
                     }

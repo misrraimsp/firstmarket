@@ -94,41 +94,37 @@ public class BookController implements Constants {
     @GetMapping("/admin/editBook/{id}")
     public String showEditBookForm(@PathVariable("id") Long id, Model model){
         Book book = bookServer.findById(id);
-        model.addAttribute("book", book);
-        model.addAttribute("bookImageId", book.getImage().getId());
+        FormBook formBook = bookServer.convertBookToFormBook(book);
+        model.addAttribute("formBook", formBook);
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("isbnPattern", ISBN);
-        model.addAttribute("textBasicPattern", TEXT_BASIC);
+        model.addAllAttributes(patterns);
+        model.addAllAttributes(numbers);
+        model.addAttribute("languages", Languages.values());
         return "editBook";
     }
 
     @PostMapping("/admin/editBook")
-    public String processEditBook(@Valid Book book, Errors errors, Long storedImageId, Model model){
+    public String processEditBook(@Valid FormBook formBook, Errors errors, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAllAttributes(patterns);
+            model.addAllAttributes(numbers);
+            model.addAttribute("languages", Languages.values());
             return "editBook";
         }
-        if (storedImageId == null){ //new image upload
-            book.setImage(imageServer.persist(book.getImage()));
-        }
-        else {
-            book.setImage(imageServer.findById(storedImageId));
-        }
         try {
+            Book book = bookServer.convertFormBookToBook(formBook);
             bookServer.edit(book);
         }
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
-            model.addAttribute("bookImageId", bookServer.findById(book.getId()).getImage().getId());
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAttribute("isbnPattern", ISBN);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAllAttributes(patterns);
+            model.addAllAttributes(numbers);
+            model.addAttribute("languages", Languages.values());
             return "editBook";
         }
         return "redirect:/admin/books";

@@ -37,10 +37,6 @@ public class BookServer implements Constants {
         this.authorServer = authorServer;
     }
 
-    public Book convertFormBookToBook(FormBook formBook) {
-        return bookConverter.convertFormBookToBook(formBook);
-    }
-
     @Transactional
     public Book persist(Book book) throws IsbnAlreadyExistsException {
         //check for isbn uniqueness
@@ -55,13 +51,19 @@ public class BookServer implements Constants {
         return bookRepository.save(book);
     }
 
+    @Transactional
     public Book edit(Book book) throws IsbnAlreadyExistsException {
-        book.setIsbn(book.getIsbn().replaceAll(ISBN_FILTER, ""));
+        //check for isbn uniqueness (allowing self-uniqueness)
         if (!this.findById(book.getId()).getIsbn().equals(book.getIsbn())){
             if (this.isbnExists(book.getIsbn())){
                 throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
             }
         }
+        //persist dependencies
+        book.setImage(imageServer.persist(book.getImage()));
+        book.setPublisher(publisherServer.persist(book.getPublisher()));
+        book.setAuthors(authorServer.persist(book.getAuthors()));
+        //save book
         return bookRepository.save(book);
     }
 
@@ -92,5 +94,13 @@ public class BookServer implements Constants {
                     book.setImage(new_image);
                     bookRepository.save(book);
                 });
+    }
+
+    public Book convertFormBookToBook(FormBook formBook) {
+        return bookConverter.convertFormBookToBook(formBook);
+    }
+
+    public FormBook convertBookToFormBook(Book book) {
+        return bookConverter.convertBookToFormBook(book);
     }
 }

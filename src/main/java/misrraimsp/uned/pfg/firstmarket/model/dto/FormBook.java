@@ -16,6 +16,8 @@ import java.time.Year;
 @Data
 public class FormBook implements Constants {
 
+    private Long bookId;
+
     @Isbn(message = "{isbn.error}")
     private String isbn;
 
@@ -28,6 +30,12 @@ public class FormBook implements Constants {
     private Image image;
 
     private Long storedImageId;
+
+    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
+    private String authorFirstName0;
+
+    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
+    private String authorLastName0;
 
     @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String authorFirstName1;
@@ -54,12 +62,6 @@ public class FormBook implements Constants {
     private String authorLastName4;
 
     @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
-    private String authorFirstName5;
-
-    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
-    private String authorLastName5;
-
-    @Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
     private String publisherName;
 
     @Pattern(regexp = TEXT_LONG, message = "{text.long}")
@@ -84,11 +86,11 @@ public class FormBook implements Constants {
 
     public String getAuthors(){
         String authors = "";
+        authors += format(authorFirstName0, authorLastName0);
         authors += format(authorFirstName1, authorLastName1);
         authors += format(authorFirstName2, authorLastName2);
         authors += format(authorFirstName3, authorLastName3);
         authors += format(authorFirstName4, authorLastName4);
-        authors += format(authorFirstName5, authorLastName5);
         return authors;
     }
 

@@ -15,6 +15,7 @@ public class BookConverter implements Constants {
 
     public Book convertFormBookToBook(FormBook formBook) {
         Book book = new Book();
+        book.setId(formBook.getBookId());
         book.setIsbn(this.convertFormBookIsbn(formBook.getIsbn()));
         book.setTitle(formBook.getTitle());
         book.setCategory(this.convertFormBookCategoryId(formBook.getCategoryId()));
@@ -28,6 +29,99 @@ public class BookConverter implements Constants {
         book.setStock(formBook.getStock());
         book.setYear(convertFormBookYear(formBook.getYear()));
         return book;
+    }
+
+    public FormBook convertBookToFormBook(Book book) {
+        FormBook formBook = new FormBook();
+        formBook.setBookId(book.getId());
+        formBook.setIsbn(book.getIsbn());
+        formBook.setTitle(book.getTitle());
+        formBook.setCategoryId(book.getCategory().getId());
+        formBook.setStoredImageId(book.getImage().getId());
+        //authors
+        List<Author> authors = book.getAuthors();
+        int size = authors.size();
+        if (size == 1){
+            formBook.setAuthorFirstName0(authors.get(0).getFirstName());
+            formBook.setAuthorLastName0(authors.get(0).getLastName());
+            formBook.setAuthorFirstName1("");
+            formBook.setAuthorLastName1("");
+            formBook.setAuthorFirstName2("");
+            formBook.setAuthorLastName2("");
+            formBook.setAuthorFirstName3("");
+            formBook.setAuthorLastName3("");
+            formBook.setAuthorFirstName4("");
+            formBook.setAuthorLastName4("");
+        }
+        else if (size == 2){
+            formBook.setAuthorFirstName0(authors.get(0).getFirstName());
+            formBook.setAuthorLastName0(authors.get(0).getLastName());
+            formBook.setAuthorFirstName1(authors.get(1).getFirstName());
+            formBook.setAuthorLastName1(authors.get(1).getLastName());
+            formBook.setAuthorFirstName2("");
+            formBook.setAuthorLastName2("");
+            formBook.setAuthorFirstName3("");
+            formBook.setAuthorLastName3("");
+            formBook.setAuthorFirstName4("");
+            formBook.setAuthorLastName4("");
+        }
+        else if (size == 3){
+            formBook.setAuthorFirstName0(authors.get(0).getFirstName());
+            formBook.setAuthorLastName0(authors.get(0).getLastName());
+            formBook.setAuthorFirstName1(authors.get(1).getFirstName());
+            formBook.setAuthorLastName1(authors.get(1).getLastName());
+            formBook.setAuthorFirstName2(authors.get(2).getFirstName());
+            formBook.setAuthorLastName2(authors.get(2).getLastName());
+            formBook.setAuthorFirstName3("");
+            formBook.setAuthorLastName3("");
+            formBook.setAuthorFirstName4("");
+            formBook.setAuthorLastName4("");
+        }
+        else if (size == 4){
+            formBook.setAuthorFirstName0(authors.get(0).getFirstName());
+            formBook.setAuthorLastName0(authors.get(0).getLastName());
+            formBook.setAuthorFirstName1(authors.get(1).getFirstName());
+            formBook.setAuthorLastName1(authors.get(1).getLastName());
+            formBook.setAuthorFirstName2(authors.get(2).getFirstName());
+            formBook.setAuthorLastName2(authors.get(2).getLastName());
+            formBook.setAuthorFirstName3(authors.get(3).getFirstName());
+            formBook.setAuthorLastName3(authors.get(3).getLastName());
+            formBook.setAuthorFirstName4("");
+            formBook.setAuthorLastName4("");
+        }
+        else if (size == 5){
+            formBook.setAuthorFirstName0(authors.get(0).getFirstName());
+            formBook.setAuthorLastName0(authors.get(0).getLastName());
+            formBook.setAuthorFirstName1(authors.get(1).getFirstName());
+            formBook.setAuthorLastName1(authors.get(1).getLastName());
+            formBook.setAuthorFirstName2(authors.get(2).getFirstName());
+            formBook.setAuthorLastName2(authors.get(2).getLastName());
+            formBook.setAuthorFirstName3(authors.get(3).getFirstName());
+            formBook.setAuthorLastName3(authors.get(3).getLastName());
+            formBook.setAuthorFirstName4(authors.get(4).getFirstName());
+            formBook.setAuthorLastName4(authors.get(4).getLastName());
+        }
+        else {
+            formBook.setAuthorFirstName0("");
+            formBook.setAuthorLastName0("");
+            formBook.setAuthorFirstName1("");
+            formBook.setAuthorLastName1("");
+            formBook.setAuthorFirstName2("");
+            formBook.setAuthorLastName2("");
+            formBook.setAuthorFirstName3("");
+            formBook.setAuthorLastName3("");
+            formBook.setAuthorFirstName4("");
+            formBook.setAuthorLastName4("");
+        }
+        //
+        formBook.setPublisherName((book.getPublisher() != null) ? book.getPublisher().getName() : "");
+        formBook.setDescription(book.getDescription());
+        formBook.setNumPages(book.getNumPages());
+        formBook.setLanguage(book.getLanguage());
+        formBook.setPrice(book.getPrice().toString());
+        formBook.setStock(book.getStock());
+        formBook.setYear(Year.of(book.getYear()));
+        return formBook;
     }
 
     private String convertFormBookIsbn(String isbn) {
