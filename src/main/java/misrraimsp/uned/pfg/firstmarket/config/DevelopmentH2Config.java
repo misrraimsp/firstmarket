@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
+import misrraimsp.uned.pfg.firstmarket.model.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -254,7 +256,8 @@ public class DevelopmentH2Config {
             formBook1.setStock(100);
             formBook1.setYear(Year.of(2020));
             //System.out.println("formBook1: " + formBook1);
-            Book book1 = bookServer.persist(formBook1);
+            Book book1 = bookServer.convertFormBookToBook(formBook1);
+            book1 = bookServer.persist(book1);
             //System.out.println(book1);
 
 
@@ -283,7 +286,8 @@ public class DevelopmentH2Config {
             formBook2.setStock(100);
             formBook2.setYear(Year.of(1990));
             //System.out.println("formBook2: " + formBook2);
-            Book book2 = bookServer.persist(formBook2);
+            Book book2 = bookServer.convertFormBookToBook(formBook2);
+            book2 = bookServer.persist(book2);
             //System.out.println(book2);
 
 
@@ -312,7 +316,8 @@ public class DevelopmentH2Config {
             formBook3.setStock(100);
             formBook3.setYear(Year.of(1998));
             //System.out.println("formBook3: " + formBook3);
-            Book book3 = bookServer.persist(formBook3);
+            Book book3 = bookServer.convertFormBookToBook(formBook3);
+            book3 = bookServer.persist(book3);
             //System.out.println(book3);
 
             FormBook formBook4 = new FormBook();
@@ -340,7 +345,8 @@ public class DevelopmentH2Config {
             formBook4.setStock(100);
             formBook4.setYear(Year.of(2007));
             //System.out.println("formBook4: " + formBook4);
-            Book book4 = bookServer.persist(formBook4);
+            Book book4 = bookServer.convertFormBookToBook(formBook4);
+            book4 = bookServer.persist(book4);
             //System.out.println(book4);
 
 
@@ -368,7 +374,8 @@ public class DevelopmentH2Config {
             formBook5.setStock(100);
             formBook5.setYear(Year.of(2014));
             //System.out.println("formBook5: " + formBook5);
-            Book book5 = bookServer.persist(formBook5);
+            Book book5 = bookServer.convertFormBookToBook(formBook5);
+            book5 = bookServer.persist(book5);
             //System.out.println(book5);
 
 
@@ -396,7 +403,8 @@ public class DevelopmentH2Config {
             formBook6.setStock(100);
             formBook6.setYear(Year.of(1987));
             //System.out.println("formBook6: " + formBook6);
-            Book book6 = bookServer.persist(formBook6);
+            Book book6 = bookServer.convertFormBookToBook(formBook6);
+            book6 = bookServer.persist(book6);
             //System.out.println(book6);
 
 
@@ -424,7 +432,8 @@ public class DevelopmentH2Config {
             formBook7.setStock(1000);
             formBook7.setYear(Year.of(2019));
             //System.out.println("formBook7: " + formBook7);
-            Book book7 = bookServer.persist(formBook7);
+            Book book7 = bookServer.convertFormBookToBook(formBook7);
+            book7 = bookServer.persist(book7);
             //System.out.println(book7);
 
 
@@ -452,7 +461,8 @@ public class DevelopmentH2Config {
             formBook8.setStock(100);
             formBook8.setYear(Year.of(2002));
             //System.out.println("formBook8: " + formBook8);
-            Book book8 = bookServer.persist(formBook8);
+            Book book8 = bookServer.convertFormBookToBook(formBook8);
+            book8 = bookServer.persist(book8);
             //System.out.println(book8);
 
 
@@ -481,7 +491,8 @@ public class DevelopmentH2Config {
             formBook9.setStock(100);
             formBook9.setYear(Year.of(2020));
             //System.out.println("formBook9: " + formBook9);
-            Book book9 = bookServer.persist(formBook9);
+            Book book9 = bookServer.convertFormBookToBook(formBook9);
+            book9 = bookServer.persist(book9);
             //System.out.println(book9);
 
             /*

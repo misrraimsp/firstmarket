@@ -28,11 +28,16 @@ public class ImageServer {
      * @return image or repositoryImage
      */
     public Image persist(Image image) {
-        Image repositoryImage = imageRepository.findByData(image.getData());
-        if (repositoryImage == null){
-            return imageRepository.save(image);
+        if (image.getId() != null){
+            return this.findById(image.getId());
         }
-        return repositoryImage;
+        else if (image.getData() != null) {
+            Image storedImage = imageRepository.findByData(image.getData());
+            return (storedImage != null) ? storedImage : imageRepository.save(image);
+        }
+        else {
+            return null;
+        }
     }
 
     public Image findById(Long id) {

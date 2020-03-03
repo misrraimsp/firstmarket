@@ -1,8 +1,9 @@
-package misrraimsp.uned.pfg.firstmarket.model;
+package misrraimsp.uned.pfg.firstmarket.model.dto;
 
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.Languages;
+import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.validation.Isbn;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 

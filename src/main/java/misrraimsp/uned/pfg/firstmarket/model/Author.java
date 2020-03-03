@@ -27,11 +27,7 @@ public class Author implements Constants {
 
 
     /**
-     * La igualdad entre autores se define únicamente a través
-     * de la iguladad de sus Id's
-     *
-     * Esto es así para evitar que autores con diferencias entre
-     * mayúsculas/minúsculas sean diferentes
+     * Esta igualdad evita que autores con diferencias entre mayúsculas/minúsculas sean diferentes
      */
     @Override
     public boolean equals(final Object o) {
@@ -39,6 +35,15 @@ public class Author implements Constants {
         if (!(o instanceof Author)) return false;
         final Author other = (Author) o;
         if (!other.canEqual((Object) this)) return false;
+
+        final Object this$firstName = this.getFirstName().toUpperCase();
+        final Object other$firstName = other.getFirstName().toUpperCase();
+        if (this$firstName == null ? other$firstName != null : !this$firstName.equals(other$firstName)) return false;
+
+        final Object this$lastName = this.getLastName().toUpperCase();
+        final Object other$lastName = other.getLastName().toUpperCase();
+        if (this$lastName == null ? other$lastName != null : !this$lastName.equals(other$lastName)) return false;
+
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;

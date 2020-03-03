@@ -4,8 +4,8 @@ import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.FormBook;
 import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
@@ -76,7 +76,8 @@ public class BookController implements Constants {
             return "newBook";
         }
         try {
-            bookServer.persist(formBook);
+            Book book = bookServer.convertFormBookToBook(formBook);
+            bookServer.persist(book);
         }
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
