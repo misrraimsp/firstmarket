@@ -46,7 +46,7 @@
             </form>
         </div>
         <footer th:replace="fragments/layout::footer"></footer>
-        <script th:replace="fragments/scripts::matchingPasswords"></script>
-        <script th:replace="fragments/scripts::disableFormSubmissionOnInvalidField"></script>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
+        <script th:src="@{/js/matchingPasswords.js}"></script>
     </body>
 </html>

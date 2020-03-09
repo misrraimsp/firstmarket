@@ -67,7 +67,7 @@
                                 </div>
                                 <!-------------------------------------------------------------------------New Image-->
                                 <div class="form-group">
-                                    <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
+                                    <input type="checkbox" id="switch"/>
                                     <label for="switch">Select New Image:</label>
                                     <input class="form-control" type="file" th:field="*{image}" id="input2" disabled accept="image/*" required/>
                                     <div class="invalid-feedback">Please select an image</div>
@@ -206,9 +206,9 @@
             </div>
             <footer th:replace="fragments/layout::footer"></footer>
         </div>
-        <script th:replace="fragments/scripts::disableFormSubmissionOnInvalidField"></script>
-        <script th:replace="fragments/scripts::isbnChecksum"></script>
-        <script th:replace="fragments/scripts::binaryInputSwitch"></script>
-        <script th:replace="fragments/scripts::manageAuthors"></script>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
+        <script th:src="@{/js/isbnChecksum.js}"></script>
+        <script th:src="@{/js/binaryInputSwitch.js}"></script>
+        <script th:src="@{/js/manageAuthors.js}"></script>
     </body>
 </html>

@@ -44,7 +44,7 @@
             </table>
         </div>
         <footer th:replace="fragments/layout::footer"></footer>
-        <script th:replace="fragments/scripts::disableFormSubmissionOnInvalidField"></script>
-        <script th:replace="fragments/scripts::enableTooltips"></script>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
+        <script th:src="@{/js/enableTooltips.js}"></script>
     </body>
 </html>
