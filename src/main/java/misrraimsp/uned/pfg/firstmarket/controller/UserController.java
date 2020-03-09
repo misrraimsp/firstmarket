@@ -16,7 +16,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -109,7 +108,7 @@ public class UserController implements Constants {
         model.addAttribute("items", user.getCart().getItems());
         return "cart";
     }
-
+/*
     @GetMapping("/user/addBook/{id}")
     public String processAddBook(@AuthenticationPrincipal User authUser, @PathVariable("id") Long bookId){
         userServer.addBookToCart(authUser.getId(), bookId);
@@ -127,7 +126,7 @@ public class UserController implements Constants {
         userServer.removeItemFromCart(authUser.getId(), itemId);
         return "redirect:/user/cart";
     }
-
+*/
     @GetMapping("/user/addPurchase")
     public String processAddPurchase(@AuthenticationPrincipal User authUser){
         userServer.addPurchase(authUser.getId());
