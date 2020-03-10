@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.getElementById("cart").setAttribute("data-count", this.responseText);
                 }
             };
-            xhttp.open("GET", "http://localhost:8080/firstmarket/user/addBook/" + button.id, true);
+            xhttp.open("GET", "http://localhost:8080/firstmarket/user/addBook/" + button.getAttribute("id"), true);
             xhttp.send();
         }, false);
     }

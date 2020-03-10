@@ -73,7 +73,6 @@
                                     </strong>
                                 </div>
                                 <div>
-                                    <!--<a class="addBookToCart btn btn-outline-dark btn-sm" th:id="${book.id}" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add to Cart">-->
                                     <button class="addBookToCart btn btn-outline-dark btn-sm" th:id="${book.id}" data-toggle="tooltip" title="Add to Cart">
                                         <i class="fas fa-cart-plus mx-3 fa-lg"></i>
                                     </button>
@@ -84,7 +83,7 @@
                 </div>
             </div>
             <div th:replace="fragments/layout::footer"></div>
-            <script type="text/javascript" th:src="@{/static/js/addBookToCart.js}"></script>
+            <script th:src="@{/js/ajaxCart.js}"></script>
         </div>
     </body>
 </html>
