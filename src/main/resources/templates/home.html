@@ -1,58 +1,46 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
     <head th:replace="fragments/layout::head('FirstMarket')"></head>
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid bg-light">
+            <!-- layout::header -->
             <div th:replace="fragments/layout::header"></div>
-            <div th:replace="fragments/layout::jumbotron"></div>
+            <!-- jumbotron -->
             <div class="row">
-                <div class="col-sm-12 bg-info">
-                    <p>Sugerencias especiales</p>
-                    <p>Sugerencias especiales</p>
-                    <p>Sugerencias especiales</p>
+                <div class="col-sm-12 bg-white">
+                    <div class="jumbotron jumbotron-fluid mb-0">
+                        <h1 class="text-center">
+                            <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
+                        </h1>
+                        <div class="text-center" sec:authorize="hasRole('ADMIN')">
+                            <h6><code class="text-info font-italic">
+                                <strong>< ADMIN - a great power comes with a great responsibility ></strong>
+                            </code></h6>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="input-group mt-5">
+                                    <input class="form-control form-control-sm" type="text" placeholder="title, ISBN, author, publisher...">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-info btn-sm" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-4 col-lg-3 d-flex flex-column p-2 bg-secondary">
-                    <form class="bg-primary p-2 m-2">
-                        <div class="form-group">
-                            <label for="category">Category:</label>
-                            <select class="custom-select" id="category">
-                                <option th:each="ic : ${indentedCategories}"
-                                        th:value="${ic.id}"
-                                        th:text="${ic.name}">
-                                </option>
-                            </select>
-                        </div>
-                        <input type="submit" value="Search">
-                    </form>
-                    <div class="bg-primary p-2 m-2">
-                        <p>Autor</p>
-                        <form>
-                            <input type="text">
-                            <input type="text">
-                            <input type="submit">
-                        </form>
-                    </div>
-                    <div class="bg-primary p-2 m-2">
-                        <p>Título</p>
-                        <form>
-                            <input type="text">
-                            <input type="submit">
-                        </form>
-                    </div>
-                    <div class="bg-primary p-2 m-2">
-                        <p>Precio</p>
-                        <form>
-                            <input type="text">
-                            <input type="text">
-                            <input type="submit">
-                        </form>
-                    </div>
-                </div>
-                <div class="col-sm-8 col-lg-9 bg-success">
+            <!-- carousel -->
+            <div class="row mt-4">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
                     <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
                         <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
                             <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-image card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
@@ -73,15 +61,17 @@
                                     </strong>
                                 </div>
                                 <div>
-                                    <button class="addBook btn btn-outline-dark btn-sm" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
-                                        <i class="fas fa-cart-plus mx-3 fa-lg"></i>
+                                    <button class="addBook btn btn-outline-info btn-sm" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                                        <i class="fas fa-cart-plus mx-1 fa-lg"></i>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-sm-1"></div>
             </div>
+            <!-- layout::footer -->
             <div th:replace="fragments/layout::footer"></div>
             <script th:src="@{/js/ajaxCart.js}"></script>
         </div>

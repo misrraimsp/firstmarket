@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class CartController {
+public class CartRestController {
 
     private UserServer userServer;
 
     @Autowired
-    public CartController(UserServer userServer) {
+    public CartRestController(UserServer userServer) {
         this.userServer = userServer;
     }
 

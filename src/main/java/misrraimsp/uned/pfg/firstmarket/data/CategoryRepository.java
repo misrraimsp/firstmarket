@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface CategoryRepository extends CrudRepository<Category, Long> {
 
     //self-parenthood root category property
@@ -23,4 +25,6 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Category c SET c.parent.id = :new_parent_id WHERE c.parent.id = :parent_id")
     void updateParentByParentId(@Param("parent_id") Long parent_id, @Param("new_parent_id") Long new_parent_id);
+
+    List<Category> findByParentId(Long id);
 }

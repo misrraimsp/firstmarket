@@ -32,7 +32,7 @@ public class HomeController {
             model.addAttribute("cartSize", user.getCart().getCartSize());
         }
         model.addAttribute("books", bookServer.findAll());
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "home";
     }
 
