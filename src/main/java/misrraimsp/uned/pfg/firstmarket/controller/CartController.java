@@ -26,9 +26,15 @@ public class CartController {
         return new ResponseEntity<>(userServer.findById(authUser.getId()).getCart().getCartSize(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/removeBook/{id}")
-    public ResponseEntity<Integer> processRemoveBook(@AuthenticationPrincipal User authUser, @PathVariable("id") Long bookId){
-        userServer.removeBookFromCart(authUser.getId(), bookId);
+    @GetMapping("/user/incrementItem/{id}")
+    public ResponseEntity<Integer> processIncrementItem(@AuthenticationPrincipal User authUser, @PathVariable("id") Long itemId){
+        userServer.incrementItemFromCart(authUser.getId(), itemId);
+        return new ResponseEntity<>(userServer.findById(authUser.getId()).getCart().getCartSize(), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/decrementItem/{id}")
+    public ResponseEntity<Integer> processDecrementItem(@AuthenticationPrincipal User authUser, @PathVariable("id") Long itemId){
+        userServer.decrementItemFromCart(authUser.getId(), itemId);
         return new ResponseEntity<>(userServer.findById(authUser.getId()).getCart().getCartSize(), HttpStatus.OK);
     }
 

@@ -54,17 +54,24 @@ public class CartServer {
         cartRepository.save(cart);
     }
 
+    @Transactional
+    public void incrementItem(Cart cart, Long itemId) {
+        itemServer.increment(itemId);
+        cart.setLastModified(LocalDateTime.now());
+        cartRepository.save(cart);
+    }
+
     /**
-     * coded for nothings happens if bookId do not match any item.book.id
+     * coded for nothings happens if itemId do not match any item.id
      * by means of putting "cart.setLastModified(LocalDateTime.now());"
      * in appropriate position
      */
     @Transactional
-    public void removeBook(Cart cart, Long bookId) {
+    public void decrementItem(Cart cart, Long itemId) {
         List<Item> items = cart.getItems();
         Item deletingItem = null;
         for (Item i : items) {
-            if (i.getBook().getId().equals(bookId)) {
+            if (i.getId().equals(itemId)) {
                 //check item deletion condition
                 if (i.getQuantity() > 1){//simple decrement item
                     itemServer.decrement(i.getId());
