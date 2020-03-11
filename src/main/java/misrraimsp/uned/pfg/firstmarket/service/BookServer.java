@@ -1,15 +1,22 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.model.Author;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
+import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
+import misrraimsp.uned.pfg.firstmarket.model.search.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class BookServer implements Constants {
@@ -102,5 +109,22 @@ public class BookServer implements Constants {
 
     public FormBook convertBookToFormBook(Book book) {
         return bookConverter.convertBookToFormBook(book);
+    }
+
+    public List<Book> findWithFilter(Filter filter) {
+        List<Book> books = bookRepository.findByAncestorCategory(filter.getCategory().getId());
+        return books;
+    }
+
+    public List<Author> findTopAuthors(List<Book> books) {
+        return authorServer.findAll();
+    }
+
+    public List<Publisher> findTopPublishers(List<Book> books) {
+        return publisherServer.findAll();
+    }
+
+    public List<Languages> findTopLanguages(List<Book> books) {
+        return Arrays.asList(Languages.values());
     }
 }

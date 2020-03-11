@@ -34,4 +34,8 @@ public class AuthorServer {
         authors.forEach(author -> savedAuthors.add(this.persist(author)));
         return savedAuthors;
     }
+
+    public List<Author> findAll() {
+        return (List<Author>) authorRepository.findAll();
+    }
 }

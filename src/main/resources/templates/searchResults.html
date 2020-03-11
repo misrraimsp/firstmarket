@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments/layout::head('Search')"></head>
+    <body>
+        <div class="container-fluid bg-light">
+            <!-- layout::header -->
+            <div th:replace="fragments/layout::header"></div>
+
+            <!-- main content -->
+            <div class="row mt-4">
+                <!-- SEARCH CRITERIA  -->
+                <div class="col-sm-4">
+                    <button class="accordion">Category</button>
+                    <div class="panel">
+                        <a class="dropdown-item" th:href="@{/books/search/{categoryId}(categoryId=${cat.id})}" th:text="${cat.name}" th:each="cat : ${childrenCategories}">Category Name</a>
+                    </div>
+                    <button class="accordion">Price</button>
+                    <div class="panel">
+                        <div class="custom-control custom-checkbox my-3">
+                            <input class="custom-control-input" type="checkbox" id="pr-0" />
+                            <label class="custom-control-label" for="pr-0">€ 0-5</label>
+                        </div>
+                        <div class="custom-control custom-checkbox my-3">
+                            <input class="custom-control-input" type="checkbox" id="pr-1" />
+                            <label class="custom-control-label" for="pr-1">€ 5-10</label>
+                        </div>
+                        <div class="custom-control custom-checkbox my-3">
+                            <input class="custom-control-input" type="checkbox" id="pr-2" />
+                            <label class="custom-control-label" for="pr-2">€ 10-15</label>
+                        </div>
+                        <div class="custom-control custom-checkbox my-3">
+                            <input class="custom-control-input" type="checkbox" id="pr-3" />
+                            <label class="custom-control-label" for="pr-3">€ 15-40</label>
+                        </div>
+                        <div class="custom-control custom-checkbox my-3">
+                            <input class="custom-control-input" type="checkbox" id="pr-4" />
+                            <label class="custom-control-label" for="pr-4">€ 40 or more</label>
+                        </div>
+                    </div>
+                    <button class="accordion">Author</button>
+                    <div class="panel">
+                        <div class="custom-control custom-checkbox my-3" th:each="author : ${authors}">
+                            <input class="custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
+                            <label class="custom-control-label" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
+                        </div>
+                    </div>
+                    <button class="accordion">Publisher</button>
+                    <div class="panel">
+                        <div class="custom-control custom-checkbox my-3" th:each="publisher : ${publishers}">
+                            <input class="custom-control-input" type="checkbox" th:id="'pu-' + ${publisher.id}" />
+                            <label class="custom-control-label" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
+                        </div>
+                    </div>
+                    <button class="accordion">Language</button>
+                    <div class="panel">
+                        <div class="custom-control custom-checkbox my-3" th:each="language : ${languages}">
+                            <input class="custom-control-input" type="checkbox" th:id="'la-' + ${language.name()}" />
+                            <label class="custom-control-label" th:for="'la-' + ${language.name()}" th:text="${language.name()}">Language</label>
+                        </div>
+                    </div>
+                </div>
+                <!-- SEARCH RESULTS  -->
+                <div class="col-sm-8">
+                    <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
+                        <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${books}">
+                            <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-image card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
+                            <div class="card-body">
+                                <a th:href="@{/book/{id}(id=${book.id})}"><p class="card-title text-responsive font-weight-bold" th:text="${book.title}">title</p></a>
+                                <div class="card-text">
+                                    <small th:each="author : ${book.authors}">
+                                        <span th:text="${author.lastName}">lastName</span>,
+                                        <span th:text="${author.firstName}">firstName</span>
+                                        <br/>
+                                    </small>
+                                </div>
+                                <div class="card-text">
+                                    <small><span th:text="${book.category.name}">category</span></small>
+                                </div>
+                            </div>
+                            <div class="card-footer d-flex align-items-baseline">
+                                <div class="card-text mr-auto">
+                                    <strong>
+                                        <span th:text="${book.price}">price</span>€
+                                    </strong>
+                                </div>
+                                <div>
+                                    <button class="addBook btn btn-outline-info btn-sm" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                                        <i class="fas fa-cart-plus mx-1 fa-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- layout::footer -->
+            <div th:replace="fragments/layout::footer"></div>
+            <script th:src="@{/js/ajaxCart.js}"></script>
+            <script th:src="@{/js/accordion.js}"></script>
+        </div>
+    </body>
+</html>

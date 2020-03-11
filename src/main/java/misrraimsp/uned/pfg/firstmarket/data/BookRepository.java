@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface BookRepository extends CrudRepository<Book, Long> {
 
     @Modifying(clearAutomatically = true)
@@ -15,4 +17,23 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     Iterable<? extends Book> findByImageId(Long id);
 
     Book findByIsbn(String isbn);
+
+    @Query("SELECT b FROM Book b WHERE b.category.id IN (" +
+            "SELECT c.id FROM Category c WHERE c.id IN (" +
+            "SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id))")
+    List<Book> findByAncestorCategory(@Param("id") Long id);
+
+    /*
+    @Query(value = "DELETE FROM Catpath cp WHERE " +
+            "cp.ancestor.id IN (SELECT cp1.ancestor.id FROM Catpath cp1 WHERE (cp1.descendant.id = :id AND cp1.ancestor.id <> :id)) AND " +
+            "cp.descendant.id IN (SELECT cp2.descendant.id FROM Catpath cp2 WHERE cp2.ancestor.id = :id)")
+    void deleteCatpathsFromAncestorsToDescendantsOf(@Param("id") Long id);
+
+
+
+    @Query(value = "SELECT * FROM book WHERE category_id IN (" +
+                    "SELECT category_id FROM category WHERE category_id IN(" +
+                    "SELECT descendant_id FROM catpath WHERE (ancestor_id = ? AND size > 0)))",
+                    nativeQuery = true)
+     */
 }

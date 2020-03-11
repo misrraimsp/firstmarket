@@ -36,7 +36,18 @@ public class CatServer {
         populate(rootCategoryNode);
     }
 
+    public List<Category> getChildren(Category c) {
+        List<Category> children = new ArrayList<>();
+        for (Catpath cp : directPaths) {
+            if (c.equals(cp.getAncestor())) {
+                children.add(cp.getDescendant());
+            }
+        }
+        return children;
+    }
+
     public List<Category> getMainCategories() {
+        /*
         Category rootCategory = categoryRepository.getRootCategory();
         List<Category> mainCategories = new ArrayList<>();
         for (Category cat : categoryRepository.findByParentId(rootCategory.getId())) {
@@ -45,6 +56,8 @@ public class CatServer {
             }
         }
         return mainCategories;
+         */
+        return this.getChildren(categoryRepository.getRootCategory());
     }
 
     public List<Category> getIndentedCategories(){
@@ -161,16 +174,6 @@ public class CatServer {
         for (Category c : getChildren(node.getData())) {
             populate(node.addChild(c));
         }
-    }
-
-    private List<Category> getChildren(Category c){
-        List<Category> children = new ArrayList<>();
-        for (Catpath cp : directPaths) {
-            if (c.equals(cp.getAncestor())) {
-                children.add(cp.getDescendant());
-            }
-        }
-        return children;
     }
 
     private String getIndent(int depth) {

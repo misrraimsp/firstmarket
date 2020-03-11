@@ -5,6 +5,8 @@ import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PublisherServer {
 
@@ -22,5 +24,9 @@ public class PublisherServer {
 
     public Publisher findByName(String publisherName) {
         return publisherRepository.findByName(publisherName);
+    }
+
+    public List<Publisher> findAll() {
+        return (List<Publisher>) publisherRepository.findAll();
     }
 }
