@@ -7,8 +7,8 @@ spring:
       active:
          - dev-mariadb
          #- dev-h2
-   jpa:
-      show-sql: true
+   #jpa:
+      #show-sql: true
 
 
 ---
