@@ -111,6 +111,12 @@ public class BookServer implements Constants {
         return bookConverter.convertBookToFormBook(book);
     }
 
+
+
+
+
+    //TODO
+
     public List<Book> findWithFilter(Filter filter) {
         List<Book> books = bookRepository.findByAncestorCategory(filter.getCategory().getId());
         return books;

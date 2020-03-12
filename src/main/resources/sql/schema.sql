@@ -1,24 +1,30 @@
 
-
 drop table if exists user_purchases;
 drop table if exists purchase_items;
 drop table if exists cart_items;
 drop table if exists users_roles;
 drop table if exists user;
 drop table if exists role;
+drop table if exists profile;
 drop table if exists cart;
 drop table if exists purchase;
 drop table if exists item;
+drop table if exists books_authors;
 drop table if exists book;
+drop table if exists author;
+drop table if exists publisher;
 drop table if exists image;
 drop table if exists catpath;
 drop table if exists category;
 
-
 drop sequence if exists hibernate_sequence;
-create sequence hibernate_sequence start with 97 increment by 1;
+create sequence hibernate_sequence start with 23 increment by 1;
 
-create table book (id bigint not null, isbn varchar(255), title varchar(255), category_id bigint, image_id bigint, primary key (id));
+create table author (id bigint not null, first_name varchar(255), last_name varchar(255), primary key (id));
+create table books_authors (book_id bigint not null, author_id bigint not null);
+create table profile (id bigint not null, first_name varchar(255), last_name varchar(255), primary key (id));
+create table publisher (id bigint not null, name varchar(255), primary key (id));
+create table book (id bigint not null, description varchar(255), isbn varchar(255), language integer, num_pages integer not null check (num_pages>=1 AND num_pages<=5000), price decimal(11,2), stock integer not null check (stock>=0 AND stock<=100000000), title varchar(255), year integer not null, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
 create table cart (id bigint not null, last_modified timestamp, primary key (id));
 create table cart_items (cart_id bigint not null, items_id bigint not null);
 create table category (id bigint not null, name varchar(255), parent_id bigint, primary key (id));
@@ -28,7 +34,7 @@ create table item (id bigint not null, quantity integer not null, book_id bigint
 create table purchase (id bigint not null, created timestamp, primary key (id));
 create table purchase_items (purchase_id bigint not null, items_id bigint not null);
 create table role (id bigint not null, name varchar(255), primary key (id));
-create table user (id bigint not null, email varchar(255), first_name varchar(255), last_name varchar(255), password varchar(255), cart_id bigint, primary key (id));
+create table user (id bigint not null, email varchar(255), password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
 create table user_purchases (user_id bigint not null, purchases_id bigint not null);
 create table users_roles (user_id bigint not null, role_id bigint not null);
 
@@ -38,6 +44,9 @@ alter table user_purchases add constraint uk_purchaseIdOnUserPurchases unique (p
 
 alter table book add constraint fk_categoryIdOnBook foreign key (category_id) references category(id);
 alter table book add constraint fk_imageIdOnBook foreign key (image_id) references image(id);
+alter table book add constraint fk_publisherIdOnBook foreign key (publisher_id) references publisher(id);
+alter table books_authors add constraint fk_authorIdOnBooksAuthors foreign key (author_id) references author(id);
+alter table books_authors add constraint fk_bookIdOnBooksAuthors foreign key (book_id) references book(id);
 alter table cart_items add constraint fk_itemIdOnCartItems foreign key (items_id) references item(id);
 alter table cart_items add constraint fk_cartIdOnCartItems foreign key (cart_id) references cart(id);
 alter table category add constraint fk_parentIdOnCategory foreign key (parent_id) references category(id);
@@ -47,6 +56,7 @@ alter table item add constraint fk_bookIdOnItem foreign key (book_id) references
 alter table purchase_items add constraint fk_itemIdOnPurchaseItems foreign key (items_id) references item(id);
 alter table purchase_items add constraint fk_purchaseIdOnPurchaseItems foreign key (purchase_id) references purchase(id);
 alter table user add constraint fk_cartIdOnUser foreign key (cart_id) references cart(id);
+alter table user add constraint fk_profileIdOnUser foreign key (profile_id) references profile(id);
 alter table user_purchases add constraint fk_purchaseIdOnUserPurchases foreign key (purchases_id) references purchase(id);
 alter table user_purchases add constraint fk_userIdOnUserPurchases foreign key (user_id) references user(id);
 alter table users_roles add constraint fk_roleIdOnUsersRoles foreign key (role_id) references role(id);

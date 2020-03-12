@@ -47,16 +47,6 @@ public class CatServer {
     }
 
     public List<Category> getMainCategories() {
-        /*
-        Category rootCategory = categoryRepository.getRootCategory();
-        List<Category> mainCategories = new ArrayList<>();
-        for (Category cat : categoryRepository.findByParentId(rootCategory.getId())) {
-            if (cat.getId() != rootCategory.getId()){
-                mainCategories.add(cat);
-            }
-        }
-        return mainCategories;
-         */
         return this.getChildren(categoryRepository.getRootCategory());
     }
 

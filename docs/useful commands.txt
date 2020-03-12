@@ -5,11 +5,18 @@
 ** MARIADB
     ** start
     mysql.server start
+
     ** login
     mysql -u root -p
+
+    ** create a new db with {db-name} as name
+    create database {db-name};
+
     ** show all databases
     show databases;
+
     ** set {db-name} as current db
     use {db-name};
+
     ** show all tables on current db
     show tables;
