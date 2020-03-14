@@ -1,64 +1,755 @@
-<fm>
-    <Arte>
-        <Arquitectura>
-            <Arquitectos_españoles/>
-            <Arquitectos_extranjeros/>
-            <Decoración_e_interiorismo/>
-            <Feng_shui/>
-            <Historia_de_la_arquitectura/>
-            <Modelos_arquitectónicos/>
-            <Paisajismo_y_diseño_de_jardines/>
-            <Teoría_y_crítica_de_arquitectura/>
-            <Urbanismo/>
-        </Arquitectura>
-        <Artes_Escénicas>
-            <Bailes_de_salón/>
-            <Bailes_populares/>
-            <Danza/>
-            <Escenografía/>
-            <Formación_del_actor/>
-            <Géneros_dramáticos/>
-            <Historia_y_estudios_de_arte_dramático/>
-            <Técnicas_de_interpretación/>
-        </Artes_Escénicas>
-        <Bellas_Artes_y_Aplicadas>
-            <Alfombras/>
-            <Bellas_Artes/>
-            <Carteles/>
-            <Cerámica_y_porcelana/>
-            <Glíptica/>
-            <Historia_y_estudios_de_Artes_Aplicadas/>
-            <Historia_y_estudios_de_Bellas_Artes/>
-            <Joyería/>
-            <Marfil/>
-            <Metal_y_cerrajería_artística/>
-            <Muebles/>
-            <Pieles/>
-            <Relojería/>
-            <Restauración/>
-            <Tapices/>
-            <Vidrieras_y_vidrio/>
-        </Bellas_Artes_y_Aplicadas>
-        <Cine>
-
-        </Cine>
-        <Dibujo>
-
-        </Dibujo>
-        <Diseño_y_moda>
-
-        </Diseño_y_moda>
-        <Historia_del_Arte>
-
-        </Historia_del_Arte>
-        <Museología_y_museos>
-
-        </Museología_y_museos>
-        <Pintores_y_escultores>
-
-        </Pintores_y_escultores>
-        <Tauromaquia>
-
-        </Tauromaquia>
-    </Arte>
-</fm>
+<Categories>
+    <Category>
+        <Id></Id>
+        <Name>root</Name>
+        <SubCategories>
+            <Category>
+                <Id></Id>
+                <Name>Art</Name>
+                <SubCategories>
+                    <Category>
+                        <Id></Id>
+                        <Name>Architecture</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Spanish Architects</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>International Architects</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Decoration And Interior Design</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Feng Shui</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History of architecture</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Architectural models</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Landscaping And Garden Design</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Theory and criticism of architecture</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Town planning</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Performing Arts</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Ballroom Dances</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Popular dances</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Dance</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Scenography</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Actor Training</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Dramatic Genres</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Dramatic art history and studies</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Interpretation Techniques</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Fine and Applied Arts</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Rugs</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Fine arts</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Posters</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Ceramic And Porcelain</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Glyptic</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History and studies of Applied Arts</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History and studies of Fine Arts</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Jewelry</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Ivory</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Metal And Artistic Locksmith</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Furniture</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Fur</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Watchmaking</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Renovation</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Hangings</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Stained Glass And Glass</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Cinema</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Actors</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Directors</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Film Direction Studies</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Film scripts</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Film genres</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History of cinema</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Films</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Production and Distribution</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Film Theory And Criticism</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Drawing</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Artistic drawing</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Technical drawing</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Design and fashion</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Beauty</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Fashion designers</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Graphic and Industrial Designers</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Graphic design</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Industrial design</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History and criticism of design</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Fashion</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Ornamentation</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>History of art</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Current Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Ancient Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Contemporary Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Egyptian Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Greco-Latin Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Islamic Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Medieval Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Modern Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Prehistoric And Primitive Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Romanesque And Gothic Art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Art Collections</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History of painting and sculpture</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>History of Spanish art</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>General Art History</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Theory and art critic</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Museology And Museums</Name>
+                        <SubCategories/>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Painters And Sculptors</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Ancient Artists</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Contemporary Artists</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Medieval Artists</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Modern Artists</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Spanish cartoonists</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>International cartoonists</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Recorders</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Bullfighting</Name>
+                        <SubCategories/>
+                    </Category>
+                </SubCategories>
+            </Category>
+            <Category>
+                <Id></Id>
+                <Name>Computer Science</Name>
+                <SubCategories>
+                    <Category>
+                        <Id></Id>
+                        <Name>Communications</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Internet Directories</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Internet</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Local Area Networks</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Information systems</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>TPC/IP</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Data transmission</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Design and Desktop Publishing</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>3D Studio</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Design Applications</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Desktop publishing</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Corel Draw</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Graphics</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>QuarkXPress</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Practical Computing</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Business and Industrial Applications</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Applications</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Computer Aided Instruction</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Artificial intelligence</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Computer science introduction</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Computer Mathematics</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Computer Concepts and Elements</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Robotics</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Computer security</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Multimedia</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Adobe</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Animation</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Freehand</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Music</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Other apps</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>PhotoShop</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Power Point</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Virtual reality</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Videogames and leisure</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Office automation</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Excel</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Spreadsheets</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Lotus</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Office</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Office automation</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Works</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Programming And Languages</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Access</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Databases</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Delphi, Java, HTML, VRML</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Assembler, Perl, VisualBasic</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>FileMaker</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Oracle</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Other languages</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Object-oriented programming</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                    <Category>
+                        <Id></Id>
+                        <Name>Operating systems</Name>
+                        <SubCategories>
+                            <Category>
+                                <Id></Id>
+                                <Name>Tools</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Latex</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Linux</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Macintosh</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Other Operating Systems</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Text processors</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Unix</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Windows</Name>
+                                <SubCategories/>
+                            </Category>
+                            <Category>
+                                <Id></Id>
+                                <Name>Word</Name>
+                                <SubCategories/>
+                            </Category>
+                        </SubCategories>
+                    </Category>
+                </SubCategories>
+            </Category>
+        </SubCategories>
+    </Category>
+</Categories>
