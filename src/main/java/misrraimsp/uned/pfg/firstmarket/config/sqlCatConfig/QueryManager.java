@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlConfig;
+package misrraimsp.uned.pfg.firstmarket.config.sqlCatConfig;
 
 public class QueryManager {
 
@@ -11,16 +11,16 @@ public class QueryManager {
         this.reset();
     }
 
-    public void addCategoryQuery(String id, String name, String parent_id) {
-        sql += categoryStaticPart + "(" + id + ",'" + name + "'," + parent_id + ")";
+    public void addInsertCategoryQuery(String id, String name, String parent_id) {
+        sql += categoryStaticPart + "(" + id + ",'" + name + "'," + parent_id + ")" + ";";
     }
 
     public void addNewLine() {
-        sql += "\\n";
+        sql += "\n";
     }
 
-    public void addCatpathQuery(String id, String size, String ancestor_id, String descendant_id) {
-        sql += catpathStaticPart + "(" + id + "," + size + "," + ancestor_id + "," + descendant_id + ")";
+    public void addInsertCatpathQuery(String id, String size, String ancestor_id, String descendant_id) {
+        sql += catpathStaticPart + "(" + id + "," + size + "," + ancestor_id + "," + descendant_id + ")" + ";";
     }
 
     public String getSql(){

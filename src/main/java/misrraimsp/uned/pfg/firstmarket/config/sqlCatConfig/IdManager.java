@@ -1,6 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlConfig;
+package misrraimsp.uned.pfg.firstmarket.config.sqlCatConfig;
 
 public class IdManager {
+
     private int id;
 
     public IdManager(){
@@ -16,7 +17,7 @@ public class IdManager {
     }
 
     public void reset(){
-        id = 0;
+        id = 1;
     }
 }
 
