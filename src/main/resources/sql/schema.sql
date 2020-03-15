@@ -18,7 +18,7 @@ drop table if exists catpath;
 drop table if exists category;
 
 drop sequence if exists hibernate_sequence;
-create sequence hibernate_sequence start with 565 increment by 1;
+create sequence hibernate_sequence start with 1196 increment by 1;
 
 create table author (id bigint not null, first_name varchar(255), last_name varchar(255), primary key (id));
 create table books_authors (book_id bigint not null, author_id bigint not null);

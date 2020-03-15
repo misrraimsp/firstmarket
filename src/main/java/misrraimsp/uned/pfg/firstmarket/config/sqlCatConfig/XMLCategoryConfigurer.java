@@ -25,13 +25,19 @@ public class XMLCategoryConfigurer {
         configure();
     }
 
+    /**
+     * Este método establece el workflow para producir las queries necesarias
+     * que insertan en la base de datos las categorias y los catpath
+     * @throws JDOMException
+     * @throws IOException
+     */
     private static void configure() throws JDOMException, IOException {
 
         Document document = parse(XMLCategoriesPath);
+        Element rootCategory = document.getRootElement().getChild("Category");
         IdManager idManager = new IdManager();
         LevelManager levelManager = new LevelManager();
         QueryManager queryManager = new QueryManager();
-        Element rootCategory = document.getRootElement().getChild("Category");
 
         completeXML(rootCategory, idManager, levelManager);
         buildCategorySQL(rootCategory, queryManager);
@@ -44,11 +50,24 @@ public class XMLCategoryConfigurer {
         outputSQL(queryManager.getSql(), BuiltQueriesPath);
     }
 
+    /**
+     * @param fileName
+     * @return the JDOM parsed Document
+     * @throws JDOMException
+     * @throws IOException
+     */
     private static Document parse(String fileName) throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();//Get JDOM document from SAX Parser
         return saxBuilder.build(new File(fileName));
     }
 
+    /**
+     * Este método recorre el JDOM Document y establece el elemento 'Id' y el atributo 'Level'
+     * de todos los elementos 'Category'
+     * @param element
+     * @param idManager
+     * @param levelManager
+     */
     private static void completeXML(Element element, IdManager idManager, LevelManager levelManager){
         element.getChild("Id").setText(String.valueOf(idManager.getId()));
         element.setAttribute("level", String.valueOf(levelManager.getLevel()));
@@ -60,6 +79,11 @@ public class XMLCategoryConfigurer {
         levelManager.decrement();
     }
 
+    /**
+     * Este método genera las queries necesarias para insertar las categorias
+     * @param element
+     * @param queryManager
+     */
     private static void buildCategorySQL(Element element, QueryManager queryManager){
         String id = element.getChild("Id").getText();
         if (id.equals("1")){
@@ -77,6 +101,12 @@ public class XMLCategoryConfigurer {
         }
     }
 
+    /**
+     * Este método genera las queries necesarias para insertar los catpaths
+     * @param element
+     * @param queryManager
+     * @param idManager
+     */
     private static void buildCatpathSQL(Element element, QueryManager queryManager, IdManager idManager) {
         String id = element.getChild("Id").getText();
         queryManager.addInsertCatpathQuery(String.valueOf(idManager.getId()),"0",id,id);
@@ -98,6 +128,10 @@ public class XMLCategoryConfigurer {
         }
     }
 
+    /**
+     * @param element
+     * @return all 'Category' elements under input parameter element
+     */
     private static List<Element> getDescendants(Element element) {
         List<Element> descendants = new ArrayList<>();
         for (Content content : element.getDescendants()){
@@ -111,12 +145,24 @@ public class XMLCategoryConfigurer {
         return descendants;
     }
 
+    /**
+     * Este método escribe el JDOM Document en un fichero
+     * @param document
+     * @param fileName
+     * @throws IOException
+     */
     private static void outputXML(Document document, String fileName) throws IOException {
         XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
         xmlOutputter.output(document, new FileOutputStream(fileName));
         //xmlOutputter.output(document, System.out);
     }
 
+    /**
+     * Este método escribe el input parameter sql en un fichero
+     * @param sql
+     * @param fileName
+     * @throws IOException
+     */
     private static void outputSQL(String sql, String fileName) throws IOException {
         Files.write(Paths.get(fileName), sql.getBytes());
         //System.out.println(sql);
