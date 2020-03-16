@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlCatConfig;
+package misrraimsp.uned.pfg.firstmarket.config.sql;
 
 import org.jdom2.Content;
 import org.jdom2.Document;
@@ -19,7 +19,7 @@ import java.util.List;
 public class XMLCategoryConfigurer {
 
     private static final String XMLCategoriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/categories";
-    private static final String BuiltQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtQueries.txt";
+    private static final String BuiltCatQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtCatQueries.txt";
 
     public static void main(String[] args) throws JDOMException, IOException {
         configure();
@@ -35,19 +35,19 @@ public class XMLCategoryConfigurer {
 
         Document document = parse(XMLCategoriesPath);
         Element rootCategory = document.getRootElement().getChild("Category");
-        IdManager idManager = new IdManager();
-        LevelManager levelManager = new LevelManager();
-        QueryManager queryManager = new QueryManager();
+        IdSequenceHolder idSequenceHolder = new IdSequenceHolder();
+        CategoryLevelHolder categoryLevelHolder = new CategoryLevelHolder();
+        QueryHolder queryHolder = new QueryHolder();
 
-        completeXML(rootCategory, idManager, levelManager);
-        buildCategorySQL(rootCategory, queryManager);
-        queryManager.addNewLine();
-        queryManager.addNewLine();
-        idManager.reset();
-        buildCatpathSQL(rootCategory, queryManager, idManager);
+        completeXML(rootCategory, idSequenceHolder, categoryLevelHolder);
+        buildCategorySQL(rootCategory, queryHolder);
+        queryHolder.addNewLine();
+        queryHolder.addNewLine();
+        idSequenceHolder.reset();
+        buildCatpathSQL(rootCategory, queryHolder, idSequenceHolder);
 
         outputXML(document, XMLCategoriesPath);
-        outputSQL(queryManager.getSql(), BuiltQueriesPath);
+        outputSQL(queryHolder.getSql(), BuiltCatQueriesPath);
     }
 
     /**
@@ -65,66 +65,66 @@ public class XMLCategoryConfigurer {
      * Este método recorre el JDOM Document y establece el elemento 'Id' y el atributo 'Level'
      * de todos los elementos 'Category'
      * @param element
-     * @param idManager
-     * @param levelManager
+     * @param idSequenceHolder
+     * @param categoryLevelHolder
      */
-    private static void completeXML(Element element, IdManager idManager, LevelManager levelManager){
-        element.getChild("Id").setText(String.valueOf(idManager.getId()));
-        element.setAttribute("level", String.valueOf(levelManager.getLevel()));
-        idManager.increment();
-        levelManager.increment();
+    private static void completeXML(Element element, IdSequenceHolder idSequenceHolder, CategoryLevelHolder categoryLevelHolder){
+        element.getChild("Id").setText(String.valueOf(idSequenceHolder.getId()));
+        element.setAttribute("level", String.valueOf(categoryLevelHolder.getLevel()));
+        idSequenceHolder.increment();
+        categoryLevelHolder.increment();
         for (Element child : element.getChild("SubCategories").getChildren()){
-            completeXML(child, idManager, levelManager);
+            completeXML(child, idSequenceHolder, categoryLevelHolder);
         }
-        levelManager.decrement();
+        categoryLevelHolder.decrement();
     }
 
     /**
      * Este método genera las queries necesarias para insertar las categorias
      * @param element
-     * @param queryManager
+     * @param queryHolder
      */
-    private static void buildCategorySQL(Element element, QueryManager queryManager){
+    private static void buildCategorySQL(Element element, QueryHolder queryHolder){
         String id = element.getChild("Id").getText();
         if (id.equals("1")){
             //self-parenthood
-            queryManager.addInsertCategoryQuery(id, element.getChild("Name").getText(), id);
+            queryHolder.addInsertCategoryQuery(id, element.getChild("Name").getText(), id);
         } else {
-            queryManager.addInsertCategoryQuery(
+            queryHolder.addInsertCategoryQuery(
                     id,
                     element.getChild("Name").getText(),
                     element.getParentElement().getParentElement().getChild("Id").getText());
         }
-        queryManager.addNewLine();
+        queryHolder.addNewLine();
         for (Element child : element.getChild("SubCategories").getChildren()) {
-            buildCategorySQL(child,queryManager);
+            buildCategorySQL(child, queryHolder);
         }
     }
 
     /**
      * Este método genera las queries necesarias para insertar los catpaths
      * @param element
-     * @param queryManager
-     * @param idManager
+     * @param queryHolder
+     * @param idSequenceHolder
      */
-    private static void buildCatpathSQL(Element element, QueryManager queryManager, IdManager idManager) {
+    private static void buildCatpathSQL(Element element, QueryHolder queryHolder, IdSequenceHolder idSequenceHolder) {
         String id = element.getChild("Id").getText();
-        queryManager.addInsertCatpathQuery(String.valueOf(idManager.getId()),"0",id,id);
-        queryManager.addNewLine();
-        idManager.increment();
+        queryHolder.addInsertCatpathQuery(String.valueOf(idSequenceHolder.getId()),"0",id,id);
+        queryHolder.addNewLine();
+        idSequenceHolder.increment();
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
-            queryManager.addInsertCatpathQuery(
-                    String.valueOf(idManager.getId()),
+            queryHolder.addInsertCatpathQuery(
+                    String.valueOf(idSequenceHolder.getId()),
                     String.valueOf(descendantLevel - elementLevel),
                     id,
                     descendant.getChild("Id").getText());
-            queryManager.addNewLine();
-            idManager.increment();
+            queryHolder.addNewLine();
+            idSequenceHolder.increment();
         }
         for (Element child : element.getChild("SubCategories").getChildren()){
-            buildCatpathSQL(child,queryManager,idManager);
+            buildCatpathSQL(child, queryHolder, idSequenceHolder);
         }
     }
 

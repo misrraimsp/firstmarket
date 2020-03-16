@@ -1,10 +1,10 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlCatConfig;
+package misrraimsp.uned.pfg.firstmarket.config.sql;
 
-public class LevelManager {
+public class CategoryLevelHolder {
 
     private int level;
 
-    public LevelManager(){
+    public CategoryLevelHolder(){
         this.reset();
     }
 
