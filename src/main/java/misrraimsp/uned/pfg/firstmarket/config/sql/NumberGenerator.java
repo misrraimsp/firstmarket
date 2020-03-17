@@ -5,7 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class RandomNumberGenerator extends Random implements Constants {
+public class NumberGenerator extends Random implements Constants {
 
     private static final int MIN_LANGUAGE = 0;
     private static final int MAX_LANGUAGE = 4;
@@ -20,6 +20,9 @@ public class RandomNumberGenerator extends Random implements Constants {
     private static final int MAX_CATEGORY_ID = 310;
     private static final int MAX_IMAGE_ID = 3;
     private static final int MAX_PUBLISHER_ID = 128;
+    private static final int MAX_AUTHOR_ID = 512;
+
+    int MAX_NUM_AUTHORS = 3;//overwritting 'Constants' interface value
 
     public String getRandomLanguage(){
         return String.valueOf(getDiscreteRandomNumber(MIN_LANGUAGE, MAX_LANGUAGE));
@@ -54,4 +57,11 @@ public class RandomNumberGenerator extends Random implements Constants {
         return String.valueOf(getDiscreteRandomNumber(MIN_ID, MAX_PUBLISHER_ID));
     }
 
+    public int getRandomNumOfAuthors() {
+        return getDiscreteRandomNumber(MIN_NUM_AUTHORS, MAX_NUM_AUTHORS);
+    }
+
+    public String getRandomAuthorId() {
+        return String.valueOf(getDiscreteRandomNumber(MIN_ID, MAX_AUTHOR_ID));
+    }
 }

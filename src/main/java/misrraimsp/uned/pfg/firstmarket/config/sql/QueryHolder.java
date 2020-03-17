@@ -5,6 +5,7 @@ public class QueryHolder {
     private static final String categoryStaticPart = "INSERT INTO category (id,name,parent_id) VALUES ";
     private static final String catpathStaticPart = "INSERT INTO catpath (id,size,ancestor_id,descendant_id) VALUES ";
     private static final String bookStaticPart = "INSERT INTO book (id,description,isbn,language,num_pages,price,stock,title,year,category_id,image_id,publisher_id) VALUES ";
+    private static final String booksAuthorsStaticPart = "INSERT INTO books_authors (book_id,author_id) VALUES ";
 
     private static final String description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
             "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, " +
@@ -43,6 +44,10 @@ public class QueryHolder {
         sql += num_pages + "," + price + "," + stock + ",'" + title + "',";
         sql += year + "," + category_id + "," + image_id + "," + publisher_id;
         sql += ")" + ";";
+    }
+
+    public void addInsertBooksAuthorsQuery(String book_id, String author_id) {
+        sql += booksAuthorsStaticPart + "(" + book_id + "," + author_id + ")" + ";";
     }
 
     public void addNewLine() {

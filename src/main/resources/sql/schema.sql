@@ -18,13 +18,13 @@ drop table if exists catpath;
 drop table if exists category;
 
 drop sequence if exists hibernate_sequence;
-create sequence hibernate_sequence start with 1196 increment by 1;
+create sequence hibernate_sequence start with 10001 increment by 1;
 
 create table author (id bigint not null, first_name varchar(255), last_name varchar(255), primary key (id));
 create table books_authors (book_id bigint not null, author_id bigint not null);
 create table profile (id bigint not null, first_name varchar(255), last_name varchar(255), primary key (id));
 create table publisher (id bigint not null, name varchar(255), primary key (id));
-create table book (id bigint not null, description varchar(255), isbn varchar(255), language integer, num_pages integer not null check (num_pages>=1 AND num_pages<=5000), price decimal(11,2), stock integer not null check (stock>=0 AND stock<=100000000), title varchar(255), year integer not null, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
+create table book (id bigint not null, description varchar(510), isbn varchar(255), language integer, num_pages integer not null check (num_pages>=1 AND num_pages<=5000), price decimal(11,2), stock integer not null check (stock>=0 AND stock<=100000000), title varchar(255), year integer not null, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
 create table cart (id bigint not null, last_modified timestamp, primary key (id));
 create table cart_items (cart_id bigint not null, items_id bigint not null);
 create table category (id bigint not null, name varchar(255), parent_id bigint, primary key (id));

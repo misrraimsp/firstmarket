@@ -7,32 +7,44 @@ import java.nio.file.Paths;
 public class BookConfigurer {
 
     private static final String BuiltBookQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtBookQueries.txt";
-    private static final int numBooks = 1000;
+    private static final int numBooks = 10000; //10k
 
     public static void main(String[] args) throws IOException {
         configure();
     }
-//(id,description,isbn,language,num_pages,price,stock,title,year,category_id,image_id,publisher_id)
+
     private static void configure() throws IOException {
-        RandomNumberGenerator randomNumberGenerator = new RandomNumberGenerator();
-        IsbnHolder isbnHolder = new IsbnHolder();
+
+        NumberGenerator numberGenerator = new NumberGenerator();
+        IsbnHolder isbnHolder = new IsbnHolder(numBooks);
         QueryHolder queryHolder = new QueryHolder();
 
         for (int i = 1; i <= numBooks; i++){
             queryHolder.addInsertBookQuery(
                     String.valueOf(i),
-                    isbnHolder.getNextIsbn(),
-                    randomNumberGenerator.getRandomLanguage(),
-                    randomNumberGenerator.getRandomNumPages(),
-                    randomNumberGenerator.getRandomPrice(),
-                    randomNumberGenerator.getRandomStock(),
-                    "title" + i,
-                    randomNumberGenerator.getRandomYear(),
-                    randomNumberGenerator.getRandomCategoryId(),
-                    randomNumberGenerator.getRandomImageId(),
-                    randomNumberGenerator.getRandomPublisherId()
+                    isbnHolder.getIsbn(),
+                    numberGenerator.getRandomLanguage(),
+                    numberGenerator.getRandomNumPages(),
+                    numberGenerator.getRandomPrice(),
+                    numberGenerator.getRandomStock(),
+                    "title-" + i,
+                    numberGenerator.getRandomYear(),
+                    numberGenerator.getRandomCategoryId(),
+                    numberGenerator.getRandomImageId(),
+                    numberGenerator.getRandomPublisherId()
             );
             queryHolder.addNewLine();
+        }
+        queryHolder.addNewLine();
+        queryHolder.addNewLine();
+        for (int i = 1; i <= numBooks; i++){
+            for (int j = 1; j <= numberGenerator.getRandomNumOfAuthors(); j++) {
+                queryHolder.addInsertBooksAuthorsQuery(
+                        String.valueOf(i),
+                        numberGenerator.getRandomAuthorId()
+                );
+                queryHolder.addNewLine();
+            }
         }
 
         outputSQL(queryHolder.getSql(), BuiltBookQueriesPath);

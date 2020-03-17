@@ -46,13 +46,13 @@ public class IsbnHolder extends Random {
                         isbn13Prefix + candidate + this.computeChecksum13(this.getIntegers(isbn13Prefix + candidate)));
             }
         }
-        return (List<String>) map.values();
+        return new ArrayList<>(map.values());
     }
 
     /**
-     *
+     * Este método asume una lista de 12 enteros como parámetro
      * @param numbers
-     * @return
+     * @return isbn13 checksum number, as a string
      */
     private String computeChecksum13(List<Integer> numbers) {
         int sum = 0;

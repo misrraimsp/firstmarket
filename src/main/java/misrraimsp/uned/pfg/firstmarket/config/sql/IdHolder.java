@@ -1,10 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.config.sql;
 
-public class IdSequenceHolder {
+public class IdHolder {
 
     private int id;
 
-    public IdSequenceHolder(){
+    public IdHolder(){
         this.reset();
     }
 

@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XMLCategoryConfigurer {
+public class CategoryConfigurer {
 
     private static final String XMLCategoriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/categories";
     private static final String BuiltCatQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtCatQueries.txt";
@@ -35,16 +35,16 @@ public class XMLCategoryConfigurer {
 
         Document document = parse(XMLCategoriesPath);
         Element rootCategory = document.getRootElement().getChild("Category");
-        IdSequenceHolder idSequenceHolder = new IdSequenceHolder();
+        IdHolder idHolder = new IdHolder();
         CategoryLevelHolder categoryLevelHolder = new CategoryLevelHolder();
         QueryHolder queryHolder = new QueryHolder();
 
-        completeXML(rootCategory, idSequenceHolder, categoryLevelHolder);
+        completeXML(rootCategory, idHolder, categoryLevelHolder);
         buildCategorySQL(rootCategory, queryHolder);
         queryHolder.addNewLine();
         queryHolder.addNewLine();
-        idSequenceHolder.reset();
-        buildCatpathSQL(rootCategory, queryHolder, idSequenceHolder);
+        idHolder.reset();
+        buildCatpathSQL(rootCategory, queryHolder, idHolder);
 
         outputXML(document, XMLCategoriesPath);
         outputSQL(queryHolder.getSql(), BuiltCatQueriesPath);
@@ -65,16 +65,16 @@ public class XMLCategoryConfigurer {
      * Este método recorre el JDOM Document y establece el elemento 'Id' y el atributo 'Level'
      * de todos los elementos 'Category'
      * @param element
-     * @param idSequenceHolder
+     * @param idHolder
      * @param categoryLevelHolder
      */
-    private static void completeXML(Element element, IdSequenceHolder idSequenceHolder, CategoryLevelHolder categoryLevelHolder){
-        element.getChild("Id").setText(String.valueOf(idSequenceHolder.getId()));
+    private static void completeXML(Element element, IdHolder idHolder, CategoryLevelHolder categoryLevelHolder){
+        element.getChild("Id").setText(String.valueOf(idHolder.getId()));
         element.setAttribute("level", String.valueOf(categoryLevelHolder.getLevel()));
-        idSequenceHolder.increment();
+        idHolder.increment();
         categoryLevelHolder.increment();
         for (Element child : element.getChild("SubCategories").getChildren()){
-            completeXML(child, idSequenceHolder, categoryLevelHolder);
+            completeXML(child, idHolder, categoryLevelHolder);
         }
         categoryLevelHolder.decrement();
     }
@@ -105,26 +105,26 @@ public class XMLCategoryConfigurer {
      * Este método genera las queries necesarias para insertar los catpaths
      * @param element
      * @param queryHolder
-     * @param idSequenceHolder
+     * @param idHolder
      */
-    private static void buildCatpathSQL(Element element, QueryHolder queryHolder, IdSequenceHolder idSequenceHolder) {
+    private static void buildCatpathSQL(Element element, QueryHolder queryHolder, IdHolder idHolder) {
         String id = element.getChild("Id").getText();
-        queryHolder.addInsertCatpathQuery(String.valueOf(idSequenceHolder.getId()),"0",id,id);
+        queryHolder.addInsertCatpathQuery(String.valueOf(idHolder.getId()),"0",id,id);
         queryHolder.addNewLine();
-        idSequenceHolder.increment();
+        idHolder.increment();
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
             queryHolder.addInsertCatpathQuery(
-                    String.valueOf(idSequenceHolder.getId()),
+                    String.valueOf(idHolder.getId()),
                     String.valueOf(descendantLevel - elementLevel),
                     id,
                     descendant.getChild("Id").getText());
             queryHolder.addNewLine();
-            idSequenceHolder.increment();
+            idHolder.increment();
         }
         for (Element child : element.getChild("SubCategories").getChildren()){
-            buildCatpathSQL(child, queryHolder, idSequenceHolder);
+            buildCatpathSQL(child, queryHolder, idHolder);
         }
     }
 

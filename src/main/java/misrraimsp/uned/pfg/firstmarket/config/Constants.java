@@ -27,6 +27,7 @@ public interface Constants {
 
     String IMAGE_NAME = "^[ \\w-._]{1,30}$";
 
+    int MIN_NUM_AUTHORS = 1;
     int MAX_NUM_AUTHORS = 5;
 
     int MIN_NUM_PAGES = 1;
