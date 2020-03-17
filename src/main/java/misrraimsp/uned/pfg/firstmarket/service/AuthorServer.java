@@ -35,7 +35,15 @@ public class AuthorServer {
         return savedAuthors;
     }
 
+    /*
     public List<Author> findAll() {
         return (List<Author>) authorRepository.findAll();
     }
+     */
+
+    public List<Author> findTopAuthorsByBookIds(List<Long> bookIds, int numTopAuthors) {
+        List<Long> authorIds = authorRepository.findTopIdsByBookIds(bookIds, numTopAuthors);
+        return authorRepository.findAuthorsByIds(authorIds);
+    }
+
 }

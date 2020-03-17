@@ -1,6 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
@@ -15,15 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class BookServer implements Constants {
+public class BookServer {
 
     private BookRepository bookRepository;
     private BookConverter bookConverter;
-    //private CatServer catServer;
     private ImageServer imageServer;
     private PublisherServer publisherServer;
     private AuthorServer authorServer;
@@ -31,14 +30,12 @@ public class BookServer implements Constants {
     @Autowired
     public BookServer(BookRepository bookRepository,
                       BookConverter bookConverter,
-                      //CatServer catServer,
                       ImageServer imageServer,
                       PublisherServer publisherServer,
                       AuthorServer authorServer) {
 
         this.bookRepository = bookRepository;
         this.bookConverter = bookConverter;
-        //this.catServer = catServer;
         this.imageServer = imageServer;
         this.publisherServer = publisherServer;
         this.authorServer = authorServer;
@@ -111,9 +108,11 @@ public class BookServer implements Constants {
         return bookConverter.convertBookToFormBook(book);
     }
 
-
-
-
+    public List<Author> findTopAuthorsInBookSet(List<Book> books, int numTopAuthors) {
+        List<Long> bookIds = new ArrayList<>();
+        books.forEach(book -> bookIds.add(book.getId()));
+        return authorServer.findTopAuthorsByBookIds(bookIds, numTopAuthors);
+    }
 
     //TODO
 
@@ -122,15 +121,11 @@ public class BookServer implements Constants {
         return books;
     }
 
-    public List<Author> findTopAuthors(List<Book> books) {
-        return authorServer.findAll();
-    }
-
-    public List<Publisher> findTopPublishers(List<Book> books) {
+    public List<Publisher> findTopPublishersInBookSet(List<Book> books) {
         return publisherServer.findAll();
     }
 
-    public List<Languages> findTopLanguages(List<Book> books) {
+    public List<Languages> findTopLanguagesInBookSet(List<Book> books) {
         return Arrays.asList(Languages.values());
     }
 }

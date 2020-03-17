@@ -36,6 +36,14 @@ public interface Constants {
     int MAX_INTEGER_PRICE = 9;  //maximum number of integral digits accepted for price numbers
     int MAX_FRACTION_PRICE = 2; //maximum number of fractional digits accepted for price numbers
     String PRICE = "^[\\d]{0," + MAX_INTEGER_PRICE + "}([.][\\d]{1," + MAX_FRACTION_PRICE + "})*$";
+    int PRICE_0 = 0;
+    int PRICE_1 = 5;
+    int PRICE_2 = 10;
+    int PRICE_3 = 15;
+    int PRICE_4 = 40;
+
+    int NUM_TOP_AUTHORS = 5;
+
 
     int MIN_NUM_STOCK = 0;
     int MAX_NUM_STOCK = 100000000;
