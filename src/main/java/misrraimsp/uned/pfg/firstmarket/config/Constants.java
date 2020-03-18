@@ -44,6 +44,7 @@ public interface Constants {
 
     int NUM_TOP_AUTHORS = 5;
     int NUM_TOP_PUBLISHERS = 5;
+    int NUM_TOP_LANGUAGES = 5;
 
 
     int MIN_NUM_STOCK = 0;

@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -120,15 +119,16 @@ public class BookServer {
         return publisherServer.findTopPublishersByBookIds(bookIds, numTopPublishers);
     }
 
+    public List<Languages> findTopLanguagesInBookSet(List<Book> books, int numTopLanguages) {
+        List<Long> bookIds = new ArrayList<>();
+        books.forEach(book -> bookIds.add(book.getId()));
+        return bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
+    }
+
     //TODO
 
     public List<Book> findWithFilter(Filter filter) {
         List<Book> books = bookRepository.findByAncestorCategory(filter.getCategory().getId());
         return books;
-    }
-
-
-    public List<Languages> findTopLanguagesInBookSet(List<Book> books) {
-        return Arrays.asList(Languages.values());
     }
 }

@@ -7,7 +7,6 @@ import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import misrraimsp.uned.pfg.firstmarket.model.search.Filter;
-import misrraimsp.uned.pfg.firstmarket.service.AuthorServer;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.FilterServer;
@@ -25,18 +24,15 @@ public class SearchController implements Constants {
     private FilterServer filterServer;
     private CatServer catServer;
     private BookServer bookServer;
-    private AuthorServer authorServer;
 
     @Autowired
     public SearchController(FilterServer filterServer,
                             CatServer catServer,
-                            BookServer bookServer,
-                            AuthorServer authorServer) {
+                            BookServer bookServer) {
 
         this.filterServer = filterServer;
         this.catServer = catServer;
         this.bookServer = bookServer;
-        this.authorServer = authorServer;
     }
 
     @GetMapping("/books/search/{categoryId}")
@@ -49,7 +45,7 @@ public class SearchController implements Constants {
 
         List<Author> authors = bookServer.findTopAuthorsInBookSet(books, NUM_TOP_AUTHORS);
         List<Publisher> publishers = bookServer.findTopPublishersInBookSet(books, NUM_TOP_PUBLISHERS);
-        List<Languages> languages = bookServer.findTopLanguagesInBookSet(books);
+        List<Languages> languages = bookServer.findTopLanguagesInBookSet(books, NUM_TOP_LANGUAGES);
 
         List<Category> childrenCategories = catServer.getChildren(category);
 
