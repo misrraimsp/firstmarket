@@ -32,20 +32,27 @@ public class CategoryConfigurer {
      * @throws IOException
      */
     private static void configure() throws JDOMException, IOException {
-
+        //initialize
         Document document = parse(XMLCategoriesPath);
         Element rootCategory = document.getRootElement().getChild("Category");
         IdHolder idHolder = new IdHolder();
         CategoryLevelHolder categoryLevelHolder = new CategoryLevelHolder();
         QueryHolder queryHolder = new QueryHolder();
-
+        //set categories id ad level
         completeXML(rootCategory, idHolder, categoryLevelHolder);
-        buildCategorySQL(rootCategory, queryHolder);
+        //build insert category query
+        queryHolder.openInsertCategoryQuery();
+        addCategoryValues(rootCategory, queryHolder);
+        queryHolder.closeInsertQuery();
+        //new lines and reset
         queryHolder.addNewLine();
         queryHolder.addNewLine();
         idHolder.reset();
-        buildCatpathSQL(rootCategory, queryHolder, idHolder);
-
+        //build insert catpath query
+        queryHolder.openInsertCatpathQuery();
+        addCatpathValues(rootCategory, queryHolder, idHolder);
+        queryHolder.closeInsertQuery();
+        //output
         outputXML(document, XMLCategoriesPath);
         outputSQL(queryHolder.getSql(), BuiltCatQueriesPath);
     }
@@ -84,20 +91,18 @@ public class CategoryConfigurer {
      * @param element
      * @param queryHolder
      */
-    private static void buildCategorySQL(Element element, QueryHolder queryHolder){
+    private static void addCategoryValues(Element element, QueryHolder queryHolder){
         String id = element.getChild("Id").getText();
         if (id.equals("1")){
-            //self-parenthood
-            queryHolder.addInsertCategoryQuery(id, element.getChild("Name").getText(), id);
+            queryHolder.addCategoryValues(id, element.getChild("Name").getText(), id); //self-parenthood
         } else {
-            queryHolder.addInsertCategoryQuery(
+            queryHolder.addCategoryValues(
                     id,
                     element.getChild("Name").getText(),
                     element.getParentElement().getParentElement().getChild("Id").getText());
         }
-        queryHolder.addNewLine();
         for (Element child : element.getChild("SubCategories").getChildren()) {
-            buildCategorySQL(child, queryHolder);
+            addCategoryValues(child, queryHolder);
         }
     }
 
@@ -107,24 +112,22 @@ public class CategoryConfigurer {
      * @param queryHolder
      * @param idHolder
      */
-    private static void buildCatpathSQL(Element element, QueryHolder queryHolder, IdHolder idHolder) {
+    private static void addCatpathValues(Element element, QueryHolder queryHolder, IdHolder idHolder) {
         String id = element.getChild("Id").getText();
-        queryHolder.addInsertCatpathQuery(String.valueOf(idHolder.getId()),"0",id,id);
-        queryHolder.addNewLine();
+        queryHolder.addCatpathValues(String.valueOf(idHolder.getId()),"0",id,id);
         idHolder.increment();
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
-            queryHolder.addInsertCatpathQuery(
+            queryHolder.addCatpathValues(
                     String.valueOf(idHolder.getId()),
                     String.valueOf(descendantLevel - elementLevel),
                     id,
                     descendant.getChild("Id").getText());
-            queryHolder.addNewLine();
             idHolder.increment();
         }
         for (Element child : element.getChild("SubCategories").getChildren()){
-            buildCatpathSQL(child, queryHolder, idHolder);
+            addCatpathValues(child, queryHolder, idHolder);
         }
     }
 

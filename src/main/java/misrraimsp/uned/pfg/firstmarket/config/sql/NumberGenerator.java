@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 public class NumberGenerator extends Random implements Constants {
 
     private static final int MIN_LANGUAGE = 0;
-    private static final int MAX_LANGUAGE = 4;
+    private static final int MAX_LANGUAGE = 27;
 
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2020;

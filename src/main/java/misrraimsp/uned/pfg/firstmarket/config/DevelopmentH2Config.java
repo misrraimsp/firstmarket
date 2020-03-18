@@ -248,7 +248,7 @@ public class DevelopmentH2Config {
             formBook1.setAuthorFirstName4("");
             formBook1.setAuthorLastName4("");
             formBook1.setPublisherName("Anaya");
-            formBook1.setLanguage(Languages.ESPAÑOL);
+            formBook1.setLanguage(Languages.Spanish);
             formBook1.setNumPages(123);
             formBook1.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
@@ -278,7 +278,7 @@ public class DevelopmentH2Config {
             formBook2.setAuthorFirstName4("");
             formBook2.setAuthorLastName4("");
             formBook2.setPublisherName("Manning");
-            formBook2.setLanguage(Languages.ENGLISH);
+            formBook2.setLanguage(Languages.English);
             formBook2.setNumPages(100);
             formBook2.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
@@ -308,7 +308,7 @@ public class DevelopmentH2Config {
             formBook3.setAuthorFirstName4("");
             formBook3.setAuthorLastName4("");
             formBook3.setPublisherName("Cabildo de Gran Canaria");
-            formBook3.setLanguage(Languages.DEUTSCH);
+            formBook3.setLanguage(Languages.German);
             formBook3.setNumPages(422);
             formBook3.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
@@ -337,7 +337,7 @@ public class DevelopmentH2Config {
             formBook4.setAuthorFirstName4("Antonio");
             formBook4.setAuthorLastName4("Escohotado");
             formBook4.setPublisherName("Planeta");
-            formBook4.setLanguage(Languages.FRANÇAISE);
+            formBook4.setLanguage(Languages.French);
             formBook4.setNumPages(111);
             formBook4.setDescription("Breve comentario sobre los principales " +
                     "temas relacionados con la conectividad de computadores");
@@ -367,7 +367,7 @@ public class DevelopmentH2Config {
             formBook5.setAuthorFirstName4("");
             formBook5.setAuthorLastName4("");
             formBook5.setPublisherName("Cambridge");
-            formBook5.setLanguage(Languages.PORTUGUÊS);
+            formBook5.setLanguage(Languages.Portuguese);
             formBook5.setNumPages(128);
             formBook5.setDescription("");
             formBook5.setPrice("19.99");
@@ -396,7 +396,7 @@ public class DevelopmentH2Config {
             formBook6.setAuthorFirstName4("");
             formBook6.setAuthorLastName4("");
             formBook6.setPublisherName("Uned");
-            formBook6.setLanguage(Languages.ESPAÑOL);
+            formBook6.setLanguage(Languages.Estonian);
             formBook6.setNumPages(123);
             formBook6.setDescription("");
             formBook6.setPrice("55");
@@ -425,7 +425,7 @@ public class DevelopmentH2Config {
             formBook7.setAuthorFirstName4("");
             formBook7.setAuthorLastName4("");
             formBook7.setPublisherName("Espasa");
-            formBook7.setLanguage(Languages.ESPAÑOL);
+            formBook7.setLanguage(Languages.Czech);
             formBook7.setNumPages(599);
             formBook7.setDescription("");
             formBook7.setPrice("14.99");
@@ -454,7 +454,7 @@ public class DevelopmentH2Config {
             formBook8.setAuthorFirstName4("");
             formBook8.setAuthorLastName4("");
             formBook8.setPublisherName("Alianza");
-            formBook8.setLanguage(Languages.PORTUGUÊS);
+            formBook8.setLanguage(Languages.Polish);
             formBook8.setNumPages(344);
             formBook8.setDescription("");
             formBook8.setPrice("99.99");
@@ -483,7 +483,7 @@ public class DevelopmentH2Config {
             formBook9.setAuthorFirstName4("");
             formBook9.setAuthorLastName4("");
             formBook9.setPublisherName("Anaya");
-            formBook9.setLanguage(Languages.ESPAÑOL);
+            formBook9.setLanguage(Languages.Basque);
             formBook9.setNumPages(12);
             formBook9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
                     " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
@@ -495,152 +495,6 @@ public class DevelopmentH2Config {
             book9 = bookServer.persist(book9);
             //System.out.println(book9);
 
-            /*
-            //Books
-
-            Book book1 = new Book();
-            book1.setIsbn("3-04-013341-1");
-            book1.setTitle("Computer Basics");
-            book1.setCategory(computers);
-            book1.setImage(img1);
-            book1.setAuthors(Arrays.asList(author1));
-            book1.setPublisher(publisher1);
-            book1.setLanguage(Languages.ESPAÑOL);
-            book1.setNumPages(123);
-            book1.setDescription("Este es un libro que trata acerca de los fundamentos " +
-                    "en los que se basa las construcción de ordenadores modernos");
-            book1.setPrice(BigDecimal.valueOf(19.99));
-            book1.setStock(100);
-            book1.setYear(2020);
-            bookServer.persist(book1);
-
-            Book book2 = new Book();
-            book2.setIsbn("ISBN-13: 978-0-596-52068-7");
-            book2.setTitle("Traditional Music of Spain");
-            book2.setCategory(music);
-            book2.setImage(img2);
-            book2.setAuthors(Arrays.asList(author1, author2));
-            book2.setPublisher(publisher2);
-            book2.setLanguage(Languages.ENGLISH);
-            book2.setNumPages(100);
-            book2.setDescription("En este libro se recogen las principales " +
-                    "características de la música tradicional española");
-            book2.setPrice(BigDecimal.valueOf(59.89));
-            book2.setStock(100);
-            book2.setYear(1990);
-            bookServer.persist(book2);
-
-            Book book3 = new Book();
-            book3.setIsbn("ISBN-10 0-596-52068-9");
-            book3.setTitle("Compilers");
-            book3.setCategory(computers);
-            book3.setImage(img3);
-            book3.setAuthors(Arrays.asList(author2, author3));
-            book3.setPublisher(publisher3);
-            book3.setLanguage(Languages.DEUTSCH);
-            book3.setNumPages(422);
-            book3.setDescription("Recorrido por los principales aspectos del análisis, " +
-                    "diseño y construcción de compiladores modernos");
-            book3.setPrice(BigDecimal.valueOf(0));
-            book3.setStock(100);
-            book3.setYear(1998);
-            bookServer.persist(book3);
-
-            Book book4 = new Book();
-            book4.setIsbn("043942089X");
-            book4.setTitle("Computer Networking");
-            book4.setCategory(computers);
-            book4.setImage(img4);
-            book4.setAuthors(Arrays.asList(author4));
-            book4.setPublisher(publisher4);
-            book4.setLanguage(Languages.FRANÇAISE);
-            book4.setNumPages(111);
-            book4.setDescription("Breve comentario sobre los principales " +
-                    "temas relacionados con la conectividad de computadores");
-            book4.setPrice(BigDecimal.valueOf(0.01));
-            book4.setStock(100);
-            book4.setYear(2007);
-            bookServer.persist(book4);
-
-            Book book5 = new Book();
-            book5.setIsbn("9788417761967");
-            book5.setTitle("EL VAGON DE LAS MUJERES");
-            book5.setCategory(computers);
-            book5.setImage(img0);
-            book5.setAuthors(Arrays.asList(author1));
-            book5.setPublisher(publisher1);
-            book5.setLanguage(Languages.ESPAÑOL);
-            book5.setNumPages(128);
-            book5.setDescription("Este es un libro que trata acerca de los fundamentos " +
-                    "en los que se basa las construcción de ordenadores modernos");
-            book5.setPrice(BigDecimal.valueOf(19.99));
-            book5.setStock(100);
-            book5.setYear(2014);
-            bookServer.persist(book5);
-
-            Book book6 = new Book();
-            book6.setIsbn("ISBN-13: 9788498385472");
-            book6.setTitle("COMETAS EN EL CIELO");
-            book6.setCategory(music);
-            book6.setImage(img2);
-            book6.setAuthors(Arrays.asList(author1, author2));
-            book6.setPublisher(publisher2);
-            book6.setLanguage(Languages.ENGLISH);
-            book6.setNumPages(100);
-            book6.setDescription("En este libro se recogen las principales " +
-                    "características de la música tradicional española");
-            book6.setPrice(BigDecimal.valueOf(55));
-            book6.setStock(100);
-            book6.setYear(1987);
-            bookServer.persist(book6);
-
-            Book book7 = new Book();
-            book7.setIsbn("9788420675657");
-            book7.setTitle("LA HIJA DE LA CRIADA");
-            book7.setCategory(computers);
-            book7.setImage(img1);
-            book7.setAuthors(Arrays.asList(author2, author3));
-            book7.setPublisher(publisher3);
-            book7.setLanguage(Languages.DEUTSCH);
-            book7.setNumPages(422);
-            book7.setDescription("Recorrido por los principales aspectos del análisis, " +
-                    "diseño y construcción de compiladores modernos");
-            book7.setPrice(BigDecimal.valueOf(100.05));
-            book7.setStock(100);
-            book7.setYear(2019);
-            bookServer.persist(book7);
-
-            Book book8 = new Book();
-            book8.setIsbn("9788415532767");
-            book8.setTitle("LA ISLA DE LAS MARIPOSAS");
-            book8.setCategory(computers);
-            book8.setImage(img1);
-            book8.setAuthors(Arrays.asList(author4));
-            book8.setPublisher(publisher4);
-            book8.setLanguage(Languages.FRANÇAISE);
-            book8.setNumPages(111);
-            book8.setDescription("El mismo día en que descubre que su marido le es infiel, la joven abogada Diana recibe la noticia de que su adorada tía abuela Emmely está muy enferma. Sin pensárselo dos veces, Diana toma el primer vuelo a Inglaterra para despedirse de ella.");
-            book8.setPrice(BigDecimal.valueOf(99.99));;
-            book8.setStock(100);
-            book8.setYear(2002);
-            bookServer.persist(book8);
-
-            Book book9 = new Book();
-            book9.setIsbn("9788417708344");
-            book9.setTitle("LA HERENCIA DE AGNETA");
-            book9.setCategory(computers);
-            book9.setImage(img1);
-            book9.setAuthors(Arrays.asList(author4));
-            book9.setPublisher(publisher4);
-            book9.setLanguage(Languages.FRANÇAISE);
-            book9.setNumPages(111);
-            book9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
-            book9.setPrice(BigDecimal.valueOf(14.95));
-            book9.setStock(100);
-            book9.setYear(2020);
-            bookServer.persist(book9);
-
-             */
 
             //Items
 
