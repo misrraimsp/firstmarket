@@ -26,7 +26,14 @@ public class PublisherServer {
         return publisherRepository.findByName(publisherName);
     }
 
+    /*
     public List<Publisher> findAll() {
         return (List<Publisher>) publisherRepository.findAll();
+    }
+     */
+
+    public List<Publisher> findTopPublishersByBookIds(List<Long> bookIds, int numTopPublishers) {
+        List<Long> publisherIds = publisherRepository.findTopIdsByBookIds(bookIds, numTopPublishers);
+        return publisherRepository.findPublishersByIds(publisherIds);
     }
 }

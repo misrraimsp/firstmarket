@@ -15,11 +15,9 @@ public interface AuthorRepository extends CrudRepository<Author,Long> {
 
     @Query(
             nativeQuery = true,
-            value = "SELECT aux2.author_id FROM (" +
-                        "SELECT aux1.author_id, COUNT(*) FROM (" +
-                            "SELECT * FROM books_authors ba WHERE ba.book_id IN :bookIds" +
-                        ") AS aux1 GROUP BY author_id ORDER BY 2 DESC LIMIT :numTopAuthors" +
-                    ") AS aux2"
+            value = "SELECT aux.author_id FROM (" +
+                    "SELECT author_id, COUNT(*) FROM books_authors ba WHERE ba.book_id IN :bookIds GROUP BY author_id ORDER BY 2 DESC LIMIT :numTopAuthors" +
+                    ") AS aux"
     )
     List<Long> findTopIdsByBookIds(@Param("bookIds") List<Long> bookIds, @Param("numTopAuthors") int numTopAuthors);
 

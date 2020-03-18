@@ -43,6 +43,7 @@ public interface Constants {
     int PRICE_4 = 40;
 
     int NUM_TOP_AUTHORS = 5;
+    int NUM_TOP_PUBLISHERS = 5;
 
 
     int MIN_NUM_STOCK = 0;

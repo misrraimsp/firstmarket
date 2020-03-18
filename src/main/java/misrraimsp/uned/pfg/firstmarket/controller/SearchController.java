@@ -48,7 +48,7 @@ public class SearchController implements Constants {
         List<Book> books = bookServer.findWithFilter(filter);
 
         List<Author> authors = bookServer.findTopAuthorsInBookSet(books, NUM_TOP_AUTHORS);
-        List<Publisher> publishers = bookServer.findTopPublishersInBookSet(books);
+        List<Publisher> publishers = bookServer.findTopPublishersInBookSet(books, NUM_TOP_PUBLISHERS);
         List<Languages> languages = bookServer.findTopLanguagesInBookSet(books);
 
         List<Category> childrenCategories = catServer.getChildren(category);

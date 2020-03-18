@@ -114,6 +114,12 @@ public class BookServer {
         return authorServer.findTopAuthorsByBookIds(bookIds, numTopAuthors);
     }
 
+    public List<Publisher> findTopPublishersInBookSet(List<Book> books, int numTopPublishers) {
+        List<Long> bookIds = new ArrayList<>();
+        books.forEach(book -> bookIds.add(book.getId()));
+        return publisherServer.findTopPublishersByBookIds(bookIds, numTopPublishers);
+    }
+
     //TODO
 
     public List<Book> findWithFilter(Filter filter) {
@@ -121,9 +127,6 @@ public class BookServer {
         return books;
     }
 
-    public List<Publisher> findTopPublishersInBookSet(List<Book> books) {
-        return publisherServer.findAll();
-    }
 
     public List<Languages> findTopLanguagesInBookSet(List<Book> books) {
         return Arrays.asList(Languages.values());
