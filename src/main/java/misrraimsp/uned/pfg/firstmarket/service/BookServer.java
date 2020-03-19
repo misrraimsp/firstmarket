@@ -11,6 +11,8 @@ import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
 import misrraimsp.uned.pfg.firstmarket.model.search.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -72,6 +74,10 @@ public class BookServer {
 
     private boolean isbnExists(String isbn) {
         return bookRepository.findByIsbn(isbn) != null;
+    }
+
+    public Page<Book> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable);
     }
 
     public Iterable<Book> findAll() {

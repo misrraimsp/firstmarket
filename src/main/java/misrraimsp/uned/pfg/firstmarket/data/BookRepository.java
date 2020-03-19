@@ -2,6 +2,8 @@ package misrraimsp.uned.pfg.firstmarket.data;
 
 import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -31,4 +33,6 @@ public interface BookRepository extends CrudRepository<Book, Long> {
                     ") AS aux"
     )
     List<Languages> findTopLanguagesByBookIds(@Param("bookIds") List<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
+
+    Page<Book> findAll(Pageable pageable);
 }

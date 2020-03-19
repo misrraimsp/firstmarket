@@ -1,17 +1,22 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class HomeController {
+public class HomeController implements Constants {
 
     private BookServer bookServer;
     private CatServer catServer;
@@ -25,13 +30,21 @@ public class HomeController {
     }
 
     @GetMapping({"/", "/home"})
-    public String showHome(Model model, @AuthenticationPrincipal User authUser){
+    public String showHome(@RequestParam(defaultValue = "166") String pageNo,
+                           Model model,
+                           @AuthenticationPrincipal User authUser){
         if (authUser != null){
             User user = userServer.findById(authUser.getId());
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
         }
-        model.addAttribute("books", bookServer.findAll());
+
+        Pageable pageable = PageRequest.of(
+                Integer.parseInt(pageNo),
+                PAGE_SIZE,
+                Sort.by("price").descending().and(Sort.by("id").ascending()));
+
+        model.addAttribute("pageOfBooks", bookServer.findAll(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "home";
     }
