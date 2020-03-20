@@ -29,8 +29,13 @@ public class HomeController implements Constants {
         this.userServer = userServer;
     }
 
-    @GetMapping({"/", "/home"})
-    public String showHome(@RequestParam(defaultValue = "166") String pageNo,
+    @GetMapping("/")
+    public String redirectHome(){
+        return "redirect:/home";
+    }
+
+    @GetMapping("/home")
+    public String showHome(@RequestParam(defaultValue = "0") String pageNo,
                            Model model,
                            @AuthenticationPrincipal User authUser){
         if (authUser != null){

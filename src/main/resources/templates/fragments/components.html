@@ -33,6 +33,33 @@
             </div>
         </div>
 
+        <!-- pagination links -->
+        <div th:fragment="paginationLinks" class="d-flex justify-content-center" id="pagination">
+            <a class="btn btn-outline-info" id="pl-1">1</a>
+            <a class="btn btn-outline-info" id="pl-2">2</a>
+            <a class="btn btn-outline-info" id="pl-3">3</a>
+            <a class="btn btn-outline-info" id="pl-4">4</a>
+            <a class="btn btn-outline-info" id="pl-5">5</a>
+            <a class="btn btn-outline-info" id="pl-6">6</a>
+            <a class="btn btn-outline-info" id="pl-7">7</a>
+        </div>
+
+        <!-- pagination legend -->
+        <p th:fragment="paginationLegend" class="mt-2 text-center text-info">
+            <small>
+                from <span id="begin">1</span> to <span id="end">30</span> of <span id="total">5000</span>
+            </small>
+        </p>
+
+        <!-- pagination MVC variables -->
+        <script th:fragment="paginationMvcVariables">
+            let totalElements = [[${pageOfBooks.totalElements}]];
+            let totalPages = [[${pageOfBooks.totalPages}]];
+            let pageIndex = [[${pageOfBooks.number}]];
+            let numberOfElements = [[${pageOfBooks.numberOfElements}]];
+            let pageSize = [[${pageOfBooks.size}]];
+        </script>
+
     </body>
 
 </html>

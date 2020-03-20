@@ -75,39 +75,17 @@
             <div class="row mt-4">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
-                    <div class="d-flex justify-content-between" id="pagination">
-                        <button class="btn btn-outline-info" id="pageButton-1">1</button>
-                        <button class="btn btn-outline-info" id="pageButton-2">2</button>
-                        <button class="btn btn-outline-info" id="pageButton-3">3</button>
-                        <button class="btn btn-outline-info" id="pageButton-4">4</button>
-                        <button class="btn btn-outline-info" id="pageButton-5">5</button>
-                        <button class="btn btn-outline-info" id="pageButton-6">6</button>
-                        <button class="btn btn-outline-info" id="pageButton-7">7</button>
-                    </div>
-                    <p class="mt-2 text-center"><small>Del 169021 al 169080 de 169246</small></p>
+                    <div th:replace="fragments/components::paginationLinks"></div>
+                    <p th:replace="fragments/components::paginationLegend"></p>
                 </div>
                 <div class="col-sm-4"></div>
             </div>
             <!-- layout::footer -->
-            <p th:text="${pageOfBooks.totalElements}"></p>
-            <p th:text="${pageOfBooks.totalPages}"></p>
-            <p th:text="${pageOfBooks.number}"></p>
-            <p th:text="${pageOfBooks.first}"></p>
-            <p th:text="${pageOfBooks.last}"></p>
-            <p th:text="${pageOfBooks.numberOfElements}"></p>
-            <p th:text="${pageOfBooks.size}"></p>
             <div th:replace="fragments/layout::footer"></div>
-            <script>
-                let totalElements = [[${pageOfBooks.totalElements}]];
-                let totalPages = [[${pageOfBooks.totalPages}]];
-                let number = [[${pageOfBooks.number}]];
-                let first = [[${pageOfBooks.first}]];
-                let last = [[${pageOfBooks.last}]];
-                let numberOfElements = [[${pageOfBooks.numberOfElements}]];
-                let size = [[${pageOfBooks.size}]];
-            </script>
             <script th:src="@{/js/ajaxCart.js}"></script>
-            <script th:src="@{/js/pagination.js}"></script>
+            <script th:replace="fragments/components::paginationMvcVariables"></script>
+            <script th:src="@{/js/paginationLinks.js}"></script>
+            <script th:src="@{/js/paginationLegend.js}"></script>
         </div>
     </body>
 </html>
