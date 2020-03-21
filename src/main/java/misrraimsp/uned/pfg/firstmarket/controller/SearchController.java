@@ -11,10 +11,15 @@ import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.FilterServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,12 +41,20 @@ public class SearchController implements Constants {
     }
 
     @GetMapping("/books/search/{categoryId}")
-    public String showNewSearch(@PathVariable("categoryId") Long categoryId, Model model){
+    public String showNewSearch(@RequestParam(defaultValue = "0") String pageNo,
+                                @PathVariable("categoryId") Long categoryId,
+                                Model model){
 
         Category category = catServer.findCategoryById(categoryId);
         Filter filter = new Filter();
         filter.setCategory(category);
-        List<Book> books = bookServer.findWithFilter(filter);
+
+        Pageable pageable = PageRequest.of(
+                Integer.parseInt(pageNo),
+                PAGE_SIZE,
+                Sort.by("price").descending().and(Sort.by("id").ascending()));
+
+        Page<Book> books = bookServer.findWithFilter(filter, pageable);
 
         List<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, NUM_TOP_AUTHORS);
         List<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, NUM_TOP_PUBLISHERS);
@@ -49,7 +62,7 @@ public class SearchController implements Constants {
 
         List<Category> childrenCategories = catServer.getChildren(category);
 
-        model.addAttribute("books", books);
+        model.addAttribute("pageOfBooks", books);
         model.addAttribute("category", category);
         model.addAttribute("childrenCategories", childrenCategories);
         model.addAttribute("authors", authors);

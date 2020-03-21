@@ -114,14 +114,10 @@ public class BookServer {
     }
 
     public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
-        //List<Long> bookIds = new ArrayList<>();
-        //books.forEach(book -> bookIds.add(book.getId()));
         return authorServer.findTopAuthorsByCategoryId(categoryId, numTopAuthors);
     }
 
     public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
-        //List<Long> bookIds = new ArrayList<>();
-        //books.forEach(book -> bookIds.add(book.getId()));
         return publisherServer.findTopPublishersByCategoryId(categoryId, numTopPublishers);
     }
 
@@ -133,8 +129,8 @@ public class BookServer {
 
     //TODO
 
-    public List<Book> findWithFilter(Filter filter) {
-        List<Book> books = bookRepository.findByAncestorCategoryId(filter.getCategory().getId());
+    public Page<Book> findWithFilter(Filter filter, Pageable pageable) {
+        Page<Book> books = bookRepository.findByAncestorCategoryIdInPage(filter.getCategory().getId(), pageable);
         return books;
     }
 }

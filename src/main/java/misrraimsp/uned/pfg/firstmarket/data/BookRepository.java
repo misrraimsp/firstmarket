@@ -21,9 +21,11 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     Book findByIsbn(String isbn);
 
-    @Query("SELECT b FROM Book b WHERE b.category.id IN (" +
-            "SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
+    @Query("SELECT b FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
     List<Book> findByAncestorCategoryId(@Param("id") Long id);
+
+    @Query("SELECT b FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
+    Page<Book> findByAncestorCategoryIdInPage(@Param("id") Long id, Pageable pageable);
 
     @Query(
             nativeQuery = true,
