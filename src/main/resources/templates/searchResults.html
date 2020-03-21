@@ -14,9 +14,9 @@
                 <div class="col-sm-1"></div>-->
                 <!-- SEARCH CRITERIA  -->
                 <div class="col-sm-3 my-3">
-                    <button class="accordion">Category</button>
+                    <button class="accordion" id="accCategory">Category</button>
                     <div class="panel">
-                        <a class="dropdown-item" th:href="@{/books/search/{categoryId}(categoryId=${cat.id})}" th:text="${cat.name}" th:each="cat : ${childrenCategories}">Category Name</a>
+                        <a class="dropdown-item" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}" th:each="cat : ${childrenCategories}">Category Name</a>
                     </div>
                     <button class="accordion">Price</button>
                     <div class="panel">

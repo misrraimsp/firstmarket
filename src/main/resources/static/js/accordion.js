@@ -20,5 +20,8 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
     }
+
+    document.getElementById("accCategory").click();
+
 }, false);
 

@@ -3,14 +3,18 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.config.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.Languages;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
-import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
+import misrraimsp.uned.pfg.firstmarket.model.search.Filter;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +22,10 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Controller
 public class BookController implements Constants {
@@ -134,6 +140,37 @@ public class BookController implements Constants {
     public String deleteBook(@PathVariable("id") Long id){
         bookServer.deleteById(id);
         return "redirect:/admin/books";
+    }
+
+    @GetMapping("/books")
+    public String showSearchResults(@RequestParam(defaultValue = "0") String pageNo,
+                                    @RequestParam(defaultValue = "1") Long categoryId,
+                                    Model model){
+
+        Category category = catServer.findCategoryById(categoryId);
+        Filter filter = new Filter();
+        filter.setCategory(category);
+
+        Pageable pageable = PageRequest.of(
+                Integer.parseInt(pageNo),
+                PAGE_SIZE,
+                Sort.by("price").descending().and(Sort.by("id").ascending()));
+
+        Page<Book> books = bookServer.findWithFilter(filter, pageable);
+
+        List<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, NUM_TOP_AUTHORS);
+        List<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, NUM_TOP_PUBLISHERS);
+        List<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, NUM_TOP_LANGUAGES);
+
+        List<Category> childrenCategories = catServer.getChildren(category);
+
+        model.addAttribute("pageOfBooks", books);
+        model.addAttribute("category", category);
+        model.addAttribute("childrenCategories", childrenCategories);
+        model.addAttribute("authors", authors);
+        model.addAttribute("publishers", publishers);
+        model.addAttribute("languages", languages);
+        return "searchResults";
     }
 
 }

@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let i, pageLinks, pageLinki, pageLink1, pageLink2, pageLink3, pageLink4, pageLink5, pageLink6, pageLink7;
 
-    let url = document.URL.replace(/(pageNo=)\d+/g,"");
+    let url = document.URL.replace(/(&)*(pageNo=)\d+/g,"");
     let indexOfParamToken = url.indexOf("?");
     if (indexOfParamToken != -1) {
         if (indexOfParamToken != url.length - 1) {
