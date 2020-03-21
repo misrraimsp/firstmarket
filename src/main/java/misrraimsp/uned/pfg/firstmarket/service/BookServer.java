@@ -113,28 +113,28 @@ public class BookServer {
         return bookConverter.convertBookToFormBook(book);
     }
 
-    public List<Author> findTopAuthorsInBookSet(List<Book> books, int numTopAuthors) {
-        List<Long> bookIds = new ArrayList<>();
-        books.forEach(book -> bookIds.add(book.getId()));
-        return authorServer.findTopAuthorsByBookIds(bookIds, numTopAuthors);
+    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
+        //List<Long> bookIds = new ArrayList<>();
+        //books.forEach(book -> bookIds.add(book.getId()));
+        return authorServer.findTopAuthorsByCategoryId(categoryId, numTopAuthors);
     }
 
-    public List<Publisher> findTopPublishersInBookSet(List<Book> books, int numTopPublishers) {
-        List<Long> bookIds = new ArrayList<>();
-        books.forEach(book -> bookIds.add(book.getId()));
-        return publisherServer.findTopPublishersByBookIds(bookIds, numTopPublishers);
+    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
+        //List<Long> bookIds = new ArrayList<>();
+        //books.forEach(book -> bookIds.add(book.getId()));
+        return publisherServer.findTopPublishersByCategoryId(categoryId, numTopPublishers);
     }
 
-    public List<Languages> findTopLanguagesInBookSet(List<Book> books, int numTopLanguages) {
+    public List<Languages> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
         List<Long> bookIds = new ArrayList<>();
-        books.forEach(book -> bookIds.add(book.getId()));
+        bookRepository.findByAncestorCategoryId(categoryId).forEach(book -> bookIds.add(book.getId()));
         return bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
     }
 
     //TODO
 
     public List<Book> findWithFilter(Filter filter) {
-        List<Book> books = bookRepository.findByAncestorCategory(filter.getCategory().getId());
+        List<Book> books = bookRepository.findByAncestorCategoryId(filter.getCategory().getId());
         return books;
     }
 }

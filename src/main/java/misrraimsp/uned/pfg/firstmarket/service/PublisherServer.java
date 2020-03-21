@@ -32,8 +32,8 @@ public class PublisherServer {
     }
      */
 
-    public List<Publisher> findTopPublishersByBookIds(List<Long> bookIds, int numTopPublishers) {
-        List<Long> publisherIds = publisherRepository.findTopIdsByBookIds(bookIds, numTopPublishers);
+    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
+        List<Long> publisherIds = publisherRepository.findTopIdsByCategoryId(categoryId, numTopPublishers);
         return publisherRepository.findPublishersByIds(publisherIds);
     }
 }

@@ -95,6 +95,15 @@
                             </div>
                         </div>
                     </div>
+                    <!-- pagination -->
+                    <div class="row mt-4">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <div th:replace="fragments/components::paginationLinks"></div>
+                            <p th:replace="fragments/components::paginationLegend"></p>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
                 </div>
                 <!-- right margin  -->
                 <div class="col-sm-1"></div>
@@ -103,6 +112,9 @@
             <div th:replace="fragments/layout::footer"></div>
             <script th:src="@{/js/ajaxCart.js}"></script>
             <script th:src="@{/js/accordion.js}"></script>
+            <script th:replace="fragments/components::paginationMvcVariables"></script>
+            <script th:src="@{/js/paginationLinks.js}"></script>
+            <script th:src="@{/js/paginationLegend.js}"></script>
         </div>
     </body>
 </html>

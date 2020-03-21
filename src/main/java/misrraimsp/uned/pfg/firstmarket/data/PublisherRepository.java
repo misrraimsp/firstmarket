@@ -16,10 +16,14 @@ public interface PublisherRepository extends CrudRepository<Publisher,Long> {
     @Query(
             nativeQuery = true,
             value = "SELECT aux.publisher_id FROM (" +
-                    "SELECT publisher_id, COUNT(*) FROM book b WHERE b.id IN :bookIds GROUP BY publisher_id ORDER BY 2 DESC LIMIT :numTopPublishers" +
+                        "SELECT publisher_id, COUNT(*) FROM book WHERE id IN (" +
+                            "SELECT id FROM book WHERE category_id IN (" +
+                                "SELECT descendant_id FROM catpath WHERE ancestor_id = :categoryId" +
+                            ")" +
+                        ") GROUP BY publisher_id ORDER BY 2 DESC LIMIT :numTopPublishers" +
                     ") AS aux"
     )
-    List<Long> findTopIdsByBookIds(@Param("bookIds") List<Long> bookIds, @Param("numTopPublishers") int numTopPublishers);
+    List<Long> findTopIdsByCategoryId(@Param("categoryId") Long categoryId, @Param("numTopPublishers") int numTopPublishers);
 
 
 

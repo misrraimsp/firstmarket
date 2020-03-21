@@ -39,7 +39,7 @@ public interface Constants {
 
     //sizing UI
     int NUM_TOP_AUTHORS = 5;
-    int NUM_TOP_PUBLISHERS = 5;
+    int NUM_TOP_PUBLISHERS = 10;
     int NUM_TOP_LANGUAGES = 5;
     int PAGE_SIZE = 30;
 

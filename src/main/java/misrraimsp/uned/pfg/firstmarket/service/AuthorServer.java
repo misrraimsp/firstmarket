@@ -41,8 +41,8 @@ public class AuthorServer {
     }
      */
 
-    public List<Author> findTopAuthorsByBookIds(List<Long> bookIds, int numTopAuthors) {
-        List<Long> authorIds = authorRepository.findTopIdsByBookIds(bookIds, numTopAuthors);
+    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
+        List<Long> authorIds = authorRepository.findTopIdsByCategoryId(categoryId, numTopAuthors);
         return authorRepository.findAuthorsByIds(authorIds);
     }
 
