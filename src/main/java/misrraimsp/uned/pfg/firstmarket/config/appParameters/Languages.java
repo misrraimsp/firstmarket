@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config;
+package misrraimsp.uned.pfg.firstmarket.config.appParameters;
 
 public enum Languages {
     Bulgarian,

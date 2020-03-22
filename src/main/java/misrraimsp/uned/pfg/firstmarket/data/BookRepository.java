@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.data;
 
-import misrraimsp.uned.pfg.firstmarket.config.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;

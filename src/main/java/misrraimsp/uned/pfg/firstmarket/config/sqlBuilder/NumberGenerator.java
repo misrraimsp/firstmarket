@@ -1,6 +1,6 @@
-package misrraimsp.uned.pfg.firstmarket.config.sql;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

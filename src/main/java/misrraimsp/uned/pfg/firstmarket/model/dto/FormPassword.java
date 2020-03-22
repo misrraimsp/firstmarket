@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
 
 import javax.validation.constraints.Pattern;

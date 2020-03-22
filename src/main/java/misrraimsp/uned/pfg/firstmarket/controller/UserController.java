@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;

@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 
 import javax.validation.ConstraintValidator;

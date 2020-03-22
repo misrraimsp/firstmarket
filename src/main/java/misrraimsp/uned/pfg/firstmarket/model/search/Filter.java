@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model.search;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.Author;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.model.Publisher;

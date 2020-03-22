@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

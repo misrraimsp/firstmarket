@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.sql;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 public class Random {
 

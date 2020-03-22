@@ -1,7 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.Constants;
-import misrraimsp.uned.pfg.firstmarket.config.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
@@ -145,7 +146,17 @@ public class BookController implements Constants {
     @GetMapping("/books")
     public String showSearchResults(@RequestParam(defaultValue = "0") String pageNo,
                                     @RequestParam(defaultValue = "1") Long categoryId,
+                                    @RequestParam(required = false) List<String> authorId,
+                                    @RequestParam(required = false) List<String> publisherId,
+                                    @RequestParam(required = false) List<String> priceId,
+                                    @RequestParam(required = false) List<String> languageId,
                                     Model model){
+
+
+        System.out.println("Page: " + pageNo);
+        System.out.println("Category: " + categoryId);
+        System.out.println("Authors: " + authorId);
+        System.out.println("Publishers: " + publisherId);
 
         Category category = catServer.findCategoryById(categoryId);
         Filter filter = new Filter();
@@ -167,6 +178,7 @@ public class BookController implements Constants {
         model.addAttribute("pageOfBooks", books);
         model.addAttribute("category", category);
         model.addAttribute("childrenCategories", childrenCategories);
+        model.addAttribute("prices", PriceIntervals.values());
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);

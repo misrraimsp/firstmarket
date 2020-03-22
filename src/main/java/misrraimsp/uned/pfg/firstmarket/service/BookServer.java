@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.config.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
