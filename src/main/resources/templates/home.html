@@ -12,26 +12,34 @@
             <div class="row">
                 <div class="col-sm-12 bg-white">
                     <div class="jumbotron jumbotron-fluid mb-0">
+                        <!-- main message -->
                         <h1 class="text-center">
                             <span class="font-weight-bold text-dark">firstmarket</span><small>, where books belong</small>
                         </h1>
+                        <!-- admin message -->
                         <div class="text-center" sec:authorize="hasRole('ADMIN')">
                             <h6><code class="text-info font-italic">
                                 <strong>< ADMIN - a great power comes with a great responsibility ></strong>
                             </code></h6>
                         </div>
+                        <!-- search query -->
                         <div class="row">
+                            <!-- left margin  -->
                             <div class="col-sm-4"></div>
+                            <!-- query -->
                             <div class="col-sm-4">
-                                <div class="input-group mt-5">
-                                    <input class="form-control form-control-sm" type="text" placeholder="title, ISBN, author, publisher...">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-info btn-sm" type="submit">
-                                            <i class="fas fa-search"></i>
-                                        </button>
+                                <form class="needs-validation" novalidate th:action="@{/books}" method="GET" action="#">
+                                    <div class="input-group mt-5">
+                                        <input class="form-control form-control-sm" type="text" name="q" placeholder="title, ISBN, author, publisher..." th:pattern="${TEXT_QUERY}">
+                                        <div class="input-group-append">
+                                            <button class="btn btn-info btn-sm" type="submit">
+                                                <i class="fas fa-search"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
+                            <!-- right margin  -->
                             <div class="col-sm-4"></div>
                         </div>
                     </div>
@@ -107,6 +115,7 @@
             </div>
             <!-- layout::footer -->
             <div th:replace="fragments/layout::footer"></div>
+            <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
             <script th:src="@{/js/ajaxCart.js}"></script>
             <script th:replace="fragments/components::paginationMvcVariables"></script>
             <script th:src="@{/js/paginationLinks.js}"></script>

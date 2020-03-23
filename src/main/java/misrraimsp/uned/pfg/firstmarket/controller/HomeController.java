@@ -52,6 +52,7 @@ public class HomeController implements Constants {
 
         model.addAttribute("pageOfBooks", bookServer.findAll(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("TEXT_QUERY", TEXT_QUERY);
         return "home";
     }
 

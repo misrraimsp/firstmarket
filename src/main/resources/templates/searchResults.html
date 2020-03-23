@@ -7,15 +7,15 @@
         <div class="container-fluid bg-light">
             <!-- layout::header -->
             <div th:replace="fragments/layout::header"></div>
-
-            <!-- under head -->
+            <!-- second header -->
             <div class="row mt-3">
                 <!-- search query -->
                 <div class="col-sm-3">
                     <div class="input-group">
                         <input class="form-control form-control-sm" type="text" placeholder="title, ISBN, author, publisher...">
                         <div class="input-group-append">
-                            <button class="btn btn-info btn-sm" type="submit">
+                            <!--<button class="btn btn-info btn-sm" type="submit">-->
+                            <button class="btn btn-info btn-sm">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
@@ -25,12 +25,11 @@
                 <div class="col-sm-8 text-right text-info">
                     <p th:replace="fragments/components::paginationLegend"></p>
                 </div>
+                <!-- right margin  -->
                 <div class="col-sm-1"></div>
             </div>
             <!-- main content -->
             <div class="row">
-                <!-- left margin
-                <div class="col-sm-1"></div>-->
                 <!-- SEARCH CRITERIA  -->
                 <a style="display: none" id="trigger"></a>
                 <div class="col-sm-3 my-3">
