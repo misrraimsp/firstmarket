@@ -13,10 +13,13 @@
                 <!-- left margin
                 <div class="col-sm-1"></div>-->
                 <!-- SEARCH CRITERIA  -->
+                <a style="display: none" id="trigger"></a>
                 <div class="col-sm-3 my-3">
                     <button class="accordion" id="category-acc">Category</button>
                     <div class="panel">
-                        <a class="dropdown-item" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}" th:each="cat : ${childrenCategories}">Category Name</a>
+                        <div class="my-3" th:each="cat : ${childrenCategories}">
+                            <a class="text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                        </div>
                     </div>
                     <button class="accordion">Price</button>
                     <div class="panel">
@@ -25,10 +28,10 @@
                             <label class="custom-control-label" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
                         </div>
                     </div>
-                    <button class="accordion">Author</button>
+                    <button class="accordion" id="author-acc">Author</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="author : ${authors}">
-                            <input class="custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
+                            <input class="authorCriteria custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
                             <label class="custom-control-label" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
                         </div>
                     </div>
@@ -96,6 +99,7 @@
             <div th:replace="fragments/layout::footer"></div>
             <script th:src="@{/js/ajaxCart.js}"></script>
             <script th:src="@{/js/accordion.js}"></script>
+            <script th:src="@{/js/searchCriteria.js}"></script>
             <script th:replace="fragments/components::paginationMvcVariables"></script>
             <script th:src="@{/js/paginationLinks.js}"></script>
             <script th:src="@{/js/paginationLegend.js}"></script>
