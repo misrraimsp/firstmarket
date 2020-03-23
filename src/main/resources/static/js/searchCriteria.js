@@ -19,13 +19,13 @@ document.addEventListener("DOMContentLoaded", function() {
         ];
     let regex = new RegExp("," + id + "\$");
     let extractId = (str) => str.slice(str.indexOf("-") + 1);
-    let extractPrefix = (str) => str.slice(str.search("-") + 1);
+    let extractPrefix = (str) => str.slice(0, str.indexOf("-") + 1);
     let extractIds = function (url, key, start, end) {
         return (end === -1) ? url.slice(start + key.length).split(",") : url.slice(start + key.length, end).split(",");
     };
-    let extractCriteriaIndex = function(str){
+    let getCriteriaIndex = function(prefix){
         for (i = 0; i < criteria.length; i++){
-            if (str.indexOf(criteria[i].prefix) !== -1) {
+            if (criteria[i].prefix === prefix) {
                 return i;
             }
         }
@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 checkBox = e.currentTarget;
                 fullId = checkBox.getAttribute("id");
                 id = extractId(fullId);
-                k = extractCriteriaIndex(fullId);
+                k = getCriteriaIndex(extractPrefix(fullId));
                 start = url.indexOf(criteria[k].key);
                 end = url.indexOf("&", start);
                 if (checkBox.checked){
