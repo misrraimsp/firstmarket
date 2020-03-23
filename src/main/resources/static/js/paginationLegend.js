@@ -7,8 +7,15 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    document.getElementById("begin").innerHTML = (pageIndex * pageSize) + 1;
-    document.getElementById("end").innerHTML = (pageIndex * pageSize) + numberOfElements;
-    document.getElementById("total").innerHTML = totalElements;
+    let begins = document.getElementsByClassName("paginationBegin");
+    let ends = document.getElementsByClassName("paginationEnd");
+    let totals = document.getElementsByClassName("paginationTotal");
+
+    let i = 0;
+    for (; i < begins.length; i++){
+        begins[i].innerHTML = (pageIndex * pageSize) + 1;
+        ends[i].innerHTML = (pageIndex * pageSize) + numberOfElements;
+        totals[i].innerHTML = totalElements;
+    }
 
 }, false);

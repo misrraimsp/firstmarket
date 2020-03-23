@@ -35,7 +35,8 @@ public class HomeController implements Constants {
     }
 
     @GetMapping("/home")
-    public String showHome(@RequestParam(defaultValue = "0") String pageNo,
+    public String showHome(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
+                           @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
                            Model model,
                            @AuthenticationPrincipal User authUser){
         if (authUser != null){
@@ -46,7 +47,7 @@ public class HomeController implements Constants {
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
-                PAGE_SIZE,
+                Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
         model.addAttribute("pageOfBooks", bookServer.findAll(pageable));

@@ -144,19 +144,28 @@ public class BookController implements Constants {
     }
 
     @GetMapping("/books")
-    public String showSearchResults(@RequestParam(defaultValue = "0") String pageNo,
-                                    @RequestParam(defaultValue = "1") Long categoryId,
+    public String showSearchResults(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
+                                    @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
+                                    @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
+                                    @RequestParam(required = false) List<String> priceId,
                                     @RequestParam(required = false) List<String> authorId,
                                     @RequestParam(required = false) List<String> publisherId,
-                                    @RequestParam(required = false) List<String> priceId,
                                     @RequestParam(required = false) List<String> languageId,
+                                    @RequestParam(required = false) String q,
                                     Model model){
 
-
-        System.out.println("Page: " + pageNo);
-        System.out.println("Category: " + categoryId);
-        System.out.println("Authors: " + authorId);
-        System.out.println("Publishers: " + publisherId);
+        {
+            System.out.println("*** begin ***");
+            System.out.println("Page Number: " + pageNo);
+            System.out.println("Page Size: " + pageSize);
+            System.out.println("Category: " + categoryId);
+            System.out.println("Prices: " + priceId);
+            System.out.println("Authors: " + authorId);
+            System.out.println("Publishers: " + publisherId);
+            System.out.println("Languages: " + languageId);
+            System.out.println("Query: " + q);
+            System.out.println("*** end ***");
+        }
 
         Category category = catServer.findCategoryById(categoryId);
         Filter filter = new Filter();
@@ -164,7 +173,7 @@ public class BookController implements Constants {
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
-                PAGE_SIZE,
+                Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
         Page<Book> books = bookServer.findWithFilter(filter, pageable);

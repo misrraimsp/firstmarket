@@ -96,8 +96,12 @@
             <div class="row mt-4">
                 <div class="col-sm-4"></div>
                 <div class="col-sm-4">
+                    <!-- pagination links -->
                     <div th:replace="fragments/components::paginationLinks"></div>
-                    <p th:replace="fragments/components::paginationLegend"></p>
+                    <!-- pagination legend -->
+                    <div class="mt-2 text-center text-info">
+                        <p th:replace="fragments/components::paginationLegend"></p>
+                    </div>
                 </div>
                 <div class="col-sm-4"></div>
             </div>

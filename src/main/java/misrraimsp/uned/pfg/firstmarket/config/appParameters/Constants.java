@@ -37,11 +37,13 @@ public interface Constants {
     int MAX_FRACTION_PRICE = 2; //maximum number of fractional digits accepted for price numbers
     String PRICE = "^[\\d]{0," + MAX_INTEGER_PRICE + "}([.][\\d]{1," + MAX_FRACTION_PRICE + "})*$";
 
-    //sizing UI
+    //front end
     int NUM_TOP_AUTHORS = 5;
     int NUM_TOP_PUBLISHERS = 10;
     int NUM_TOP_LANGUAGES = 5;
-    int PAGE_SIZE = 30;
+    String DEFAULT_PAGE_SIZE = "30";
+    String DEFAULT_PAGE_NUMBER = "0";
+    String DEFAULT_CATEGORY_ID = "1";
 
 
 

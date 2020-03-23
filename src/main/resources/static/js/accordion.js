@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    document.getElementById("category-acc").click();
+    document.getElementById("categoryAcc").click();
 
 }, false);
 

@@ -8,14 +8,33 @@
             <!-- layout::header -->
             <div th:replace="fragments/layout::header"></div>
 
+            <!-- under head -->
+            <div class="row mt-3">
+                <!-- search query -->
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <input class="form-control form-control-sm" type="text" placeholder="title, ISBN, author, publisher...">
+                        <div class="input-group-append">
+                            <button class="btn btn-info btn-sm" type="submit">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- pagination legend -->
+                <div class="col-sm-8 text-right text-info">
+                    <p th:replace="fragments/components::paginationLegend"></p>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
             <!-- main content -->
-            <div class="row mt-4">
+            <div class="row">
                 <!-- left margin
                 <div class="col-sm-1"></div>-->
                 <!-- SEARCH CRITERIA  -->
                 <a style="display: none" id="trigger"></a>
                 <div class="col-sm-3 my-3">
-                    <button class="accordion" id="category-acc">Category</button>
+                    <button class="accordion" id="categoryAcc">Category</button>
                     <div class="panel">
                         <div class="my-3" th:each="cat : ${childrenCategories}">
                             <a class="text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
@@ -86,8 +105,12 @@
                     <div class="row mt-4">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
+                            <!-- pagination links -->
                             <div th:replace="fragments/components::paginationLinks"></div>
-                            <p th:replace="fragments/components::paginationLegend"></p>
+                            <!-- pagination legend -->
+                            <div class="mt-2 text-center text-info">
+                                <p th:replace="fragments/components::paginationLegend"></p>
+                            </div>
                         </div>
                         <div class="col-sm-4"></div>
                     </div>
