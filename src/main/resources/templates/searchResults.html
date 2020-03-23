@@ -21,31 +21,31 @@
                             <a class="text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
                         </div>
                     </div>
-                    <button class="accordion">Price</button>
+                    <button class="accordion" id="priceAcc">Price</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="price : ${prices}">
-                            <input class="custom-control-input" type="checkbox" th:id="'pr-' + ${price.ordinal()}" />
+                            <input class="priceCheckBox custom-control-input" type="checkbox" th:id="'pr-' + ${price.ordinal()}" />
                             <label class="custom-control-label" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
                         </div>
                     </div>
-                    <button class="accordion" id="author-acc">Author</button>
+                    <button class="accordion" id="authorAcc">Author</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="author : ${authors}">
-                            <input class="authorCriteria custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
+                            <input class="authorCheckBox custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
                             <label class="custom-control-label" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
                         </div>
                     </div>
-                    <button class="accordion">Publisher</button>
+                    <button class="accordion" id="publisherAcc">Publisher</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="publisher : ${publishers}">
-                            <input class="custom-control-input" type="checkbox" th:id="'pu-' + ${publisher.id}" />
+                            <input class="publisherCheckBox custom-control-input" type="checkbox" th:id="'pu-' + ${publisher.id}" />
                             <label class="custom-control-label" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
                         </div>
                     </div>
-                    <button class="accordion">Language</button>
+                    <button class="accordion" id="languageAcc">Language</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="language : ${languages}">
-                            <input class="custom-control-input" type="checkbox" th:id="'la-' + ${language.ordinal()}" />
+                            <input class="languageCheckBox custom-control-input" type="checkbox" th:id="'la-' + ${language.ordinal()}" />
                             <label class="custom-control-label" th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
                         </div>
                     </div>
