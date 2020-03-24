@@ -152,7 +152,8 @@ public class BookController implements Constants {
                                     @RequestParam(required = false) List<String> publisherId,
                                     @RequestParam(required = false) List<String> languageId,
                                     @RequestParam(required = false) String q,
-                                    Model model){
+                                    Model model,
+                                    @AuthenticationPrincipal User authUser){
 
         {
             System.out.println("*** begin ***");
@@ -184,6 +185,11 @@ public class BookController implements Constants {
 
         List<Category> childrenCategories = catServer.getChildren(category);
 
+        if (authUser != null){
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
+        }
         model.addAttribute("pageOfBooks", books);
         model.addAttribute("category", category);
         model.addAttribute("childrenCategories", childrenCategories);
@@ -191,6 +197,7 @@ public class BookController implements Constants {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
+        model.addAttribute("TEXT_QUERY", TEXT_QUERY);
         return "searchResults";
     }
 

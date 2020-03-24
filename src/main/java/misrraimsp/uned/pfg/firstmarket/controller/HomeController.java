@@ -39,6 +39,7 @@ public class HomeController implements Constants {
                            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
                            Model model,
                            @AuthenticationPrincipal User authUser){
+
         if (authUser != null){
             User user = userServer.findById(authUser.getId());
             model.addAttribute("firstName", user.getProfile().getFirstName());

@@ -2,8 +2,8 @@
 /******************************* accordion */
 
 .accordion {
-    background-color: #eee;
-    color: #444;
+    background-color: #e9ecef; /* BS4 jumbotron */
+    color: #343a40; /* BS4 dark */
     cursor: pointer;
     padding: 18px;
     width: 100%;
@@ -15,12 +15,12 @@
 }
 
 .accordion.active, .accordion:hover {
-    background-color: #ccc;
+    background-color: #6c757d; /* BS4 secondary */
+    color: white;
 }
 
 .accordion:after {
     content: '\002B';
-    color: #777;
     font-weight: bold;
     float: right;
     margin-left: 5px;
@@ -64,8 +64,9 @@
     padding:.35em;
     border-radius:999px;
     line-height:.75em;
-    color: white;
-    color: #0275d8; /* bs4 primary */
+    /*color: white;
+    color: #0275d8;  bs4 primary */
+    color: #17a2b8; /* bs4 info */
     text-align:center;
     min-width:1em;
     font-weight:bold;
@@ -73,7 +74,8 @@
 
 }
 .fa-circle {
-    color: #0275d8; /* bs4 primary */
+    /*color: #0275d8;  bs4 primary */
+    color: #17a2b8; /* bs4 info */
 }
 
 .primary-over-dark {
@@ -81,8 +83,18 @@
     background: #343a40; /* bs4 dark */
 }
 
+.primary-over-secondary {
+    color: #0275d8; /* bs4 primary */
+    background: #6c757d; /* BS4 secondary */
+}
+
 .info-over-dark {
     color: #17a2b8; /* bs4 info */
     background: #343a40; /* bs4 dark */
+}
+
+.info-over-secondary {
+    color: #17a2b8; /* bs4 info */
+    background: #6c757d; /* BS4 secondary */
 }
 
