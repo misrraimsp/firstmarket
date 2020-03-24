@@ -7,22 +7,29 @@
         <div class="container-fluid bg-light">
             <!-- layout::header -->
             <div th:replace="fragments/layout::header"></div>
-            <!-- second header -->
-            <div class="row mt-3">
-                <!-- search query -->
-                <div class="col-sm-3">
-                    <div class="input-group">
-                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${TEXT_QUERY}">
-                        <div class="input-group-append">
-                            <button class="btn btn-secondary btn-sm" id="clearTextBoxButton" style="display: none">
-                                <i class="fas fa-times"></i>
-                            </button>
-                            <button class="btn btn-info btn-sm" id="searchTextBoxButton">
-                                <i class="fas fa-search"></i>
-                            </button>
+            <!-- second header with main categories -->
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- NavBar -->
+                    <nav class="navbar navbar-expand-sm p-0 m-0" style="background-color:#e9ecef">
+                        <!-- Toggler/collapsibe Button -->
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <!-- Navbar links -->
+                        <div class="collapse navbar-collapse" id="#collapsibleNavbar">
+                            <ul class="navbar-nav">
+                                <li class="nav-item" th:each="cat : ${mainCategories}">
+                                    <a class="categoryLink btn btn-outline-info btn-sm border-0 rounded-0" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
+                    </nav>
                 </div>
+            </div>
+            <!-- under header -->
+            <div class="row mt-3">
+                <div class="col-sm-3"></div>
                 <!-- pagination legend -->
                 <div class="col-sm-8 text-right text-info">
                     <p th:replace="fragments/components::paginationLegend"></p>
@@ -35,13 +42,31 @@
                 <!-- SEARCH CRITERIA  -->
                 <a style="display: none" id="trigger"></a>
                 <div class="col-sm-3 my-3">
-                    <button class="accordion" id="categoryAcc">Category</button>
+                    <!-- search query -->
+                    <div class="input-group">
+                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${TEXT_QUERY}">
+                        <div class="input-group-append">
+                            <button class="btn btn-info btn-sm" id="searchTextBoxButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- alert box text query -->
+                    <div class="alert alert-info alert-dismissible mt-1 mb-0 p-0 d-flex" id="textQueryAlertBox">
+                        <small class="ml-2 mr-auto mt-1">Java</small>
+                        <button class="btn btn-outline-info btn-sm border-0 my-0">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <a class="close" data-dismiss="alert" style="display: none"></a>
+                    </div>
+                    <!-- category criteria -->
+                    <button class="accordion mt-3" id="categoryAcc">Category</button>
                     <div class="panel">
                         <div class="my-3" th:each="cat : ${childrenCategories}">
                             <a class="categoryLink text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
-                            <!-- th:id="'ca-' + ${cat.id}" -->
                         </div>
                     </div>
+                    <!-- price criteria -->
                     <button class="accordion" id="priceAcc">Price</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="price : ${prices}">
@@ -49,6 +74,7 @@
                             <label class="custom-control-label" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
                         </div>
                     </div>
+                    <!-- author criteria -->
                     <button class="accordion" id="authorAcc">Author</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="author : ${authors}">
@@ -56,6 +82,7 @@
                             <label class="custom-control-label" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
                         </div>
                     </div>
+                    <!-- publisher criteria -->
                     <button class="accordion" id="publisherAcc">Publisher</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="publisher : ${publishers}">
@@ -63,6 +90,7 @@
                             <label class="custom-control-label" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
                         </div>
                     </div>
+                    <!-- language criteria -->
                     <button class="accordion" id="languageAcc">Language</button>
                     <div class="panel">
                         <div class="custom-control custom-checkbox my-3" th:each="language : ${languages}">

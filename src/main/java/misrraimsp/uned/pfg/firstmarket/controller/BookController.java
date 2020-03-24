@@ -197,6 +197,7 @@ public class BookController implements Constants {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("TEXT_QUERY", TEXT_QUERY);
         return "searchResults";
     }

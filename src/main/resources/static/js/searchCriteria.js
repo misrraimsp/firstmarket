@@ -5,36 +5,46 @@
 
 'use strict';
 
+
 document.addEventListener("DOMContentLoaded", function() {
 
-    //definitions
-    let i, j, k, id, ids, fullId, start, end, checkBox, checkBoxes, textBoxQuery, present;
-    const transitionTime = 300;
+    //general definitions
+    let url = document.URL;
     let sendTrigger = document.getElementById("trigger");
     let catLinks = document.getElementsByClassName("categoryLink");
-    let textBox = document.getElementById("queryTextBox");
-    let clearTextBoxButton = document.getElementById("clearTextBoxButton");
-    let searchTextBoxButton = document.getElementById("searchTextBoxButton");
-    let url = document.URL;
 
-    const textBoxQueryKey = "q=";
+    //check boxes definitions
+    let i, j, k, id, ids, fullId, start, end, checkBox, checkBoxes, present;
     const criteriaCheckBox = [
         {key:"priceId=", htmlIdPrefix:"pr-", htmlAccordionId:"priceAcc", htmlClass:"priceCheckBox"},
         {key:"authorId=", htmlIdPrefix:"au-", htmlAccordionId:"authorAcc", htmlClass:"authorCheckBox"},
         {key:"publisherId=", htmlIdPrefix:"pu-", htmlAccordionId:"publisherAcc", htmlClass:"publisherCheckBox"},
         {key:"languageId=", htmlIdPrefix:"la-", htmlAccordionId:"languageAcc", htmlClass:"languageCheckBox"}
-        ];
-
+    ];
     let regex = new RegExp("," + id + "\$");
 
+    //text query definitions
+    let textBox = document.getElementById("queryTextBox");
+    let searchTextBoxButton = document.getElementById("searchTextBoxButton");
+    let textQueryAlertBox = document.getElementById("textQueryAlertBox");
+    const textKey = "q=";
+    const startTextKey = url.indexOf(textKey);
+    let endTextQuery, textBoxQuery, textBoxQueryValue, newTextBoxQuery;
+    if (startTextKey !== -1){
+        endTextQuery = url.indexOf("&", startTextKey);
+        textBoxQuery = (endTextQuery === -1) ? url.slice(startTextKey) : url.slice(startTextKey, endTextQuery);
+        textBoxQueryValue = textBoxQuery.slice(textKey.length).replace(/\+/g, " ");
+    } else {
+        textBoxQuery = "";
+        textBoxQueryValue = "";
+    }
+
+    //function definitions
     let extractId = (str) => str.slice(str.indexOf("-") + 1);
-
     let extractPrefix = (str) => str.slice(0, str.indexOf("-") + 1);
-
     let extractItems = function (str, start, end, separator) {
         return (end === -1) ? str.slice(start).split(separator) : str.slice(start, end).split(separator);
     };
-
     let getCriteriaIndex = function(prefix){
         for (i = 0; i < criteriaCheckBox.length; i++){
             if (criteriaCheckBox[i].htmlIdPrefix === prefix) {
@@ -44,49 +54,38 @@ document.addEventListener("DOMContentLoaded", function() {
         return -1;
     };
 
-
-    //populate text box, show clear button and update category links with text box query, if necessary
-    start = url.indexOf(textBoxQueryKey);
-    if (start !== -1) {
-        end = url.indexOf("&", start);
-        textBoxQuery = (end === -1) ? url.slice(start) : url.slice(start, end);
+    //hide-show query alert box and update category links with text box query, if necessary
+    if (textBoxQuery !== "") {
         for (i = 0; i < catLinks.length; i++){
             catLinks[i].setAttribute("href", catLinks[i].getAttribute("href") + "&" + textBoxQuery);
         }
-        textBox.value = textBoxQuery.slice(textBoxQueryKey.length).replace(/\+/g, " ");
-        $("#clearTextBoxButton").show(transitionTime);
+        textQueryAlertBox.getElementsByTagName("small")[0].innerHTML = textBoxQueryValue;
+    } else {
+        textQueryAlertBox.getElementsByTagName("a")[0].click();
     }
 
     //manage clear button click
-    clearTextBoxButton.addEventListener("click", function () {
-        start = url.indexOf(textBoxQueryKey);
-        if (start !== -1) {
-            end = url.indexOf("&", start);
-            textBoxQuery = (end === -1) ? url.slice(start) : url.slice(start, end);
-            url = url.
-            replace("&" + textBoxQuery, "").
-            replace("?" + textBoxQuery + "&", "?").
-            replace("?" + textBoxQuery, "");
-            sendTrigger.setAttribute("href", url);
-            sendTrigger.click();
-        } else {
-            textBox.value = "";
-            $("#clearTextBoxButton").hide(transitionTime);
-        }
-    }, false);
-
-    //manage text box change (show or hide clear button)
-    textBox.addEventListener("input", function () {
-        if (textBox.value !== ""){
-            $("#clearTextBoxButton").show(transitionTime);
-        } else {
-            $("#clearTextBoxButton").hide(transitionTime);
-        }
+    textQueryAlertBox.getElementsByTagName("button")[0].addEventListener("click", function () {
+        url = url.
+        replace("&" + textBoxQuery, "").
+        replace("?" + textBoxQuery + "&", "?").
+        replace("?" + textBoxQuery, "");
+        sendTrigger.setAttribute("href", url);
+        sendTrigger.click();
     }, false);
 
     //manage search text box button
     searchTextBoxButton.addEventListener("click", function () {
-
+        if (textBox.value !== ""){
+            newTextBoxQuery = textKey + textBox.value.replace(/ /g, "+");
+            if (textBoxQuery !== ""){
+                url = url.replace(textBoxQuery, newTextBoxQuery);
+            } else {
+                url += (url.indexOf("?") !== -1) ? "&" + newTextBoxQuery : "?" + newTextBoxQuery;
+            }
+            sendTrigger.setAttribute("href", url);
+            sendTrigger.click();
+        }
     }, false);
 
     //set all criteria checkboxes checked state based on url info
