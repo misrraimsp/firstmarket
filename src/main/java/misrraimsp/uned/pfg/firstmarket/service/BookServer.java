@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
@@ -9,7 +10,6 @@ import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
-import misrraimsp.uned.pfg.firstmarket.model.search.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -129,32 +129,45 @@ public class BookServer {
         return bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
     }
 
-    //TODO
-
-    public Page<Book> findSearchResults(Filter filter, Pageable pageable) {
-        Page<Book> books = bookRepository.findByAncestorCategoryIdInPage(filter.getCategory().getId(), pageable);
-        return books;
-    }
-
-    public Page<Book> findSearchResults(Long categoryId, Set<Long> priceIds, Set<Long> authorIds, Set<Long> publisherIds, Set<Languages> languageIds, String q, Pageable pageable) {
+    public Page<Book> findSearchResults(Long categoryId, Set<String> priceIds, Set<Long> authorIds, Set<Long> publisherIds, Set<Languages> languageIds, String q, Pageable pageable) {
         Set<Long> idsFromCategory = bookRepository.findIdByAncestorCategoryId(categoryId);
         Set<Long> idsFromAuthor = (authorIds != null) ? bookRepository.findIdByAuthorIds(authorIds) : null;
         Set<Long> idsFromPublisher = (publisherIds != null) ? bookRepository.findIdByPublisherIds(publisherIds) : null;
         Set<Long> idsFromLanguage = (languageIds != null) ? bookRepository.findIdByLanguageIds(languageIds) : null;
+        Set<Long> idsFromPrice  = (priceIds != null) ? this.getIdsByPriceIntervals(priceIds) : null;
+        Set<Long> idsFromQ  = (q != null) ? this.getIdsByQueryText(q) : null;
 
-        Set<Long> resultIds = intersect(idsFromCategory, idsFromAuthor, idsFromPublisher, idsFromLanguage);
+        Set<Long> resultIds = intersect(idsFromCategory, idsFromPrice, idsFromAuthor, idsFromPublisher, idsFromLanguage, idsFromQ);
         if (resultIds.size() == 0){
             resultIds.add(0L);
         }
         return bookRepository.findByIds(resultIds, pageable);
     }
 
+    private Set<Long> getIdsByQueryText(String q) {
+        return null;
+    }
+
+    private Set<Long> getIdsByPriceIntervals(Set<String> priceIds) {
+        Set<Long> idsFromPrice = new HashSet<>();
+        for (String priceIntervalIndex : priceIds){
+            PriceIntervals pi = PriceIntervals.values()[Integer.parseInt(priceIntervalIndex)];
+            idsFromPrice.addAll(bookRepository.findIdByPrice(pi.getLowLimit(), pi.getHighLimit()));
+        }
+        return idsFromPrice;
+    }
+
     private Set<Long> intersect(Set<Long> idsFromCategory,
+                                Set<Long> idsFromPrice,
                                 Set<Long> idsFromAuthor,
                                 Set<Long> idsFromPublisher,
-                                Set<Long> idsFromLanguage) {
+                                Set<Long> idsFromLanguage,
+                                Set<Long> idsFromQ) {
 
-        Set<Long> result = new HashSet<Long>(idsFromCategory);
+        Set<Long> result = new HashSet<>(idsFromCategory);
+        if (idsFromPrice != null) {
+            result.retainAll(idsFromPrice);
+        }
         if (idsFromAuthor != null) {
             result.retainAll(idsFromAuthor);
         }
@@ -163,6 +176,9 @@ public class BookServer {
         }
         if (idsFromLanguage != null) {
             result.retainAll(idsFromLanguage);
+        }
+        if (idsFromQ != null) {
+            result.retainAll(idsFromQ);
         }
         return result;
     }

@@ -148,7 +148,7 @@ public class BookController implements Constants {
     public String showSearchResults(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
                                     @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
                                     @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
-                                    @RequestParam(required = false) Set<Long> priceId,
+                                    @RequestParam(required = false) Set<String> priceId,
                                     @RequestParam(required = false) Set<Long> authorId,
                                     @RequestParam(required = false) Set<Long> publisherId,
                                     @RequestParam(required = false) Set<Languages> languageId,

@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Set;
 
@@ -55,4 +56,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     @Query("SELECT b.id FROM Book b WHERE b.language IN :languageIds")
     Set<Long> findIdByLanguageIds(@Param("languageIds") Set<Languages> languageIds);
+
+    @Query("SELECT b.id FROM Book b WHERE b.price >= :lowLimit AND b.price < :highLimit")
+    Set<Long> findIdByPrice(@Param("lowLimit") BigDecimal lowLimit, @Param("highLimit") BigDecimal highLimit);
 }
