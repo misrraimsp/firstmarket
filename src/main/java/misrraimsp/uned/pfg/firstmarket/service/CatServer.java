@@ -73,6 +73,19 @@ public class CatServer {
         return categoryRepository.getRootCategory();
     }
 
+    /**
+     * This method returns the category sequence from root category to parameter category within the category tree
+     * @param category
+     * @return
+     */
+    public List<Category> getCategorySequence(Category category) {
+        List<Category> sequence = new ArrayList<>();
+        catpathRepository.findByDescendantIdAndSizeIsGreaterThanOrderBySizeDesc(category.getId(), 0).forEach(
+                catpath -> sequence.add(catpath.getAncestor())
+        );
+        return sequence;
+    }
+
     public List<Category> getDescendants(Category category) {
         List<Category> list = new ArrayList<>();
         TreeNode<Category> subtreeRoot = null;

@@ -147,10 +147,10 @@ public class BookController implements Constants {
     public String showSearchResults(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
                                     @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
                                     @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
-                                    @RequestParam(required = false) List<String> priceId,
-                                    @RequestParam(required = false) List<String> authorId,
-                                    @RequestParam(required = false) List<String> publisherId,
-                                    @RequestParam(required = false) List<String> languageId,
+                                    @RequestParam(required = false) List<Long> priceId,
+                                    @RequestParam(required = false) List<Long> authorId,
+                                    @RequestParam(required = false) List<Long> publisherId,
+                                    @RequestParam(required = false) List<Long> languageId,
                                     @RequestParam(required = false) String q,
                                     Model model,
                                     @AuthenticationPrincipal User authUser){
@@ -184,6 +184,9 @@ public class BookController implements Constants {
         List<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, NUM_TOP_LANGUAGES);
 
         List<Category> childrenCategories = catServer.getChildren(category);
+        List<Category> categorySequence = catServer.getCategorySequence(category);
+
+        //categorySequence.forEach(cat -> System.out.println("Cat: " + cat.getName()));
 
         if (authUser != null){
             User user = userServer.findById(authUser.getId());
@@ -192,6 +195,7 @@ public class BookController implements Constants {
         }
         model.addAttribute("pageOfBooks", books);
         model.addAttribute("category", category);
+        model.addAttribute("categorySequence", categorySequence);
         model.addAttribute("childrenCategories", childrenCategories);
         model.addAttribute("prices", PriceIntervals.values());
         model.addAttribute("authors", authors);

@@ -52,4 +52,5 @@ public interface CatpathRepository extends CrudRepository<Catpath, Long> {
             "cp.descendant.id IN (SELECT cp2.descendant.id FROM Catpath cp2 WHERE cp2.ancestor.id = :id)")
     void reduceCatpathsFromAncestorsToDescendantsOf(@Param("id") Long id);
 
+    List<Catpath> findByDescendantIdAndSizeIsGreaterThanOrderBySizeDesc(Long descendantId, int minSize);
 }

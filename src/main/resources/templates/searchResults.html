@@ -59,16 +59,25 @@
                         </button>
                         <a class="close" data-dismiss="alert" style="display: none"></a>
                     </div>
+                    <!-- category breadcrumb -->
+                    <div class="mt-3 mb-1">
+                        <ol class="breadcrumb my-0 p-1">
+                            <li class="breadcrumb-item" th:each="c : ${categorySequence}">
+                                <a class="categoryLink text-info" th:href="@{/books?categoryId={categoryId}(categoryId=${c.id})}"><small class="font-weight-lighter" th:text="${c.name}">Category Name</small></a>
+                            </li>
+                            <li class="breadcrumb-item active font-weight-lighter"><small class="font-weight-lighter" th:text="${category.name}">Category Name</small></li>
+                        </ol>
+                    </div>
                     <!-- category criteria -->
-                    <button class="accordion mt-3" id="categoryAcc">Category</button>
-                    <div class="panel">
+                    <button class="accordion" id="categoryAcc">Category</button>
+                    <div class="panel mb-1">
                         <div class="my-3" th:each="cat : ${childrenCategories}">
                             <a class="categoryLink text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
                         </div>
                     </div>
                     <!-- price criteria -->
                     <button class="accordion" id="priceAcc">Price</button>
-                    <div class="panel">
+                    <div class="panel mb-1">
                         <div class="custom-control custom-checkbox my-3" th:each="price : ${prices}">
                             <input class="priceCheckBox custom-control-input" type="checkbox" th:id="'pr-' + ${price.ordinal()}" />
                             <label class="custom-control-label" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
@@ -76,7 +85,7 @@
                     </div>
                     <!-- author criteria -->
                     <button class="accordion" id="authorAcc">Author</button>
-                    <div class="panel">
+                    <div class="panel mb-1">
                         <div class="custom-control custom-checkbox my-3" th:each="author : ${authors}">
                             <input class="authorCheckBox custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
                             <label class="custom-control-label" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
@@ -84,7 +93,7 @@
                     </div>
                     <!-- publisher criteria -->
                     <button class="accordion" id="publisherAcc">Publisher</button>
-                    <div class="panel">
+                    <div class="panel mb-1">
                         <div class="custom-control custom-checkbox my-3" th:each="publisher : ${publishers}">
                             <input class="publisherCheckBox custom-control-input" type="checkbox" th:id="'pu-' + ${publisher.id}" />
                             <label class="custom-control-label" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
