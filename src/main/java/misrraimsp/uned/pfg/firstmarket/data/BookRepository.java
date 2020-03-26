@@ -10,6 +10,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Set;
 
 public interface BookRepository extends CrudRepository<Book, Long> {
 
@@ -24,6 +25,9 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     @Query("SELECT b FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
     List<Book> findByAncestorCategoryId(@Param("id") Long id);
 
+    @Query("SELECT b.id FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
+    Set<Long> findIdByAncestorCategoryId(@Param("id") Long id);
+
     @Query("SELECT b FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
     Page<Book> findByAncestorCategoryIdInPage(@Param("id") Long id, Pageable pageable);
 
@@ -36,4 +40,19 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     List<Languages> findTopLanguagesByBookIds(@Param("bookIds") List<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
 
     Page<Book> findAll(Pageable pageable);
+
+    @Query("SELECT b FROM Book b WHERE b.id IN :ids")
+    Page<Book> findByIds(@Param("ids") Set<Long> ids, Pageable pageable);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT id FROM book WHERE id IN (SELECT book_id FROM books_authors WHERE author_id IN :authorIds)"
+    )
+    Set<Long> findIdByAuthorIds(@Param("authorIds") Set<Long> authorIds);
+
+    @Query("SELECT b.id FROM Book b WHERE b.publisher.id IN :publisherIds")
+    Set<Long> findIdByPublisherIds(@Param("publisherIds") Set<Long> publisherIds);
+
+    @Query("SELECT b.id FROM Book b WHERE b.language IN :languageIds")
+    Set<Long> findIdByLanguageIds(@Param("languageIds") Set<Languages> languageIds);
 }

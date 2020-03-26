@@ -17,7 +17,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class BookServer {
@@ -129,8 +131,40 @@ public class BookServer {
 
     //TODO
 
-    public Page<Book> findWithFilter(Filter filter, Pageable pageable) {
+    public Page<Book> findSearchResults(Filter filter, Pageable pageable) {
         Page<Book> books = bookRepository.findByAncestorCategoryIdInPage(filter.getCategory().getId(), pageable);
         return books;
     }
+
+    public Page<Book> findSearchResults(Long categoryId, Set<Long> priceIds, Set<Long> authorIds, Set<Long> publisherIds, Set<Languages> languageIds, String q, Pageable pageable) {
+        Set<Long> idsFromCategory = bookRepository.findIdByAncestorCategoryId(categoryId);
+        Set<Long> idsFromAuthor = (authorIds != null) ? bookRepository.findIdByAuthorIds(authorIds) : null;
+        Set<Long> idsFromPublisher = (publisherIds != null) ? bookRepository.findIdByPublisherIds(publisherIds) : null;
+        Set<Long> idsFromLanguage = (languageIds != null) ? bookRepository.findIdByLanguageIds(languageIds) : null;
+
+        Set<Long> resultIds = intersect(idsFromCategory, idsFromAuthor, idsFromPublisher, idsFromLanguage);
+        if (resultIds.size() == 0){
+            resultIds.add(0L);
+        }
+        return bookRepository.findByIds(resultIds, pageable);
+    }
+
+    private Set<Long> intersect(Set<Long> idsFromCategory,
+                                Set<Long> idsFromAuthor,
+                                Set<Long> idsFromPublisher,
+                                Set<Long> idsFromLanguage) {
+
+        Set<Long> result = new HashSet<Long>(idsFromCategory);
+        if (idsFromAuthor != null) {
+            result.retainAll(idsFromAuthor);
+        }
+        if (idsFromPublisher != null) {
+            result.retainAll(idsFromPublisher);
+        }
+        if (idsFromLanguage != null) {
+            result.retainAll(idsFromLanguage);
+        }
+        return result;
+    }
+
 }

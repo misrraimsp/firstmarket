@@ -74,7 +74,7 @@ public class CatServer {
     }
 
     /**
-     * This method returns the category sequence from root category to parameter category within the category tree
+     * This method returns the category tree sequence from root category to parameter category (without including it)
      * @param category
      * @return
      */

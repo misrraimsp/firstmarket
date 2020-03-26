@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class BookController implements Constants {
@@ -147,10 +148,10 @@ public class BookController implements Constants {
     public String showSearchResults(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
                                     @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
                                     @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
-                                    @RequestParam(required = false) List<Long> priceId,
-                                    @RequestParam(required = false) List<Long> authorId,
-                                    @RequestParam(required = false) List<Long> publisherId,
-                                    @RequestParam(required = false) List<Long> languageId,
+                                    @RequestParam(required = false) Set<Long> priceId,
+                                    @RequestParam(required = false) Set<Long> authorId,
+                                    @RequestParam(required = false) Set<Long> publisherId,
+                                    @RequestParam(required = false) Set<Languages> languageId,
                                     @RequestParam(required = false) String q,
                                     Model model,
                                     @AuthenticationPrincipal User authUser){
@@ -169,6 +170,7 @@ public class BookController implements Constants {
         }
 
         Category category = catServer.findCategoryById(categoryId);
+
         Filter filter = new Filter();
         filter.setCategory(category);
 
@@ -177,7 +179,7 @@ public class BookController implements Constants {
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
-        Page<Book> books = bookServer.findWithFilter(filter, pageable);
+        Page<Book> books = bookServer.findSearchResults(categoryId, priceId, authorId, publisherId, languageId, q, pageable);
 
         List<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, NUM_TOP_AUTHORS);
         List<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, NUM_TOP_PUBLISHERS);
@@ -185,8 +187,6 @@ public class BookController implements Constants {
 
         List<Category> childrenCategories = catServer.getChildren(category);
         List<Category> categorySequence = catServer.getCategorySequence(category);
-
-        //categorySequence.forEach(cat -> System.out.println("Cat: " + cat.getName()));
 
         if (authUser != null){
             User user = userServer.findById(authUser.getId());

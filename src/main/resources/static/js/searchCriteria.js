@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", function() {
         {key:"publisherId=", htmlIdPrefix:"pu-", htmlAccordionId:"publisherAcc", htmlClass:"publisherCheckBox"},
         {key:"languageId=", htmlIdPrefix:"la-", htmlAccordionId:"languageAcc", htmlClass:"languageCheckBox"}
     ];
-    let regex = new RegExp("," + id + "\$");
 
     //text query definitions
     let textBox = document.getElementById("queryTextBox");
@@ -129,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 } else {
                     ids = extractItems(url, start + criteriaCheckBox[k].key.length, end, ",");
                     if (ids.length > 1){
+                        let regex = new RegExp("," + id + "\$");
                         url = url.
                         replace("=" + id + ",", "=").
                         replace("," + id + ",", ",").
