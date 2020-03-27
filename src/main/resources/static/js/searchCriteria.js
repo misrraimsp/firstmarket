@@ -52,6 +52,13 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return -1;
     };
+    let removePageNo = function (str) {
+        str = str.replace(/(\?pageNo=)\d+$/g,"");//first and unique
+        str = str.replace(/(\?pageNo=)\d+(&)/g,"?");//first but not unique
+        str = str.replace(/(&pageNo=)\d+$/g,"");//last
+        str = str.replace(/(&pageNo=)\d+(&)/g, "&");//middle
+        return str;
+    };
 
     //hide-show query alert box and update category links with text box query, if necessary
     if (textBoxQuery !== "") {
@@ -69,6 +76,7 @@ document.addEventListener("DOMContentLoaded", function() {
         replace("&" + textBoxQuery, "").
         replace("?" + textBoxQuery + "&", "?").
         replace("?" + textBoxQuery, "");
+        url = removePageNo(url);
         sendTrigger.setAttribute("href", url);
         sendTrigger.click();
     }, false);
@@ -82,6 +90,7 @@ document.addEventListener("DOMContentLoaded", function() {
             } else {
                 url += (url.indexOf("?") !== -1) ? "&" + newTextBoxQuery : "?" + newTextBoxQuery;
             }
+            url = removePageNo(url);
             sendTrigger.setAttribute("href", url);
             sendTrigger.click();
         }
@@ -141,6 +150,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         replace("?" + criteriaCheckBox[k].key + id, "");
                     }
                 }
+                url = removePageNo(url);
                 sendTrigger.setAttribute("href", url);
                 sendTrigger.click();
             }, false);
