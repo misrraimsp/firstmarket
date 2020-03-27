@@ -5,7 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class PublisherServer {
@@ -26,14 +26,8 @@ public class PublisherServer {
         return publisherRepository.findByName(publisherName);
     }
 
-    /*
-    public List<Publisher> findAll() {
-        return (List<Publisher>) publisherRepository.findAll();
-    }
-     */
-
-    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
-        List<Long> publisherIds = publisherRepository.findTopIdsByCategoryId(categoryId, numTopPublishers);
+    public Set<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
+        Set<Long> publisherIds = publisherRepository.findTopIdsByCategoryId(categoryId, numTopPublishers);
         return publisherRepository.findPublishersByIds(publisherIds);
     }
 }

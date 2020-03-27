@@ -10,7 +10,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Set;
 
 public interface BookRepository extends CrudRepository<Book, Long> {
@@ -23,31 +22,25 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     Book findByIsbn(String isbn);
 
-    @Query("SELECT b FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
-    List<Book> findByAncestorCategoryId(@Param("id") Long id);
-
-    @Query("SELECT b.id FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
-    Set<Long> findIdByAncestorCategoryId(@Param("id") Long id);
-
-    @Query("SELECT b FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
-    Page<Book> findByAncestorCategoryIdInPage(@Param("id") Long id, Pageable pageable);
-
     @Query(
             nativeQuery = true,
             value = "SELECT aux.language FROM (" +
                         "SELECT language, COUNT(*) FROM book b WHERE b.id IN :bookIds GROUP BY language ORDER BY 2 DESC LIMIT :numTopLanguages" +
                     ") AS aux"
     )
-    List<Languages> findTopLanguagesByBookIds(@Param("bookIds") List<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
+    Set<Languages> findTopLanguagesByBookIds(@Param("bookIds") Set<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
 
     Page<Book> findAll(Pageable pageable);
 
     @Query("SELECT b FROM Book b WHERE b.id IN :ids")
     Page<Book> findByIds(@Param("ids") Set<Long> ids, Pageable pageable);
 
+    @Query("SELECT b.id FROM Book b WHERE b.category.id IN (SELECT cp.descendant.id FROM Catpath cp WHERE cp.ancestor.id = :id)")
+    Set<Long> findIdByAncestorCategoryId(@Param("id") Long id);
+
     @Query(
             nativeQuery = true,
-            value = "SELECT id FROM book WHERE id IN (SELECT book_id FROM books_authors WHERE author_id IN :authorIds)"
+            value = "SELECT DISTINCT book_id FROM books_authors WHERE author_id IN :authorIds"
     )
     Set<Long> findIdByAuthorIds(@Param("authorIds") Set<Long> authorIds);
 
@@ -59,4 +52,29 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     @Query("SELECT b.id FROM Book b WHERE b.price >= :lowLimit AND b.price < :highLimit")
     Set<Long> findIdByPrice(@Param("lowLimit") BigDecimal lowLimit, @Param("highLimit") BigDecimal highLimit);
+
+    @Query("SELECT b.id FROM Book b WHERE b.title LIKE :q")
+    Set<Long> findIdByTitleLike(@Param("q") String q);
+
+    @Query("SELECT b.id FROM Book b WHERE b.isbn LIKE :q")
+    Set<Long> findIdByIsbnLike(@Param("q") String s);
+
+    @Query("SELECT b.id FROM Book b WHERE b.publisher.id IN (SELECT p.id FROM Publisher p WHERE p.name LIKE :q)")
+    Set<Long> findIdByPublisherNameLike(@Param("q") String s);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT DISTINCT book_id FROM books_authors WHERE author_id IN (" +
+                        "SELECT id FROM author WHERE first_name LIKE :q" +
+                    ")"
+    )
+    Set<Long> findIdByAuthorFirstNameLike(@Param("q") String s);
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT DISTINCT book_id FROM books_authors WHERE author_id IN (" +
+                        "SELECT id FROM author WHERE last_name LIKE :q" +
+                    ")"
+    )
+    Set<Long> findIdByAuthorLastNameLike(@Param("q") String s);
 }

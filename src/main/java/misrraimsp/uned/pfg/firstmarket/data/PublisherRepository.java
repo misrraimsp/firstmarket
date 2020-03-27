@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import java.util.List;
+import java.util.Set;
 
 public interface PublisherRepository extends CrudRepository<Publisher,Long> {
 
@@ -23,11 +23,11 @@ public interface PublisherRepository extends CrudRepository<Publisher,Long> {
                         ") GROUP BY publisher_id ORDER BY 2 DESC LIMIT :numTopPublishers" +
                     ") AS aux"
     )
-    List<Long> findTopIdsByCategoryId(@Param("categoryId") Long categoryId, @Param("numTopPublishers") int numTopPublishers);
+    Set<Long> findTopIdsByCategoryId(@Param("categoryId") Long categoryId, @Param("numTopPublishers") int numTopPublishers);
 
 
 
     @Query("SELECT p FROM Publisher p WHERE p.id IN :publisherIds")
-    List<Publisher> findPublishersByIds(@Param("publisherIds") List<Long> publisherIds);
+    Set<Publisher> findPublishersByIds(@Param("publisherIds") Set<Long> publisherIds);
 
 }

@@ -16,9 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -115,29 +113,27 @@ public class BookServer {
         return bookConverter.convertBookToFormBook(book);
     }
 
-    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
+    public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
         return authorServer.findTopAuthorsByCategoryId(categoryId, numTopAuthors);
     }
 
-    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
+    public Set<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
         return publisherServer.findTopPublishersByCategoryId(categoryId, numTopPublishers);
     }
 
-    public List<Languages> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
-        List<Long> bookIds = new ArrayList<>();
-        bookRepository.findByAncestorCategoryId(categoryId).forEach(book -> bookIds.add(book.getId()));
-        return bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
+    public Set<Languages> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
+        return bookRepository.findTopLanguagesByBookIds(bookRepository.findIdByAncestorCategoryId(categoryId), numTopLanguages);
     }
 
     public Page<Book> findSearchResults(Long categoryId, Set<String> priceIds, Set<Long> authorIds, Set<Long> publisherIds, Set<Languages> languageIds, String q, Pageable pageable) {
-        Set<Long> idsFromCategory = bookRepository.findIdByAncestorCategoryId(categoryId);
-        Set<Long> idsFromAuthor = (authorIds != null) ? bookRepository.findIdByAuthorIds(authorIds) : null;
-        Set<Long> idsFromPublisher = (publisherIds != null) ? bookRepository.findIdByPublisherIds(publisherIds) : null;
-        Set<Long> idsFromLanguage = (languageIds != null) ? bookRepository.findIdByLanguageIds(languageIds) : null;
-        Set<Long> idsFromPrice  = (priceIds != null) ? this.getIdsByPriceIntervals(priceIds) : null;
-        Set<Long> idsFromQ  = (q != null) ? this.getIdsByQueryText(q) : null;
+        Set<Long> idsByCategory = bookRepository.findIdByAncestorCategoryId(categoryId);
+        Set<Long> idsByAuthor = (authorIds != null) ? bookRepository.findIdByAuthorIds(authorIds) : null;
+        Set<Long> idsByPublisher = (publisherIds != null) ? bookRepository.findIdByPublisherIds(publisherIds) : null;
+        Set<Long> idsByLanguage = (languageIds != null) ? bookRepository.findIdByLanguageIds(languageIds) : null;
+        Set<Long> idsByPrice  = (priceIds != null) ? this.getIdsByPriceIntervals(priceIds) : null;
+        Set<Long> idsByQ  = (q != null) ? this.getIdsByQueryText(q) : null;
 
-        Set<Long> resultIds = intersect(idsFromCategory, idsFromPrice, idsFromAuthor, idsFromPublisher, idsFromLanguage, idsFromQ);
+        Set<Long> resultIds = intersect(idsByCategory, idsByPrice, idsByAuthor, idsByPublisher, idsByLanguage, idsByQ);
         if (resultIds.size() == 0){
             resultIds.add(0L);
         }
@@ -145,40 +141,48 @@ public class BookServer {
     }
 
     private Set<Long> getIdsByQueryText(String q) {
-        return null;
+        Set<Long> idsByQ = new HashSet<>();
+        String[] qs = q.split("\\s+");
+        for (String query : qs){
+            idsByQ.addAll(bookRepository.findIdByTitleLike("%" + query + "%"));
+            idsByQ.addAll(bookRepository.findIdByIsbnLike("%" + query + "%"));
+            idsByQ.addAll(bookRepository.findIdByPublisherNameLike("%" + query + "%"));
+            idsByQ.addAll(bookRepository.findIdByAuthorFirstNameLike("%" + query + "%"));
+            idsByQ.addAll(bookRepository.findIdByAuthorLastNameLike("%" + query + "%"));
+        }
+        return idsByQ;
     }
 
     private Set<Long> getIdsByPriceIntervals(Set<String> priceIds) {
-        Set<Long> idsFromPrice = new HashSet<>();
+        Set<Long> idsByPrice = new HashSet<>();
         for (String priceIntervalIndex : priceIds){
             PriceIntervals pi = PriceIntervals.values()[Integer.parseInt(priceIntervalIndex)];
-            idsFromPrice.addAll(bookRepository.findIdByPrice(pi.getLowLimit(), pi.getHighLimit()));
+            idsByPrice.addAll(bookRepository.findIdByPrice(pi.getLowLimit(), pi.getHighLimit()));
         }
-        return idsFromPrice;
+        return idsByPrice;
     }
 
-    private Set<Long> intersect(Set<Long> idsFromCategory,
-                                Set<Long> idsFromPrice,
-                                Set<Long> idsFromAuthor,
-                                Set<Long> idsFromPublisher,
-                                Set<Long> idsFromLanguage,
-                                Set<Long> idsFromQ) {
-
-        Set<Long> result = new HashSet<>(idsFromCategory);
-        if (idsFromPrice != null) {
-            result.retainAll(idsFromPrice);
+    /**
+     * This method intersect a variable quantity of Long number sets.
+     * Also, any set can be of NULL value
+     * @param sets
+     * @return intersection set. If no intersection is possible returns NULL
+     */
+    private Set<Long> intersect(Set<Long> ... sets) {
+        int i = 0;
+        int size = sets.length;
+        while (sets[i] == null && i < size){
+            i++;
         }
-        if (idsFromAuthor != null) {
-            result.retainAll(idsFromAuthor);
+        if (i == size){
+            return null;
         }
-        if (idsFromPublisher != null) {
-            result.retainAll(idsFromPublisher);
-        }
-        if (idsFromLanguage != null) {
-            result.retainAll(idsFromLanguage);
-        }
-        if (idsFromQ != null) {
-            result.retainAll(idsFromQ);
+        Set<Long> result = new HashSet<>(sets[i]);
+        for (int j = i + 1; j < size; j++) {
+            Set<Long> s = sets[j];
+            if (s != null) {
+                result.retainAll(s);
+            }
         }
         return result;
     }

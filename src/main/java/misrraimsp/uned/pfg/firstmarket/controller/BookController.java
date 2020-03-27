@@ -6,7 +6,6 @@ import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
-import misrraimsp.uned.pfg.firstmarket.model.search.Filter;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
@@ -156,6 +155,7 @@ public class BookController implements Constants {
                                     Model model,
                                     @AuthenticationPrincipal User authUser){
 
+        //debug
         {
             System.out.println("*** begin ***");
             System.out.println("Page Number: " + pageNo);
@@ -169,22 +169,16 @@ public class BookController implements Constants {
             System.out.println("*** end ***");
         }
 
-        Category category = catServer.findCategoryById(categoryId);
-
-        Filter filter = new Filter();
-        filter.setCategory(category);
-
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
         Page<Book> books = bookServer.findSearchResults(categoryId, priceId, authorId, publisherId, languageId, q, pageable);
-
-        List<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, NUM_TOP_AUTHORS);
-        List<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, NUM_TOP_PUBLISHERS);
-        List<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, NUM_TOP_LANGUAGES);
-
+        Set<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, NUM_TOP_AUTHORS);
+        Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, NUM_TOP_PUBLISHERS);
+        Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, NUM_TOP_LANGUAGES);
+        Category category = catServer.findCategoryById(categoryId);
         List<Category> childrenCategories = catServer.getChildren(category);
         List<Category> categorySequence = catServer.getCategorySequence(category);
 

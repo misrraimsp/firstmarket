@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class AuthorServer {
@@ -35,14 +36,8 @@ public class AuthorServer {
         return savedAuthors;
     }
 
-    /*
-    public List<Author> findAll() {
-        return (List<Author>) authorRepository.findAll();
-    }
-     */
-
-    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
-        List<Long> authorIds = authorRepository.findTopIdsByCategoryId(categoryId, numTopAuthors);
+    public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
+        Set<Long> authorIds = authorRepository.findTopIdsByCategoryId(categoryId, numTopAuthors);
         return authorRepository.findAuthorsByIds(authorIds);
     }
 
