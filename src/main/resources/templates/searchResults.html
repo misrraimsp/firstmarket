@@ -78,33 +78,49 @@
                     <!-- price criteria -->
                     <button class="accordion" id="priceAcc">Price</button>
                     <div class="panel mb-1">
-                        <div class="custom-control custom-checkbox my-3" th:each="price : ${prices}">
-                            <input class="priceCheckBox custom-control-input" type="checkbox" th:id="'pr-' + ${price.ordinal()}" />
-                            <label class="custom-control-label" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="price : ${prices}">
+                                <input class="priceCheckBox" type="checkbox" th:id="'pr-' + ${price.ordinal()}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- author criteria -->
                     <button class="accordion" id="authorAcc">Author</button>
                     <div class="panel mb-1">
-                        <div class="custom-control custom-checkbox my-3" th:each="author : ${authors}">
-                            <input class="authorCheckBox custom-control-input" type="checkbox" th:id="'au-' + ${author.id}" />
-                            <label class="custom-control-label" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="author : ${authors}">
+                                <input class="authorCheckBox" type="checkbox" th:id="'au-' + ${author.id}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- publisher criteria -->
                     <button class="accordion" id="publisherAcc">Publisher</button>
                     <div class="panel mb-1">
-                        <div class="custom-control custom-checkbox my-3" th:each="publisher : ${publishers}">
-                            <input class="publisherCheckBox custom-control-input" type="checkbox" th:id="'pu-' + ${publisher.id}" />
-                            <label class="custom-control-label" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="publisher : ${publishers}">
+                                <input class="publisherCheckBox" type="checkbox" th:id="'pu-' + ${publisher.id}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <!-- language criteria -->
                     <button class="accordion" id="languageAcc">Language</button>
                     <div class="panel">
-                        <div class="custom-control custom-checkbox my-3" th:each="language : ${languages}">
-                            <input class="languageCheckBox custom-control-input" type="checkbox" th:id="'la-' + ${language.ordinal()}" />
-                            <label class="custom-control-label" th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="language : ${languages}">
+                                <input class="languageCheckBox" type="checkbox" th:id="'la-' + ${language.ordinal()}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
