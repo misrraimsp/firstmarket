@@ -21,14 +21,14 @@
                             <input class="form-control" type="password" id="password" placeholder="enter password" name="password" required>
                             <div class="invalid-feedback">Please fill out this field</div>
                         </div>
-                        <button class="btn btn-primary" type="submit">Login</button>
+                        <button class="btn btn-info" type="submit">Login</button>
                     </form>
                     <br/>
-                    <span>New? Click <a th:href="@{/newUser}">here</a> to register.</span>
+                    <span>New? Click <a class="font-weight-bolder text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
-            <footer th:replace="fragments/layout::footer"></footer>
+            <footer th:replace="fragments/layout::fixedFooter"></footer>
         </div>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
     </body>

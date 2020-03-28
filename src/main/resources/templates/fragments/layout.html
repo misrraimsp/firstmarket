@@ -104,21 +104,6 @@
             </div>
         </div>
 
-        <!--<div class="row" th:fragment="jumbotron">
-            <div class="col-sm-12 bg-white">
-                <div class="jumbotron jumbotron-fluid mb-0">
-                    <h1 class="text-center">
-                        <span class="font-weight-bold">firstmarket</span><small>, where books belong</small>
-                    </h1>
-                    <div class="text-center" sec:authorize="hasRole('ADMIN')">
-                        <h6><code class="text-info font-italic">
-                            <strong>< ADMIN - a great power comes with a great responsibility ></strong>
-                        </code></h6>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-
         <div class="row" th:fragment="underHead(text)">
             <div class="col-sm-12 bg-white">
                 <h2 class="text-center my-4" th:text="${text}"></h2>
@@ -128,10 +113,17 @@
         <div class="row" th:fragment="footer">
             <div class="col-sm-12 mt-5">
                 <footer class="bg-light text-center">
-                    <span class="info-copyrigth"><a href="https://github.com/misrraimsp/firstmarket">firstmarket</a> © 2020</span>
+                    <span class="info-copyrigth"><a class="text-info" href="https://github.com/misrraimsp/firstmarket" style="text-decoration: none">FirstMarket</a> © 2020</span>
                 </footer>
             </div>
         </div>
+
+        <div class="fixed-footer mb-3" th:fragment="fixedFooter">
+            <footer class="bg-light text-center">
+                <span class="info-copyrigth"><a class="text-info" href="https://github.com/misrraimsp/firstmarket" style="text-decoration: none">FirstMarket</a> © 2020</span>
+            </footer>
+        </div>
+
     </body>
 
 </html>
