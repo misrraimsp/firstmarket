@@ -44,11 +44,14 @@ public class BookController implements Constants {
         this.userServer = userServer;
     }
 
+    /*
     @GetMapping("/admin/books")
     public String showBooks(Model model){
         model.addAttribute("books", bookServer.findAll());
-        return "books";
+        return "oldbooks";
     }
+
+     */
 
     @GetMapping("/book/{id}")
     public String showBook(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User authUser){
@@ -95,7 +98,7 @@ public class BookController implements Constants {
             model.addAttribute("languages", Languages.values());
             return "newBook";
         }
-        return "redirect:/admin/books";
+        return "redirect:/books";
     }
 
     @GetMapping("/admin/editBook/{id}")
@@ -134,26 +137,26 @@ public class BookController implements Constants {
             model.addAttribute("languages", Languages.values());
             return "editBook";
         }
-        return "redirect:/admin/books";
+        return "redirect:/books";
     }
 
     @GetMapping("/admin/deleteBook/{id}")
     public String deleteBook(@PathVariable("id") Long id){
         bookServer.deleteById(id);
-        return "redirect:/admin/books";
+        return "redirect:/books";
     }
 
     @GetMapping("/books")
-    public String showSearchResults(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
-                                    @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
-                                    @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
-                                    @RequestParam(required = false) Set<String> priceId,
-                                    @RequestParam(required = false) Set<Long> authorId,
-                                    @RequestParam(required = false) Set<Long> publisherId,
-                                    @RequestParam(required = false) Set<Languages> languageId,
-                                    @RequestParam(required = false) String q,
-                                    Model model,
-                                    @AuthenticationPrincipal User authUser){
+    public String showBooks(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
+                            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
+                            @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
+                            @RequestParam(required = false) Set<String> priceId,
+                            @RequestParam(required = false) Set<Long> authorId,
+                            @RequestParam(required = false) Set<Long> publisherId,
+                            @RequestParam(required = false) Set<Languages> languageId,
+                            @RequestParam(required = false) String q,
+                            Model model,
+                            @AuthenticationPrincipal User authUser){
 
         //debug
         {
@@ -197,7 +200,7 @@ public class BookController implements Constants {
         model.addAttribute("languages", languages);
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("TEXT_QUERY", TEXT_QUERY);
-        return "searchResults";
+        return "books";
     }
 
 }

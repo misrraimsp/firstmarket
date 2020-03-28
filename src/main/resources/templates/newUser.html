@@ -2,50 +2,57 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/layout::head('New User')"></head>
+    <head th:replace="fragments/components::head('New User')"></head>
     <body>
-        <header th:replace="fragments/layout::header"></header>
-        <div class="container">
-            <ul class="breadcrumb my-2">
-                <li class="breadcrumb-item"><a th:href="@{/}">Home</a></li>
-                <li class="breadcrumb-item active">New User</li>
-            </ul>
-            <h3>New User</h3>
-            <form class="needs-validation" novalidate th:action="@{/newUser}" th:object="${formUser}" method="POST" action="#">
-                <div class="form-group">
-                    <label for="email">E-mail:</label>
-                    <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${emailPattern}">
-                    <div class="invalid-feedback">Please fill out this field with your email</div>
-                    <div th:replace="fragments/components::backendValidationErrors('email')"></div>
+        <div class="container-fluid">
+            <header th:replace="fragments/components::header"></header>
+            <div th:replace="fragments/components::title(text = 'New User')"></div>
+            <div class="row">
+                <div class="col-sm-3 bg-white"></div>
+                <div class="col-sm-6 bg-light">
+                    <form class="needs-validation" novalidate th:action="@{/newUser}" th:object="${formUser}" method="POST" action="#">
+                        <!-- email -->
+                        <div class="form-group">
+                            <label for="email">E-mail:</label>
+                            <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${emailPattern}">
+                            <div class="invalid-feedback">Please fill out this field with your email</div>
+                            <div th:replace="fragments/components::backendValidationFieldErrors('email')"></div>
+                        </div>
+                        <!-- password -->
+                        <div class="form-group">
+                            <label for="newPassword">Password:</label>
+                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${passwordPattern}" th:title="#{password.invalidFormat}"/>
+                            <div class="invalid-feedback" th:text="#{password.invalidFormat}">Please fill out this field with a valid password</div>
+                            <div th:replace="fragments/components::backendValidationFieldErrors('password')"></div>
+                        </div>
+                        <!-- confirm password -->
+                        <div class="form-group">
+                            <label for="newPasswordConfirm">Confirm Password:</label>
+                            <input class="form-control" type="password" th:field="*{matchingPassword}" id="newPasswordConfirm" placeholder="confirm password" required pattern=".*" title="Please enter the same password as above"/>
+                            <div class="invalid-feedback" th:text="#{password.notMatching}">Please enter the same password as above</div>
+                            <div th:replace="fragments/components::backendValidationFieldErrors('matchingPassword')"></div>
+                        </div>
+                        <!-- first name -->
+                        <div class="form-group">
+                            <label for="firstName">First Name:</label>
+                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${textBasicPattern}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                            <div th:replace="fragments/components::backendValidationFieldErrors('firstName')"></div>
+                        </div>
+                        <!-- last name -->
+                        <div class="form-group">
+                            <label for="lastName">Last Name:</label>
+                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${textBasicPattern}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                            <div th:replace="fragments/components::backendValidationFieldErrors('lastName')"></div>
+                        </div>
+                        <button th:replace="fragments/components::saveButton"></button>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <label for="newPassword">Password:</label>
-                    <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${passwordPattern}" th:title="#{password.invalidFormat}"/>
-                    <div class="invalid-feedback" th:text="#{password.invalidFormat}">Please fill out this field with a valid password</div>
-                    <div th:replace="fragments/components::backendValidationErrors('password')"></div>
-                </div>
-                <div class="form-group">
-                    <label for="newPasswordConfirm">Confirm Password:</label>
-                    <input class="form-control" type="password" th:field="*{matchingPassword}" id="newPasswordConfirm" placeholder="confirm password" required pattern=".*" title="Please enter the same password as above"/>
-                    <div class="invalid-feedback" th:text="#{password.notMatching}">Please enter the same password as above</div>
-                    <div th:replace="fragments/components::backendValidationErrors('matchingPassword')"></div>
-                </div>
-                <div class="form-group">
-                    <label for="firstName">First Name:</label>
-                    <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${textBasicPattern}">
-                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                    <div th:replace="fragments/components::backendValidationErrors('firstName')"></div>
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Last Name:</label>
-                    <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${textBasicPattern}">
-                    <div class="invalid-feedback">Please fill out this field correctly</div>
-                    <div th:replace="fragments/components::backendValidationErrors('lastName')"></div>
-                </div>
-                <button th:replace="fragments/components::saveButton"></button>
-            </form>
+                <div class="col-sm-3 bg-white"></div>
+            </div>
+            <footer th:replace="fragments/components::fixedFooter"></footer>
         </div>
-        <footer th:replace="fragments/layout::footer"></footer>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/matchingPasswords.js}"></script>
     </body>

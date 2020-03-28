@@ -2,21 +2,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/layout::head('Edit Book')"></head>
+    <head th:replace="fragments/components::head('Edit Book')"></head>
     <body>
         <div class="container-fluid">
-            <div th:replace="fragments/layout::header"></div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="breadcrumb rounded-0 my-0">
-                    <!--<ul class="breadcrumb mt-1">-->
-                        <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-                        <li class="breadcrumb-item"><a th:href="@{/admin/books}">Books</a></li>
-                        <li class="breadcrumb-item active">Edit Book</li>
-                    </ul>
-                </div>
-            </div>
-            <div th:replace="fragments/layout::underHead('Edit Book')"></div>
+            <div th:replace="fragments/components::header"></div>
+            <div th:replace="fragments/components::title(text = 'Edit Book')"></div>
             <div class="row">
                 <div class="col-sm-2 bg-white"></div>
                 <div class="col-sm-8">
@@ -208,7 +198,7 @@
                 </div>
                 <div class="col-sm-2 bg-white"></div>
             </div>
-            <footer th:replace="fragments/layout::footer"></footer>
+            <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/isbnChecksum.js}"></script>

@@ -3,16 +3,21 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
-    <head th:replace="fragments/layout::head('Book Details')"></head>
+    <head th:replace="fragments/components::head('Book Details')"></head>
     <body>
         <div class="container-fluid">
-            <div th:replace="fragments/layout::header"></div>
-            <!--<div th:replace="fragments/layout::jumbotron"></div>-->
-            <div class="row my-2">
+            <!-- header -->
+            <div th:replace="fragments/components::header"></div>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- main book info -->
+            <div class="row my-5">
                 <div class="col-sm-1 bg-white"></div>
+                <!-- image -->
                 <div class="col-sm-3 bg-white">
                     <img class="img-fluid" th:src="@{/image/{id}(id=${book.image.id})}"/>
                 </div>
+                <!-- book info -->
                 <div class="col-sm-6 bg-white">
                     <div class="row">
                         <div class="col-sm-6" >
@@ -35,6 +40,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- right side buttons -->
                 <div class="col-sm-2 bg-white" >
                     <div sec:authorize="!hasRole('ADMIN')">
                         <button class="addBook btn btn-outline-info btn-lg align-center" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
@@ -48,7 +54,8 @@
                     </div>
                 </div>
             </div>
-            <div th:replace="fragments/layout::footer"></div>
+            <!-- footer -->
+            <div th:replace="fragments/components::footer"></div>
             <script th:src="@{/js/ajaxCart.js}"></script>
         </div>
     </body>

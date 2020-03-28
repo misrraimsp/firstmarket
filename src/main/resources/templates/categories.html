@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/layout::head('Categories')">
+    <head th:replace="fragments/components::head('Categories')">
     </head>
     <body>
-        <header th:replace="fragments/layout::header"></header>
-        <div class="container">
-            <div th:replace="fragments/layout::underHead('Categories')"></div>
+        <div class="container-fluid">
+            <header th:replace="fragments/components::header"></header>
+            <div th:replace="fragments/components::title(text = 'Categories')"></div>
             <div th:replace="fragments/components::addButton('newCategory')"></div>
             <table class="table">
                 <thead class="thead-light">
@@ -19,15 +19,15 @@
                 <tbody>
                 <tr th:each="ic : ${indentedCategories}">
                     <td><span th:text="${ic.name}">name</span></td>
-                    <td th:if="${ic.name!='firstmarket'}">
+                    <td th:if="${ic.id!=ic.parent.id}">
                         <a th:href="@{/admin/editCategory/{id}(id=${ic.id})}" data-toggle="tooltip" title="Edit Category"><i class="fas fa-pen"></i></a>
                         <a th:href="@{/admin/deleteCategory/{id}(id=${ic.id})}" data-toggle="tooltip" title="Delete Category"><i class='fas fa-trash-alt' style='color:red'></i></a>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <footer th:replace="fragments/components::footer"></footer>
         </div>
-        <footer th:replace="fragments/layout::footer"></footer>
         <script th:src="@{/js/enableTooltips.js}"></script>
     </body>
 </html>

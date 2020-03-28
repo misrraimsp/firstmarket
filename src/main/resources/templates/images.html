@@ -2,48 +2,54 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/layout::head('Images')"></head>
+    <head th:replace="fragments/components::head('Images')"></head>
     <body>
-        <header th:replace="fragments/layout::header"></header>
-        <div class="container">
-            <div th:replace="fragments/layout::underHead('Images')"></div>
-            <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
-                <div class="form-group my-2">
-                    <input class="form-control" type="file" th:name="image" accept="image/*" required/>
-                    <div class="invalid-feedback">Please select an image</div>
+        <div class="container-fluid">
+            <header th:replace="fragments/components::header"></header>
+            <div th:replace="fragments/components::title(text = 'Images')"></div>
+            <div class="row">
+                <div class="col-sm-3 bg-white"></div>
+                <div class="col-sm-6 bg-light">
+                    <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
+                        <div class="form-group my-2">
+                            <input class="form-control" type="file" th:name="image" accept="image/*" required/>
+                            <div class="invalid-feedback">Please select an image</div>
+                        </div>
+                        <div class="alert alert-danger alert-dismissible fade show my-2" th:each="cv : ${constraintViolations}">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            <strong>Error: </strong><span th:text="#{image.error}"></span>
+                        </div>
+                        <button th:replace="fragments/components::saveButton"></button>
+                    </form>
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>MIME type</th>
+                            <th>is Default</th>
+                            <th>Image</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="mi : ${allMetaInfo}">
+                            <td><span th:text="${mi.name}">name</span></td>
+                            <td><span th:text="${mi.mimeType}">mimeType</span></td>
+                            <td><span th:text="${mi.default}">isDefault</span></td>
+                            <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
+                            <td th:if="${!mi.default}">
+                                <a th:href="@{/admin/deleteImage/{id}(id=${mi.id})}" data-toggle="tooltip" title="Delete Image">
+                                    <i class='fas fa-trash-alt' style='color:red'></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="alert alert-danger alert-dismissible fade show my-2" th:each="cv : ${constraintViolations}">
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                    <strong>Error: </strong><span th:text="#{image.error}"></span>
-                </div>
-                <button th:replace="fragments/components::saveButton"></button>
-            </form>
-            <table class="table">
-                <thead class="thead-light">
-                <tr>
-                    <th>Name</th>
-                    <th>MIME type</th>
-                    <th>is Default</th>
-                    <th>Image</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="mi : ${allMetaInfo}">
-                    <td><span th:text="${mi.name}">name</span></td>
-                    <td><span th:text="${mi.mimeType}">mimeType</span></td>
-                    <td><span th:text="${mi.default}">isDefault</span></td>
-                    <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
-                    <td th:if="${!mi.default}">
-                        <a th:href="@{/admin/deleteImage/{id}(id=${mi.id})}" data-toggle="tooltip" title="Delete Image">
-                            <i class='fas fa-trash-alt' style='color:red'></i>
-                        </a>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                <div class="col-sm-3 bg-white"></div>
+            </div>
+            <footer th:replace="fragments/components::footer"></footer>
         </div>
-        <footer th:replace="fragments/layout::footer"></footer>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/enableTooltips.js}"></script>
     </body>

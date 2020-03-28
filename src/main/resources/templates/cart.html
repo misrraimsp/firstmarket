@@ -2,48 +2,50 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/layout::head('Cart')"></head>
+    <head th:replace="fragments/components::head('Cart')"></head>
     <body>
-        <header th:replace="fragments/layout::header"></header>
-        <div class="container">
-            <ul class="breadcrumb my-2">
-                <li class="breadcrumb-item"><a th:href="@{/home}">Home</a></li>
-                <li class="breadcrumb-item active">Cart</li>
-            </ul>
-            <div th:replace="fragments/layout::underHead('Cart')"></div>
-            <table class="table">
-                <thead class="thead-light">
-                <tr>
-                    <th>ISBN</th>
-                    <th>Title</th>
-                    <th>Image</th>
-                    <th>Quantity</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:id="'i-' + ${item.id}" th:each="item : ${items}">
-                    <td><span th:text="${item.book.isbn}">isbn</span></td>
-                    <td><span th:text="${item.book.title}">title</span></td>
-                    <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
-                    <td><span th:id="'iq-' + ${item.id}" th:text="${item.quantity}">quantity</span></td>
-                    <td>
-                        <button class="incrementItem" th:id="'ii-' + ${item.id}" data-toggle="tooltip" title="Increment Quantity">
-                            <i class="far fa-plus-square"></i>
-                        </button><br/>
-                        <button class="decrementItem" th:id="'di-' + ${item.id}" data-toggle="tooltip" title="Decrement Quantity">
-                            <i class="far fa-minus-square"></i>
-                        </button><br/>
-                        <button class="removeItem" th:id="'ri-' + ${item.id}" data-toggle="tooltip" title="Delete Item">
-                            <i class='fas fa-trash-alt' style='color:red'></i>
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div th:replace="fragments/components::purchaseButton('user','addPurchase')"></div>
+        <div class="container-fluid">
+            <header th:replace="fragments/components::header"></header>
+            <div th:replace="fragments/components::title(text = 'Cart')"></div>
+            <div class="row">
+                <div class="col-sm-2 bg-white"></div>
+                <div class="col-sm-8 bg-light">
+                    <table class="table">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>ISBN</th>
+                            <th>Title</th>
+                            <th>Image</th>
+                            <th>Quantity</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:id="'i-' + ${item.id}" th:each="item : ${items}">
+                            <td><span th:text="${item.book.isbn}">isbn</span></td>
+                            <td><span th:text="${item.book.title}">title</span></td>
+                            <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
+                            <td><span th:id="'iq-' + ${item.id}" th:text="${item.quantity}">quantity</span></td>
+                            <td>
+                                <button class="incrementItem" th:id="'ii-' + ${item.id}" data-toggle="tooltip" title="Increment Quantity">
+                                    <i class="far fa-plus-square"></i>
+                                </button><br/>
+                                <button class="decrementItem" th:id="'di-' + ${item.id}" data-toggle="tooltip" title="Decrement Quantity">
+                                    <i class="far fa-minus-square"></i>
+                                </button><br/>
+                                <button class="removeItem" th:id="'ri-' + ${item.id}" data-toggle="tooltip" title="Delete Item">
+                                    <i class='fas fa-trash-alt' style='color:red'></i>
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div th:replace="fragments/components::purchaseButton('user','addPurchase')"></div>
+                </div>
+                <div class="col-sm-2 bg-white"></div>
+            </div>
+            <footer th:replace="fragments/components::footer"></footer>
         </div>
-        <footer th:replace="fragments/layout::footer"></footer>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <script th:src="@{/js/ajaxCart.js}"></script>
     </body>

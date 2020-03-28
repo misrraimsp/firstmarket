@@ -1,38 +1,178 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
-    <head th:replace="fragments/layout::head('Books')"></head>
+    <head th:replace="fragments/components::head('Books')"></head>
     <body>
-        <header th:replace="fragments/layout::header"></header>
-        <div class="container">
-            <div th:replace="fragments/layout::underHead('Books')"></div>
-            <div th:replace="fragments/components::addButton('newBook')"></div>
-            <table class="table">
-                <thead class="thead-light">
-                    <tr>
-                        <th>ISBN</th>
-                        <th>Title</th>
-                        <th>Category</th>
-                        <th>Image</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="book : ${books}">
-                        <td><span th:text="${book.isbn}">isbn</span></td>
-                        <td><span th:text="${book.title}">title</span></td>
-                        <td><span th:text="${book.category.name}">category</span></td>
-                        <td><img th:src="@{/image/{id}(id=${book.image.id})}" style="width:64px;height:64px;"></td>
-                        <td>
-                            <a th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book"><i class="fas fa-pen"></i></a>
-                            <a th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book"><i class='fas fa-trash-alt' style='color:red'></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="container-fluid bg-light">
+            <!-- header -->
+            <div th:replace="fragments/components::header"></div>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- under header -->
+            <div class="row mt-3">
+                <div class="col-sm-3"></div>
+                <!-- pagination legend -->
+                <div class="col-sm-8 text-right text-info">
+                    <p th:replace="fragments/components::paginationLegend"></p>
+                </div>
+                <!-- right margin  -->
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- main content -->
+            <div class="row">
+                <!-- SEARCH CRITERIA  -->
+                <a style="display: none" id="trigger"></a>
+                <div class="col-sm-3 my-3">
+                    <!-- search query -->
+                    <div class="input-group">
+                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${TEXT_QUERY}">
+                        <div class="input-group-append">
+                            <button class="btn btn-info btn-sm" id="searchTextBoxButton">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- alert box text query -->
+                    <div class="alert alert-info alert-dismissible mt-1 mb-0 p-0 d-flex" id="textQueryAlertBox">
+                        <small class="ml-2 mr-auto mt-1">Java</small>
+                        <button class="btn btn-outline-info btn-sm border-0 my-0">
+                            <i class="fas fa-times"></i>
+                        </button>
+                        <a class="close" data-dismiss="alert" style="display: none"></a>
+                    </div>
+                    <!-- category breadcrumb -->
+                    <div class="mt-3 mb-1">
+                        <ol class="breadcrumb my-0 p-1">
+                            <li class="breadcrumb-item" th:each="c : ${categorySequence}">
+                                <a class="categoryLink text-info" th:href="@{/books?categoryId={categoryId}(categoryId=${c.id})}"><small class="font-weight-lighter" th:text="${c.name}">Category Name</small></a>
+                            </li>
+                            <li class="breadcrumb-item active font-weight-lighter"><small class="font-weight-lighter" th:text="${category.name}">Category Name</small></li>
+                        </ol>
+                    </div>
+                    <!-- category criteria -->
+                    <button class="accordion" id="categoryAcc">Category</button>
+                    <div class="panel mb-1">
+                        <div class="my-3" th:each="cat : ${childrenCategories}">
+                            <a class="categoryLink text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                        </div>
+                    </div>
+                    <!-- price criteria -->
+                    <button class="accordion" id="priceAcc">Price</button>
+                    <div class="panel mb-1">
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="price : ${prices}">
+                                <input class="priceCheckBox" type="checkbox" th:id="'pr-' + ${price.ordinal()}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- author criteria -->
+                    <button class="accordion" id="authorAcc">Author</button>
+                    <div class="panel mb-1">
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="author : ${authors}">
+                                <input class="authorCheckBox" type="checkbox" th:id="'au-' + ${author.id}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- publisher criteria -->
+                    <button class="accordion" id="publisherAcc">Publisher</button>
+                    <div class="panel mb-1">
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="publisher : ${publishers}">
+                                <input class="publisherCheckBox" type="checkbox" th:id="'pu-' + ${publisher.id}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- language criteria -->
+                    <button class="accordion" id="languageAcc">Language</button>
+                    <div class="panel">
+                        <div class="d-flex flex-column pt-3">
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="language : ${languages}">
+                                <input class="languageCheckBox" type="checkbox" th:id="'la-' + ${language.ordinal()}"/>
+                                <div class="state p-info-o">
+                                    <label th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- SEARCH RESULTS  -->
+                <div class="col-sm-8">
+                    <div class="row d-flex flex-column">
+                        <div class="col-sm-12" th:each="book : ${pageOfBooks}">
+                            <div class="row my-3">
+                                <div class="col-sm-3 bg-white">
+                                    <a th:href="@{/book/{id}(id=${book.id})}"><img class="img-fluid my-3" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
+                                </div>
+                                <div class="col-sm-6 bg-white">
+                                    <a th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none"><p class="text-responsive text-info font-weight-bold mt-3" th:text="${book.title}">title</p></a>
+                                    <p><strong><span th:text="${book.authorsString}"></span></strong></p>
+                                    <p><small>Published by </small><strong><span th:text="${book.publisher.name}"></span></strong></p>
+                                    <p class="my-0"><small><span th:text="${book.language}"></span></small></p>
+                                    <p class="my-0"><small><span th:text="${book.category.name}"></span></small></p>
+                                    <p class="mb-3"><small>ISBN-<span th:text="${book.isbn}"></span></small></p>
+                                </div>
+                                <div class="col-sm-3 bg-white">
+                                    <div class="row d-flex flex-column">
+                                        <div class="col-sm-12 my-3" sec:authorize="!hasRole('ADMIN')">
+                                            <button class="addBook btn btn-outline-info btn-sm btn-block align-center" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                                                Add to Cart<i class="fas fa-cart-plus ml-2"></i>
+                                            </button>
+                                        </div>
+                                        <div class="col-sm-12 my-3" sec:authorize="hasRole('ADMIN')">
+                                            <div class="d-flex flex-column">
+                                                <a class="btn btn-outline-info btn-sm align-center mb-3" th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                                                    Edit Book<i class="fas fa-pen ml-2"></i>
+                                                </a>
+                                                <a class="btn btn-outline-danger btn-sm align-center" th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book">
+                                                    Delete Book<i class="fas fa-trash-alt ml-2"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <p><strong>EUR <span th:text="${book.price}"></span></strong></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- pagination -->
+                    <div class="row mt-4">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <!-- pagination links -->
+                            <div th:replace="fragments/components::paginationLinks"></div>
+                            <!-- pagination legend -->
+                            <div class="mt-2 text-center text-info">
+                                <p th:replace="fragments/components::paginationLegend"></p>
+                            </div>
+                        </div>
+                        <div class="col-sm-4"></div>
+                    </div>
+                </div>
+                <!-- right margin  -->
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- footer -->
+            <div th:replace="fragments/components::footer"></div>
         </div>
-        <footer th:replace="fragments/layout::footer"></footer>
-        <script th:src="@{/js/enableTooltips.js}"></script>
+        <script th:src="@{/js/ajaxCart.js}"></script>
+        <script th:src="@{/js/accordion.js}"></script>
+        <script th:src="@{/js/searchCriteria.js}"></script>
+        <script th:replace="fragments/components::paginationMvcVariables"></script>
+        <script th:src="@{/js/paginationLinks.js}"></script>
+        <script th:src="@{/js/paginationLegend.js}"></script>
     </body>
 </html>

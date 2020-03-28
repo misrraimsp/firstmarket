@@ -3,32 +3,13 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
-    <head th:replace="fragments/layout::head('FirstMarket')"></head>
+    <head th:replace="fragments/components::head('FirstMarket')"></head>
     <body>
         <div class="container-fluid bg-light">
-            <!-- layout::header -->
-            <div th:replace="fragments/layout::header"></div>
+            <!-- header -->
+            <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
-            <div class="row">
-                <div class="col-sm-12">
-                    <!-- NavBar -->
-                    <nav class="navbar navbar-expand-sm p-0 m-0" style="background-color:#e9ecef">
-                        <!-- Toggler/collapsibe Button -->
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <!-- Navbar links -->
-                        <div class="collapse navbar-collapse" id="#collapsibleNavbar">
-                            <ul class="navbar-nav">
-                                <li class="nav-item" th:each="cat : ${mainCategories}">
-                                    <!--<a class="nav-link text-dark font-weight-bold" th:href="@{/books/search/{categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>-->
-                                    <a class="btn btn-outline-info btn-sm border-0 rounded-0" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-            </div>
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- jumbotron -->
             <div class="row">
                 <div class="col-sm-12 bg-white">
@@ -66,7 +47,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- books -->
             <div class="row mt-4">
                 <div class="col-sm-1"></div>
@@ -114,13 +94,13 @@
                 </div>
                 <div class="col-sm-4"></div>
             </div>
-            <!-- layout::footer -->
-            <div th:replace="fragments/layout::footer"></div>
-            <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
-            <script th:src="@{/js/ajaxCart.js}"></script>
-            <script th:replace="fragments/components::paginationMvcVariables"></script>
-            <script th:src="@{/js/paginationLinks.js}"></script>
-            <script th:src="@{/js/paginationLegend.js}"></script>
+            <!-- footer -->
+            <div th:replace="fragments/components::footer"></div>
         </div>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
+        <script th:src="@{/js/ajaxCart.js}"></script>
+        <script th:replace="fragments/components::paginationMvcVariables"></script>
+        <script th:src="@{/js/paginationLinks.js}"></script>
+        <script th:src="@{/js/paginationLegend.js}"></script>
     </body>
 </html>

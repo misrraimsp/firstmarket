@@ -47,7 +47,7 @@ public class CatServer {
     }
 
     public List<Category> getMainCategories() {
-        return this.getChildren(categoryRepository.getRootCategory());
+        return this.getChildren(rootCategoryNode.getData());
     }
 
     public List<Category> getIndentedCategories(){
@@ -55,6 +55,7 @@ public class CatServer {
         for (TreeNode<Category> node : rootCategoryNode) {
             Category indentedCategory = new Category();
             indentedCategory.setId(node.getData().getId());
+            indentedCategory.setParent(node.getData().getParent());
             if (node == rootCategoryNode){
                 indentedCategory.setName(node.getData().getName());
             }
