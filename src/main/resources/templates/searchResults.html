@@ -133,7 +133,7 @@
                                     <a th:href="@{/book/{id}(id=${book.id})}"><img class="img-fluid my-3" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
                                 </div>
                                 <div class="col-sm-6 bg-white">
-                                    <a th:href="@{/book/{id}(id=${book.id})}"><p class="text-responsive text-info font-weight-bold mt-3" th:text="${book.title}">title</p></a>
+                                    <a th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none"><p class="text-responsive text-info font-weight-bold mt-3" th:text="${book.title}">title</p></a>
                                     <p><strong><span th:text="${book.authorsString}"></span></strong></p>
                                     <p><small>Published by </small><strong><span th:text="${book.publisher.name}"></span></strong></p>
                                     <p class="my-0"><small><span th:text="${book.language}"></span></small></p>
@@ -143,10 +143,9 @@
                                 <div class="col-sm-3 bg-white">
                                     <div class="row d-flex flex-column">
                                         <div class="col-sm-12 my-3">
-                                            <a class="btn btn-outline-info btn-lg align-center" th:href="@{/user/addBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Add to Cart">
-                                                <!--Add to Cart<i class="fas fa-cart-plus fa-2x"></i>-->
+                                            <button class="addBook btn btn-outline-info btn-lg align-center" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
                                                 Add to Cart<i class="fas fa-cart-plus ml-2"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                         <div class="col-sm-12">
                                             <p><strong>EUR <span th:text="${book.price}"></span></strong></p>

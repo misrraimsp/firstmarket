@@ -75,7 +75,7 @@
                         <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${pageOfBooks}">
                             <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-image card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
                             <div class="card-body">
-                                <a th:href="@{/book/{id}(id=${book.id})}"><p class="card-title text-responsive text-info font-weight-bold" th:text="${book.title}">title</p></a>
+                                <a th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none"><p class="card-title text-responsive text-info font-weight-bold" th:text="${book.title}">title</p></a>
                                 <div class="card-text">
                                     <small th:each="author : ${book.authors}">
                                         <span th:text="${author.lastName}">lastName</span>,
