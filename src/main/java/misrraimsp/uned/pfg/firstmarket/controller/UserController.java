@@ -7,6 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormUser;
+import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,16 +26,19 @@ public class UserController implements Constants {
 
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
+    private CatServer catServer;
 
     @Autowired
-    public UserController(UserServer userServer, PasswordEncoder passwordEncoder) {
+    public UserController(UserServer userServer, PasswordEncoder passwordEncoder, CatServer catServer) {
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
+        this.catServer = catServer;
     }
 
     @GetMapping("/newUser")
     public String showNewUserForm(Model model) {
         model.addAttribute("formUser", new FormUser());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("emailPattern", EMAIL);
         model.addAttribute("textBasicPattern", TEXT_BASIC);
         model.addAttribute("passwordPattern", PASSWORD);
@@ -56,6 +60,7 @@ public class UserController implements Constants {
                     }
                 }
             }
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("emailPattern", EMAIL);
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             model.addAttribute("passwordPattern", PASSWORD);
@@ -66,6 +71,7 @@ public class UserController implements Constants {
         }
         catch (EmailAlreadyExistsException e) {
             errors.rejectValue("email", "email.notUnique");
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("emailPattern", EMAIL);
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             model.addAttribute("passwordPattern", PASSWORD);
@@ -80,6 +86,7 @@ public class UserController implements Constants {
         model.addAttribute("firstName", user.getProfile().getFirstName());
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("profile", user.getProfile());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editProfile";
     }
@@ -93,6 +100,7 @@ public class UserController implements Constants {
             User user = userServer.findById(authUser.getId());
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editProfile";
         }
@@ -106,6 +114,7 @@ public class UserController implements Constants {
         model.addAttribute("firstName", user.getProfile().getFirstName());
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("items", user.getCart().getItems());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "cart";
     }
 
@@ -121,6 +130,7 @@ public class UserController implements Constants {
         model.addAttribute("firstName", user.getProfile().getFirstName());
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("purchases", user.getPurchases());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "purchases";
     }
 
@@ -129,6 +139,7 @@ public class UserController implements Constants {
         User user = userServer.findById(authUser.getId());
         model.addAttribute("firstName", user.getProfile().getFirstName());
         model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("formPassword", new FormPassword());
         model.addAttribute("passwordPattern", PASSWORD);
         return "editPassword";
@@ -153,6 +164,7 @@ public class UserController implements Constants {
             User user = userServer.findById(authUser.getId());
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("passwordPattern", PASSWORD);
             return "editPassword";
         }
@@ -164,6 +176,7 @@ public class UserController implements Constants {
             User user = userServer.findById(authUser.getId());
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());;
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("passwordPattern", PASSWORD);
             return "editPassword";
         }

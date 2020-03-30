@@ -35,6 +35,7 @@ public class CategoryController implements Constants {
     @GetMapping("/admin/categories")
     public String showCategories(Model model){
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "categories";
     }
 
@@ -42,6 +43,7 @@ public class CategoryController implements Constants {
     public String showNewCategoryForm(Model model){
         model.addAttribute("category", new Category());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "newCategory";
     }
@@ -50,6 +52,7 @@ public class CategoryController implements Constants {
     public String processNewCategory(@Valid Category category, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "newCategory";
         }
@@ -63,6 +66,7 @@ public class CategoryController implements Constants {
         model.addAttribute("category", category);
         model.addAttribute("descendants", catServer.getDescendants(category));
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("textBasicPattern", TEXT_BASIC);
         return "editCategory";
     }
@@ -72,6 +76,7 @@ public class CategoryController implements Constants {
         if (errors.hasErrors()) {
             model.addAttribute("descendants", catServer.getDescendants(category));
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("textBasicPattern", TEXT_BASIC);
             return "editCategory";
         }

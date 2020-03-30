@@ -5,7 +5,10 @@
     <head th:replace="fragments/components::head('Cart')"></head>
     <body>
         <div class="container-fluid">
+            <!-- header -->
             <header th:replace="fragments/components::header"></header>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
             <div th:replace="fragments/components::title(text = 'Cart')"></div>
             <div class="row">
                 <div class="col-sm-2 bg-white"></div>

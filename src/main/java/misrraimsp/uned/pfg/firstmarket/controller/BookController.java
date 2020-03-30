@@ -44,15 +44,6 @@ public class BookController implements Constants {
         this.userServer = userServer;
     }
 
-    /*
-    @GetMapping("/admin/books")
-    public String showBooks(Model model){
-        model.addAttribute("books", bookServer.findAll());
-        return "oldbooks";
-    }
-
-     */
-
     @GetMapping("/book/{id}")
     public String showBook(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User authUser){
         if (authUser != null){
@@ -61,6 +52,7 @@ public class BookController implements Constants {
             model.addAttribute("cartSize", user.getCart().getCartSize());
         }
         model.addAttribute("book", bookServer.findById(id));
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "book";
     }
 
@@ -68,6 +60,7 @@ public class BookController implements Constants {
     public String showNewBookForm(Model model){
         model.addAttribute("formBook", new FormBook());
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         model.addAllAttributes(patterns);
         model.addAllAttributes(numbers);
@@ -79,6 +72,7 @@ public class BookController implements Constants {
     public String processNewBook(@Valid FormBook formBook, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAllAttributes(patterns);
             model.addAllAttributes(numbers);
@@ -92,6 +86,7 @@ public class BookController implements Constants {
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAllAttributes(patterns);
             model.addAllAttributes(numbers);
@@ -107,6 +102,7 @@ public class BookController implements Constants {
         FormBook formBook = bookServer.convertBookToFormBook(book);
         model.addAttribute("formBook", formBook);
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
         model.addAllAttributes(patterns);
         model.addAllAttributes(numbers);
@@ -118,6 +114,7 @@ public class BookController implements Constants {
     public String processEditBook(@Valid FormBook formBook, Errors errors, Model model){
         if (errors.hasErrors()) {
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAllAttributes(patterns);
             model.addAllAttributes(numbers);
@@ -131,6 +128,7 @@ public class BookController implements Constants {
         catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
             model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
             model.addAllAttributes(patterns);
             model.addAllAttributes(numbers);

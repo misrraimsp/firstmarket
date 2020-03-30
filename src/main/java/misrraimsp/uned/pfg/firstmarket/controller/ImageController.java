@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
+import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +23,21 @@ import java.io.InputStream;
 @Controller
 public class ImageController {
 
-    ImageServer imageServer;
+    private ImageServer imageServer;
     private BookServer bookServer;
+    private CatServer catServer;
 
     @Autowired
-    public ImageController(ImageServer imageServer, BookServer bookServer) {
+    public ImageController(ImageServer imageServer, BookServer bookServer, CatServer catServer) {
         this.imageServer = imageServer;
         this.bookServer = bookServer;
+        this.catServer = catServer;
     }
 
     @GetMapping("/admin/images")
     public String showImages(Model model){
         model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "images";
     }
 
@@ -58,6 +62,7 @@ public class ImageController {
             if (t instanceof ConstraintViolationException) {
                 ConstraintViolationException cve = (ConstraintViolationException) t;
                 model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
+                model.addAttribute("mainCategories", catServer.getMainCategories());
                 model.addAttribute("constraintViolations", cve.getConstraintViolations());
                 return "images";
             }

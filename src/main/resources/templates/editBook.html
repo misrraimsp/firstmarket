@@ -6,6 +6,8 @@
     <body>
         <div class="container-fluid">
             <div th:replace="fragments/components::header"></div>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
             <div th:replace="fragments/components::title(text = 'Edit Book')"></div>
             <div class="row">
                 <div class="col-sm-2 bg-white"></div>
@@ -60,8 +62,12 @@
                                 </div>
                                 <!-------------------------------------------------------------------------New Image-->
                                 <div class="form-group">
-                                    <input type="checkbox" id="switch" onclick="binaryInputSwitch()"/>
-                                    <label for="switch">Select New Image:</label>
+                                    <div class="pretty p-default p-round p-thick mb-2">
+                                        <input type="checkbox" id="switch"/>
+                                        <div class="state p-info-o">
+                                            <label for="switch">Select New Image:</label>
+                                        </div>
+                                    </div>
                                     <input class="form-control" type="file" th:field="*{image}" id="input2" disabled accept="image/*" required/>
                                     <div class="invalid-feedback">Please select an image</div>
                                 </div>
@@ -190,7 +196,7 @@
                                 </div>
                                 <div th:replace="fragments/components::backendValidationFieldErrors('price')"></div>
                             </div>
-                            <div class="col-sm-12 bg-white">
+                            <div class="col-sm-12 bg-light">
                                 <button th:replace="fragments/components::saveButton"></button>
                             </div>
                         </div>

@@ -12,10 +12,19 @@
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- under header -->
             <div class="row mt-3">
-                <div class="col-sm-3"></div>
+                <!-- admin new book -->
+                <div class="col-sm-3">
+                    <div sec:authorize="hasRole('ADMIN')">
+                        <a class="btn btn-outline-info align-center btn-lg btn-block" th:href="@{/admin/newBook}" data-toggle="tooltip" title="New Book">
+                            <i class="fas fa-book-medical fa-lg mr-4"></i>New Book
+                        </a>
+                    </div>
+                </div>
                 <!-- pagination legend -->
-                <div class="col-sm-8 text-right text-info">
-                    <p th:replace="fragments/components::paginationLegend"></p>
+                <div class="col-sm-8 d-flex align-items-end justify-content-end">
+                    <div class="text-info">
+                        <p th:replace="fragments/components::paginationLegend"></p>
+                    </div>
                 </div>
                 <!-- right margin  -->
                 <div class="col-sm-1"></div>

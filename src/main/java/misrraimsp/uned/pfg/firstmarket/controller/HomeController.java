@@ -57,4 +57,10 @@ public class HomeController implements Constants {
         return "home";
     }
 
+    @GetMapping("/login")
+    public String showLogin(Model model) {
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        return "login";
+    }
+
 }

@@ -6,6 +6,8 @@
     <body>
         <div class="container-fluid">
             <header th:replace="fragments/components::header"></header>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
             <div th:replace="fragments/components::title(text = 'New User')"></div>
             <div class="row">
                 <div class="col-sm-3 bg-white"></div>
@@ -51,7 +53,7 @@
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
-            <footer th:replace="fragments/components::fixedFooter"></footer>
+            <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/matchingPasswords.js}"></script>
