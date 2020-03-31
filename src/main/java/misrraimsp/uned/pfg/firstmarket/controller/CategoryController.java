@@ -36,7 +36,7 @@ public class CategoryController implements Constants {
     public String showCategories(Model model){
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        return "categories";
+        return "categoriesV2";
     }
 
     @GetMapping("/admin/newCategory")

@@ -29,8 +29,8 @@ spring:
       password: misrra
       driver-class-name: org.mariadb.jdbc.Driver
       initialization-mode: always
-      schema: classpath:sql/schema.sql
-      data: classpath:sql/data.sql
+      #schema: classpath:sql/schema.sql
+      #data: classpath:sql/data.sql
    jpa:
       hibernate:
          ddl-auto: none
