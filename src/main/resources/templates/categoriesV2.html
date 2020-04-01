@@ -14,9 +14,9 @@
             <!-- main content -->
             <div class="row">
                 <div class="col-sm-2 bg-white"></div>
-                <div class="col-sm-8 bg-light" id="input">
+                <div class="col-sm-8 bg-light" id="root-hook">
 
-
+<!--
                     <div class="d-flex align-items-baseline my-1 p-1 border rounded shadow-sm">
                         <div class="mr-auto">
                             <a class="text-dark" href="#cat1" data-toggle="collapse" style="text-decoration: none">cat1</a>
@@ -333,7 +333,7 @@
                             </div>
                         </div>
                     </div>
-
+-->
                 </div>
                 <div class="col-sm-2 bg-white"></div>
             </div>
@@ -341,6 +341,9 @@
             <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:src="@{/js/enableTooltips.js}"></script>
-        <script th:src="@{/js/categories.js}"></script>
+        <script>
+            let jsonString = '{"name":"cat1", "id":1, "children":[{"name":"cat2", "id":2, "children":[{"name":"cat2-1", "id":3, "children":[]}, {"name":"cat2-2", "id":4, "children":[]}]}, {"name":"cat3", "id":5, "children":[{"name":"cat3-1", "id":6, "children":[]}, {"name":"cat3-2", "id":7, "children":[]}]}, {"name":"cat4", "id":8, "children":[{"name":"cat4-1", "id":9, "children":[]}, {"name":"cat4-2", "id":10, "children":[]}]}]}';
+        </script>
+        <script th:src="@{/static/js/categoriesBuilder.js}"></script>
     </body>
 </html>
