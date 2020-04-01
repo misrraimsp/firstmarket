@@ -6,7 +6,7 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    let categories = JSON.parse(jsonString);
+    let categories = JSON.parse(jsonStringCategories);
 
     let build = function (category, hookId) {
 

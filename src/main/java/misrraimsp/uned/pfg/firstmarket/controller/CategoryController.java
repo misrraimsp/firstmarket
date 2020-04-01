@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
@@ -33,10 +34,10 @@ public class CategoryController implements Constants {
     }
 
     @GetMapping("/admin/categories")
-    public String showCategories(Model model){
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+    public String showCategories(Model model) throws JsonProcessingException {
+        model.addAttribute("jsonStringCategories", catServer.getJSONStringCategories());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        return "categoriesV2";
+        return "categories";
     }
 
     @GetMapping("/admin/newCategory")
