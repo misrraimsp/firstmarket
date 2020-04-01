@@ -1,8 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatpathRepository;
@@ -197,10 +194,20 @@ public class CatServer {
         return !(originalCategory.getParent().getId().equals(modifiedCategory.getParent().getId()));
     }
 
-    public String getJSONStringCategories() throws JsonProcessingException {
-        String jsonString = "{\"name\":\"cat1\", \"id\":1, \"children\":[{\"name\":\"NEWcat2\", \"id\":2, \"children\":[{\"name\":\"cat2-1\", \"id\":3, \"children\":[]}, {\"name\":\"cat2-2\", \"id\":4, \"children\":[]}]}, {\"name\":\"cat3\", \"id\":5, \"children\":[{\"name\":\"cat3-1\", \"id\":6, \"children\":[]}, {\"name\":\"cat3-2\", \"id\":7, \"children\":[]}]}, {\"name\":\"cat4\", \"id\":8, \"children\":[{\"name\":\"cat4-1\", \"id\":9, \"children\":[]}, {\"name\":\"cat4-2\", \"id\":10, \"children\":[]}]}]}";
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(jsonString);
-        return jsonNode.toString();
+    public String getJSONStringCategories() {
+        return this.jsonStringify(this.getRootCategory());
+    }
+
+    private String jsonStringify(Category category) {
+        String localString = "";
+        localString += "{ \"name\":\"" + category.getName() + "\", \"id\":" + category.getId() + ", \"children\":[";
+        for (Category child : this.getChildren(category)) {
+            localString += jsonStringify(child) + ",";
+        }
+        if (localString.charAt(localString.length() - 1) == ',') {
+            localString = localString.substring(0, localString.length() - 1);
+        }
+        localString += "]}";
+        return localString;
     }
 }

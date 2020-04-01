@@ -9,17 +9,13 @@ document.addEventListener("DOMContentLoaded", function() {
     let categories = JSON.parse(jsonStringCategories);
 
     let build = function (category, hookId) {
-
         let hook = document.getElementById(hookId);
         let childrenId = "cat-" + category.id + "-children";
         let newHookId = childrenId + "-hook";
 
         buildControl(category, hook, childrenId);
-
         if (category.children.length !== 0) {
-
             buildCollapsible(category, hook, childrenId, newHookId);
-
             for (let i = 0; i < category.children.length; i++) {
                 build(category.children[i], newHookId);
             }
