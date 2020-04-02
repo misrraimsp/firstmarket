@@ -87,9 +87,9 @@ public class CategoryController implements Constants {
     @GetMapping("/admin/deleteCategory/{id}")
     public String deleteCategory(@PathVariable("id") Long id){
         Category deletingCategory = catServer.findCategoryById(id);
-        catServer.deleteById(id);
         //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
         bookServer.updateCategoryIdByCategoryId(id, deletingCategory.getParent().getId());
+        catServer.deleteById(id);
         return "redirect:/admin/loadCategories";
     }
 

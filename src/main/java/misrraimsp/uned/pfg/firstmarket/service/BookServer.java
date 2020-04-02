@@ -93,6 +93,7 @@ public class BookServer {
         bookRepository.deleteById(id);
     }
 
+    @Transactional
     public void updateCategoryIdByCategoryId(Long category_id, Long new_category_id) {
         bookRepository.updateCategoryIdByCategoryId(category_id, new_category_id);
     }
