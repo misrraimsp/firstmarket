@@ -11,13 +11,9 @@ public interface Constants {
      */
     String PASSWORD = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$";
 
-    /**
-     * This field must have zero to thirty characters between:
-     * middle hyphen (-), space, underscore (_), letters or numbers
-     */
-    String TEXT_BASIC = "^[ \\w-]{0,30}$";
+    String TEXT_BASIC = "^[\\s\\w-.,:\"?¿¡!()äëïöüñáéíóú]{0,30}$";
 
-    String TEXT_LONG = "^[\\s\\w-.,:;\"?¿¡!()äëïöüñáéíóú]{0,250}$";
+    String TEXT_LONG = "^[\\s\\w-.,:;\"?¿¡!()äëïöüñáéíóú]{0,1000}$";
 
     String TEXT_QUERY = "^[\\s\\w-.,:\"?¿¡!()äëïöüñáéíóú]{0,100}$";
 
@@ -47,8 +43,7 @@ public interface Constants {
     String DEFAULT_PAGE_SIZE = "30";
     String DEFAULT_PAGE_NUMBER = "0";
     String DEFAULT_CATEGORY_ID = "1";
-
-
+    //
 
     int MIN_NUM_STOCK = 0;
     int MAX_NUM_STOCK = 100000000;

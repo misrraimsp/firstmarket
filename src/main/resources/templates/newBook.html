@@ -102,7 +102,7 @@
                                             <input class="form-control" type="text" th:field="*{authorLastName1}" id="authorLastName1" placeholder="Last Name" th:pattern="${TEXT_BASIC}">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-info" style="display: none" type="button" id="showAuthor2" title="Add Author"><i class="fas fa-plus"></i></button>
-                                                <button class="btn btn-outline-danger" style="display: none" type="button" id="hideAuthor1" title="Delete Author"><i class="fas fa-minus"></i></button>
+                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor1" title="Delete Author"><i class="fas fa-minus"></i></button>
                                             </div>
                                             <div class="invalid-feedback">Please fill out this field correctly</div>
                                         </div>
@@ -116,7 +116,7 @@
                                             <input class="form-control" type="text" th:field="*{authorLastName2}" id="authorLastName2" placeholder="Last Name" th:pattern="${TEXT_BASIC}">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-info" style="display: none" type="button" id="showAuthor3" title="Add Author"><i class="fas fa-plus"></i></button>
-                                                <button class="btn btn-outline-danger" style="display: none" type="button" id="hideAuthor2" title="Delete Author"><i class="fas fa-minus"></i></button>
+                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor2" title="Delete Author"><i class="fas fa-minus"></i></button>
                                             </div>
                                             <div class="invalid-feedback">Please fill out this field correctly</div>
                                         </div>
@@ -130,7 +130,7 @@
                                             <input class="form-control" type="text" th:field="*{authorLastName3}" id="authorLastName3" placeholder="Last Name" th:pattern="${TEXT_BASIC}">
                                             <div class="input-group-append">
                                                 <button class="btn btn-outline-info" style="display: none" type="button" id="showAuthor4" title="Add Author"><i class="fas fa-plus"></i></button>
-                                                <button class="btn btn-outline-danger" style="display: none" type="button" id="hideAuthor3" title="Delete Author"><i class="fas fa-minus"></i></button>
+                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor3" title="Delete Author"><i class="fas fa-minus"></i></button>
                                             </div>
                                             <div class="invalid-feedback">Please fill out this field correctly</div>
                                         </div>
@@ -143,7 +143,7 @@
                                             <input class="form-control" type="text" th:field="*{authorFirstName4}" id="authorFirstName4" placeholder="First Name" th:pattern="${TEXT_BASIC}">
                                             <input class="form-control" type="text" th:field="*{authorLastName4}" id="authorLastName4" placeholder="Last Name" th:pattern="${TEXT_BASIC}">
                                             <div class="input-group-append">
-                                                <button class="btn btn-outline-danger" style="display: none" type="button" id="hideAuthor4" title="Delete Author"><i class="fas fa-minus"></i></button>
+                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor4" title="Delete Author"><i class="fas fa-minus"></i></button>
                                             </div>
                                             <div class="invalid-feedback">Please fill out this field correctly</div>
                                         </div>
@@ -195,6 +195,7 @@
                             </div>
                             <div class="col-sm-12 bg-light">
                                 <button th:replace="fragments/components::saveButton"></button>
+                                <a th:replace="fragments/components::cancelButton"></a>
                             </div>
                         </div>
                     </form>

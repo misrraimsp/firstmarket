@@ -3,7 +3,7 @@
 
 .accordion {
     background-color: #e9ecef; /* BS4 jumbotron */
-    color: #343a40; /* BS4 dark */
+    color: #6c757d; /* BS4 secondary */
     cursor: pointer;
     padding: 18px;
     width: 100%;

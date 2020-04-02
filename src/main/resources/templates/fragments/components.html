@@ -131,13 +131,7 @@
         <button th:fragment="saveButton" class="btn btn-info px-5 mb-3" type="submit">Save</button>
 
         <!-- Cancel button -->
-        <button th:fragment="cancelButton" class="btn btn-outline-danger px-5 mb-3" onclick="window.history.back();">Cancel</button>
-
-        <!--
-        <button th:fragment="saveButton" class="btn btn-outline-info btn-block font-weight-bold my-2" type="submit">
-            Save
-        </button>
-        -->
+        <a th:fragment="cancelButton" class="btn btn-secondary px-5 mb-3 text-white" onclick="window.history.back();">Cancel</a>
 
         <div th:fragment="addButton(action)">
             <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>

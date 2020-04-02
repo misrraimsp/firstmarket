@@ -5,6 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.model.Publisher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -28,6 +29,6 @@ public class PublisherServer {
 
     public Set<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
         Set<Long> publisherIds = publisherRepository.findTopIdsByCategoryId(categoryId, numTopPublishers);
-        return publisherRepository.findPublishersByIds(publisherIds);
+        return (publisherIds.isEmpty()) ? new HashSet<>() : publisherRepository.findPublishersByIds(publisherIds);
     }
 }

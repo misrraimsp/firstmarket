@@ -15,7 +15,7 @@
                 <!-- admin new book -->
                 <div class="col-sm-3">
                     <div sec:authorize="hasRole('ADMIN')">
-                        <a class="btn btn-outline-info align-center btn-lg btn-block" th:href="@{/admin/newBook}" data-toggle="tooltip" title="New Book">
+                        <a class="btn btn-outline-secondary align-center btn-lg btn-block" th:href="@{/admin/newBook}" data-toggle="tooltip" title="New Book">
                             <i class="fas fa-book-medical fa-lg mr-4"></i>New Book
                         </a>
                     </div>
@@ -64,7 +64,7 @@
                     <button class="accordion" id="categoryAcc">Category</button>
                     <div class="panel mb-1">
                         <div class="my-3" th:each="cat : ${childrenCategories}">
-                            <a class="categoryLink text-dark" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                            <a class="categoryLink text-secondary" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
                         </div>
                     </div>
                     <!-- price criteria -->
@@ -74,7 +74,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="price : ${prices}">
                                 <input class="priceCheckBox" type="checkbox" th:id="'pr-' + ${price.ordinal()}"/>
                                 <div class="state p-info-o">
-                                    <label th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
+                                    <label class="text-secondary" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
                                 </div>
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="author : ${authors}">
                                 <input class="authorCheckBox" type="checkbox" th:id="'au-' + ${author.id}"/>
                                 <div class="state p-info-o">
-                                    <label th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
+                                    <label class="text-secondary" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +98,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="publisher : ${publishers}">
                                 <input class="publisherCheckBox" type="checkbox" th:id="'pu-' + ${publisher.id}"/>
                                 <div class="state p-info-o">
-                                    <label th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
+                                    <label class="text-secondary" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="language : ${languages}">
                                 <input class="languageCheckBox" type="checkbox" th:id="'la-' + ${language.ordinal()}"/>
                                 <div class="state p-info-o">
-                                    <label th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
+                                    <label class="text-secondary" th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
                                 </div>
                             </div>
                         </div>
@@ -141,10 +141,10 @@
                                         </div>
                                         <div class="col-sm-12 my-3" sec:authorize="hasRole('ADMIN')">
                                             <div class="d-flex flex-column">
-                                                <a class="btn btn-outline-info btn-sm align-center mb-3" th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                                                <a class="btn btn-outline-secondary btn-sm align-center mb-3" th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
                                                     Edit Book<i class="fas fa-pen ml-2"></i>
                                                 </a>
-                                                <a class="btn btn-outline-danger btn-sm align-center" th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book">
+                                                <a class="btn btn-outline-secondary btn-sm align-center" th:href="@{/admin/deleteBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Delete Book">
                                                     Delete Book<i class="fas fa-trash-alt ml-2"></i>
                                                 </a>
                                             </div>

@@ -122,7 +122,8 @@ public class BookServer {
     }
 
     public Set<Languages> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
-        return bookRepository.findTopLanguagesByBookIds(bookRepository.findIdByAncestorCategoryId(categoryId), numTopLanguages);
+        Set<Long> bookIds = bookRepository.findIdByAncestorCategoryId(categoryId);
+        return (bookIds.isEmpty()) ? new HashSet<>() : bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
     }
 
     public Page<Book> findSearchResults(Long categoryId, Set<String> priceIds, Set<Long> authorIds, Set<Long> publisherIds, Set<Languages> languageIds, String q, Pageable pageable) {

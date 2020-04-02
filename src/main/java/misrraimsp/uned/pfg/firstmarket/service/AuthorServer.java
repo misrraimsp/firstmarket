@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -38,7 +39,7 @@ public class AuthorServer {
 
     public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
         Set<Long> authorIds = authorRepository.findTopIdsByCategoryId(categoryId, numTopAuthors);
-        return authorRepository.findAuthorsByIds(authorIds);
+        return (authorIds.isEmpty()) ? new HashSet<>() : authorRepository.findAuthorsByIds(authorIds);
     }
 
 }
