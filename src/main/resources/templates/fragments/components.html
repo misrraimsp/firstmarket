@@ -123,12 +123,15 @@
         <!-- Title -->
         <div class="row" th:fragment="title(text)">
             <div class="col-sm-12 bg-white">
-                <h2 class="text-center my-4" th:text="${text}"></h2>
+                <h2 class="text-center text-dark my-4" th:text="${text}"></h2>
             </div>
         </div>
 
         <!-- Save button -->
         <button th:fragment="saveButton" class="btn btn-info px-5 mb-3" type="submit">Save</button>
+
+        <!-- Cancel button -->
+        <button th:fragment="cancelButton" class="btn btn-outline-danger px-5 mb-3" onclick="window.history.back();">Cancel</button>
 
         <!--
         <button th:fragment="saveButton" class="btn btn-outline-info btn-block font-weight-bold my-2" type="submit">

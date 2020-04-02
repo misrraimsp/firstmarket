@@ -6,8 +6,7 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    let categories = JSON.parse(jsonStringCategories);
-
+    // function definitions
     let build = function (category, hookId) {
         let hook = document.getElementById(hookId);
         let childrenId = "cat-" + category.id + "-children";
@@ -21,56 +20,52 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
     };
-
     let buildControl = function (category, hook, childrenId) {
 
         let divControl, divCatName, divCatEdit, divCatDelete;
         let catName, editCat, deleteCat;
         let editIcon, deleteIcon;
 
+        // Control
         divControl = document.createElement("div");
-        divControl.setAttribute("class", "d-flex align-items-baseline my-1 p-1 border rounded shadow-sm");
+        divControl.setAttribute("class", "d-flex flex-row-reverse mt-1 bg-light");
 
+        // Category name
         divCatName = document.createElement("div");
-        divCatName.setAttribute("class", "mr-auto");
+        divCatName.setAttribute("class", "flex-grow-1 order-3");
 
+        catName = document.createElement("button");
+        catName.setAttribute("class", "btn btn-sm btn-outline-secondary btn-block text-left");
         if (category.children.length !== 0) {
-            //<a class="text-dark" href="#cat1" data-toggle="collapse" style="text-decoration: none">
-            catName = document.createElement("a");
-            catName.setAttribute("class", "text-dark");
-            catName.setAttribute("href", "#" + childrenId);
+            catName.setAttribute("collapser", "categoryCollapser");
             catName.setAttribute("data-toggle", "collapse");
-            catName.setAttribute("style", "text-decoration: none");
-        } else {
-            //<span class="text-dark"/>
-            catName = document.createElement("span");
-            catName.setAttribute("class", "text-dark");
+            catName.setAttribute("data-target", "#" + childrenId);
         }
         catName.innerHTML = category.name;
 
+        // Category edition
         divCatEdit = document.createElement("div");
-        divCatEdit.setAttribute("class", "mr-1");
+        divCatEdit.setAttribute("class", "mx-1 order-2");
 
-        //<a class="btn btn-outline-info btn-sm" th:href="@{/home}"></a>
         editCat = document.createElement("a");
-        editCat.setAttribute("class", "btn btn-outline-info btn-sm");
+        editCat.setAttribute("class", "btn btn-sm btn-outline-secondary");
         editCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/editCategory/" + category.id);
 
-        //<i class="fas fa-pen"></i>
         editIcon = document.createElement("i");
         editIcon.setAttribute("class", "fas fa-pen");
 
+        // Category deletion
         divCatDelete = document.createElement("div");
+        divCatDelete.setAttribute("class", "order-1");
 
-        //<a class="btn btn-outline-danger btn-sm" th:href="@{/home}"></a>
         deleteCat = document.createElement("a");
-        deleteCat.setAttribute("class", "btn btn-outline-danger btn-sm");
+        deleteCat.setAttribute("class", "btn btn-sm btn-outline-secondary");
         deleteCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/deleteCategory/" + category.id);
 
-        //<i class="fas fa-trash-alt"></i>
         deleteIcon = document.createElement("i");
         deleteIcon.setAttribute("class", "fas fa-trash-alt");
 
+        // Connexions
         divCatName.appendChild(catName);
 
         editCat.appendChild(editIcon);
@@ -86,13 +81,12 @@ document.addEventListener("DOMContentLoaded", function() {
         hook.appendChild(divControl);
 
     };
-
     let buildCollapsible = function (category, hook, childrenId, newHookId) {
 
         let divCollapse, divNewHook;
 
         divCollapse = document.createElement("div");
-        divCollapse.setAttribute("class", "collapse m-3");
+        divCollapse.setAttribute("class", "collapse ml-5");
         divCollapse.setAttribute("id", childrenId);
 
         divNewHook = document.createElement("div");
@@ -104,10 +98,24 @@ document.addEventListener("DOMContentLoaded", function() {
         hook.appendChild(divCollapse);
     };
 
-
+    // build html
+    let categories = JSON.parse(jsonStringCategories);
     for (let i = 0; i < categories.children.length; i++){
         build(categories.children[i],"root-hook");
     }
 
+    // change style if expanded
+    let collapsers = document.querySelectorAll('button[collapser="categoryCollapser"]');
+    let button;
+    for (let i = 0; i < collapsers.length; i++) {
+        collapsers[i].addEventListener("click", function (e) {
+            button = e.target;
+            if (button.getAttribute("aria-expanded") === "true") {
+                button.setAttribute("class", "btn btn-sm btn-outline-secondary btn-block text-left");
+            } else {
+                button.setAttribute("class", "btn btn-sm btn-secondary btn-block text-left");
+            }
+        }, false);
+    }
 
 }, false);
