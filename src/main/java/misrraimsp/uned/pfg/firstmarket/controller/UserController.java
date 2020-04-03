@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.event.OnRegistrationCompleteEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -10,6 +11,7 @@ import misrraimsp.uned.pfg.firstmarket.model.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,6 +20,7 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.context.request.WebRequest;
 
 import javax.validation.Valid;
 
@@ -27,12 +30,18 @@ public class UserController implements Constants {
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
     private CatServer catServer;
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public UserController(UserServer userServer, PasswordEncoder passwordEncoder, CatServer catServer) {
+    public UserController(UserServer userServer,
+                          PasswordEncoder passwordEncoder,
+                          CatServer catServer,
+                          ApplicationEventPublisher applicationEventPublisher) {
+
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
         this.catServer = catServer;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @GetMapping("/newUser")
@@ -46,16 +55,17 @@ public class UserController implements Constants {
     }
 
     @PostMapping("/newUser")
-    public String processNewUser(@Valid FormUser formUser,
-                                 Errors errors,
-                                 Model model) {
+    public String processNewUser(@Valid FormUser formUser, Errors errors, Model model, WebRequest webRequest) {
+
+        // Check validation errors
         if (errors.hasErrors()) {
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
                         errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
                     }
-                    else{//debug
+                    else {
+                        // TODO log this state
                         System.out.println(objectError);
                     }
                 }
@@ -66,8 +76,11 @@ public class UserController implements Constants {
             model.addAttribute("passwordPattern", PASSWORD);
             return "newUser";
         }
+
+        // Try to persist, catching email non-uniqueness condition
+        User registeredUser;
         try {
-            userServer.persist(formUser, passwordEncoder, null, null);
+            registeredUser = userServer.persist(formUser, passwordEncoder, null, null);
         }
         catch (EmailAlreadyExistsException e) {
             errors.rejectValue("email", "email.notUnique");
@@ -77,6 +90,23 @@ public class UserController implements Constants {
             model.addAttribute("passwordPattern", PASSWORD);
             return "newUser";
         }
+
+        // Trigger email verification
+        if (registeredUser != null) {
+            try {
+                String appUrl = webRequest.getContextPath();
+                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser, appUrl));
+            }
+            catch (Exception me) {
+                System.out.println("some problem with email sending");
+            }
+        }
+        else {
+            // TODO log this state
+            System.out.println("user not registered but no EmailAlreadyExistsException was thrown");
+        }
+
+
         return "redirect:/login";
     }
 

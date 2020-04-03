@@ -18,6 +18,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
+    private boolean enabled;
+
     private String email;
 
     private String password;
@@ -65,6 +67,6 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

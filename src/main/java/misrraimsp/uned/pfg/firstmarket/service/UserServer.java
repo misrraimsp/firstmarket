@@ -50,11 +50,11 @@ public class UserServer implements UserDetailsService {
         return user;
     }
 
-    //if role is not specified it is by default assigned to ROLE_USER
-    //if cart is not specified it is created a new one
+    // role ROLE_USER assigned by default if not specified
+    // new cart created if not specified
     public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) throws EmailAlreadyExistsException {
         if (this.emailExists(formUser.getEmail())){
-            throw new EmailAlreadyExistsException("There is an account with that email adress: " +  formUser.getEmail());
+            throw new EmailAlreadyExistsException("email already exists: " +  formUser.getEmail());
         }
         else {
             if (roles == null){
@@ -68,6 +68,7 @@ public class UserServer implements UserDetailsService {
             profile.setFirstName(formUser.getFirstName());
             profile.setLastName(formUser.getLastName());
             User user = new User();
+            user.setEnabled(false);
             user.setEmail(formUser.getEmail());
             user.setPassword(passwordEncoder.encode(formUser.getPassword()));
             user.setProfile(profileServer.persist(profile));
