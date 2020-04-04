@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.FormBook;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.*;
-import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
-import misrraimsp.uned.pfg.firstmarket.model.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;

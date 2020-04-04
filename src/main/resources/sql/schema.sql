@@ -3,6 +3,7 @@ drop table if exists user_purchases;
 drop table if exists purchase_items;
 drop table if exists cart_items;
 drop table if exists users_roles;
+drop table if exists verification_token;
 drop table if exists user;
 drop table if exists role;
 drop table if exists profile;
@@ -34,7 +35,8 @@ create table item (id bigint not null, quantity integer not null, book_id bigint
 create table purchase (id bigint not null, created timestamp, primary key (id));
 create table purchase_items (purchase_id bigint not null, items_id bigint not null);
 create table role (id bigint not null, name varchar(255), primary key (id));
-create table user (id bigint not null, email varchar(255), password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
+create table user (id bigint not null, email varchar(255), enabled boolean not null, password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
+create table verification_token (id bigint not null, expiry_date timestamp, token varchar(255), user_id bigint not null, primary key (id));
 create table user_purchases (user_id bigint not null, purchases_id bigint not null);
 create table users_roles (user_id bigint not null, role_id bigint not null);
 
@@ -57,6 +59,7 @@ alter table purchase_items add constraint fk_itemIdOnPurchaseItems foreign key (
 alter table purchase_items add constraint fk_purchaseIdOnPurchaseItems foreign key (purchase_id) references purchase(id);
 alter table user add constraint fk_cartIdOnUser foreign key (cart_id) references cart(id);
 alter table user add constraint fk_profileIdOnUser foreign key (profile_id) references profile(id);
+alter table verification_token add constraint fk_userIdOnVerificationToken foreign key (user_id) references user(id);
 alter table user_purchases add constraint fk_purchaseIdOnUserPurchases foreign key (purchases_id) references purchase(id);
 alter table user_purchases add constraint fk_userIdOnUserPurchases foreign key (user_id) references user(id);
 alter table users_roles add constraint fk_roleIdOnUsersRoles foreign key (role_id) references role(id);

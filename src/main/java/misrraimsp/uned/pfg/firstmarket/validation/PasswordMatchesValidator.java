@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
-import misrraimsp.uned.pfg.firstmarket.model.dto.MatchingPassword;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.MatchingPassword;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

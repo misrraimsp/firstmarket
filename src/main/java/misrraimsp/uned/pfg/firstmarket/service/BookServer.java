@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.FormBook;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
@@ -9,7 +10,6 @@ import misrraimsp.uned.pfg.firstmarket.model.Author;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.model.Publisher;
-import misrraimsp.uned.pfg.firstmarket.model.dto.FormBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

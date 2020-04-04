@@ -1,5 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.event.OnRegistrationCompleteEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
@@ -7,8 +9,6 @@ import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.model.VerificationToken;
-import misrraimsp.uned.pfg.firstmarket.model.dto.FormPassword;
-import misrraimsp.uned.pfg.firstmarket.model.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;

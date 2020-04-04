@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.model.dto;
+package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
