@@ -7,9 +7,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class VerificationToken {
-
-    private static final int EXPIRATION = 60 * 24;
+public class VerificationToken{
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,6 +22,7 @@ public class VerificationToken {
     private User user;
 
     private Date expiryDate;
+
 }
 
 

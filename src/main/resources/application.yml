@@ -5,8 +5,8 @@ server:
 spring:
    profiles:
       active:
-         - dev-mariadb
-         #- dev-h2
+         #- dev-mariadb
+         - dev-h2
    #jpa:
       #show-sql: true
 

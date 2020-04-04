@@ -6,12 +6,14 @@ import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.VerificationToken;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.model.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -20,9 +22,10 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.Calendar;
 
 @Controller
 public class UserController implements Constants {
@@ -31,17 +34,20 @@ public class UserController implements Constants {
     private PasswordEncoder passwordEncoder;
     private CatServer catServer;
     private ApplicationEventPublisher applicationEventPublisher;
+    private MessageSource messageSource;
 
     @Autowired
     public UserController(UserServer userServer,
                           PasswordEncoder passwordEncoder,
                           CatServer catServer,
-                          ApplicationEventPublisher applicationEventPublisher) {
+                          ApplicationEventPublisher applicationEventPublisher,
+                          MessageSource messageSource) {
 
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
         this.catServer = catServer;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/newUser")
@@ -55,7 +61,7 @@ public class UserController implements Constants {
     }
 
     @PostMapping("/newUser")
-    public String processNewUser(@Valid FormUser formUser, Errors errors, Model model, WebRequest webRequest) {
+    public String processNewUser(@Valid FormUser formUser, Errors errors, Model model) {
 
         // Check validation errors
         if (errors.hasErrors()) {
@@ -91,11 +97,10 @@ public class UserController implements Constants {
             return "newUser";
         }
 
-        // Trigger email verification
+        // Trigger email verification event
         if (registeredUser != null) {
             try {
-                String appUrl = webRequest.getContextPath();
-                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser, appUrl));
+                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser));
             }
             catch (Exception me) {
                 System.out.println("some problem with email sending");
@@ -106,7 +111,34 @@ public class UserController implements Constants {
             System.out.println("user not registered but no EmailAlreadyExistsException was thrown");
         }
 
+        return "redirect:/newUserSuccess";
+    }
 
+    @GetMapping("/newUserSuccess")
+    public String showNewUserSuccess(Model model){
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        return "newUserSuccess";
+    }
+
+    @GetMapping("/confirmNewUser")
+    public String processConfirmNewUser(@RequestParam("token") String token, Model model){
+        VerificationToken verificationToken = userServer.getVerificationToken(token);
+        // check for invalid token
+        if (verificationToken == null) {
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            model.addAttribute("message", messageSource.getMessage("auth.invalidToken", null, null));
+            return "newUserError";
+        }
+        // check for expired token
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            model.addAttribute("message", messageSource.getMessage("auth.expiredToken", null, null));
+            return "newUserError";
+        }
+        // enable user
+        User user = verificationToken.getUser();
+        userServer.enable(user);
         return "redirect:/login";
     }
 

@@ -544,7 +544,8 @@ public class DevelopmentH2Config {
             formUser1.setMatchingPassword("admin");
             formUser1.setFirstName("ad");
             formUser1.setLastName("ad");
-            userServer.persist(formUser1, passwordEncoder, Arrays.asList(role1), cart1);
+            User admin = userServer.persist(formUser1, passwordEncoder, Arrays.asList(role1), cart1);
+            userServer.enable(admin);
 
             FormUser formUser2 = new FormUser();
             formUser2.setEmail("misrra@fm.com");
@@ -560,7 +561,8 @@ public class DevelopmentH2Config {
             formUser3.setMatchingPassword("andrea");
             formUser3.setFirstName("Andrea");
             formUser3.setLastName("andre");
-            userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);
+            User andrea = userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);
+            userServer.enable(andrea);
 
 
         };

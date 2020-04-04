@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
+import misrraimsp.uned.pfg.firstmarket.data.VerificationTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
@@ -14,14 +16,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Service
-public class UserServer implements UserDetailsService {
+public class UserServer implements UserDetailsService, Constants {
 
     private UserRepository userRepository;
+    private VerificationTokenRepository verificationTokenRepository;
     private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
@@ -29,12 +32,14 @@ public class UserServer implements UserDetailsService {
 
     @Autowired
     public UserServer(UserRepository userRepository,
+                      VerificationTokenRepository verificationTokenRepository,
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
                       PurchaseServer purchaseServer) {
 
         this.userRepository = userRepository;
+        this.verificationTokenRepository = verificationTokenRepository;
         this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
@@ -129,4 +134,25 @@ public class UserServer implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public VerificationToken createVerificationToken(User user) {
+        VerificationToken verificationToken = new VerificationToken();
+        verificationToken.setUser(user);
+        verificationToken.setToken(UUID.randomUUID().toString());
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
+        calendar.add(Calendar.MINUTE, EXPIRATION_MINUTES);
+        verificationToken.setExpiryDate(new Date(calendar.getTime().getTime()));
+
+        return verificationTokenRepository.save(verificationToken);
+    }
+
+    public VerificationToken getVerificationToken(String token) {
+        return verificationTokenRepository.findByToken(token);
+    }
+
+    public User enable(User user) {
+        user.setEnabled(true);
+        return userRepository.save(user);
+    }
 }
