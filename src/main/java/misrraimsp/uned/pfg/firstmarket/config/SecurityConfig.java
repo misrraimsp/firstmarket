@@ -1,7 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
+import misrraimsp.uned.pfg.firstmarket.event.security.CustomAuthenticationFailureHandler;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -10,16 +12,24 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserServer userServer;
+    private MessageSource messageSource;
 
     @Autowired
-    public SecurityConfig(UserServer userServer) {
+    public SecurityConfig(UserServer userServer, MessageSource messageSource) {
         this.userServer = userServer;
+        this.messageSource = messageSource;
+    }
+
+    @Bean
+    public AuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler(messageSource);
     }
 
     @Override
@@ -36,6 +46,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                .failureHandler(customAuthenticationFailureHandler())
 
                 .and()
                 .logout()

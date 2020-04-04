@@ -142,6 +142,14 @@
         </div>
 
         <!-- backend errors -->
+        <div th:fragment="loginError" class="my-2" th:if="${param.error != null}">
+            <div class="alert alert-danger alert-dismissible fade show">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <small><strong>Error: </strong><span th:text="${session[SPRING_SECURITY_LAST_EXCEPTION]}">error</span></small>
+            </div>
+        </div>
+
+        <!-- backend errors -->
         <div th:fragment="backendValidationErrors" class="mt-1" th:if="${#fields.hasErrors()}">
             <div class="alert alert-danger alert-dismissible fade show mb-2">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>

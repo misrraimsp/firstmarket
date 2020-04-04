@@ -15,6 +15,7 @@
                 <div class="col-sm-3 bg-white"></div>
                 <div class="col-sm-6 bg-light">
                     <form class="needs-validation" novalidate th:action="@{/login}" method="POST" action="#">
+                        <div th:replace="fragments/components::loginError"></div>
                         <!-- email -->
                         <div class="form-group">
                             <label for="email">E-mail:</label>
@@ -30,7 +31,7 @@
                         <button class="btn btn-info px-5" type="submit">Login</button>
                     </form>
                     <br/>
-                    <span>New? Click <a class="font-weight-bolder text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
+                    <span>New? Click <a class="text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
