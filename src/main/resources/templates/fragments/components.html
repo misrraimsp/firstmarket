@@ -165,6 +165,21 @@
             </div>
         </div>
 
+        <!-- deleting modal -->
+        <div th:fragment="deletingModal(entity)" class="modal fade" id="theModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        You are about to perform a single <span th:text="${entity}">entity</span> removal. Do you want to proceed?
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-info text-white" id="theModalYes" href="#">Yes, Delete <span th:text="${entity}">entity</span></a>
+                        <button class="btn btn-secondary" data-dismiss="modal">No, Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- pagination links -->
         <div th:fragment="paginationLinks" class="d-flex justify-content-center" id="pagination">
             <a class="btn btn-outline-info mx-1" id="pl-1">1</a>

@@ -58,9 +58,9 @@ document.addEventListener("DOMContentLoaded", function() {
         divCatDelete = document.createElement("div");
         divCatDelete.setAttribute("class", "order-1");
 
-        deleteCat = document.createElement("a");
-        deleteCat.setAttribute("class", "btn btn-sm btn-outline-secondary");
-        deleteCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/deleteCategory/" + category.id);
+        deleteCat = document.createElement("button");
+        deleteCat.setAttribute("class", "modalTrigger btn btn-sm btn-outline-secondary");
+        deleteCat.setAttribute("id", "del-" + category.id);
 
         deleteIcon = document.createElement("i");
         deleteIcon.setAttribute("class", "fas fa-trash-alt");
@@ -103,19 +103,6 @@ document.addEventListener("DOMContentLoaded", function() {
     for (let i = 0; i < categories.children.length; i++){
         build(categories.children[i],"root-hook");
     }
-
-    // change style if expanded
-    let collapsers = document.querySelectorAll('button[collapser="categoryCollapser"]');
-    let button;
-    for (let i = 0; i < collapsers.length; i++) {
-        collapsers[i].addEventListener("click", function (e) {
-            button = e.target;
-            if (button.getAttribute("aria-expanded") === "true") {
-                button.setAttribute("class", "btn btn-sm btn-outline-secondary btn-block text-left");
-            } else {
-                button.setAttribute("class", "btn btn-sm btn-secondary btn-block text-left");
-            }
-        }, false);
-    }
+    document.dispatchEvent(new CustomEvent('custom-htmlReady'));
 
 }, false);

@@ -23,15 +23,22 @@
                     </div>
                     <hr/>
                     <!--
-                    dynamic content here
+                    js dynamic generated content here
                     -->
                 </div>
                 <div class="col-sm-2 bg-white"></div>
             </div>
+            <!-- modal -->
+            <div th:replace="fragments/components::deletingModal(entity = 'Category')"></div>
             <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:utext="'let jsonStringCategories = \'' + ${jsonStringCategories} + '\';'"></script>
         <script th:src="@{/js/categoriesBuilder.js}"></script>
+        <script th:src="@{/js/categoriesStyler.js}"></script>
+        <script>
+            let baseUrl = "http://localhost:8080/firstmarket/admin/deleteCategory/";
+        </script>
+        <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>
