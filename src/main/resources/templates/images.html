@@ -5,13 +5,18 @@
     <head th:replace="fragments/components::head('Images')"></head>
     <body>
         <div class="container-fluid">
+            <!-- header -->
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
             <div th:replace="fragments/components::title(text = 'Images')"></div>
+            <!-- main content -->
             <div class="row">
                 <div class="col-sm-3 bg-white"></div>
                 <div class="col-sm-6 bg-light">
+                    <!-- new image form -->
+                    <p class="my-1">Select a new image:</p>
                     <form class="needs-validation my-2" novalidate th:action="@{/admin/newImage}" method="POST" enctype="multipart/form-data" action="#">
                         <div class="form-group my-2">
                             <input class="form-control" type="file" th:name="image" accept="image/*" required/>
@@ -23,36 +28,48 @@
                         </div>
                         <button th:replace="fragments/components::saveButton"></button>
                     </form>
+                    <!-- images -->
                     <table class="table">
                         <thead class="thead-light">
-                        <tr>
-                            <th>Name</th>
-                            <th>MIME type</th>
-                            <th>is Default</th>
-                            <th>Image</th>
-                            <th></th>
-                        </tr>
+                            <tr>
+                                <th>Name</th>
+                                <th>MIME type</th>
+                                <th>is Default</th>
+                                <th>Image</th>
+                                <th></th>
+                            </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="mi : ${allMetaInfo}">
-                            <td><span th:text="${mi.name}">name</span></td>
-                            <td><span th:text="${mi.mimeType}">mimeType</span></td>
-                            <td><span th:text="${mi.default}">isDefault</span></td>
-                            <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
-                            <td th:if="${!mi.default}">
-                                <a th:href="@{/admin/deleteImage/{id}(id=${mi.id})}" data-toggle="tooltip" title="Delete Image">
-                                    <i class='fas fa-trash-alt' style='color:red'></i>
-                                </a>
-                            </td>
-                        </tr>
+                            <tr th:each="mi : ${allMetaInfo}">
+                                <td><span th:text="${mi.name}">name</span></td>
+                                <td><span th:text="${mi.mimeType}">mimeType</span></td>
+                                <td><span th:text="${mi.default}">isDefault</span></td>
+                                <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
+                                <td th:if="${!mi.default}">
+                                    <button class="modalTrigger btn btn-sm btn-outline-secondary" th:id="'del-' + ${mi.id}" data-toggle="tooltip" title="Delete Image">
+                                        <i class='fas fa-trash-alt'></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
+            <!-- modal -->
+            <div th:replace="fragments/components::deletingModal(entity = 'Image')"></div>
+            <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/enableTooltips.js}"></script>
+        <!-- modal functionality -->
+        <script>
+            let baseUrl = "http://localhost:8080/firstmarket/admin/deleteImage/";
+            document.addEventListener("DOMContentLoaded", function() {
+                document.dispatchEvent(new CustomEvent('custom-htmlReady'));
+            }, false);
+        </script>
+        <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>
