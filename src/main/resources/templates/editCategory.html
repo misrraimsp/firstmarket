@@ -20,7 +20,7 @@
                             <label for="name">Name:</label>
                             <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${textBasicPattern}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
-                            <div th:replace="fragments/components::backendValidationFieldErrors('name')"></div>
+                            <div th:replace="fragments/components::backendSpecificObjectFieldErrors('name')"></div>
                         </div>
                         <!-- parent category -->
                         <div class="form-group">
@@ -35,7 +35,7 @@
                             </select>
                         </div>
                         <button th:replace="fragments/components::saveButton"></button>
-                        <a th:replace="fragments/components::cancelButton"></a>
+                        <a th:replace="fragments/components::cancelButtonToBack"></a>
                     </form>
                 </div>
                 <div class="col-sm-3 bg-white"></div>

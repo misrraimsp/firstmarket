@@ -83,7 +83,7 @@ public class UserServer implements UserDetailsService, Constants {
         }
     }
 
-    private boolean emailExists(String email) {
+    public boolean emailExists(String email) {
         return userRepository.findByEmail(email) != null;
     }
 
@@ -125,19 +125,38 @@ public class UserServer implements UserDetailsService, Constants {
         userRepository.save(user);
     }
 
-    public void editPassword(Long id, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
+    public User editPassword(Long id, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
         User user = this.findById(id);
-        if (!passwordEncoder.matches(formPassword.getCurrentPassword(), user.getPassword())){
+        if (!this.checkPassword(passwordEncoder, formPassword.getCurrentPassword(), user.getPassword())) {
             throw new InvalidPasswordException("incorrect password for user: " + user.getUsername());
         }
         user.setPassword(passwordEncoder.encode(formPassword.getPassword()));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
-    public VerificationToken createVerificationToken(User user) {
+    public User editEmail(User user, String editedEmail) {
+        user.setEmail(editedEmail);
+        return userRepository.save(user);
+    }
+
+    public User enable(User user) {
+        user.setEnabled(true);
+        return userRepository.save(user);
+    }
+
+    public boolean checkPassword(User user, PasswordEncoder passwordEncoder, String candidatePassword) {
+        return this.checkPassword(passwordEncoder, candidatePassword, user.getPassword());
+    }
+
+    private boolean checkPassword(PasswordEncoder passwordEncoder, String candidatePassword, String storedPassword) {
+        return passwordEncoder.matches(candidatePassword, storedPassword);
+    }
+
+    public VerificationToken createVerificationToken(User user, String editedEmail) {
         VerificationToken verificationToken = new VerificationToken();
         verificationToken.setUser(user);
         verificationToken.setToken(UUID.randomUUID().toString());
+        verificationToken.setEditedEmail(editedEmail);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
@@ -151,8 +170,4 @@ public class UserServer implements UserDetailsService, Constants {
         return verificationTokenRepository.findByToken(token);
     }
 
-    public User enable(User user) {
-        user.setEnabled(true);
-        return userRepository.save(user);
-    }
 }

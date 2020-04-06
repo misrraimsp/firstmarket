@@ -3,7 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
-import misrraimsp.uned.pfg.firstmarket.event.OnRegistrationCompleteEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -62,84 +62,183 @@ public class UserController implements Constants {
 
     @PostMapping("/newUser")
     public String processNewUser(@Valid FormUser formUser, Errors errors, Model model) {
+        User registeredUser = null;
+        // check validation errors
+        boolean hasError = false;
+        if (errors.hasErrors()) {
+            hasError = true;
+            if (errors.hasGlobalErrors()){
+                for (ObjectError objectError : errors.getGlobalErrors()){
+                    if (objectError.getCode().equals("PasswordMatches")){
+                        errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
+                    }
+                    else { // TODO log this state
+                        System.out.println(objectError);
+                    }
+                }
+            }
+        }
+        // try to persist, catching email non-uniqueness condition
+        else {
+            try {
+                registeredUser = userServer.persist(formUser, passwordEncoder, null, null);
+            }
+            catch (EmailAlreadyExistsException e) {
+                hasError = true;
+                errors.rejectValue("email", "email.notUnique");
+            }
+        }
+        // manage error situation
+        if (hasError) {
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            model.addAttribute("emailPattern", EMAIL);
+            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAttribute("passwordPattern", PASSWORD);
+            return "newUser";
+        }
+        // trigger email verification
+        try {
+            applicationEventPublisher.publishEvent(new OnEmailConfirmationNeededEvent(registeredUser, null));
+        }
+        catch (Exception me) { //TODO log this situation
+            System.out.println("some problem with email sending");
+            me.printStackTrace();
+        }
+        return "redirect:/emailConfirmationRequest";
+    }
 
-        // Check validation errors
+    @GetMapping("/user/editEmail")
+    public String showEditEmailForm(Model model, @AuthenticationPrincipal User authUser) {
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("emailPattern", EMAIL);
+        return "editEmail";
+    }
+
+    @PostMapping("/user/editEmail")
+    public String processEditEmail(@RequestParam String password,
+                                   @RequestParam String editedEmail,
+                                   Model model,
+                                   @AuthenticationPrincipal User authUser) {
+
+        // error checks
+        User user = userServer.findById(authUser.getId());
+        boolean hasError = false;
+        String errorMessage = null;
+        if (!userServer.checkPassword(user, passwordEncoder, password)) { // check password
+            hasError = true;
+            errorMessage = messageSource.getMessage("password.invalid", null, null);
+        }
+        else if (userServer.emailExists(editedEmail)) { // check email uniqueness
+            hasError = true;
+            errorMessage = messageSource.getMessage("email.notUnique", null, null);
+        }
+        if (hasError) {
+            model.addAttribute("message", errorMessage);
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            model.addAttribute("emailPattern", EMAIL);
+            return "editEmail";
+        }
+        // trigger email verification
+        try {
+            applicationEventPublisher.publishEvent(new OnEmailConfirmationNeededEvent(user, editedEmail));
+        }
+        catch (Exception me) { //TODO log this situation
+            System.out.println("some problem with email sending");
+        }
+        return "redirect:/emailConfirmationRequest";
+    }
+
+    @GetMapping("/emailConfirmationRequest")
+    public String showEditEmailConfirm(Model model){
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        return "emailConfirmationRequest";
+    }
+
+    @GetMapping("/confirmEmail")
+    public String processConfirmEmail(@RequestParam("token") String token, Model model){
+        // error checks
+        VerificationToken verificationToken = userServer.getVerificationToken(token);
+        boolean hasError = false;
+        String errorMessage = null;
+        if (verificationToken == null) { // check for invalid token
+            hasError = true;
+            errorMessage = messageSource.getMessage("auth.invalidToken", null, null);
+        }
+        else if ((verificationToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime()) <= 0) { // check for expired token
+            hasError = true;
+            errorMessage = messageSource.getMessage("auth.expiredToken", null, null);
+        }
+        if (hasError) {
+            model.addAttribute("message", errorMessage);
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            return "emailConfirmationError";
+        }
+        // complete confirmation
+        User user = verificationToken.getUser();
+        if (verificationToken.getEditedEmail() == null) { // new user registration process
+            userServer.enable(user);
+            //TODO send welcome email
+            return "redirect:/login";
+        }
+        else { // change email process
+            userServer.editEmail(user, verificationToken.getEditedEmail());
+            //TODO send email address change confirmation email
+            return "redirect:/home";
+        }
+    }
+
+    @GetMapping("/user/editPassword")
+    public String showEditPasswordForm(Model model, @AuthenticationPrincipal User authUser){
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("formPassword", new FormPassword());
+        model.addAttribute("passwordPattern", PASSWORD);
+        return "editPassword";
+    }
+
+    @PostMapping("/user/editPassword")
+    public String processEditPassword(@Valid FormPassword formPassword,
+                                      Errors errors,
+                                      Model model,
+                                      @AuthenticationPrincipal User authUser) {
         if (errors.hasErrors()) {
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
                         errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
                     }
-                    else {
-                        // TODO log this state
+                    else{//debug
                         System.out.println(objectError);
                     }
                 }
             }
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("emailPattern", EMAIL);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
             model.addAttribute("passwordPattern", PASSWORD);
-            return "newUser";
+            return "editPassword";
         }
-
-        // Try to persist, catching email non-uniqueness condition
-        User registeredUser;
-        try {
-            registeredUser = userServer.persist(formUser, passwordEncoder, null, null);
+        try{
+            userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
         }
-        catch (EmailAlreadyExistsException e) {
-            errors.rejectValue("email", "email.notUnique");
+        catch (InvalidPasswordException e){
+            errors.rejectValue("currentPassword", "password.invalid");
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());;
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("emailPattern", EMAIL);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
             model.addAttribute("passwordPattern", PASSWORD);
-            return "newUser";
+            return "editPassword";
         }
-
-        // Trigger email verification event
-        if (registeredUser != null) {
-            try {
-                applicationEventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredUser));
-            }
-            catch (Exception me) {
-                System.out.println("some problem with email sending");
-            }
-        }
-        else {
-            // TODO log this state
-            System.out.println("user not registered but no EmailAlreadyExistsException was thrown");
-        }
-
-        return "redirect:/newUserSuccess";
-    }
-
-    @GetMapping("/newUserSuccess")
-    public String showNewUserSuccess(Model model){
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        return "newUserSuccess";
-    }
-
-    @GetMapping("/confirmNewUser")
-    public String processConfirmNewUser(@RequestParam("token") String token, Model model){
-        VerificationToken verificationToken = userServer.getVerificationToken(token);
-        // check for invalid token
-        if (verificationToken == null) {
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("message", messageSource.getMessage("auth.invalidToken", null, null));
-            return "newUserError";
-        }
-        // check for expired token
-        Calendar cal = Calendar.getInstance();
-        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0) {
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("message", messageSource.getMessage("auth.expiredToken", null, null));
-            return "newUserError";
-        }
-        // enable user
-        User user = verificationToken.getUser();
-        userServer.enable(user);
-        return "redirect:/login";
+        return "redirect:/home";
     }
 
     @GetMapping("/user/editProfile")
@@ -194,55 +293,6 @@ public class UserController implements Constants {
         model.addAttribute("purchases", user.getPurchases());
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "purchases";
-    }
-
-    @GetMapping("/user/editPassword")
-    public String showEditPasswordForm(Model model, @AuthenticationPrincipal User authUser){
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("formPassword", new FormPassword());
-        model.addAttribute("passwordPattern", PASSWORD);
-        return "editPassword";
-    }
-
-    @PostMapping("/user/editPassword")
-    public String processEditPassword(@Valid FormPassword formPassword,
-                                      Errors errors,
-                                      Model model,
-                                      @AuthenticationPrincipal User authUser) {
-        if (errors.hasErrors()) {
-            if (errors.hasGlobalErrors()){
-                for (ObjectError objectError : errors.getGlobalErrors()){
-                    if (objectError.getCode().equals("PasswordMatches")){
-                        errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
-                    }
-                    else{//debug
-                        System.out.println(objectError);
-                    }
-                }
-            }
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("passwordPattern", PASSWORD);
-            return "editPassword";
-        }
-        try{
-            userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
-        }
-        catch (InvalidPasswordException e){
-            errors.rejectValue("currentPassword", "password.invalid");
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());;
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("passwordPattern", PASSWORD);
-            return "editPassword";
-        }
-        return "redirect:/home";
     }
 
 }

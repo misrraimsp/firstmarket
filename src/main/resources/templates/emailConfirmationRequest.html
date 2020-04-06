@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/components::head('Registration Success')"></head>
+    <head th:replace="fragments/components::head('Email Confirmation')"></head>
     <body>
         <div class="container-fluid">
             <!-- header -->
@@ -17,8 +17,8 @@
                 <div class="col-sm-6">
                     <hr class="mb-4 mt-0"/>
                     <div class="bg-light">
-                        <p class="px-2">We have sent an email with a confirmation link to your email address. In order to complete the sign-up process, please click the confirmation link.</p>
-                        <p class="px-2">If you do not receive a confirmation email, please check your spam folder. Also, please verify that you entered a valid email address in our sign-up form.</p>
+                        <p class="px-2">We have sent an email with a confirmation link to your email address. In order to complete the process, please click the confirmation link.</p>
+                        <p class="px-2">If you do not receive a confirmation email, please check your spam folder.</p>
                         <p class="px-2">If you need assistance, please <a class="text-info" th:href="@{/contactUs}" style="text-decoration: none">contact us.</a></p>
                     </div>
                 </div>
