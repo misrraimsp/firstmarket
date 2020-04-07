@@ -139,7 +139,7 @@ public class UserServer implements UserDetailsService, Constants {
         return userRepository.save(user);
     }
 
-    public User enable(User user) {
+    public User enableUser(User user) {
         user.setEnabled(true);
         return userRepository.save(user);
     }
@@ -170,4 +170,7 @@ public class UserServer implements UserDetailsService, Constants {
         return verificationTokenRepository.findByToken(token);
     }
 
+    public void deleteVerificationToken(Long tokenId) {
+        verificationTokenRepository.deleteById(tokenId);
+    }
 }

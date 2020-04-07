@@ -545,7 +545,7 @@ public class DevelopmentH2Config {
             formUser1.setFirstName("ad");
             formUser1.setLastName("ad");
             User admin = userServer.persist(formUser1, passwordEncoder, Arrays.asList(role1), cart1);
-            userServer.enable(admin);
+            userServer.enableUser(admin);
 
             FormUser formUser2 = new FormUser();
             formUser2.setEmail("misrra@fm.com");
@@ -562,7 +562,7 @@ public class DevelopmentH2Config {
             formUser3.setFirstName("Andrea");
             formUser3.setLastName("andre");
             User andrea = userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);
-            userServer.enable(andrea);
+            userServer.enableUser(andrea);
 
 
         };

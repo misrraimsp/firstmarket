@@ -164,8 +164,8 @@ public class UserController implements Constants {
         return "emailConfirmationRequest";
     }
 
-    @GetMapping("/confirmEmail")
-    public String processConfirmEmail(@RequestParam("token") String token, Model model){
+    @GetMapping("/emailConfirmation")
+    public String processEmailConfirmation(@RequestParam("token") String token, Model model, @AuthenticationPrincipal User authUser){
         // error checks
         VerificationToken verificationToken = userServer.getVerificationToken(token);
         boolean hasError = false;
@@ -179,21 +179,25 @@ public class UserController implements Constants {
             errorMessage = messageSource.getMessage("auth.expiredToken", null, null);
         }
         if (hasError) {
+            if (authUser != null) {
+                User user = userServer.findById(authUser.getId());
+                model.addAttribute("firstName", user.getProfile().getFirstName());
+                model.addAttribute("cartSize", user.getCart().getCartSize());
+            }
             model.addAttribute("message", errorMessage);
             model.addAttribute("mainCategories", catServer.getMainCategories());
             return "emailConfirmationError";
         }
         // complete confirmation
+        userServer.deleteVerificationToken(verificationToken.getId());
         User user = verificationToken.getUser();
         if (verificationToken.getEditedEmail() == null) { // new user registration process
-            userServer.enable(user);
-            //TODO delete token
+            userServer.enableUser(user);
             //TODO send welcome email
             return "redirect:/login";
         }
         else { // change email process
             userServer.editEmail(user, verificationToken.getEditedEmail());
-            //TODO delete token
             //TODO send email address change confirmation email
             return "redirect:/home";
         }
