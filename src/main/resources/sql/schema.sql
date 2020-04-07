@@ -36,7 +36,7 @@ create table purchase (id bigint not null, created timestamp, primary key (id));
 create table purchase_items (purchase_id bigint not null, items_id bigint not null);
 create table role (id bigint not null, name varchar(255), primary key (id));
 create table user (id bigint not null, email varchar(255), enabled boolean not null, password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
-create table verification_token (id bigint not null, expiry_date timestamp, token varchar(255), user_id bigint not null, primary key (id));
+create table verification_token (id bigint not null, edited_email varchar(255), expiry_date timestamp, token varchar(255), user_id bigint not null, primary key (id));
 create table user_purchases (user_id bigint not null, purchases_id bigint not null);
 create table users_roles (user_id bigint not null, role_id bigint not null);
 

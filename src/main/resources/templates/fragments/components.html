@@ -134,13 +134,13 @@
         </div>
 
         <!-- Save button -->
-        <button th:fragment="saveButton" class="btn btn-info px-5 mb-3" type="submit">Save</button>
+        <button th:fragment="saveButton" class="btn btn-info px-5 my-3" type="submit">Save</button>
 
         <!-- Cancel button (toBack) -->
-        <a th:fragment="cancelButtonToBack" class="btn btn-secondary px-5 mb-3 text-white" onclick="window.history.back();">Cancel</a>
+        <a th:fragment="cancelButtonToBack" class="btn btn-secondary px-5 my-3 text-white" onclick="window.history.back();">Cancel</a>
 
         <!-- Cancel button (toHome) -->
-        <a th:fragment="cancelButtonToHome" class="btn btn-secondary px-5 mb-3 text-white" th:href="@{/home}">Cancel</a>
+        <a th:fragment="cancelButtonToHome" class="btn btn-secondary px-5 my-3 text-white" th:href="@{/home}">Cancel</a>
 
         <div th:fragment="addButton(action)">
             <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>

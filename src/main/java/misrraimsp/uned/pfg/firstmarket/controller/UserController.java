@@ -154,7 +154,12 @@ public class UserController implements Constants {
     }
 
     @GetMapping("/emailConfirmationRequest")
-    public String showEditEmailConfirm(Model model){
+    public String showEmailConfirmationRequest(Model model, @AuthenticationPrincipal User authUser){
+        if (authUser != null) {
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
+        }
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "emailConfirmationRequest";
     }
@@ -182,11 +187,13 @@ public class UserController implements Constants {
         User user = verificationToken.getUser();
         if (verificationToken.getEditedEmail() == null) { // new user registration process
             userServer.enable(user);
+            //TODO delete token
             //TODO send welcome email
             return "redirect:/login";
         }
         else { // change email process
             userServer.editEmail(user, verificationToken.getEditedEmail());
+            //TODO delete token
             //TODO send email address change confirmation email
             return "redirect:/home";
         }
@@ -208,30 +215,32 @@ public class UserController implements Constants {
                                       Errors errors,
                                       Model model,
                                       @AuthenticationPrincipal User authUser) {
+
+        User user = userServer.findById(authUser.getId());
+        boolean hasError = false;
         if (errors.hasErrors()) {
+            hasError = true;
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
                     if (objectError.getCode().equals("PasswordMatches")){
                         errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
                     }
-                    else{//debug
+                    else{//debug TODO log this situation
                         System.out.println(objectError);
                     }
                 }
             }
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("passwordPattern", PASSWORD);
-            return "editPassword";
         }
-        try{
-            userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
+        else {
+            try{
+                userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
+            }
+            catch (InvalidPasswordException e){
+                hasError = true;
+                errors.rejectValue("currentPassword", "password.invalid");
+            }
         }
-        catch (InvalidPasswordException e){
-            errors.rejectValue("currentPassword", "password.invalid");
-            User user = userServer.findById(authUser.getId());
+        if (hasError) {
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());;
             model.addAttribute("mainCategories", catServer.getMainCategories());
@@ -279,12 +288,6 @@ public class UserController implements Constants {
         return "cart";
     }
 
-    @GetMapping("/user/addPurchase")
-    public String processAddPurchase(@AuthenticationPrincipal User authUser){
-        userServer.addPurchase(authUser.getId());
-        return "redirect:/home";
-    }
-
     @GetMapping("/user/purchases")
     public String showPurchases(@AuthenticationPrincipal User authUser, Model model){
         User user = userServer.findById(authUser.getId());
@@ -293,6 +296,12 @@ public class UserController implements Constants {
         model.addAttribute("purchases", user.getPurchases());
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "purchases";
+    }
+
+    @GetMapping("/user/addPurchase")
+    public String processAddPurchase(@AuthenticationPrincipal User authUser){
+        userServer.addPurchase(authUser.getId());
+        return "redirect:/home";
     }
 
 }
