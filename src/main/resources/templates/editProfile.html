@@ -13,18 +13,21 @@
                 <div class="col-sm-3 bg-white"></div>
                 <div class="col-sm-6 bg-light">
                     <form class="needs-validation" novalidate th:action="@{/user/editProfile}" th:object="${profile}" method="POST" action="#">
+                        <!-- firstname -->
                         <div class="form-group">
                             <label for="firstName">First Name:</label>
                             <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${textBasicPattern}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
-                            <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
                         </div>
+                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
+                        <!-- lastname -->
                         <div class="form-group">
                             <label for="lastName">Last Name:</label>
                             <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${textBasicPattern}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
-                            <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>
                         </div>
+                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>
+                        <!-- save or cancel -->
                         <button th:replace="fragments/components::saveButton"></button>
                         <a th:replace="fragments/components::cancelButtonToHome"></a>
                     </form>

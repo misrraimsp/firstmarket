@@ -134,12 +134,14 @@ public class UserServer implements UserDetailsService, Constants {
         return userRepository.save(user);
     }
 
-    public User editEmail(User user, String editedEmail) {
+    public User editEmail(Long userId, String editedEmail) {
+        User user = this.findById(userId);
         user.setEmail(editedEmail);
         return userRepository.save(user);
     }
 
-    public User enableUser(User user) {
+    public User enableUser(Long userId) {
+        User user = this.findById(userId);
         user.setEnabled(true);
         return userRepository.save(user);
     }

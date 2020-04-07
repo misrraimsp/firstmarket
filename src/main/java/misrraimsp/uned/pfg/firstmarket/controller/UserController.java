@@ -4,6 +4,8 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnEmailEditionEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnUserRegistrationEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -189,16 +191,28 @@ public class UserController implements Constants {
             return "emailConfirmationError";
         }
         // complete confirmation
-        userServer.deleteVerificationToken(verificationToken.getId());
-        User user = verificationToken.getUser();
         if (verificationToken.getEditedEmail() == null) { // new user registration process
-            userServer.enableUser(user);
-            //TODO send welcome email
+            User user = userServer.enableUser(verificationToken.getUser().getId());
+            userServer.deleteVerificationToken(verificationToken.getId());
+            try {
+                applicationEventPublisher.publishEvent(new OnUserRegistrationEvent(user));
+            }
+            catch (Exception me) { //TODO log this situation
+                System.out.println("some problem with email sending");
+                me.printStackTrace();
+            }
             return "redirect:/login";
         }
         else { // change email process
-            userServer.editEmail(user, verificationToken.getEditedEmail());
-            //TODO send email address change confirmation email
+            User user = userServer.editEmail(verificationToken.getUser().getId(), verificationToken.getEditedEmail());
+            userServer.deleteVerificationToken(verificationToken.getId());
+            try {
+                applicationEventPublisher.publishEvent(new OnEmailEditionEvent(user));
+            }
+            catch (Exception me) { //TODO log this situation
+                System.out.println("some problem with email sending");
+                me.printStackTrace();
+            }
             return "redirect:/home";
         }
     }
