@@ -217,53 +217,58 @@ public class UserController implements Constants {
         }
     }
 
-    @GetMapping("/user/editPassword")
+    @GetMapping("/editPassword")
     public String showEditPasswordForm(Model model, @AuthenticationPrincipal User authUser){
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("formPassword", new FormPassword());
-        model.addAttribute("passwordPattern", PASSWORD);
-        return "editPassword";
+        if (authUser != null){
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            model.addAttribute("formPassword", new FormPassword());
+            model.addAttribute("passwordPattern", PASSWORD);
+            return "editPassword";
+        }
+        return "redirect:/home";
     }
 
-    @PostMapping("/user/editPassword")
+    @PostMapping("/editPassword")
     public String processEditPassword(@Valid FormPassword formPassword,
                                       Errors errors,
                                       Model model,
                                       @AuthenticationPrincipal User authUser) {
 
-        User user = userServer.findById(authUser.getId());
-        boolean hasError = false;
-        if (errors.hasErrors()) {
-            hasError = true;
-            if (errors.hasGlobalErrors()){
-                for (ObjectError objectError : errors.getGlobalErrors()){
-                    if (objectError.getCode().equals("PasswordMatches")){
-                        errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
-                    }
-                    else{//debug TODO log this situation
-                        System.out.println(objectError);
+        if (authUser != null){
+            User user = userServer.findById(authUser.getId());
+            boolean hasError = false;
+            if (errors.hasErrors()) {
+                hasError = true;
+                if (errors.hasGlobalErrors()){
+                    for (ObjectError objectError : errors.getGlobalErrors()){
+                        if (objectError.getCode().equals("PasswordMatches")){
+                            errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
+                        }
+                        else{//debug TODO log this situation
+                            System.out.println(objectError);
+                        }
                     }
                 }
             }
-        }
-        else {
-            try{
-                userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
+            else {
+                try{
+                    userServer.editPassword(authUser.getId(), passwordEncoder, formPassword);
+                }
+                catch (InvalidPasswordException e){
+                    hasError = true;
+                    errors.rejectValue("currentPassword", "password.invalid");
+                }
             }
-            catch (InvalidPasswordException e){
-                hasError = true;
-                errors.rejectValue("currentPassword", "password.invalid");
+            if (hasError) {
+                model.addAttribute("firstName", user.getProfile().getFirstName());
+                model.addAttribute("cartSize", user.getCart().getCartSize());;
+                model.addAttribute("mainCategories", catServer.getMainCategories());
+                model.addAttribute("passwordPattern", PASSWORD);
+                return "editPassword";
             }
-        }
-        if (hasError) {
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());;
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("passwordPattern", PASSWORD);
-            return "editPassword";
         }
         return "redirect:/home";
     }
