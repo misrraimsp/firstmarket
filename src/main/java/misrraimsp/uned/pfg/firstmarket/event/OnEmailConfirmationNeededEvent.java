@@ -1,22 +1,28 @@
 package misrraimsp.uned.pfg.firstmarket.event;
 
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import org.springframework.context.ApplicationEvent;
 
 
 public class OnEmailConfirmationNeededEvent extends ApplicationEvent {
 
-    private User user;
+    private SecurityEvent securityEvent;
+    private Long userId;
     private String editedEmail;
 
-    public OnEmailConfirmationNeededEvent(User user, String editedEmail) {
-        super(user);
-        this.user = user;
+    public OnEmailConfirmationNeededEvent(SecurityEvent securityEvent, Long userId, String editedEmail) {
+        super(userId);
+        this.securityEvent = securityEvent;
+        this.userId = userId;
         this.editedEmail = editedEmail;
     }
 
-    public User getUser(){
-        return user;
+    public SecurityEvent getSecurityEvent(){
+        return securityEvent;
+    }
+
+    public Long getUserId(){
+        return userId;
     }
 
     public String getEditedEmail(){

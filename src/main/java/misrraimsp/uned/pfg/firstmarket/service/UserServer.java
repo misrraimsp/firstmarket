@@ -1,12 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.data.VerificationTokenRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.EmailAlreadyExistsException;
-import misrraimsp.uned.pfg.firstmarket.exception.InvalidPasswordException;
+import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +22,7 @@ import java.util.*;
 public class UserServer implements UserDetailsService, Constants {
 
     private UserRepository userRepository;
-    private VerificationTokenRepository verificationTokenRepository;
+    private SecurityTokenRepository securityTokenRepository;
     private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
@@ -32,14 +30,14 @@ public class UserServer implements UserDetailsService, Constants {
 
     @Autowired
     public UserServer(UserRepository userRepository,
-                      VerificationTokenRepository verificationTokenRepository,
+                      SecurityTokenRepository securityTokenRepository,
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
                       PurchaseServer purchaseServer) {
 
         this.userRepository = userRepository;
-        this.verificationTokenRepository = verificationTokenRepository;
+        this.securityTokenRepository = securityTokenRepository;
         this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
@@ -57,30 +55,25 @@ public class UserServer implements UserDetailsService, Constants {
 
     // role ROLE_USER assigned by default if not specified
     // new cart created if not specified
-    public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) throws EmailAlreadyExistsException {
-        if (this.emailExists(formUser.getEmail())){
-            throw new EmailAlreadyExistsException("email already exists: " +  formUser.getEmail());
+    public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) {
+        if (roles == null){
+            roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
         }
-        else {
-            if (roles == null){
-                roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
-            }
-            if (cart == null){
-                cart = new Cart();
-                cart.setLastModified(LocalDateTime.now());
-            }
-            Profile profile = new Profile();
-            profile.setFirstName(formUser.getFirstName());
-            profile.setLastName(formUser.getLastName());
-            User user = new User();
-            user.setEnabled(false);
-            user.setEmail(formUser.getEmail());
-            user.setPassword(passwordEncoder.encode(formUser.getPassword()));
-            user.setProfile(profileServer.persist(profile));
-            user.setRoles(roles);
-            user.setCart(cartServer.persist(cart));
-            return userRepository.save(user);
+        if (cart == null){
+            cart = new Cart();
+            cart.setLastModified(LocalDateTime.now());
         }
+        Profile profile = new Profile();
+        profile.setFirstName(formUser.getFirstName());
+        profile.setLastName(formUser.getLastName());
+        User user = new User();
+        user.setEnabled(false);
+        user.setEmail(formUser.getEmail());
+        user.setPassword(passwordEncoder.encode(formUser.getPassword()));
+        user.setProfile(profileServer.persist(profile));
+        user.setRoles(roles);
+        user.setCart(cartServer.persist(cart));
+        return userRepository.save(user);
     }
 
     public boolean emailExists(String email) {
@@ -125,14 +118,22 @@ public class UserServer implements UserDetailsService, Constants {
         userRepository.save(user);
     }
 
-    public User editPassword(Long id, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
-        User user = this.findById(id);
+    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password) {
+        User user = this.findById(userId);
+        user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
+    /*
+    public User editPassword(Long userId, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
+        User user = this.findById(userId);
         if (!this.checkPassword(passwordEncoder, formPassword.getCurrentPassword(), user.getPassword())) {
             throw new InvalidPasswordException("incorrect password for user: " + user.getUsername());
         }
         user.setPassword(passwordEncoder.encode(formPassword.getPassword()));
         return userRepository.save(user);
     }
+     */
 
     public User editEmail(Long userId, String editedEmail) {
         User user = this.findById(userId);
@@ -146,7 +147,8 @@ public class UserServer implements UserDetailsService, Constants {
         return userRepository.save(user);
     }
 
-    public boolean checkPassword(User user, PasswordEncoder passwordEncoder, String candidatePassword) {
+    public boolean checkPassword(Long userId, PasswordEncoder passwordEncoder, String candidatePassword) {
+        User user = this.findById(userId);
         return this.checkPassword(passwordEncoder, candidatePassword, user.getPassword());
     }
 
@@ -154,25 +156,30 @@ public class UserServer implements UserDetailsService, Constants {
         return passwordEncoder.matches(candidatePassword, storedPassword);
     }
 
-    public VerificationToken createVerificationToken(User user, String editedEmail) {
-        VerificationToken verificationToken = new VerificationToken();
-        verificationToken.setUser(user);
-        verificationToken.setToken(UUID.randomUUID().toString());
-        verificationToken.setEditedEmail(editedEmail);
+    public SecurityToken createSecurityToken(SecurityEvent securityEvent, User user, String editedEmail) {
+        SecurityToken securityToken = new SecurityToken();
+        securityToken.setSecurityEvent(securityEvent);
+        securityToken.setUser(user);
+        securityToken.setToken(UUID.randomUUID().toString());
+        securityToken.setEditedEmail(editedEmail);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, EXPIRATION_MINUTES);
-        verificationToken.setExpiryDate(new Date(calendar.getTime().getTime()));
+        calendar.add(Calendar.MINUTE, SECURITY_TOKEN_EXPIRATION_MINUTES);
+        securityToken.setExpiryDate(new Date(calendar.getTime().getTime()));
 
-        return verificationTokenRepository.save(verificationToken);
+        return securityTokenRepository.save(securityToken);
     }
 
-    public VerificationToken getVerificationToken(String token) {
-        return verificationTokenRepository.findByToken(token);
+    public SecurityToken getSecurityToken(String token) {
+        return securityTokenRepository.findByToken(token);
     }
 
-    public void deleteVerificationToken(Long tokenId) {
-        verificationTokenRepository.deleteById(tokenId);
+    public void deleteSecurityToken(Long userTokenId) {
+        securityTokenRepository.deleteById(userTokenId);
+    }
+
+    public String getRandomPassword() {
+        return "expedienteXD3";
     }
 }

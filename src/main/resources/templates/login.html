@@ -14,6 +14,7 @@
             <div class="row">
                 <div class="col-sm-3 bg-white"></div>
                 <div class="col-sm-6 bg-light">
+                    <!-- login form -->
                     <form class="needs-validation" novalidate th:action="@{/login}" method="POST" action="#">
                         <div th:replace="fragments/components::loginError"></div>
                         <!-- email -->
@@ -30,8 +31,11 @@
                         </div>
                         <button class="btn btn-info px-5" type="submit">Login</button>
                     </form>
-                    <br/>
+                    <!-- new user link -->
                     <span>New? Click <a class="text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
+                    <!-- forgot password? link -->
+                    <br/>
+                    <span>Forgot your password? Click <a class="text-info" th:href="@{/resetPassword}" style="text-decoration: none">here</a> to restore it.</span>
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
