@@ -6,6 +6,10 @@ import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -188,8 +192,24 @@ public class UserServer implements UserDetailsService, Constants {
         System.out.println("Deleted at " + present + ": " + numDeleted);
     }
 
-    //TODO
     public String getRandomPassword() {
-        return "expedienteXD3";
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+
+        // at least 1 lowercase
+        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+        lowerCaseRule.setNumberOfCharacters(1);
+
+        // at least 1 uppercase
+        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
+        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
+        upperCaseRule.setNumberOfCharacters(1);
+
+        // at least 1 number
+        CharacterData digitChars = EnglishCharacterData.Digit;
+        CharacterRule digitRule = new CharacterRule(digitChars);
+        digitRule.setNumberOfCharacters(1);
+
+        return passwordGenerator.generatePassword(16, lowerCaseRule, upperCaseRule, digitRule);
     }
 }

@@ -84,6 +84,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.passay/passay -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.5.0</version>
+        </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
         <dependency>
@@ -91,7 +97,6 @@
             <artifactId>javax.mail</artifactId>
             <version>1.6.2</version>
         </dependency>
-
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <dependency>
