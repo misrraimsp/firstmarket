@@ -10,7 +10,9 @@ spring:
    #jpa:
       #show-sql: true
 
-
+schedule:
+   fixedRate:
+      string: PT60S
 ---
 
 spring:

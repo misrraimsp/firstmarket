@@ -7,6 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -179,6 +180,15 @@ public class UserServer implements UserDetailsService, Constants {
         securityTokenRepository.deleteById(userTokenId);
     }
 
+    @Transactional
+    @Scheduled(fixedRateString = "${schedule.fixedRate.string}")
+    public void deleteExpiredSecurityTokens() {
+        Date present = Calendar.getInstance().getTime();
+        int numDeleted = securityTokenRepository.deleteByExpiryDateBefore(present);
+        System.out.println("Deleted at " + present + ": " + numDeleted);
+    }
+
+    //TODO
     public String getRandomPassword() {
         return "expedienteXD3";
     }
