@@ -5,10 +5,10 @@ server:
 spring:
    profiles:
       active:
-         - dev-mariadb
-         #- dev-h2
-   #jpa:
-      #show-sql: true
+         #- dev-mariadb
+         - dev-h2
+   jpa:
+      show-sql: true
 
 schedule:
    fixedRate:

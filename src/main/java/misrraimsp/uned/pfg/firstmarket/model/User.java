@@ -20,6 +20,8 @@ public class User implements UserDetails {
 
     private boolean enabled;
 
+    private boolean removed;
+
     private String email;
 
     private String password;

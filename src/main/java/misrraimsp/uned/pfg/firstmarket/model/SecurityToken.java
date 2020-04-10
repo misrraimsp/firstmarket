@@ -18,8 +18,9 @@ public class SecurityToken {
 
     private SecurityEvent securityEvent;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false)
+    //@OneToOne(fetch = FetchType.EAGER)
+    //@JoinColumn(nullable = false)
+    @ManyToOne
     private User user;
 
     private Date expiryDate;

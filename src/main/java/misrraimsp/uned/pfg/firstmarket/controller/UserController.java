@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnEmailEditionEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnResetPasswordEvent;
@@ -11,6 +12,7 @@ import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.UserDeletion;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -31,6 +34,7 @@ import javax.validation.Valid;
 import java.util.Calendar;
 
 @Controller
+@Validated
 public class UserController implements Constants {
 
     private UserServer userServer;
@@ -363,6 +367,56 @@ public class UserController implements Constants {
     @GetMapping("/user/addPurchase")
     public String processAddPurchase(@AuthenticationPrincipal User authUser){
         userServer.addPurchase(authUser.getId());
+        return "redirect:/home";
+    }
+
+    @GetMapping("/user/deleteUser")
+    public String showDeleteUserForm(Model model, @AuthenticationPrincipal User authUser) {
+        User user = userServer.findById(authUser.getId());
+        model.addAttribute("firstName", user.getProfile().getFirstName());
+        model.addAttribute("cartSize", user.getCart().getCartSize());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("deletionReasons", DeletionReason.values());
+        model.addAttribute("textLongPattern", TEXT_LONG);
+        return "deleteUser";
+    }
+
+    //TODO validate comment input
+    @PostMapping("/user/deleteUser")
+    public String processDeleteUser(@RequestParam(required = false) String deletionReason,
+                                    @RequestParam(required = false) String comment,
+                                    @RequestParam String password,
+                                    Model model,
+                                    @AuthenticationPrincipal User authUser) {
+
+        {
+            System.out.println("deletion reason: " + deletionReason);
+            System.out.println("comment: " + comment);
+            System.out.println("password: " + password);
+        }
+        User user = userServer.findById(authUser.getId());
+        // error checks
+        boolean hasError = false;
+        String errorMessage = null;
+        if (!userServer.checkPassword(authUser.getId(), passwordEncoder, password)) { // check password
+            hasError = true;
+            errorMessage = messageSource.getMessage("password.invalid", null, null);
+        }
+        if (hasError) {
+            model.addAttribute("message", errorMessage);
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            model.addAttribute("deletionReasons", DeletionReason.values());
+            model.addAttribute("textLongPattern", TEXT_LONG);
+            return "deleteUser";
+        }
+        // complete deletion
+        UserDeletion userDeletion = userServer.createUserDeletion(authUser.getId(), deletionReason, comment);
+        user = userServer.removeUser(authUser.getId());
+        // TODO trigger user removed event
+        System.out.println("user removed: " + user.getProfile().getFirstName());
+        System.out.println("reason: " + userDeletion.getDeletionReason().getText());
         return "redirect:/home";
     }
 

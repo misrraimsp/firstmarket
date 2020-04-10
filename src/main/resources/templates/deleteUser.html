@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments/components::head('Delete Account')"></head>
+    <body>
+        <div class="container-fluid">
+            <header th:replace="fragments/components::header"></header>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <div th:replace="fragments/components::title(text = ${firstName} + ', we\'re sorry to see you go')"></div>
+            <div class="row">
+                <div class="col-sm-3 bg-white"></div>
+                <div class="col-sm-6 bg-light">
+                    <div th:replace="fragments/components::backendRequestParamError"></div>
+                    <form class="needs-validation" novalidate th:action="@{/user/deleteUser}" method="POST" action="#">
+                        <!-- deletion reason -->
+                        <div class="d-flex flex-column pt-3">
+                            <div>
+                                <p>Please, tell us why you are closing your account:</p>
+                            </div>
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="dr : ${deletionReasons}">
+                                <input type="radio" name="deletionReason" th:value="${dr.ordinal()}" th:id="'dr-' + ${dr.ordinal()}"/>
+                                <div class="state p-info-o">
+                                    <label class="font-weight-lighter" th:for="'dr-' + ${dr.ordinal()}" th:text="${dr.getText()}">deletion reason</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- comment -->
+                        <div class="form-group">
+                            <label for="comment">Your feedback matters, so feel free to leave us a comment:</label>
+                            <textarea class="form-control" rows="5" name="comment" id="comment" placeholder="enter your comment" th:pattern="${textLongPattern}"></textarea>
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>
+                        <hr/>
+                        <!-- password -->
+                        <div class="form-group">
+                            <label class="font-weight-bold" for="password">To complete the deletion, we need you to enter your password:</label>
+                            <input class="form-control" type="password" name="password" id="password" placeholder="enter your password" required />
+                            <div class="invalid-feedback">Please introduce your current password</div>
+                        </div>
+                        <!-- delete or cancel -->
+                        <button th:replace="fragments/components::deleteAccountButton"></button>
+                        <a th:replace="fragments/components::cancelButtonToHome"></a>
+                    </form>
+                </div>
+                <div class="col-sm-3 bg-white"></div>
+            </div>
+            <footer th:replace="fragments/components::footer"></footer>
+        </div>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
+    </body>
+</html>

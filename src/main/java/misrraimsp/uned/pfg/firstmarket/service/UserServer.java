@@ -2,7 +2,9 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
+import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.*;
@@ -28,6 +30,7 @@ public class UserServer implements UserDetailsService, Constants {
 
     private UserRepository userRepository;
     private SecurityTokenRepository securityTokenRepository;
+    private UserDeletionRepository userDeletionRepository;
     private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
@@ -36,6 +39,7 @@ public class UserServer implements UserDetailsService, Constants {
     @Autowired
     public UserServer(UserRepository userRepository,
                       SecurityTokenRepository securityTokenRepository,
+                      UserDeletionRepository userDeletionRepository,
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
@@ -43,6 +47,7 @@ public class UserServer implements UserDetailsService, Constants {
 
         this.userRepository = userRepository;
         this.securityTokenRepository = securityTokenRepository;
+        this.userDeletionRepository = userDeletionRepository;
         this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
@@ -81,14 +86,6 @@ public class UserServer implements UserDetailsService, Constants {
         return userRepository.save(user);
     }
 
-    public boolean emailExists(String email) {
-        return userRepository.findByEmail(email) != null;
-    }
-
-    public void editProfile(Long userId, Profile newProfile) {
-        profileServer.edit(this.findById(userId).getProfile().getId(), newProfile);
-    }
-
     public User findById(Long id) {
         return userRepository.findById(id).
                 orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
@@ -123,22 +120,13 @@ public class UserServer implements UserDetailsService, Constants {
         userRepository.save(user);
     }
 
-    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password) {
-        User user = this.findById(userId);
-        user.setPassword(passwordEncoder.encode(password));
-        return userRepository.save(user);
+    public void editProfile(Long userId, Profile newProfile) {
+        profileServer.edit(this.findById(userId).getProfile().getId(), newProfile);
     }
 
-    /*
-    public User editPassword(Long userId, PasswordEncoder passwordEncoder, FormPassword formPassword) throws InvalidPasswordException {
-        User user = this.findById(userId);
-        if (!this.checkPassword(passwordEncoder, formPassword.getCurrentPassword(), user.getPassword())) {
-            throw new InvalidPasswordException("incorrect password for user: " + user.getUsername());
-        }
-        user.setPassword(passwordEncoder.encode(formPassword.getPassword()));
-        return userRepository.save(user);
+    public boolean emailExists(String email) {
+        return userRepository.findByEmail(email) != null;
     }
-     */
 
     public User editEmail(Long userId, String editedEmail) {
         User user = this.findById(userId);
@@ -152,6 +140,12 @@ public class UserServer implements UserDetailsService, Constants {
         return userRepository.save(user);
     }
 
+    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password) {
+        User user = this.findById(userId);
+        user.setPassword(passwordEncoder.encode(password));
+        return userRepository.save(user);
+    }
+
     public boolean checkPassword(Long userId, PasswordEncoder passwordEncoder, String candidatePassword) {
         User user = this.findById(userId);
         return this.checkPassword(passwordEncoder, candidatePassword, user.getPassword());
@@ -159,6 +153,27 @@ public class UserServer implements UserDetailsService, Constants {
 
     private boolean checkPassword(PasswordEncoder passwordEncoder, String candidatePassword, String storedPassword) {
         return passwordEncoder.matches(candidatePassword, storedPassword);
+    }
+
+    public String getRandomPassword() {
+        PasswordGenerator passwordGenerator = new PasswordGenerator();
+
+        // at least 1 lowercase
+        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+        lowerCaseRule.setNumberOfCharacters(1);
+
+        // at least 1 uppercase
+        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
+        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
+        upperCaseRule.setNumberOfCharacters(1);
+
+        // at least 1 number
+        CharacterData digitChars = EnglishCharacterData.Digit;
+        CharacterRule digitRule = new CharacterRule(digitChars);
+        digitRule.setNumberOfCharacters(1);
+
+        return passwordGenerator.generatePassword(16, lowerCaseRule, upperCaseRule, digitRule);
     }
 
     public SecurityToken createSecurityToken(SecurityEvent securityEvent, User user, String editedEmail) {
@@ -192,24 +207,21 @@ public class UserServer implements UserDetailsService, Constants {
         System.out.println("Deleted at " + present + ": " + numDeleted);
     }
 
-    public String getRandomPassword() {
-        PasswordGenerator passwordGenerator = new PasswordGenerator();
+    public UserDeletion createUserDeletion(Long userId, String deletionReason, String comment) {
+        User user = this.findById(userId);
+        UserDeletion userDeletion = new UserDeletion();
+        userDeletion.setUser(user);
+        userDeletion.setDeletionReason((deletionReason == null) ?
+                DeletionReason.OTHER : DeletionReason.values()[Integer.parseInt(deletionReason)]
+        );
+        userDeletion.setComment(comment);
+        userDeletion.setDate(Calendar.getInstance().getTime());
+        return userDeletionRepository.save(userDeletion);
+    }
 
-        // at least 1 lowercase
-        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
-        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
-        lowerCaseRule.setNumberOfCharacters(1);
-
-        // at least 1 uppercase
-        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
-        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
-        upperCaseRule.setNumberOfCharacters(1);
-
-        // at least 1 number
-        CharacterData digitChars = EnglishCharacterData.Digit;
-        CharacterRule digitRule = new CharacterRule(digitChars);
-        digitRule.setNumberOfCharacters(1);
-
-        return passwordGenerator.generatePassword(16, lowerCaseRule, upperCaseRule, digitRule);
+    public User removeUser(Long userId) {
+        User user = this.findById(userId);
+        user.setRemoved(true);
+        return userRepository.save(user);
     }
 }
