@@ -545,15 +545,16 @@ public class DevelopmentH2Config {
             formUser1.setFirstName("ad");
             formUser1.setLastName("ad");
             User admin = userServer.persist(formUser1, passwordEncoder, Arrays.asList(role1), cart1);
-            userServer.enableUser(admin.getId());
+            userServer.setCompletedState(admin.getId(),true);
 
             FormUser formUser2 = new FormUser();
-            formUser2.setEmail("misrra@fm.com");
+            formUser2.setEmail("suarezperezmisrraim@gmail.com");
             formUser2.setPassword("misrra");
             formUser2.setMatchingPassword("misrra");
             formUser2.setFirstName("mis");
             formUser2.setLastName("mis");
-            userServer.persist(formUser2, passwordEncoder, null, null);
+            User misrra = userServer.persist(formUser2, passwordEncoder, null, null);
+            userServer.setCompletedState(misrra.getId(),true);
 
             FormUser formUser3 = new FormUser();
             formUser3.setEmail("andrea@fm.com");
@@ -562,7 +563,7 @@ public class DevelopmentH2Config {
             formUser3.setFirstName("Andrea");
             formUser3.setLastName("andre");
             User andrea = userServer.persist(formUser3, passwordEncoder, Arrays.asList(role2), cart3);
-            userServer.enableUser(andrea.getId());
+            userServer.setCompletedState(andrea.getId(),true);
 
 
         };

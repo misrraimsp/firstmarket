@@ -2,7 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.event.listener;
 
 import lombok.SneakyThrows;
 import misrraimsp.uned.pfg.firstmarket.adt.MailMessage;
-import misrraimsp.uned.pfg.firstmarket.event.OnUserRegistrationEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnNewUserEvent;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.MailServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
@@ -12,15 +12,15 @@ import org.springframework.stereotype.Component;
 //import org.springframework.context.MessageSource;
 
 @Component
-public class UserRegistrationListener implements ApplicationListener<OnUserRegistrationEvent> {
+public class NewUserListener implements ApplicationListener<OnNewUserEvent> {
 
     private MailServer mailServer;
     private UserServer userServer;
     //private MessageSource messageSource;
 
     @Autowired
-    public UserRegistrationListener(MailServer mailServer, UserServer userServer
-            //, MessageSource messageSource
+    public NewUserListener(MailServer mailServer, UserServer userServer
+                           //, MessageSource messageSource
     ){
         this.mailServer = mailServer;
         this.userServer = userServer;
@@ -29,8 +29,8 @@ public class UserRegistrationListener implements ApplicationListener<OnUserRegis
 
     @SneakyThrows
     @Override
-    public void onApplicationEvent(OnUserRegistrationEvent onUserRegistrationEvent) {
-        User user = userServer.findById(onUserRegistrationEvent.getUserId());
+    public void onApplicationEvent(OnNewUserEvent onNewUserEvent) {
+        User user = userServer.findById(onNewUserEvent.getUserId());
         // Build the email message
         MailMessage mailMessage = new MailMessage();
         mailMessage.setSubject("Welcome to FirstMarket");

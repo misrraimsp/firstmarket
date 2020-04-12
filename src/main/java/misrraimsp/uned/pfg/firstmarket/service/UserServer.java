@@ -77,7 +77,8 @@ public class UserServer implements UserDetailsService, Constants {
         profile.setFirstName(formUser.getFirstName());
         profile.setLastName(formUser.getLastName());
         User user = new User();
-        user.setEnabled(false);
+        user.setCompleted(false);
+        user.setSuspended(false);
         user.setEmail(formUser.getEmail());
         user.setPassword(passwordEncoder.encode(formUser.getPassword()));
         user.setProfile(profileServer.persist(profile));
@@ -134,9 +135,15 @@ public class UserServer implements UserDetailsService, Constants {
         return userRepository.save(user);
     }
 
-    public User enableUser(Long userId) {
+    public User setCompletedState(Long userId, boolean b) {
         User user = this.findById(userId);
-        user.setEnabled(true);
+        user.setCompleted(b);
+        return userRepository.save(user);
+    }
+
+    public User setSuspendedState(Long userId, boolean b) {
+        User user = this.findById(userId);
+        user.setSuspended(b);
         return userRepository.save(user);
     }
 
@@ -219,9 +226,4 @@ public class UserServer implements UserDetailsService, Constants {
         return userDeletionRepository.save(userDeletion);
     }
 
-    public User removeUser(Long userId) {
-        User user = this.findById(userId);
-        user.setRemoved(true);
-        return userRepository.save(user);
-    }
 }

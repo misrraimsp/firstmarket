@@ -4,10 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
-import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
-import misrraimsp.uned.pfg.firstmarket.event.OnEmailEditionEvent;
-import misrraimsp.uned.pfg.firstmarket.event.OnResetPasswordEvent;
-import misrraimsp.uned.pfg.firstmarket.event.OnUserRegistrationEvent;
+import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
@@ -21,6 +18,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -30,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Calendar;
 
@@ -70,6 +69,7 @@ public class UserController implements Constants {
     @PostMapping("/newUser")
     public String processNewUser(@Valid FormUser formUser, Errors errors, Model model) {
         // error checks
+        boolean isRestarting = false;
         boolean hasError = false;
         if (errors.hasErrors()) {
             hasError = true;
@@ -85,8 +85,14 @@ public class UserController implements Constants {
             }
         }
         else if (userServer.emailExists(formUser.getEmail())) { // check email uniqueness
-            hasError = true;
-            errors.rejectValue("email", "email.notUnique");
+            User user = (User) userServer.loadUserByUsername(formUser.getEmail());
+            if (user.isSuspended()){
+                isRestarting = true;
+            }
+            else {
+                hasError = true;
+                errors.rejectValue("email", "email.notUnique");
+            }
         }
         if (hasError) {
             model.addAttribute("mainCategories", catServer.getMainCategories());
@@ -95,19 +101,29 @@ public class UserController implements Constants {
             model.addAttribute("passwordPattern", PASSWORD);
             return "newUser";
         }
-        // persist new user
-        User user = userServer.persist(formUser, passwordEncoder, null, null);
-        // trigger email confirmation
+        // complete process
         try {
+            SecurityEvent securityEvent;
+            Long userId;
+            if (isRestarting) {
+                securityEvent = SecurityEvent.RESTART_USER;
+                userId = ((User) userServer.loadUserByUsername(formUser.getEmail())).getId();
+            }
+            else {
+                securityEvent = SecurityEvent.NEW_USER;
+                userId = userServer.persist(formUser, passwordEncoder, null, null).getId();
+            }
+            // trigger email confirmation
             applicationEventPublisher.publishEvent(
-                    new OnEmailConfirmationNeededEvent(SecurityEvent.NEW_USER, user.getId(), null)
+                    new OnEmailConfirmationNeededEvent(securityEvent, userId, null)
             );
+            return "redirect:/emailConfirmationRequest";
         }
         catch (Exception me) { //TODO log this situation
-            System.out.println("some problem with email sending");
+            System.out.println("some problem with email sending at /newUser");
             me.printStackTrace();
+            return "redirect:/home";
         }
-        return "redirect:/emailConfirmationRequest";
     }
 
     @GetMapping("/user/editEmail")
@@ -230,10 +246,17 @@ public class UserController implements Constants {
         try {
             switch (securityToken.getSecurityEvent()){
                 case NEW_USER:
-                    userServer.enableUser(securityToken.getUser().getId());
+                    userServer.setCompletedState(securityToken.getUser().getId(),true);
                     userServer.deleteSecurityToken(securityToken.getId());
                     applicationEventPublisher.publishEvent(
-                            new OnUserRegistrationEvent(securityToken.getUser().getId())
+                            new OnNewUserEvent(securityToken.getUser().getId())
+                    );
+                    return "redirect:/login";
+                case RESTART_USER:
+                    userServer.setSuspendedState(securityToken.getUser().getId(),false);
+                    userServer.deleteSecurityToken(securityToken.getId());
+                    applicationEventPublisher.publishEvent(
+                            new OnRestartUserEvent(securityToken.getUser().getId())
                     );
                     return "redirect:/login";
                 case EMAIL_CHANGE:
@@ -387,13 +410,9 @@ public class UserController implements Constants {
                                     @RequestParam(required = false) String comment,
                                     @RequestParam String password,
                                     Model model,
-                                    @AuthenticationPrincipal User authUser) {
+                                    @AuthenticationPrincipal User authUser,
+                                    HttpServletRequest request) {
 
-        {
-            System.out.println("deletion reason: " + deletionReason);
-            System.out.println("comment: " + comment);
-            System.out.println("password: " + password);
-        }
         User user = userServer.findById(authUser.getId());
         // error checks
         boolean hasError = false;
@@ -412,11 +431,18 @@ public class UserController implements Constants {
             return "deleteUser";
         }
         // complete deletion
+        userServer.setSuspendedState(authUser.getId(),true);
         UserDeletion userDeletion = userServer.createUserDeletion(authUser.getId(), deletionReason, comment);
-        user = userServer.removeUser(authUser.getId());
-        // TODO trigger user removed event
-        System.out.println("user removed: " + user.getProfile().getFirstName());
-        System.out.println("reason: " + userDeletion.getDeletionReason().getText());
+        //logout
+        new SecurityContextLogoutHandler().logout(request, null, null);
+        // trigger user removal event
+        try {
+            applicationEventPublisher.publishEvent(new OnDeleteUserEvent(userDeletion));
+        }
+        catch (Exception me) { //TODO log this situation
+            System.out.println("some problem with email sending at /user/deleteUser");
+            me.printStackTrace();
+        }
         return "redirect:/home";
     }
 

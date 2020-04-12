@@ -18,9 +18,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
 
-    private boolean enabled;
-
-    private boolean removed;
+    private boolean completed;
+    private boolean suspended; // The user has deleted their account
 
     private String email;
 
@@ -69,6 +68,6 @@ public class User implements UserDetails {
     }
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return completed && !suspended;
     }
 }
