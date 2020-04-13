@@ -24,7 +24,7 @@ public class IsbnValidator implements ConstraintValidator<Isbn, String>, Constan
     }
 
     private boolean validateFormat(String isbn) {
-        pattern = Pattern.compile(ISBN);
+        pattern = Pattern.compile(ISBN_CODE);
         matcher = pattern.matcher(isbn);
         return matcher.matches();
     }

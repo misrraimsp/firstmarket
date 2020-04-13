@@ -4,6 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.FormBook;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
@@ -35,13 +36,20 @@ public class BookController implements Constants {
     private CatServer catServer;
     private ImageServer imageServer;
     private UserServer userServer;
+    private FrontEndProperties frontEndProperties;
 
     @Autowired
-    public BookController(BookServer bookServer, CatServer catServer, ImageServer imageServer, UserServer userServer) {
+    public BookController(BookServer bookServer,
+                          CatServer catServer,
+                          ImageServer imageServer,
+                          UserServer userServer,
+                          FrontEndProperties frontEndProperties) {
+
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.imageServer = imageServer;
         this.userServer = userServer;
+        this.frontEndProperties = frontEndProperties;
     }
 
     @GetMapping("/book/{id}")
@@ -145,9 +153,9 @@ public class BookController implements Constants {
     }
 
     @GetMapping("/books")
-    public String showBooks(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
-                            @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
-                            @RequestParam(defaultValue = DEFAULT_CATEGORY_ID) Long categoryId,
+    public String showBooks(@RequestParam(defaultValue = "${pagination.default.number}") String pageNo,
+                            @RequestParam(defaultValue = "${pagination.default.size}") String pageSize,
+                            @RequestParam(required = false) Long categoryId,
                             @RequestParam(required = false) Set<String> priceId,
                             @RequestParam(required = false) Set<Long> authorId,
                             @RequestParam(required = false) Set<Long> publisherId,
@@ -175,10 +183,15 @@ public class BookController implements Constants {
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
+        // root category if not specified
+        if (categoryId == null) {
+            categoryId = catServer.getRootCategory().getId();
+        }
+
         Page<Book> books = bookServer.findSearchResults(categoryId, priceId, authorId, publisherId, languageId, q, pageable);
-        Set<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, NUM_TOP_AUTHORS);
-        Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, NUM_TOP_PUBLISHERS);
-        Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, NUM_TOP_LANGUAGES);
+        Set<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, frontEndProperties.getNumOfAuthors());
+        Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, frontEndProperties.getNumOfPublishers());
+        Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, frontEndProperties.getNumOfLanguages());
         Category category = catServer.findCategoryById(categoryId);
         List<Category> childrenCategories = catServer.getChildren(category);
         List<Category> categorySequence = catServer.getCategorySequence(category);

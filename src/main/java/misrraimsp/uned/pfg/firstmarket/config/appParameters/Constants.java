@@ -17,13 +17,15 @@ public interface Constants {
 
     String TEXT_QUERY = "^[\\s\\w-.,:\"?¿¡!()äëïöüñáéíóú]{0,100}$";
 
-    String ISBN = "^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$";
+    String ISBN_CODE = "^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$";
 
     String ISBN_FILTER = "[- ]|^ISBN(?:-1[03])?:?";
 
     String IMAGE_MIME_TYPE = "^image\\/.*$";
 
     String IMAGE_NAME = "^[ \\w-._]{1,30}$";
+
+    String YEAR = "^[\\d]{1,4}$";
 
     int MIN_NUM_AUTHORS = 1;
     int MAX_NUM_AUTHORS = 5;
@@ -36,28 +38,26 @@ public interface Constants {
     String PRICE = "^[\\d]{0," + MAX_INTEGER_PRICE + "}([.][\\d]{1," + MAX_FRACTION_PRICE + "})*$";
     int MAX_PRICE = 1000000000;
 
-    //front end
-    int NUM_TOP_AUTHORS = 5;
-    int NUM_TOP_PUBLISHERS = 10;
-    int NUM_TOP_LANGUAGES = 5;
-    String DEFAULT_PAGE_SIZE = "30";
-    String DEFAULT_PAGE_NUMBER = "0";
-    String DEFAULT_CATEGORY_ID = "1";
-    //
-
     int MIN_NUM_STOCK = 0;
     int MAX_NUM_STOCK = 100000000;
 
-    int SECURITY_TOKEN_EXPIRATION_MINUTES = 10; // 24 * 60
+    //front end
+    //int NUM_TOP_AUTHORS = 5;
+    //int NUM_TOP_PUBLISHERS = 10;
+    //int NUM_TOP_LANGUAGES = 5;
+    //String DEFAULT_PAGE_SIZE = "30";
+    //String DEFAULT_PAGE_NUMBER = "0";
+    //String DEFAULT_CATEGORY_ID = "1";
+    //
 
-    String YEAR = "^[\\d]{1,4}$";
+    //int SECURITY_TOKEN_EXPIRATION_MINUTES = 10; // 24 * 60
 
     Map<String, String> patterns = Map.of(
             "EMAIL", EMAIL,
             "PASSWORD", PASSWORD,
             "TEXT_BASIC", TEXT_BASIC,
             "TEXT_LONG", TEXT_LONG,
-            "ISBN", ISBN,
+            "ISBN", ISBN_CODE,
             "ISBN_FILTER", ISBN_FILTER,
             "IMAGE_MIME_TYPE", IMAGE_MIME_TYPE,
             "IMAGE_NAME", IMAGE_NAME,

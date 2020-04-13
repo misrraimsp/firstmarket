@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
@@ -30,6 +31,7 @@ public class UserServer implements UserDetailsService, Constants {
 
     private UserRepository userRepository;
     private SecurityTokenRepository securityTokenRepository;
+    private SecurityTokenProperties securityTokenProperties;
     private UserDeletionRepository userDeletionRepository;
     private ProfileServer profileServer;
     private RoleServer roleServer;
@@ -39,6 +41,7 @@ public class UserServer implements UserDetailsService, Constants {
     @Autowired
     public UserServer(UserRepository userRepository,
                       SecurityTokenRepository securityTokenRepository,
+                      SecurityTokenProperties securityTokenProperties,
                       UserDeletionRepository userDeletionRepository,
                       ProfileServer profileServer,
                       RoleServer roleServer,
@@ -47,6 +50,7 @@ public class UserServer implements UserDetailsService, Constants {
 
         this.userRepository = userRepository;
         this.securityTokenRepository = securityTokenRepository;
+        this.securityTokenProperties = securityTokenProperties;
         this.userDeletionRepository = userDeletionRepository;
         this.profileServer = profileServer;
         this.roleServer = roleServer;
@@ -192,7 +196,7 @@ public class UserServer implements UserDetailsService, Constants {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, SECURITY_TOKEN_EXPIRATION_MINUTES);
+        calendar.add(Calendar.MINUTE, securityTokenProperties.getExpirationInMinutes());
         securityToken.setExpiryDate(new Date(calendar.getTime().getTime()));
 
         return securityTokenRepository.save(securityToken);
@@ -207,8 +211,7 @@ public class UserServer implements UserDetailsService, Constants {
     }
 
     @Transactional
-    //@Scheduled(fixedRateString = "${schedule.fixedRate.string}")
-    @Scheduled(cron = "${schedule.cron.expression}")
+    @Scheduled(cron = "${schedule.garbage-collection.cron}")
     public void garbageCollection() {
         Date present = Calendar.getInstance().getTime();
         Set<SecurityToken> securityTokens = securityTokenRepository.findByExpiryDateBefore(present);

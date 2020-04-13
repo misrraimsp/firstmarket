@@ -11,10 +11,51 @@ spring:
       #show-sql: true
 
 schedule:
-   cron:
-      expression: 0 15,30,45 * ? * *
-   fixedRate:
-      string: PT60S
+   garbage-collection:
+      cron: 0 15,30,45 * ? * *
+      fixedRateString: PT60S
+
+validation:
+   numeric:
+      authors:
+         min: 1
+         max: 5
+      pages:
+         min: 1
+         max: 5000
+      price:
+         max: 1000000000
+         integer: 9
+         fraction: 2
+      stock:
+         min: 0
+         max: 100000000
+   regex:
+      email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$
+      password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$
+      text-basic: ^[\s\w-.,:"?¿¡!()äëïöüñáéíóú]{0,30}$
+      text-long: ^[\s\w-.,:;"?¿¡!()äëïöüñáéíóú]{0,1000}$
+      text-query: ^[\s\w-.,:"?¿¡!()äëïöüñáéíóú]{0,100}$
+      isbn-code: ^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$
+      isbn-filter: '[- ]|^ISBN(?:-1[03])?:?'
+      image-mime-type: ^image\/.*$
+      image-name: ^[ \w-._]{1,30}$
+      year: ^[\d]{1,4}$
+      price: ^[\\d]{0,9}([.][\\d]{1,2})*$
+
+security-token:
+   expiration-in-minutes: 2
+
+front-end:
+   search-criteria:
+      numOfAuthors: 3
+      numOfPublishers: 3
+      numOfLanguages: 3
+
+pagination:
+   default:
+      size: 30
+      number: 0
 ---
 
 spring:

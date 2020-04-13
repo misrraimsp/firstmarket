@@ -84,7 +84,8 @@ public class UserController implements Constants {
                 }
             }
         }
-        else if (userServer.emailExists(formUser.getEmail())) { // manage email already exists situations
+        // manage email-already-exists situations
+        else if (userServer.emailExists(formUser.getEmail())) {
             User user = (User) userServer.loadUserByUsername(formUser.getEmail());
             // user is suspended (the user has deleted his account)
             if (user.isSuspended()){

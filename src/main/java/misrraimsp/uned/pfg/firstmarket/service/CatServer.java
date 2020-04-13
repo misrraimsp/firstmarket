@@ -70,7 +70,7 @@ public class CatServer {
         return list;
     }
 
-    private Category getRootCategory(){
+    public Category getRootCategory(){
         return categoryRepository.getRootCategory();
     }
 

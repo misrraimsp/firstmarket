@@ -23,7 +23,10 @@ public class HomeController implements Constants {
     private UserServer userServer;
 
     @Autowired
-    public HomeController(BookServer bookServer, CatServer catServer, UserServer userServer) {
+    public HomeController(BookServer bookServer,
+                          CatServer catServer,
+                          UserServer userServer) {
+
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.userServer = userServer;
@@ -35,8 +38,8 @@ public class HomeController implements Constants {
     }
 
     @GetMapping("/home")
-    public String showHome(@RequestParam(defaultValue = DEFAULT_PAGE_NUMBER) String pageNo,
-                           @RequestParam(defaultValue = DEFAULT_PAGE_SIZE) String pageSize,
+    public String showHome(@RequestParam(defaultValue = "${pagination.default.number}") String pageNo,
+                           @RequestParam(defaultValue = "${pagination.default.size}") String pageSize,
                            Model model,
                            @AuthenticationPrincipal User authUser){
 
