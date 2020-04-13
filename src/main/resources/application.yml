@@ -11,6 +11,8 @@ spring:
       #show-sql: true
 
 schedule:
+   cron:
+      expression: 0 15,30,45 * ? * *
    fixedRate:
       string: PT60S
 ---

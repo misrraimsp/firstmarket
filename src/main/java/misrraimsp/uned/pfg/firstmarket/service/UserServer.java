@@ -207,11 +207,19 @@ public class UserServer implements UserDetailsService, Constants {
     }
 
     @Transactional
-    @Scheduled(fixedRateString = "${schedule.fixedRate.string}")
-    public void deleteExpiredSecurityTokens() {
+    //@Scheduled(fixedRateString = "${schedule.fixedRate.string}")
+    @Scheduled(cron = "${schedule.cron.expression}")
+    public void garbageCollection() {
         Date present = Calendar.getInstance().getTime();
-        int numDeleted = securityTokenRepository.deleteByExpiryDateBefore(present);
-        System.out.println("Deleted at " + present + ": " + numDeleted);
+        Set<SecurityToken> securityTokens = securityTokenRepository.findByExpiryDateBefore(present);
+        securityTokens.forEach(securityToken -> {
+            if (securityToken.getSecurityEvent().equals(SecurityEvent.NEW_USER)){
+                userRepository.deleteById(securityToken.getUser().getId());
+            }
+            securityTokenRepository.deleteById(securityToken.getId());
+        });
+        //int numDeleted = securityTokenRepository.deleteByExpiryDateBefore(present);
+        System.out.println("Deleted at " + present + ": " + securityTokens.size());
     }
 
     public UserDeletion createUserDeletion(Long userId, String deletionReason, String comment) {
@@ -226,4 +234,11 @@ public class UserServer implements UserDetailsService, Constants {
         return userDeletionRepository.save(userDeletion);
     }
 
+    public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) {
+        return securityTokenRepository.findByUserAndSecurityEventAndExpiryDateAfter(
+                this.findById(userId),
+                securityEvent,
+                Calendar.getInstance().getTime()
+        ).size() != 0;
+    }
 }

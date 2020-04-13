@@ -84,11 +84,34 @@ public class UserController implements Constants {
                 }
             }
         }
-        else if (userServer.emailExists(formUser.getEmail())) { // check email uniqueness
+        else if (userServer.emailExists(formUser.getEmail())) { // manage email already exists situations
             User user = (User) userServer.loadUserByUsername(formUser.getEmail());
+            // user is suspended (the user has deleted his account)
             if (user.isSuspended()){
-                isRestarting = true;
+                // there is a valid restart_user token sent waiting for email confirmation
+                if (userServer.isEmailConfirmationAlreadyNeededFor(user.getId(),SecurityEvent.RESTART_USER)){
+                    hasError = true;
+                    errors.rejectValue("email", "email.checkEmail");
+                }
+                // normal restoring workflow
+                else {
+                    isRestarting = true;
+                }
             }
+            // user is not completed -and not suspended- (email address verification has never occurred)
+            else if (!user.isCompleted()) {
+                // there is a valid new_user token sent waiting for email confirmation
+                if (userServer.isEmailConfirmationAlreadyNeededFor(user.getId(),SecurityEvent.NEW_USER)){
+                    hasError = true;
+                    errors.rejectValue("email", "email.checkEmail");
+                }
+                // user is not complete but the new_user token has expired, so the user and the token are deleted and
+                // normal new user workflow goes on
+                else {
+                    userServer.garbageCollection();
+                }
+            }
+            // user is completed and not suspended, so that email can not be used again
             else {
                 hasError = true;
                 errors.rejectValue("email", "email.notUnique");

@@ -677,7 +677,7 @@ INSERT INTO profile (id,first_name,last_name) VALUES (2,'Peter','Parker');
 INSERT INTO profile (id,first_name,last_name) VALUES (3,'Marco','Polo');
 
 INSERT INTO user (id,email,completed,suspended,password,cart_id,profile_id) VALUES (1,'admin@fm.com',true,false,'$2a$10$b6cNYRchyum58sJw3BrS2OYRm9GiqRYDwlHTLKFY3fdD/kRS2GL0G',1,1);
-INSERT INTO user (id,email,completed,suspended,password,cart_id,profile_id) VALUES (2,'peter@fm.com',false,true,'$2a$10$b6cNYRchyum58sJw3BrS2OYRm9GiqRYDwlHTLKFY3fdD/kRS2GL0G',2,2);
+INSERT INTO user (id,email,completed,suspended,password,cart_id,profile_id) VALUES (2,'peter@fm.com',true,false,'$2a$10$b6cNYRchyum58sJw3BrS2OYRm9GiqRYDwlHTLKFY3fdD/kRS2GL0G',2,2);
 INSERT INTO user (id,email,completed,suspended,password,cart_id,profile_id) VALUES (3,'marco@fm.com',true,false,'$2a$10$b6cNYRchyum58sJw3BrS2OYRm9GiqRYDwlHTLKFY3fdD/kRS2GL0G',3,3);
 
 INSERT INTO role (id,name) VALUES (1,'ROLE_ADMIN');

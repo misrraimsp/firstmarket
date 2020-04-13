@@ -48,7 +48,7 @@ public interface Constants {
     int MIN_NUM_STOCK = 0;
     int MAX_NUM_STOCK = 100000000;
 
-    int SECURITY_TOKEN_EXPIRATION_MINUTES = 2; // 24 * 60
+    int SECURITY_TOKEN_EXPIRATION_MINUTES = 10; // 24 * 60
 
     String YEAR = "^[\\d]{1,4}$";
 
