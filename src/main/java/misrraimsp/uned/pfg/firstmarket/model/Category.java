@@ -1,20 +1,17 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 
 @Data
 @Entity
-public class Category implements Constants {
+public class Category {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Pattern(regexp = TEXT_BASIC, message = "{text.basic}")
 	private String name;
 
 	@ManyToOne

@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -11,19 +12,28 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
-public class CategoryController implements Constants {
+public class CategoryController {
 
     private CatServer catServer;
     private BookServer bookServer;
+    private ValidationRegexProperties validationRegexProperties;
 
     @Autowired
-    public CategoryController(CatServer catServer, BookServer bookServer) {
+    public CategoryController(CatServer catServer,
+                              BookServer bookServer,
+                              ValidationRegexProperties validationRegexProperties) {
+
         this.catServer = catServer;
         this.bookServer = bookServer;
+        this.validationRegexProperties = validationRegexProperties;
     }
 
     @GetMapping("/admin/loadCategories")
@@ -39,49 +49,55 @@ public class CategoryController implements Constants {
         return "categories";
     }
 
-    @GetMapping("/admin/newCategory")
-    public String showNewCategoryForm(Model model){
-        model.addAttribute("category", new Category());
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("textBasicPattern", TEXT_BASIC);
-        return "newCategory";
+    @GetMapping("/admin/categoryForm")
+    public String showCategoryForm(@RequestParam(name = "id") Optional<Long> optCategoryId, Model model){
+        AtomicBoolean badIdArgument = new AtomicBoolean(false);
+        optCategoryId.ifPresentOrElse(
+                categoryId -> {
+                    try {
+                        Category category = catServer.findCategoryById(categoryId);
+                        model.addAttribute("categoryForm", catServer.convertCategoryToCategoryForm(category));
+                        populateModelToCategoryForm(model);
+                        model.addAttribute("descendants", catServer.getDescendants(categoryId));
+                    } catch (IllegalArgumentException e) {
+                        badIdArgument.set(true);
+                    }
+                },
+                () -> {
+                    model.addAttribute("categoryForm", new CategoryForm());
+                    populateModelToCategoryForm(model);
+                }
+        );
+        if (badIdArgument.get()) {
+            return "redirect:/admin/categories";
+        }
+        return "categoryForm";
     }
 
-    @PostMapping("/admin/newCategory")
-    public String processNewCategory(@Valid Category category, Errors errors, Model model){
+    @PostMapping("/admin/categoryForm")
+    public String processCategoryForm(@Valid CategoryForm categoryForm, Errors errors, Model model){
+        boolean isEdition = categoryForm.getCategoryId() != null;
         if (errors.hasErrors()) {
-            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
-            return "newCategory";
+            populateModelToCategoryForm(model);
+            if (isEdition){
+                model.addAttribute("descendants", catServer.getDescendants(categoryForm.getCategoryId()));
+            }
+            return "categoryForm";
         }
-        catServer.persist(category);
+        Category category = catServer.convertCategoryFormToCategory(categoryForm);
+        if (isEdition){
+            catServer.edit(category);
+        } else {
+            catServer.persist(category);
+        }
         return "redirect:/admin/loadCategories";
     }
 
-    @GetMapping("/admin/editCategory/{id}")
-    public String showEditCategoryForm(@PathVariable("id") Long id, Model model){
-        Category category = catServer.findCategoryById(id);
-        model.addAttribute("category", category);
-        model.addAttribute("descendants", catServer.getDescendants(category));
+    private void populateModelToCategoryForm(Model model) {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("textBasicPattern", TEXT_BASIC);
-        return "editCategory";
-    }
-
-    @PostMapping("/admin/editCategory")
-    public String processEditCategory(@Valid Category category, Errors errors, Model model){
-        if (errors.hasErrors()) {
-            model.addAttribute("descendants", catServer.getDescendants(category));
-            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
-            return "editCategory";
-        }
-        catServer.edit(category);
-        return "redirect:/admin/loadCategories";
+        model.addAttribute("patterns", validationRegexProperties);
+        model.addAttribute("descendants", new ArrayList<>());
     }
 
     @GetMapping("/admin/deleteCategory/{id}")

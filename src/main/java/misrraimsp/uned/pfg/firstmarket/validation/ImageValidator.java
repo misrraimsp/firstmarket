@@ -1,17 +1,30 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ImageValidator implements ConstraintValidator<ValidImage, Object>, Constants {
+public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
+
+    private ValidationRegexProperties validationRegexProperties;
+    private ValidationNumericProperties validationNumericProperties;
 
     private Pattern pattern;
     private Matcher matcher;
+
+    @Autowired
+    public ImageValidator(ValidationRegexProperties validationRegexProperties,
+                          ValidationNumericProperties validationNumericProperties){
+
+        this.validationRegexProperties = validationRegexProperties;
+        this.validationNumericProperties = validationNumericProperties;
+    }
 
     @Override
     public void initialize(ValidImage constraintAnnotation) { }
@@ -26,17 +39,17 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object>, 
     }
 
     private boolean validateName(String name) {
-        pattern = Pattern.compile(IMAGE_NAME);
+        pattern = Pattern.compile(validationRegexProperties.getImageName());
         matcher = pattern.matcher(name);
         return matcher.matches();
     }
 
     private boolean validateSize(byte[] data) {
-        return data.length < 500000;
+        return data.length <= validationNumericProperties.getImageMaxSize();
     }
 
     private boolean validateMimeType(String mimeType) {
-        pattern = Pattern.compile(IMAGE_MIME_TYPE);
+        pattern = Pattern.compile(validationRegexProperties.getImageMimeType());
         matcher = pattern.matcher(mimeType);
         return matcher.matches();
     }

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.dev.sqlBuilder;
 
 public class QueryHolder {
 

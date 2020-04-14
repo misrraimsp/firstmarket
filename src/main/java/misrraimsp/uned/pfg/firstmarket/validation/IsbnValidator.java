@@ -1,7 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
 
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -10,13 +11,20 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IsbnValidator implements ConstraintValidator<Isbn, String>, Constants {
+public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
+
+    private ValidationRegexProperties validationRegexProperties;
 
     private Pattern pattern;
     private Matcher matcher;
 
+    @Autowired
+    public IsbnValidator(ValidationRegexProperties validationRegexProperties){
+        this.validationRegexProperties = validationRegexProperties;
+    }
+
     @Override
-    public void initialize(Isbn constraintAnnotation) { }
+    public void initialize(ValidIsbn constraintAnnotation) { }
 
     @Override
     public boolean isValid(String isbn, ConstraintValidatorContext constraintValidatorContext) {
@@ -24,7 +32,7 @@ public class IsbnValidator implements ConstraintValidator<Isbn, String>, Constan
     }
 
     private boolean validateFormat(String isbn) {
-        pattern = Pattern.compile(ISBN_CODE);
+        pattern = Pattern.compile(validationRegexProperties.getIsbnCode());
         matcher = pattern.matcher(isbn);
         return matcher.matches();
     }
@@ -42,7 +50,7 @@ public class IsbnValidator implements ConstraintValidator<Isbn, String>, Constan
     }
 
     private List<Integer> getNumbers(String isbn) {
-        String filtered = isbn.replaceAll(ISBN_FILTER, "");
+        String filtered = isbn.replaceAll(validationRegexProperties.getIsbnFilter(), "");
         List<Integer> numbers = new ArrayList<>();
         for (int i = 0; i < filtered.length() - 1; i++) {
             numbers.add(Integer.parseInt(filtered.substring(i, i + 1)));

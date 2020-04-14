@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         editCat = document.createElement("a");
         editCat.setAttribute("class", "btn btn-sm btn-outline-secondary");
-        editCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/editCategory/" + category.id);
+        editCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/categoryForm?id=" + category.id);
 
         editIcon = document.createElement("i");
         editIcon.setAttribute("class", "fas fa-pen");

@@ -1,11 +1,13 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.dev.sqlBuilder;
 
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
-public class NumberGenerator extends Random implements Constants {
+/**
+ * app properties are overwritten in this dev-class
+ */
+public class NumberGenerator extends Random {
 
     private static final int MIN_LANGUAGE = 0;
     private static final int MAX_LANGUAGE = 27;
@@ -22,7 +24,18 @@ public class NumberGenerator extends Random implements Constants {
     private static final int MAX_PUBLISHER_ID = 128;
     private static final int MAX_AUTHOR_ID = 512;
 
-    int MAX_NUM_AUTHORS = 3;//overwritting 'Constants' interface value
+    private static final int MIN_NUM_AUTHORS = 1;
+    private static final int MAX_NUM_AUTHORS = 3;
+
+    private static final int MIN_NUM_PAGES = 1;
+    private static final int MAX_NUM_PAGES = 5000;
+
+    private static final int MAX_FRACTION_PRICE = 2;
+
+    private static final int MIN_NUM_STOCK = 0;
+    private static final int MAX_NUM_STOCK = 1000000;
+
+
 
     public String getRandomLanguage(){
         return String.valueOf(getDiscreteRandomNumber(MIN_LANGUAGE, MAX_LANGUAGE));

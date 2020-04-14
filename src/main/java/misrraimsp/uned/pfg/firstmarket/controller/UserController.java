@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.FormPassword;
-import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -34,40 +34,41 @@ import java.util.Calendar;
 
 @Controller
 @Validated
-public class UserController implements Constants {
+public class UserController {
 
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
     private CatServer catServer;
     private ApplicationEventPublisher applicationEventPublisher;
     private MessageSource messageSource;
+    private ValidationRegexProperties validationRegexProperties;
 
     @Autowired
     public UserController(UserServer userServer,
                           PasswordEncoder passwordEncoder,
                           CatServer catServer,
                           ApplicationEventPublisher applicationEventPublisher,
-                          MessageSource messageSource) {
+                          MessageSource messageSource,
+                          ValidationRegexProperties validationRegexProperties) {
 
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
         this.catServer = catServer;
         this.applicationEventPublisher = applicationEventPublisher;
         this.messageSource = messageSource;
+        this.validationRegexProperties = validationRegexProperties;
     }
 
     @GetMapping("/newUser")
     public String showNewUserForm(Model model) {
-        model.addAttribute("formUser", new FormUser());
+        model.addAttribute("userForm", new UserForm());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("emailPattern", EMAIL);
-        model.addAttribute("textBasicPattern", TEXT_BASIC);
-        model.addAttribute("passwordPattern", PASSWORD);
+        model.addAttribute("patterns", validationRegexProperties);
         return "newUser";
     }
 
     @PostMapping("/newUser")
-    public String processNewUser(@Valid FormUser formUser, Errors errors, Model model) {
+    public String processNewUser(@Valid UserForm userForm, Errors errors, Model model) {
         // error checks
         boolean isRestarting = false;
         boolean hasError = false;
@@ -85,8 +86,8 @@ public class UserController implements Constants {
             }
         }
         // manage email-already-exists situations
-        else if (userServer.emailExists(formUser.getEmail())) {
-            User user = (User) userServer.loadUserByUsername(formUser.getEmail());
+        else if (userServer.emailExists(userForm.getEmail())) {
+            User user = (User) userServer.loadUserByUsername(userForm.getEmail());
             // user is suspended (the user has deleted his account)
             if (user.isSuspended()){
                 // there is a valid restart_user token sent waiting for email confirmation
@@ -120,9 +121,7 @@ public class UserController implements Constants {
         }
         if (hasError) {
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("emailPattern", EMAIL);
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
-            model.addAttribute("passwordPattern", PASSWORD);
+            model.addAttribute("patterns", validationRegexProperties);
             return "newUser";
         }
         // complete process
@@ -131,11 +130,11 @@ public class UserController implements Constants {
             Long userId;
             if (isRestarting) {
                 securityEvent = SecurityEvent.RESTART_USER;
-                userId = ((User) userServer.loadUserByUsername(formUser.getEmail())).getId();
+                userId = ((User) userServer.loadUserByUsername(userForm.getEmail())).getId();
             }
             else {
                 securityEvent = SecurityEvent.NEW_USER;
-                userId = userServer.persist(formUser, passwordEncoder, null, null).getId();
+                userId = userServer.persist(userForm, passwordEncoder, null, null).getId();
             }
             // trigger email confirmation
             applicationEventPublisher.publishEvent(
@@ -156,7 +155,7 @@ public class UserController implements Constants {
         model.addAttribute("firstName", user.getProfile().getFirstName());
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("emailPattern", EMAIL);
+        model.addAttribute("patterns", validationRegexProperties);
         return "editEmail";
     }
 
@@ -183,7 +182,7 @@ public class UserController implements Constants {
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("emailPattern", EMAIL);
+            model.addAttribute("patterns", validationRegexProperties);
             return "editEmail";
         }
         // trigger email confirmation
@@ -202,7 +201,7 @@ public class UserController implements Constants {
     public String showResetPasswordForm(Model model, @AuthenticationPrincipal User authUser) {
         if (authUser == null) {
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("emailPattern", EMAIL);
+            model.addAttribute("patterns", validationRegexProperties);
             return "resetPassword";
         }
         // authenticated users are not allowed to trigger the reset password process
@@ -316,15 +315,15 @@ public class UserController implements Constants {
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("formPassword", new FormPassword());
-            model.addAttribute("passwordPattern", PASSWORD);
+            model.addAttribute("passwordForm", new PasswordForm());
+            model.addAttribute("patterns", validationRegexProperties);
             return "editPassword";
         }
         return "redirect:/home";
     }
 
     @PostMapping("/editPassword")
-    public String processEditPassword(@Valid FormPassword formPassword,
+    public String processEditPassword(@Valid PasswordForm passwordForm,
                                       Errors errors,
                                       Model model,
                                       @AuthenticationPrincipal User authUser) {
@@ -345,7 +344,7 @@ public class UserController implements Constants {
                     }
                 }
             }
-            else if (!userServer.checkPassword(authUser.getId(),passwordEncoder, formPassword.getCurrentPassword())){
+            else if (!userServer.checkPassword(authUser.getId(),passwordEncoder, passwordForm.getCurrentPassword())){
                 hasError = true;
                 errors.rejectValue("currentPassword", "password.invalid");
             }
@@ -354,11 +353,11 @@ public class UserController implements Constants {
                 model.addAttribute("firstName", user.getProfile().getFirstName());
                 model.addAttribute("cartSize", user.getCart().getCartSize());;
                 model.addAttribute("mainCategories", catServer.getMainCategories());
-                model.addAttribute("passwordPattern", PASSWORD);
+                model.addAttribute("patterns", validationRegexProperties);
                 return "editPassword";
             }
             // edit password
-            userServer.editPassword(authUser.getId(), passwordEncoder, formPassword.getPassword());
+            userServer.editPassword(authUser.getId(), passwordEncoder, passwordForm.getPassword());
         }
         return "redirect:/home";
     }
@@ -370,7 +369,7 @@ public class UserController implements Constants {
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("profile", user.getProfile());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("textBasicPattern", TEXT_BASIC);
+        model.addAttribute("patterns", validationRegexProperties);
         return "editProfile";
     }
 
@@ -384,7 +383,7 @@ public class UserController implements Constants {
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("textBasicPattern", TEXT_BASIC);
+            model.addAttribute("patterns", validationRegexProperties);
             return "editProfile";
         }
         userServer.editProfile(authUser.getId(), profile);
@@ -424,7 +423,7 @@ public class UserController implements Constants {
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("deletionReasons", DeletionReason.values());
-        model.addAttribute("textLongPattern", TEXT_LONG);
+        model.addAttribute("patterns", validationRegexProperties);
         return "deleteUser";
     }
 
@@ -451,7 +450,7 @@ public class UserController implements Constants {
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("deletionReasons", DeletionReason.values());
-            model.addAttribute("textLongPattern", TEXT_LONG);
+            model.addAttribute("patterns", validationRegexProperties);
             return "deleteUser";
         }
         // complete deletion

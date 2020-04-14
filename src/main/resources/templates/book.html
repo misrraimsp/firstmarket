@@ -43,12 +43,12 @@
                 <!-- right side buttons -->
                 <div class="col-sm-2 bg-white" >
                     <div sec:authorize="!hasRole('ADMIN')">
-                        <button class="addBook btn btn-outline-info btn-lg align-center" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                        <button class="addBook btn btn-outline-info btn-lg align-center" th:id="'ab-' + ${book.id}">
                             Add to Cart<i class="fas fa-cart-plus ml-2"></i>
                         </button>
                     </div>
                     <div sec:authorize="hasRole('ADMIN')">
-                        <a class="btn btn-outline-info btn-xl align-center" th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                        <a class="btn btn-outline-info btn-xl align-center" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
                             Edit Book<i class="fas fa-pen fa-2x ml-2"></i>
                         </a>
                     </div>

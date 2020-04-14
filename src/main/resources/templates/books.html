@@ -15,7 +15,7 @@
                 <!-- admin new book -->
                 <div class="col-sm-3">
                     <div sec:authorize="hasRole('ADMIN')">
-                        <a class="btn btn-outline-secondary align-center btn-lg btn-block" th:href="@{/admin/newBook}" data-toggle="tooltip" title="New Book">
+                        <a class="btn btn-outline-secondary align-center btn-lg btn-block" th:href="@{/admin/bookForm}">
                             <i class="fas fa-book-medical fa-lg mr-4"></i>New Book
                         </a>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="col-sm-3 my-3">
                     <!-- search query -->
                     <div class="input-group">
-                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${TEXT_QUERY}">
+                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${patterns.textQuery}">
                         <div class="input-group-append">
                             <button class="btn btn-info btn-sm" id="searchTextBoxButton">
                                 <i class="fas fa-search"></i>
@@ -135,16 +135,16 @@
                                 <div class="col-sm-3 bg-white">
                                     <div class="row d-flex flex-column">
                                         <div class="col-sm-12 my-3" sec:authorize="!hasRole('ADMIN')">
-                                            <button class="addBook btn btn-outline-info btn-sm btn-block align-center" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                                            <button class="addBook btn btn-outline-info btn-sm btn-block align-center" th:id="'ab-' + ${book.id}">
                                                 Add to Cart<i class="fas fa-cart-plus ml-2"></i>
                                             </button>
                                         </div>
                                         <div class="col-sm-12 my-3" sec:authorize="hasRole('ADMIN')">
                                             <div class="d-flex flex-column">
-                                                <a class="btn btn-outline-secondary btn-sm align-center mb-3" th:href="@{/admin/editBook/{id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                                                <a class="btn btn-outline-secondary btn-sm align-center mb-3" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
                                                     Edit Book<i class="fas fa-pen ml-2"></i>
                                                 </a>
-                                                <button class="modalTrigger btn btn-outline-secondary btn-sm align-center" th:id="'del-' + ${book.id}" data-toggle="tooltip" title="Delete Book">
+                                                <button class="modalTrigger btn btn-outline-secondary btn-sm align-center" th:id="'del-' + ${book.id}">
                                                     Delete Book<i class="fas fa-trash-alt ml-2"></i>
                                                 </button>
                                             </div>

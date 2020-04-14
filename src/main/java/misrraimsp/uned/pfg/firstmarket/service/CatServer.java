@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
+import misrraimsp.uned.pfg.firstmarket.converter.CategoryConverter;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatpathRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
@@ -20,14 +22,19 @@ public class CatServer {
 
     private CategoryRepository categoryRepository;
     private CatpathRepository catpathRepository;
+    private CategoryConverter categoryConverter;
 
     private TreeNode<Category> rootCategoryNode; //root node of category tree
     private List<Catpath> directPaths; //set of first-order relations among categories
 
     @Autowired
-    public CatServer(CategoryRepository categoryRepository, CatpathRepository catpathRepository) {
+    public CatServer(CategoryRepository categoryRepository,
+                     CatpathRepository catpathRepository,
+                     CategoryConverter categoryConverter) {
+
         this.categoryRepository = categoryRepository;
         this.catpathRepository = catpathRepository;
+        this.categoryConverter = categoryConverter;
     }
 
     public void loadCategories() {
@@ -87,11 +94,11 @@ public class CatServer {
         return sequence;
     }
 
-    public List<Category> getDescendants(Category category) {
+    public List<Category> getDescendants(Long categoryId) {
         List<Category> list = new ArrayList<>();
         TreeNode<Category> subtreeRoot = null;
         for (TreeNode<Category> node : rootCategoryNode) {
-            if (node.getData().equals(category)) {
+            if (node.getData().getId() == categoryId) {
                 subtreeRoot = node;
                 break;
             }
@@ -107,6 +114,7 @@ public class CatServer {
         return catpathRepository.save(catpath);
     }
 
+    // dev method
     public Category save(Category category) {
         return categoryRepository.save(category);
     }
@@ -114,7 +122,7 @@ public class CatServer {
     @Transactional
     public void persist(Category category) {
         //Update Category info
-        Category savedCategory =  this.save(category);
+        Category savedCategory =  categoryRepository.save(category);
 
         //Update Catpath info
         for (Catpath ancestorCP : catpathRepository.getCatpathsByDescendant(category.getParent())){
@@ -209,5 +217,13 @@ public class CatServer {
         }
         localString += "]}";
         return localString;
+    }
+
+    public CategoryForm convertCategoryToCategoryForm(Category category) {
+        return categoryConverter.convertCategoryToCategoryForm(category);
+    }
+
+    public Category convertCategoryFormToCategory(CategoryForm categoryForm) {
+        return categoryConverter.convertCategoryFormToCategory(categoryForm);
     }
 }

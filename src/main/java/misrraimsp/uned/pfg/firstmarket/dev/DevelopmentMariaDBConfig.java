@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config;
+package misrraimsp.uned.pfg.firstmarket.dev;
 
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import org.springframework.boot.CommandLineRunner;

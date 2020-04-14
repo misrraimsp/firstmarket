@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.dev.sqlBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;

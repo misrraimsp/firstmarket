@@ -10,6 +10,9 @@ public class StringToYearConverter implements Converter<String, Year> {
 
     @Override
     public Year convert(String s) {
+        if (s.isBlank()) {
+            return Year.now();
+        }
         return Year.of(Integer.parseInt(s));
     }
 }

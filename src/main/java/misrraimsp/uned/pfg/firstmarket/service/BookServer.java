@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.FormBook;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
@@ -106,12 +106,12 @@ public class BookServer {
                 });
     }
 
-    public Book convertFormBookToBook(FormBook formBook) {
-        return bookConverter.convertFormBookToBook(formBook);
+    public Book convertBookFormToBook(BookForm bookForm) {
+        return bookConverter.convertBookFormToBook(bookForm);
     }
 
-    public FormBook convertBookToFormBook(Book book) {
-        return bookConverter.convertBookToFormBook(book);
+    public BookForm convertBookToBookForm(Book book) {
+        return bookConverter.convertBookToBookForm(book);
     }
 
     public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {

@@ -2,21 +2,26 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/components::head('New Category')"></head>
+    <head th:replace="fragments/components::head('Category Form')"></head>
     <body>
         <div class="container-fluid">
+            <!-- header -->
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <header th:replace="fragments/components::title(text = 'New Category')"></header>
+            <!-- title -->
+            <div th:replace="fragments/components::title(text = 'Category Form')"></div>
+            <!-- main content -->
             <div class="row">
                 <div class="col-sm-3 bg-white"></div>
                 <div class="col-sm-6 bg-light">
-                    <form class="needs-validation" novalidate th:action="@{/admin/newCategory}" th:object="${category}" method="POST" action="#">
+                    <form class="needs-validation" novalidate th:action="@{/admin/categoryForm}" th:object="${categoryForm}" method="POST" action="#">
+                        <input type="hidden" th:field="*{categoryId}"/>
+                        <input type="hidden" th:field="*{parent.name}"/>
                         <!-- name -->
                         <div class="form-group">
                             <label for="name">Name:</label>
-                            <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${textBasicPattern}">
+                            <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${patterns.textBasic}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('name')"></div>
@@ -26,7 +31,9 @@
                             <select class="custom-select" th:field="*{parent.id}" id="parent" >
                                 <option th:each="ic : ${indentedCategories}"
                                         th:value="${ic.id}"
-                                        th:text="${ic.name}">
+                                        th:text="${ic.name}"
+                                        th:selected="${ic.id==categoryForm.parent.id}"
+                                        th:disabled="${descendants.contains(ic)}">
                                 </option>
                             </select>
                         </div>
@@ -37,6 +44,7 @@
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
+            <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>

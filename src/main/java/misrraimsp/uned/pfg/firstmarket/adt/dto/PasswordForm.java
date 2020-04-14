@@ -1,18 +1,17 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
 import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidPassword;
 
-import javax.validation.constraints.Pattern;
 
 @Data
 @PasswordMatches
-public class FormPassword implements MatchingPassword, Constants {
+public class PasswordForm implements MatchingPassword {
 
     private String currentPassword;
 
-    @Pattern(regexp = PASSWORD, message = "{password.invalidFormat}")
+    @ValidPassword(message = "{password.invalidFormat}")
     private String password;
     private String matchingPassword;
 }

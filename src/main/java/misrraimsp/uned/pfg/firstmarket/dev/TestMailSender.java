@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config;
+package misrraimsp.uned.pfg.firstmarket.dev;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;

@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.FormUser;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
@@ -27,16 +27,19 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
-public class UserServer implements UserDetailsService, Constants {
+public class UserServer implements UserDetailsService {
 
     private UserRepository userRepository;
     private SecurityTokenRepository securityTokenRepository;
     private SecurityTokenProperties securityTokenProperties;
     private UserDeletionRepository userDeletionRepository;
+
     private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
     private PurchaseServer purchaseServer;
+
+    private SecurityRandomPasswordProperties securityRandomPasswordProperties;
 
     @Autowired
     public UserServer(UserRepository userRepository,
@@ -46,16 +49,20 @@ public class UserServer implements UserDetailsService, Constants {
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
-                      PurchaseServer purchaseServer) {
+                      PurchaseServer purchaseServer,
+                      SecurityRandomPasswordProperties securityRandomPasswordProperties) {
 
         this.userRepository = userRepository;
         this.securityTokenRepository = securityTokenRepository;
         this.securityTokenProperties = securityTokenProperties;
         this.userDeletionRepository = userDeletionRepository;
+
         this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
         this.purchaseServer = purchaseServer;
+
+        this.securityRandomPasswordProperties = securityRandomPasswordProperties;
     }
 
     @Override
@@ -69,7 +76,7 @@ public class UserServer implements UserDetailsService, Constants {
 
     // role ROLE_USER assigned by default if not specified
     // new cart created if not specified
-    public User persist(FormUser formUser, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) {
+    public User persist(UserForm userForm, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) {
         if (roles == null){
             roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
         }
@@ -78,13 +85,13 @@ public class UserServer implements UserDetailsService, Constants {
             cart.setLastModified(LocalDateTime.now());
         }
         Profile profile = new Profile();
-        profile.setFirstName(formUser.getFirstName());
-        profile.setLastName(formUser.getLastName());
+        profile.setFirstName(userForm.getFirstName());
+        profile.setLastName(userForm.getLastName());
         User user = new User();
         user.setCompleted(false);
         user.setSuspended(false);
-        user.setEmail(formUser.getEmail());
-        user.setPassword(passwordEncoder.encode(formUser.getPassword()));
+        user.setEmail(userForm.getEmail());
+        user.setPassword(passwordEncoder.encode(userForm.getPassword()));
         user.setProfile(profileServer.persist(profile));
         user.setRoles(roles);
         user.setCart(cartServer.persist(cart));
@@ -169,22 +176,22 @@ public class UserServer implements UserDetailsService, Constants {
     public String getRandomPassword() {
         PasswordGenerator passwordGenerator = new PasswordGenerator();
 
-        // at least 1 lowercase
+        // lowercase
         CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
         CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
-        lowerCaseRule.setNumberOfCharacters(1);
+        lowerCaseRule.setNumberOfCharacters(securityRandomPasswordProperties.getNumOfLowerCase());
 
-        // at least 1 uppercase
+        // uppercase
         CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
         CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
-        upperCaseRule.setNumberOfCharacters(1);
+        upperCaseRule.setNumberOfCharacters(securityRandomPasswordProperties.getNumOfUpperCase());
 
-        // at least 1 number
+        // digit
         CharacterData digitChars = EnglishCharacterData.Digit;
         CharacterRule digitRule = new CharacterRule(digitChars);
-        digitRule.setNumberOfCharacters(1);
+        digitRule.setNumberOfCharacters(securityRandomPasswordProperties.getNumOfDigit());
 
-        return passwordGenerator.generatePassword(16, lowerCaseRule, upperCaseRule, digitRule);
+        return passwordGenerator.generatePassword(securityRandomPasswordProperties.getSize(), lowerCaseRule, upperCaseRule, digitRule);
     }
 
     public SecurityToken createSecurityToken(SecurityEvent securityEvent, User user, String editedEmail) {

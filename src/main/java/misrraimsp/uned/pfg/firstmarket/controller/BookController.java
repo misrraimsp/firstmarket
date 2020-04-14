@@ -1,10 +1,11 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.FormBook;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Constants;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
@@ -27,29 +28,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
-public class BookController implements Constants {
+public class BookController {
 
     private BookServer bookServer;
     private CatServer catServer;
     private ImageServer imageServer;
     private UserServer userServer;
+
     private FrontEndProperties frontEndProperties;
+    private ValidationRegexProperties validationRegexProperties;
+    private ValidationNumericProperties validationNumericProperties;
 
     @Autowired
     public BookController(BookServer bookServer,
                           CatServer catServer,
                           ImageServer imageServer,
                           UserServer userServer,
-                          FrontEndProperties frontEndProperties) {
+                          FrontEndProperties frontEndProperties,
+                          ValidationRegexProperties validationRegexProperties,
+                          ValidationNumericProperties validationNumericProperties) {
 
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.imageServer = imageServer;
         this.userServer = userServer;
+
         this.frontEndProperties = frontEndProperties;
+        this.validationRegexProperties = validationRegexProperties;
+        this.validationNumericProperties = validationNumericProperties;
     }
 
     @GetMapping("/book/{id}")
@@ -64,86 +75,55 @@ public class BookController implements Constants {
         return "book";
     }
 
-    @GetMapping("/admin/newBook")
-    public String showNewBookForm(Model model){
-        model.addAttribute("formBook", new FormBook());
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAllAttributes(patterns);
-        model.addAllAttributes(numbers);
-        model.addAttribute("languages", Languages.values());
-        return "newBook";
+    @GetMapping("/admin/bookForm")
+    public String showBookForm(@RequestParam(name = "id") Optional<Long> optBookId, Model model){
+        AtomicBoolean badIdArgument = new AtomicBoolean(false);
+        optBookId.ifPresentOrElse(
+                bookId -> {
+                    try {
+                        Book book = bookServer.findById(bookId);
+                        model.addAttribute("bookForm", bookServer.convertBookToBookForm(book));
+                    } catch (IllegalArgumentException e) {
+                        badIdArgument.set(true);
+                    }
+                },
+                () -> model.addAttribute("bookForm", new BookForm())
+        );
+        if (badIdArgument.get()) {
+            return "redirect:/books";
+        }
+        populateModelToBookForm(model);
+        return "bookForm";
     }
 
-    @PostMapping("/admin/newBook")
-    public String processNewBook(@Valid FormBook formBook, Errors errors, Model model){
+    @PostMapping("/admin/bookForm")
+    public String processBookForm(@Valid BookForm bookForm, Errors errors, Model model){
         if (errors.hasErrors()) {
-            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAllAttributes(patterns);
-            model.addAllAttributes(numbers);
-            model.addAttribute("languages", Languages.values());
-            return "newBook";
+            populateModelToBookForm(model);
+            return "bookForm";
         }
         try {
-            Book book = bookServer.convertFormBookToBook(formBook);
-            bookServer.persist(book);
-        }
-        catch (IsbnAlreadyExistsException e) {
+            Book book = bookServer.convertBookFormToBook(bookForm);
+            if (book.getId() == null){
+                bookServer.persist(book);
+            } else {
+                bookServer.edit(book);
+            }
+        } catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
-            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAllAttributes(patterns);
-            model.addAllAttributes(numbers);
-            model.addAttribute("languages", Languages.values());
-            return "newBook";
+            populateModelToBookForm(model);
+            return "bookForm";
         }
         return "redirect:/books";
     }
 
-    @GetMapping("/admin/editBook/{id}")
-    public String showEditBookForm(@PathVariable("id") Long id, Model model){
-        Book book = bookServer.findById(id);
-        FormBook formBook = bookServer.convertBookToFormBook(book);
-        model.addAttribute("formBook", formBook);
+    private void populateModelToBookForm(Model model) {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAllAttributes(patterns);
-        model.addAllAttributes(numbers);
+        model.addAttribute("patterns", validationRegexProperties);
+        model.addAttribute("numbers", validationNumericProperties);
         model.addAttribute("languages", Languages.values());
-        return "editBook";
-    }
-
-    @PostMapping("/admin/editBook")
-    public String processEditBook(@Valid FormBook formBook, Errors errors, Model model){
-        if (errors.hasErrors()) {
-            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAllAttributes(patterns);
-            model.addAllAttributes(numbers);
-            model.addAttribute("languages", Languages.values());
-            return "editBook";
-        }
-        try {
-            Book book = bookServer.convertFormBookToBook(formBook);
-            bookServer.edit(book);
-        }
-        catch (IsbnAlreadyExistsException e) {
-            errors.rejectValue("isbn", "isbn.notUnique");
-            model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-            model.addAllAttributes(patterns);
-            model.addAllAttributes(numbers);
-            model.addAttribute("languages", Languages.values());
-            return "editBook";
-        }
-        return "redirect:/books";
     }
 
     @GetMapping("/admin/deleteBook/{id}")
@@ -163,20 +143,6 @@ public class BookController implements Constants {
                             @RequestParam(required = false) String q,
                             Model model,
                             @AuthenticationPrincipal User authUser){
-
-        //debug
-        {
-            System.out.println("*** begin ***");
-            System.out.println("Page Number: " + pageNo);
-            System.out.println("Page Size: " + pageSize);
-            System.out.println("Category: " + categoryId);
-            System.out.println("Prices: " + priceId);
-            System.out.println("Authors: " + authorId);
-            System.out.println("Publishers: " + publisherId);
-            System.out.println("Languages: " + languageId);
-            System.out.println("Query: " + q);
-            System.out.println("*** end ***");
-        }
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
@@ -210,7 +176,7 @@ public class BookController implements Constants {
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("TEXT_QUERY", TEXT_QUERY);
+        model.addAttribute("patterns", validationRegexProperties);
         return "books";
     }
 
