@@ -18,8 +18,12 @@ public class CategoryConverter {
     public Category convertCategoryFormToCategory(CategoryForm categoryForm) {
         Category category = new Category();
         category.setId(categoryForm.getCategoryId());
-        category.setName(categoryForm.getName());
+        category.setName(this.convertCategoryFormName(categoryForm.getName()));
         category.setParent(categoryForm.getParent());
         return category;
+    }
+
+    private String convertCategoryFormName(String name) {
+        return (!name.isBlank()) ? name : "UNKNOWN-NAME";
     }
 }

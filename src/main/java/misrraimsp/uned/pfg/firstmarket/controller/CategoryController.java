@@ -80,7 +80,12 @@ public class CategoryController {
         if (errors.hasErrors()) {
             populateModelToCategoryForm(model);
             if (isEdition){
-                model.addAttribute("descendants", catServer.getDescendants(categoryForm.getCategoryId()));
+                try {
+                    model.addAttribute("descendants", catServer.getDescendants(categoryForm.getCategoryId()));
+                } catch (IllegalArgumentException e) {
+                    // TODO log this situation
+                    return "redirect:/home";
+                }
             }
             return "categoryForm";
         }

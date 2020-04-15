@@ -94,16 +94,18 @@ public class CatServer {
         return sequence;
     }
 
-    public List<Category> getDescendants(Long categoryId) {
+    public List<Category> getDescendants(Long categoryId) throws IllegalArgumentException{
         List<Category> list = new ArrayList<>();
         TreeNode<Category> subtreeRoot = null;
         for (TreeNode<Category> node : rootCategoryNode) {
-            if (node.getData().getId() == categoryId) {
+            if (node.getData().getId().equals(categoryId)) {
                 subtreeRoot = node;
                 break;
             }
         }
-        if (subtreeRoot == null) return null;
+        if (subtreeRoot == null) {
+            throw new IllegalArgumentException();
+        }
         for (TreeNode<Category> node : subtreeRoot) {
             list.add(node.getData());
         }
@@ -122,7 +124,7 @@ public class CatServer {
     @Transactional
     public void persist(Category category) {
         //Update Category info
-        Category savedCategory =  categoryRepository.save(category);
+        Category savedCategory = categoryRepository.save(category);
 
         //Update Catpath info
         for (Catpath ancestorCP : catpathRepository.getCatpathsByDescendant(category.getParent())){
