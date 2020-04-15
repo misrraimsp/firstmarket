@@ -140,7 +140,7 @@ public class BookController {
                             @RequestParam(required = false) Set<Long> authorId,
                             @RequestParam(required = false) Set<Long> publisherId,
                             @RequestParam(required = false) Set<Languages> languageId,
-                            @RequestParam(required = false) String q,
+                            @RequestParam(required = false) String q, //TODO validate this param
                             Model model,
                             @AuthenticationPrincipal User authUser){
 

@@ -118,27 +118,68 @@
                 </div>
                 <!-- SEARCH RESULTS  -->
                 <div class="col-sm-8">
+                    <!-- books -->
                     <div class="row d-flex flex-column">
                         <div class="col-sm-12" th:each="book : ${pageOfBooks}">
                             <div class="row my-3">
+                                <!-- image -->
                                 <div class="col-sm-3 bg-white">
                                     <a th:href="@{/book/{id}(id=${book.id})}"><img class="img-fluid my-3" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
                                 </div>
+                                <!-- book info -->
                                 <div class="col-sm-6 bg-white">
-                                    <a th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none"><p class="text-responsive text-info font-weight-bold mt-3" th:text="${book.title}">title</p></a>
-                                    <p><strong><span th:text="${book.authorsString}"></span></strong></p>
-                                    <p><small>Published by </small><strong><span th:text="${book.publisher.name}"></span></strong></p>
-                                    <p class="my-0"><small><span th:text="${book.language}"></span></small></p>
-                                    <p class="my-0"><small><span th:text="${book.category.name}"></span></small></p>
-                                    <p class="mb-3"><small>ISBN-<span th:text="${book.isbn}"></span></small></p>
+                                    <!-- title -->
+                                    <div class="mt-3">
+                                        <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
+                                            <p th:unless="${book.title.isBlank()}">
+                                                <span th:text="${book.title}">title</span>
+                                            </p>
+                                            <p th:if="${book.title.isBlank()}">
+                                                <span><small><i>unknown title</i></small></span>
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <!-- authors -->
+                                    <div>
+                                        <p th:unless="${book.authorsString.isBlank()}">
+                                            <strong><span th:text="${book.authorsString}"></span></strong>
+                                        </p>
+                                        <p th:if="${book.authorsString.isBlank()}">
+                                            <span><small><i>unknown authors</i></small></span>
+                                        </p>
+                                    </div>
+                                    <!-- publisher -->
+                                    <div>
+                                        <p th:if="${book.publisher ne null}">
+                                            <small>Published by </small><strong><span th:text="${book.publisher.name}"></span></strong>
+                                        </p>
+                                        <p th:unless="${book.publisher ne null}">
+                                            <small><i>unknown publisher</i></small>
+                                        </p>
+                                    </div>
+                                    <!-- language -->
+                                    <div>
+                                        <p class="my-0"><small><span th:text="${book.language}"></span></small></p>
+                                    </div>
+                                    <!-- category -->
+                                    <div>
+                                        <p class="my-0"><small><span th:text="${book.category.name}"></span></small></p>
+                                    </div>
+                                    <!-- isbn -->
+                                    <div>
+                                        <p class="mb-3"><small>ISBN-<span th:text="${book.isbn}"></span></small></p>
+                                    </div>
                                 </div>
+                                <!-- actions -->
                                 <div class="col-sm-3 bg-white">
                                     <div class="row d-flex flex-column">
+                                        <!-- user actions -->
                                         <div class="col-sm-12 my-3" sec:authorize="!hasRole('ADMIN')">
                                             <button class="addBook btn btn-outline-info btn-sm btn-block align-center" th:id="'ab-' + ${book.id}">
                                                 Add to Cart<i class="fas fa-cart-plus ml-2"></i>
                                             </button>
                                         </div>
+                                        <!-- admin actions -->
                                         <div class="col-sm-12 my-3" sec:authorize="hasRole('ADMIN')">
                                             <div class="d-flex flex-column">
                                                 <a class="btn btn-outline-secondary btn-sm align-center mb-3" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
@@ -149,6 +190,7 @@
                                                 </button>
                                             </div>
                                         </div>
+                                        <!-- price -->
                                         <div class="col-sm-12">
                                             <p><strong>EUR <span th:text="${book.price}"></span></strong></p>
                                         </div>

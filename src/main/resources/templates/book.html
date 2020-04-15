@@ -10,7 +10,7 @@
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <!-- main book info -->
+            <!-- main content -->
             <div class="row my-5">
                 <div class="col-sm-1 bg-white"></div>
                 <!-- image -->
@@ -21,22 +21,72 @@
                 <div class="col-sm-6 bg-white">
                     <div class="row">
                         <div class="col-sm-6" >
-                            <p><strong>Title: </strong><span th:text="${book.title}"></span></p>
-                            <p><strong>Publisher: </strong><span th:text="${book.publisher.name}"></span></p>
-                            <p><strong>Year: </strong><span th:text="${book.year}"></span></p>
-                            <p><strong>Category: </strong><span th:text="${book.category.name}"></span></p>
+                            <!-- title -->
+                            <div>
+                                <p th:unless="${book.title.isBlank()}">
+                                    <strong>Title: </strong><span th:text="${book.title}">title</span>
+                                </p>
+                                <p th:if="${book.title.isBlank()}">
+                                    <strong>Title: </strong><span><small><i>unknown</i></small></span>
+                                </p>
+                            </div>
+                            <!-- publisher -->
+                            <div>
+                                <p th:if="${book.publisher ne null}">
+                                    <strong>Publisher: </strong><span th:text="${book.publisher.name}"></span>
+                                </p>
+                                <p th:unless="${book.publisher ne null}">
+                                    <strong>Publisher: </strong><small><i>unknown</i></small>
+                                </p>
+                            </div>
+                            <!-- year -->
+                            <div>
+                                <p><strong>Year: </strong><span th:text="${book.year}"></span></p>
+                            </div>
+                            <!-- category -->
+                            <div>
+                                <p><strong>Category: </strong><span th:text="${book.category.name}"></span></p>
+                            </div>
                         </div>
                         <div class="col-sm-6" >
-                            <p><strong>Authors: </strong><span th:text="${book.authorsString}"></span></p>
-                            <p><strong>ISBN: </strong><span th:text="${book.isbn}"></span></p>
-                            <p><strong>Language: </strong><span th:text="${book.language}"></span></p>
-                            <p><strong>Pages: </strong><span th:text="${book.numPages}"></span></p>
-                            <p><strong>Price: </strong><span th:text="${book.price}"></span>€</p>
+                            <!-- authors -->
+                            <div>
+                                <p th:unless="${book.authorsString.isBlank()}">
+                                    <strong>Authors: </strong><span th:text="${book.authorsString}"></span>
+                                </p>
+                                <p th:if="${book.authorsString.isBlank()}">
+                                    <strong>Authors: </strong><span><small><i>unknown</i></small></span>
+                                </p>
+                            </div>
+                            <!-- isbn -->
+                            <div>
+                                <p><strong>ISBN: </strong><span th:text="${book.isbn}"></span></p>
+                            </div>
+                            <!-- language -->
+                            <div>
+                                <p><strong>Language: </strong><span th:text="${book.language}"></span></p>
+                            </div>
+                            <!-- pages -->
+                            <div>
+                                <p><strong>Pages: </strong><span th:text="${book.numPages}"></span></p>
+                            </div>
+                            <!-- price -->
+                            <div>
+                                <p><strong>Price: </strong><span th:text="${book.price}"></span>€</p>
+                            </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row mt-3">
                         <div class="col-sm-12" >
-                            <p><strong>Description: </strong><span th:text="${book.description}"></span></p>
+                            <!-- description -->
+                            <div>
+                                <p th:unless="${book.description.isBlank()}">
+                                    <strong>Description: </strong><span th:text="${book.description}"></span>
+                                </p>
+                                <p th:if="${book.title.isBlank()}">
+                                    <strong>Description: </strong><span><small><i>unknown</i></small></span>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -19,6 +19,9 @@ public class PublisherServer {
     }
 
     public Publisher persist(Publisher publisher) {
+        if (publisher == null) {
+            return null;
+        }
         Publisher storedPublisher = this.findByName(publisher.getName());
         return (storedPublisher != null) ? storedPublisher : publisherRepository.save(publisher);
     }
