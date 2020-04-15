@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
@@ -23,7 +24,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,7 +33,6 @@ import javax.validation.Valid;
 import java.util.Calendar;
 
 @Controller
-@Validated
 public class UserController {
 
     private UserServer userServer;
@@ -151,11 +150,7 @@ public class UserController {
 
     @GetMapping("/user/editEmail")
     public String showEditEmailForm(Model model, @AuthenticationPrincipal User authUser) {
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
+        loadModel(model, authUser);
         return "editEmail";
     }
 
@@ -349,11 +344,7 @@ public class UserController {
                 errors.rejectValue("currentPassword", "password.invalid");
             }
             if (hasError) {
-                User user = userServer.findById(authUser.getId());
-                model.addAttribute("firstName", user.getProfile().getFirstName());
-                model.addAttribute("cartSize", user.getCart().getCartSize());;
-                model.addAttribute("mainCategories", catServer.getMainCategories());
-                model.addAttribute("patterns", validationRegexProperties);
+                loadModel(model, authUser);
                 return "editPassword";
             }
             // edit password
@@ -362,32 +353,46 @@ public class UserController {
         return "redirect:/home";
     }
 
-    @GetMapping("/user/editProfile")
-    public String showEditProfileForm(Model model, @AuthenticationPrincipal User authUser){
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
-        model.addAttribute("profile", user.getProfile());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
-        return "editProfile";
+    @GetMapping("/user/profileForm")
+    public String showProfileForm(Model model, @AuthenticationPrincipal User authUser){
+        try {
+            model.addAttribute("profileForm", userServer.getProfileForm(authUser.getId()));
+            loadModel(model, authUser);
+        } catch (IllegalArgumentException e){
+            //TODO log this situation
+            return "redirect:/home";
+        }
+        return "profileForm";
     }
 
-    @PostMapping("/user/editProfile")
-    public String processEditProfile(@Valid Profile profile,
+    @PostMapping("/user/profileForm")
+    public String processProfileForm(@Valid ProfileForm profileForm,
                                      Errors errors,
                                      Model model,
                                      @AuthenticationPrincipal User authUser) {
+
         if (errors.hasErrors()) {
+            loadModel(model, authUser);
+            return "profileForm";
+        }
+        try {
+            Profile profile = userServer.convertProfileFormToProfile(profileForm);
+            userServer.editProfile(authUser.getId(), profile);
+        } catch (IllegalArgumentException e) {
+            //TODO log this situation
+            return "redirect:/home";
+        }
+        return "redirect:/home";
+    }
+
+    private void loadModel(Model model, @AuthenticationPrincipal User authUser) throws IllegalArgumentException {
+        if (authUser != null){
             User user = userServer.findById(authUser.getId());
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("patterns", validationRegexProperties);
-            return "editProfile";
         }
-        userServer.editProfile(authUser.getId(), profile);
-        return "redirect:/home";
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("patterns", validationRegexProperties);
     }
 
     @GetMapping("/user/cart")

@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
@@ -132,7 +133,7 @@ public class UserServer implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void editProfile(Long userId, Profile newProfile) {
+    public void editProfile(Long userId, Profile newProfile) throws IllegalArgumentException{
         profileServer.edit(this.findById(userId).getProfile().getId(), newProfile);
     }
 
@@ -250,5 +251,13 @@ public class UserServer implements UserDetailsService {
                 securityEvent,
                 Calendar.getInstance().getTime()
         ).size() != 0;
+    }
+
+    public ProfileForm getProfileForm(Long userId) throws IllegalArgumentException {
+        return profileServer.convertProfileToProfileForm(this.findById(userId).getProfile());
+    }
+
+    public Profile convertProfileFormToProfile(ProfileForm profileForm) {
+        return profileServer.convertProfileFormToProfile(profileForm);
     }
 }
