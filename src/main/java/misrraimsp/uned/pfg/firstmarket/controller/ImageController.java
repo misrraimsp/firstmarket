@@ -7,12 +7,16 @@ import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -50,16 +54,24 @@ public class ImageController {
     }
 
     @GetMapping("/admin/images")
-    public String showImages(Model model){
+    public String showImages(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
+                             @RequestParam(defaultValue = "${pagination.default-size.image}") String pageSize,
+                             Model model){
+
         model.addAttribute("imagesWrapper", new ImagesWrapper());
-        populateModel(model);
+        populateModel(model, pageNo, pageSize);
         return "images";
     }
 
     @PostMapping("/admin/newImage")
-    public String processNewImage(@Valid ImagesWrapper imagesWrapper, Errors errors, Model model){
+    public String processNewImage(@Valid ImagesWrapper imagesWrapper,
+                                  Errors errors,
+                                  @RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
+                                  @RequestParam(defaultValue = "${pagination.default-size.image}") String pageSize,
+                                  Model model){
+
         if (errors.hasErrors()) {
-            populateModel(model);
+            populateModel(model, pageNo, pageSize);
             return "images";
         }
         try {
@@ -90,8 +102,13 @@ public class ImageController {
         return "redirect:/admin/images";
     }
 
-    private void populateModel(Model model) {
-        model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
+    private void populateModel(Model model, String pageNo, String pageSize) {
+        Pageable pageable = PageRequest.of(
+                Integer.parseInt(pageNo),
+                Integer.parseInt(pageSize),
+                Sort.by("is_default").descending().and(Sort.by("name").ascending()));
+
+        model.addAttribute("pageOfEntities", imageServer.getPageOfMetaInfo(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());
     }
 }

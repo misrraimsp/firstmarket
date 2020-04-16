@@ -133,8 +133,8 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public String showBooks(@RequestParam(defaultValue = "${pagination.default.number}") String pageNo,
-                            @RequestParam(defaultValue = "${pagination.default.size}") String pageSize,
+    public String showBooks(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
+                            @RequestParam(defaultValue = "${pagination.default-size.book-search}") String pageSize,
                             @RequestParam(required = false) Long categoryId,
                             @RequestParam(required = false) Set<String> priceId,
                             @RequestParam(required = false) Set<Long> authorId,
@@ -167,7 +167,7 @@ public class BookController {
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
         }
-        model.addAttribute("pageOfBooks", books);
+        model.addAttribute("pageOfEntities", books);
         model.addAttribute("category", category);
         model.addAttribute("categorySequence", categorySequence);
         model.addAttribute("childrenCategories", childrenCategories);

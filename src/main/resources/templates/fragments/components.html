@@ -226,11 +226,11 @@
 
         <!-- pagination MVC variables -->
         <script th:fragment="paginationMvcVariables">
-            let totalElements = [[${pageOfBooks.totalElements}]];
-            let totalPages = [[${pageOfBooks.totalPages}]];
-            let pageIndex = [[${pageOfBooks.number}]];
-            let numberOfElements = [[${pageOfBooks.numberOfElements}]];
-            let pageSize = [[${pageOfBooks.size}]];
+            let totalElements = [[${pageOfEntities.totalElements}]];
+            let totalPages = [[${pageOfEntities.totalPages}]];
+            let pageIndex = [[${pageOfEntities.number}]];
+            let numberOfElements = [[${pageOfEntities.numberOfElements}]];
+            let pageSize = [[${pageOfEntities.size}]];
         </script>
 
         <!-- Botton fixed footer -->

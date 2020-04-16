@@ -43,8 +43,8 @@ public class HomeController {
     }
 
     @GetMapping("/home")
-    public String showHome(@RequestParam(defaultValue = "${pagination.default.number}") String pageNo,
-                           @RequestParam(defaultValue = "${pagination.default.size}") String pageSize,
+    public String showHome(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
+                           @RequestParam(defaultValue = "${pagination.default-size.book-home}") String pageSize,
                            Model model,
                            @AuthenticationPrincipal User authUser){
 
@@ -59,7 +59,7 @@ public class HomeController {
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
-        model.addAttribute("pageOfBooks", bookServer.findAll(pageable));
+        model.addAttribute("pageOfEntities", bookServer.findAll(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("patterns", validationRegexProperties);
         return "home";

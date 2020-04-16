@@ -46,14 +46,16 @@ security:
 
 front-end:
    search-criteria:
-      numOfAuthors: 3
-      numOfPublishers: 3
-      numOfLanguages: 3
+      numOfAuthors: 4
+      numOfPublishers: 5
+      numOfLanguages: 6
 
 pagination:
-   default:
-      size: 30
-      number: 0
+   default-size:
+      image: 2
+      book-home: 20
+      book-search: 15
+   default-index: 0
 ---
 
 spring:
@@ -72,8 +74,8 @@ spring:
       password: misrra
       driver-class-name: org.mariadb.jdbc.Driver
       initialization-mode: always
-      schema: classpath:sql/schema.sql
-      data: classpath:sql/data.sql
+      #schema: classpath:sql/schema.sql
+      #data: classpath:sql/data.sql
    jpa:
       hibernate:
          ddl-auto: none

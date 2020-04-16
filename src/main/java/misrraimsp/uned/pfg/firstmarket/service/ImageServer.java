@@ -3,6 +3,8 @@ package misrraimsp.uned.pfg.firstmarket.service;
 import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,5 +59,9 @@ public class ImageServer {
 
     public boolean isDefaultImage(Long imageId) throws IllegalArgumentException {
         return this.findById(imageId).isDefault();
+    }
+
+    public Page<Image> getPageOfMetaInfo(Pageable pageable) {
+        return imageRepository.getPageOfMetaInfo(pageable);
     }
 }
