@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.ImageWrapper;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.ImagesWrapper;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -37,13 +37,6 @@ public class ImageController {
         this.catServer = catServer;
     }
 
-    @GetMapping("/admin/images")
-    public String showImages(Model model){
-        model.addAttribute("imageWrapper", new ImageWrapper());
-        populateModel(model);
-        return "images";
-    }
-
     @GetMapping("/image/{id}")
     public void showImageById(@PathVariable("id") Long id, HttpServletResponse response) {
         try {
@@ -56,14 +49,21 @@ public class ImageController {
         }
     }
 
+    @GetMapping("/admin/images")
+    public String showImages(Model model){
+        model.addAttribute("imagesWrapper", new ImagesWrapper());
+        populateModel(model);
+        return "images";
+    }
+
     @PostMapping("/admin/newImage")
-    public String processNewImage(@Valid ImageWrapper imageWrapper, Errors errors, Model model){
+    public String processNewImage(@Valid ImagesWrapper imagesWrapper, Errors errors, Model model){
         if (errors.hasErrors()) {
             populateModel(model);
             return "images";
         }
         try {
-            imageServer.persist(imageWrapper.getImage());
+            imagesWrapper.getImages().forEach(image -> imageServer.persist(image));
         }
         catch (IllegalArgumentException e) {
             // TODO log this situation

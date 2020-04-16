@@ -4,9 +4,13 @@ import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 
-@Data
-public class ImageWrapper {
+import java.util.HashSet;
+import java.util.Set;
 
-    @ValidImage(message = "{image.error}")
-    private Image image;
+@Data
+public class ImagesWrapper {
+
+    @ValidImage(message = "{images.error}")
+    private Set<Image> images = new HashSet<>();
+
 }

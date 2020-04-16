@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,8 +32,27 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
 
     @Override
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
-        if (object == null) return true; //needed in case of using a stored image on newBook and editBook workflow
-        Image image = (Image) object;
+        if (object == null) {
+            return true; //needed in case of using a stored image on newBook and editBook workflow
+        } else if (object instanceof Collection<?>) {
+            return this.validateImageCollection((Collection<Image>) object);
+        } else if (object instanceof Image){
+            return this.validateImage((Image) object);
+        }
+        else {
+            throw new IllegalArgumentException("trying to use ImageValidator with an argument that is not of type Image, Collection<Image> or NULL");
+        }
+    }
+
+    private boolean validateImageCollection(Collection<Image> images) {
+        boolean valid = true;
+        for (Image image : images){
+            valid = valid && this.validateImage(image);
+        }
+        return valid;
+    }
+
+    private boolean validateImage(Image image) {
         return (this.validateMimeType(image.getMimeType()) &&
                 this.validateSize(image.getData()) &&
                 this.validateName(image.getName()));

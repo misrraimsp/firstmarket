@@ -17,12 +17,12 @@
                 <div class="col-sm-6 bg-light">
                     <!-- new image form -->
                     <p class="mt-1 mb-0">Select a new image:</p>
-                    <form class="needs-validation mt-1" novalidate th:action="@{/admin/newImage}" th:object="${imageWrapper}" method="POST" enctype="multipart/form-data" action="#">
+                    <form class="needs-validation mt-1" novalidate th:action="@{/admin/newImage}" th:object="${imagesWrapper}" method="POST" enctype="multipart/form-data" action="#">
                         <div class="form-group mb-3">
-                            <input class="form-control" type="file" th:field="*{image}" accept="image/*" required/>
+                            <input class="form-control" type="file" multiple th:field="*{images}" accept="image/*" required/>
                             <div class="invalid-feedback">Please select an image</div>
                         </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('image')"></div>
+                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('images')"></div>
                         <button class="btn btn-info px-5 my-1" type="submit">Save</button>
                     </form>
                     <!-- images -->
