@@ -17,12 +17,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 public class ImageController {
@@ -84,6 +87,31 @@ public class ImageController {
         return "redirect:/admin/images";
     }
 
+    @PostMapping("/admin/setDefaultImage")
+    public ModelAndView processSetDefaultImage(@RequestParam(name = "id") Optional<Long> optImageId,
+                                               @RequestParam(name = "pn") Optional<String> optPageNo) {
+
+        AtomicBoolean badIdArgument = new AtomicBoolean(false);
+        optImageId.ifPresent(imageId -> {
+            try {
+                imageServer.setDefaultImage(imageId);
+            } catch (IllegalArgumentException e){
+                badIdArgument.set(true);
+            } catch (Exception e){
+                badIdArgument.set(true);
+            }
+        });
+        ModelAndView modelAndView = new ModelAndView();
+        if (badIdArgument.get()) {
+            // TODO log this situation
+            modelAndView.setViewName("redirect:/home");
+            return modelAndView;
+        }
+        modelAndView.setViewName("redirect:/admin/images");
+        optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        return modelAndView;
+    }
+
     @GetMapping("/admin/deleteImage/{id}")
     public String deleteImage(@PathVariable("id") Long imageId){
         try {
@@ -106,7 +134,7 @@ public class ImageController {
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
                 Integer.parseInt(pageSize),
-                Sort.by("is_default").descending().and(Sort.by("name").ascending()));
+                Sort.by("mime_type").descending().and(Sort.by("name").ascending()));
 
         model.addAttribute("pageOfEntities", imageServer.getPageOfMetaInfo(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());

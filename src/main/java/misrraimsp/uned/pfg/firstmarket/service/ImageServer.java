@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -63,5 +64,15 @@ public class ImageServer {
 
     public Page<Image> getPageOfMetaInfo(Pageable pageable) {
         return imageRepository.getPageOfMetaInfo(pageable);
+    }
+
+    @Transactional
+    public void setDefaultImage(Long imageId) throws IllegalArgumentException {
+        Image oldDefaultImage = this.getDefaultImage();
+        Image newDefaultImage = this.findById(imageId);
+        oldDefaultImage.setDefault(false);
+        newDefaultImage.setDefault(true);
+        imageRepository.save(oldDefaultImage);
+        imageRepository.save(newDefaultImage);
     }
 }

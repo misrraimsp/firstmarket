@@ -36,23 +36,45 @@
                     <table class="table">
                         <thead class="thead-light">
                             <tr>
-                                <th>Name</th>
-                                <th>MIME type</th>
-                                <th>is Default</th>
                                 <th>Image</th>
+                                <th>Name</th>
+                                <th>is Default</th>
+                                <th>MIME type</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr th:each="mi : ${pageOfEntities}">
-                                <td><span th:text="${mi.name}">name</span></td>
-                                <td><span th:text="${mi.mimeType}">mimeType</span></td>
-                                <td><span th:text="${mi.default}">isDefault</span></td>
                                 <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
-                                <td th:if="${!mi.default}">
-                                    <button class="modalTrigger btn btn-sm btn-outline-secondary" th:id="'del-' + ${mi.id}" data-toggle="tooltip" title="Delete Image">
-                                        <i class='fas fa-trash-alt'></i>
-                                    </button>
+                                <td><span th:text="${mi.name}">name</span></td>
+                                <td>
+                                    <span th:if="${mi.default}"><i class="text-info fas fa-check-double fa-lg"></i></span>
+                                    <span th:unless="${mi.default}">-</span>
+                                </td>
+                                <td><span th:text="${mi.mimeType}">mimeType</span></td>
+                                <td>
+                                    <div class="d-flex justify-content-around">
+                                        <div class="mr-auto">
+                                            <form th:action="@{/admin/setDefaultImage}" method="POST" action="#">
+                                                <input type="hidden" name="id" th:value="${mi.id}"/>
+                                                <input type="hidden" name="pn" th:value="${pageOfEntities.number}"/>
+                                                <button th:if="${mi.default}" disabled class="btn btn-sm btn-outline-secondary">
+                                                    <i class='fas fa-check-double'></i>
+                                                </button>
+                                                <button th:unless="${mi.default}" class="btn btn-sm btn-outline-secondary" type="submit" data-toggle="tooltip" title="Set as Default Image">
+                                                    <i class='fas fa-check-double'></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <div>
+                                            <button th:if="${mi.default}" disabled class="btn btn-sm btn-outline-secondary">
+                                                <i class='fas fa-trash-alt'></i>
+                                            </button>
+                                            <button th:unless="${mi.default}" class="modalTrigger btn btn-sm btn-outline-secondary" th:id="'del-' + ${mi.id}" data-toggle="tooltip" title="Delete Image">
+                                                <i class='fas fa-trash-alt'></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>
