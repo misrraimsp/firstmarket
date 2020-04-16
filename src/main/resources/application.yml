@@ -21,7 +21,7 @@ validation:
       pages-max: 5000
       stock-min: 0
       stock-max: 100000000
-      image-max-size: 500000 # in bytes
+      image-max-size: 512000 # in bytes (500KB)
    regex:
       email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$
       password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$ # The password must be at least 8 characters, with at least one lowercase, one uppercase and one number

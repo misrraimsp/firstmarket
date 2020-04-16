@@ -1,7 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.StorageFileNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +11,6 @@ import java.util.List;
 public class ImageServer {
 
     private ImageRepository imageRepository;
-
 
     @Autowired
     public ImageServer(ImageRepository imageRepository) {
@@ -27,22 +25,22 @@ public class ImageServer {
      * @param image
      * @return image or repositoryImage
      */
-    public Image persist(Image image) {
-        if (image.getId() != null){
+    public Image persist(Image image) throws IllegalArgumentException {
+        if (image.getId() != null){ // image is already persisted
             return this.findById(image.getId());
         }
-        else if (image.getData() != null) {
-            Image storedImage = imageRepository.findByData(image.getData());
-            return (storedImage != null) ? storedImage : imageRepository.save(image);
+        else if (image.getData() != null) { // check for data field duplicated
+            Image duplicatedImage = imageRepository.findByData(image.getData());
+            return (duplicatedImage != null) ? duplicatedImage : imageRepository.save(image);
         }
         else {
-            return null;
+            throw new IllegalArgumentException("Trying to persist an image without id or data");
         }
     }
 
     public Image findById(Long id) {
         return imageRepository.findById(id)
-                .orElseThrow(() -> new StorageFileNotFoundException("File not found with id " + id));
+                .orElseThrow(() -> new IllegalArgumentException("File not found with id " + id));
     }
 
     public List<Image> getAllMetaInfo() {
@@ -53,13 +51,11 @@ public class ImageServer {
         imageRepository.deleteById(id);
     }
 
-    public Image findByIsDefaultIsTrue() {
+    public Image getDefaultImage() {
         return imageRepository.findByIsDefaultIsTrue();
     }
 
-    /*
-    public Long getDefaultImageId() {
-        return imageRepository.findIdByIsDefaultIsTrue();
+    public boolean isDefaultImage(Long imageId) throws IllegalArgumentException {
+        return this.findById(imageId).isDefault();
     }
-     */
 }

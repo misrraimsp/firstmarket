@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.ImageWrapper;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -7,15 +8,14 @@ import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +28,10 @@ public class ImageController {
     private CatServer catServer;
 
     @Autowired
-    public ImageController(ImageServer imageServer, BookServer bookServer, CatServer catServer) {
+    public ImageController(ImageServer imageServer,
+                           BookServer bookServer,
+                           CatServer catServer) {
+
         this.imageServer = imageServer;
         this.bookServer = bookServer;
         this.catServer = catServer;
@@ -36,44 +39,59 @@ public class ImageController {
 
     @GetMapping("/admin/images")
     public String showImages(Model model){
-        model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("imageWrapper", new ImageWrapper());
+        populateModel(model);
         return "images";
     }
 
     @GetMapping("/image/{id}")
-    public void showImageById(@PathVariable("id") Long id, HttpServletResponse response) throws IOException {
-        Image image = imageServer.findById(id);
-        response.setContentType(image.getMimeType());
-        InputStream is = new ByteArrayInputStream(image.getData());
-        IOUtils.copy(is, response.getOutputStream());
+    public void showImageById(@PathVariable("id") Long id, HttpServletResponse response) {
+        try {
+            Image image = imageServer.findById(id);
+            response.setContentType(image.getMimeType());
+            InputStream is = new ByteArrayInputStream(image.getData());
+            IOUtils.copy(is, response.getOutputStream());
+        } catch (IOException | IllegalArgumentException e) {
+            // TODO log this situation
+        }
     }
 
     @PostMapping("/admin/newImage")
-    public String processNewImage(@RequestParam Image image, Model model){
-        try {
-            imageServer.persist(image);
+    public String processNewImage(@Valid ImageWrapper imageWrapper, Errors errors, Model model){
+        if (errors.hasErrors()) {
+            populateModel(model);
+            return "images";
         }
-        catch (TransactionSystemException e) {
-            Throwable t = e.getCause();
-            while ((t != null) && !(t instanceof ConstraintViolationException)) {
-                t = t.getCause();
-            }
-            if (t instanceof ConstraintViolationException) {
-                ConstraintViolationException cve = (ConstraintViolationException) t;
-                model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
-                model.addAttribute("mainCategories", catServer.getMainCategories());
-                model.addAttribute("constraintViolations", cve.getConstraintViolations());
-                return "images";
-            }
+        try {
+            imageServer.persist(imageWrapper.getImage());
+        }
+        catch (IllegalArgumentException e) {
+            // TODO log this situation
+            return "redirect:/home";
         }
         return "redirect:/admin/images";
     }
 
     @GetMapping("/admin/deleteImage/{id}")
-    public String deleteImage(@PathVariable("id") Long id){
-        bookServer.updateImageByImageId(id, imageServer.findByIsDefaultIsTrue());
-        imageServer.deleteById(id);
+    public String deleteImage(@PathVariable("id") Long imageId){
+        try {
+            if (imageServer.isDefaultImage(imageId)) {
+                // TODO log this situation
+                System.out.println("trying to delete default image");
+                return "redirect:/home";
+            }
+            bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
+            imageServer.deleteById(imageId);
+        } catch (IllegalArgumentException e) {
+            // TODO log this situation
+            System.out.println("image does not exist: " + e.getMessage());
+            return "redirect:/home";
+        }
         return "redirect:/admin/images";
+    }
+
+    private void populateModel(Model model) {
+        model.addAttribute("allMetaInfo", imageServer.getAllMetaInfo());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
     }
 }
