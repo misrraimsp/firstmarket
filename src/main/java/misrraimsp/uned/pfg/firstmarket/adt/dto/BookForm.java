@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.validation.*;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.*;
 
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;

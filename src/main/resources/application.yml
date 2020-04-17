@@ -13,7 +13,7 @@ spring:
 schedule:
    garbage-collection:
       cron: 0 15,30,45 * ? * *
-      fixedRateString: PT60S
+      #fixed-rate-string: PT60S
 
 validation:
    numeric:
@@ -36,19 +36,22 @@ validation:
       price: ^[\d]{0,9}([.][\d]{1,2})*$ # dependency with PriceIntervals enum, so keep an eye on it
 
 security:
+   lock:
+      num-of-attempts: 2
+      locking-minutes: 10
    token:
       expiration-in-minutes: 2
    random-password:
-      numOfLowerCase: 2
-      numOfUpperCase: 2
-      numOfDigit: 2
+      num-of-lower-case: 2
+      num-of-upper-case: 2
+      num-of-digit: 2
       size: 10
 
 front-end:
    search-criteria:
-      numOfAuthors: 4
-      numOfPublishers: 5
-      numOfLanguages: 6
+      num-of-authors: 4
+      num-of-publishers: 5
+      num-of-languages: 6
 
 pagination:
    default-size:

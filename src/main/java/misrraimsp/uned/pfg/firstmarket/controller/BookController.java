@@ -1,11 +1,11 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;

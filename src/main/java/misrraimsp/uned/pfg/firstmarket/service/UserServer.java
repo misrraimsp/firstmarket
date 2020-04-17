@@ -2,20 +2,22 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.security.LoginAttemptService;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,7 +34,6 @@ public class UserServer implements UserDetailsService {
 
     private UserRepository userRepository;
     private SecurityTokenRepository securityTokenRepository;
-    private SecurityTokenProperties securityTokenProperties;
     private UserDeletionRepository userDeletionRepository;
 
     private ProfileServer profileServer;
@@ -40,22 +41,25 @@ public class UserServer implements UserDetailsService {
     private CartServer cartServer;
     private PurchaseServer purchaseServer;
 
+    private SecurityTokenProperties securityTokenProperties;
     private SecurityRandomPasswordProperties securityRandomPasswordProperties;
+
+    private LoginAttemptService loginAttemptService;
 
     @Autowired
     public UserServer(UserRepository userRepository,
                       SecurityTokenRepository securityTokenRepository,
-                      SecurityTokenProperties securityTokenProperties,
                       UserDeletionRepository userDeletionRepository,
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
                       PurchaseServer purchaseServer,
-                      SecurityRandomPasswordProperties securityRandomPasswordProperties) {
+                      SecurityTokenProperties securityTokenProperties,
+                      SecurityRandomPasswordProperties securityRandomPasswordProperties,
+                      LoginAttemptService loginAttemptService) {
 
         this.userRepository = userRepository;
         this.securityTokenRepository = securityTokenRepository;
-        this.securityTokenProperties = securityTokenProperties;
         this.userDeletionRepository = userDeletionRepository;
 
         this.profileServer = profileServer;
@@ -63,14 +67,28 @@ public class UserServer implements UserDetailsService {
         this.cartServer = cartServer;
         this.purchaseServer = purchaseServer;
 
+        this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
+
+        this.loginAttemptService = loginAttemptService;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException, LockedException {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new UsernameNotFoundException("User '" + email + "' not found");
+            throw new UsernameNotFoundException("User not found");
+        } else if (loginAttemptService.isLocked(email)) {
+            throw new LockedException("locked");
+        } else {
+            return user;
+        }
+    }
+
+    public User getUserByEmail(String email) throws IllegalArgumentException {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new IllegalArgumentException("email not found");
         }
         return user;
     }
@@ -79,7 +97,7 @@ public class UserServer implements UserDetailsService {
     // new cart created if not specified
     public User persist(UserForm userForm, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) {
         if (roles == null){
-            roles = Arrays.asList(roleServer.findByName("ROLE_USER"));
+            roles = Collections.singletonList(roleServer.findByName("ROLE_USER"));
         }
         if (cart == null){
             cart = new Cart();

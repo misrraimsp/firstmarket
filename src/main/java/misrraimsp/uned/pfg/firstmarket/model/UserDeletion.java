@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 
 import javax.persistence.*;
 import java.util.Date;

@@ -34,6 +34,7 @@
                     <hr/>
                     <!-- images -->
                     <table class="table">
+                        <!-- table head -->
                         <thead class="thead-light">
                             <tr>
                                 <th>Image</th>
@@ -43,17 +44,24 @@
                                 <th></th>
                             </tr>
                         </thead>
+                        <!-- table body -->
                         <tbody>
                             <tr th:each="mi : ${pageOfEntities}">
+                                <!-- image visualization -->
                                 <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
+                                <!-- image name -->
                                 <td><span th:text="${mi.name}">name</span></td>
+                                <!-- is default -->
                                 <td>
                                     <span th:if="${mi.default}"><i class="text-info fas fa-check-double fa-lg"></i></span>
                                     <span th:unless="${mi.default}">-</span>
                                 </td>
+                                <!-- image MIME type -->
                                 <td><span th:text="${mi.mimeType}">mimeType</span></td>
+                                <!-- actions -->
                                 <td>
                                     <div class="d-flex justify-content-around">
+                                        <!-- set as default -->
                                         <div class="mr-auto">
                                             <form th:action="@{/admin/setDefaultImage}" method="POST" action="#">
                                                 <input type="hidden" name="id" th:value="${mi.id}"/>
@@ -66,6 +74,7 @@
                                                 </button>
                                             </form>
                                         </div>
+                                        <!-- delete -->
                                         <div>
                                             <button th:if="${mi.default}" disabled class="btn btn-sm btn-outline-secondary">
                                                 <i class='fas fa-trash-alt'></i>

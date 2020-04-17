@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.validation;
 
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidIsbn;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

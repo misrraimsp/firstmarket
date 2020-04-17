@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 
 import javax.persistence.*;
 import java.math.BigDecimal;

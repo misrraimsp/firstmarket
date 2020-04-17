@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.validation.ValidTextBasic;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidTextBasic;
 
 @Data
 public class ProfileForm {

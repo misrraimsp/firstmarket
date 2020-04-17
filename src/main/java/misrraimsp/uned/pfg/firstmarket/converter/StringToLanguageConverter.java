@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 

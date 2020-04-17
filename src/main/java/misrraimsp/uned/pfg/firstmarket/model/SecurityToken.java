@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 
 import javax.persistence.*;
 import java.util.Date;

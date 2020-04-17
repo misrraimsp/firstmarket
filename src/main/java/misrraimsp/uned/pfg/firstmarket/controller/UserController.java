@@ -3,10 +3,10 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.*;
-import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
@@ -86,7 +86,7 @@ public class UserController {
         }
         // manage email-already-exists situations
         else if (userServer.emailExists(userForm.getEmail())) {
-            User user = (User) userServer.loadUserByUsername(userForm.getEmail());
+            User user = userServer.getUserByEmail(userForm.getEmail());
             // user is suspended (the user has deleted his account)
             if (user.isSuspended()){
                 // there is a valid restart_user token sent waiting for email confirmation
@@ -129,7 +129,7 @@ public class UserController {
             Long userId;
             if (isRestarting) {
                 securityEvent = SecurityEvent.RESTART_USER;
-                userId = ((User) userServer.loadUserByUsername(userForm.getEmail())).getId();
+                userId = userServer.getUserByEmail(userForm.getEmail()).getId();
             }
             else {
                 securityEvent = SecurityEvent.NEW_USER;
@@ -206,7 +206,7 @@ public class UserController {
     @PostMapping("/resetPassword")
     public String processResetPassword(@RequestParam String email) {
         try {
-            User user = (User) userServer.loadUserByUsername(email);
+            User user = userServer.getUserByEmail(email);
             applicationEventPublisher.publishEvent(
                     new OnEmailConfirmationNeededEvent(SecurityEvent.RESET_PASSWORD, user.getId(), null)
             );

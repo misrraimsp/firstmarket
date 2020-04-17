@@ -45,7 +45,9 @@ public class ImageController {
     }
 
     @GetMapping("/image/{id}")
-    public void showImageById(@PathVariable("id") Long id, HttpServletResponse response) {
+    public void showImageById(@PathVariable("id") Long id,
+                              HttpServletResponse response) {
+
         try {
             Image image = imageServer.findById(id);
             response.setContentType(image.getMimeType());
@@ -113,7 +115,8 @@ public class ImageController {
     }
 
     @GetMapping("/admin/deleteImage/{id}")
-    public String deleteImage(@PathVariable("id") Long imageId){
+    public String deleteImage(@PathVariable("id") Long imageId) {
+
         try {
             if (imageServer.isDefaultImage(imageId)) {
                 // TODO log this situation
@@ -130,7 +133,10 @@ public class ImageController {
         return "redirect:/admin/images";
     }
 
-    private void populateModel(Model model, String pageNo, String pageSize) {
+    private void populateModel(Model model,
+                               String pageNo,
+                               String pageSize) {
+
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
                 Integer.parseInt(pageSize),

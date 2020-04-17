@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.event;
 
-import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import org.springframework.context.ApplicationEvent;
 
 

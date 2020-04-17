@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidStock;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;

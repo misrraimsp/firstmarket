@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.Languages;
-import misrraimsp.uned.pfg.firstmarket.config.appParameters.PriceIntervals;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;

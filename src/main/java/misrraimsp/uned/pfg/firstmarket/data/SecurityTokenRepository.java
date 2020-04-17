@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.data;
 
-import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.springframework.data.repository.CrudRepository;

@@ -2,8 +2,8 @@ package misrraimsp.uned.pfg.firstmarket.event.listener;
 
 import lombok.SneakyThrows;
 import misrraimsp.uned.pfg.firstmarket.adt.MailMessage;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
-import misrraimsp.uned.pfg.firstmarket.event.security.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.MailServer;

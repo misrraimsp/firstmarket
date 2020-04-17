@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.validation;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidImage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
