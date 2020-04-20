@@ -1,7 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -24,16 +23,13 @@ public class CategoryController {
 
     private CatServer catServer;
     private BookServer bookServer;
-    private ValidationRegexProperties validationRegexProperties;
 
     @Autowired
     public CategoryController(CatServer catServer,
-                              BookServer bookServer,
-                              ValidationRegexProperties validationRegexProperties) {
+                              BookServer bookServer) {
 
         this.catServer = catServer;
         this.bookServer = bookServer;
-        this.validationRegexProperties = validationRegexProperties;
     }
 
     @GetMapping("/admin/loadCategories")
@@ -101,7 +97,6 @@ public class CategoryController {
     private void populateModelToCategoryForm(Model model) {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
         model.addAttribute("descendants", new ArrayList<>());
     }
 

@@ -32,7 +32,7 @@
                             <div class="col-sm-4">
                                 <form class="needs-validation" novalidate th:action="@{/books}" method="GET" action="#">
                                     <div class="input-group mt-5">
-                                        <input class="form-control form-control-sm" type="text" name="q" placeholder="title, ISBN, author, publisher..." required th:pattern="${patterns.textQuery}">
+                                        <input class="form-control form-control-sm" type="text" name="q" placeholder="title, ISBN, author, publisher..." required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                                         <div class="input-group-append">
                                             <button class="btn btn-info btn-sm" type="submit">
                                                 <i class="fas fa-search"></i>

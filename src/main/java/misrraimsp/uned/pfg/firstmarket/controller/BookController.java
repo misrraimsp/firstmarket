@@ -2,8 +2,6 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
@@ -41,17 +39,13 @@ public class BookController {
     private UserServer userServer;
 
     private FrontEndProperties frontEndProperties;
-    private ValidationRegexProperties validationRegexProperties;
-    private ValidationNumericProperties validationNumericProperties;
 
     @Autowired
     public BookController(BookServer bookServer,
                           CatServer catServer,
                           ImageServer imageServer,
                           UserServer userServer,
-                          FrontEndProperties frontEndProperties,
-                          ValidationRegexProperties validationRegexProperties,
-                          ValidationNumericProperties validationNumericProperties) {
+                          FrontEndProperties frontEndProperties) {
 
         this.bookServer = bookServer;
         this.catServer = catServer;
@@ -59,8 +53,6 @@ public class BookController {
         this.userServer = userServer;
 
         this.frontEndProperties = frontEndProperties;
-        this.validationRegexProperties = validationRegexProperties;
-        this.validationNumericProperties = validationNumericProperties;
     }
 
     @GetMapping("/book/{id}")
@@ -121,8 +113,6 @@ public class BookController {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("patterns", validationRegexProperties);
-        model.addAttribute("numbers", validationNumericProperties);
         model.addAttribute("languages", Languages.values());
     }
 
@@ -176,7 +166,6 @@ public class BookController {
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
         return "books";
     }
 

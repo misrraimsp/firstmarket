@@ -29,7 +29,7 @@
                         <!-- comment -->
                         <div class="form-group">
                             <label for="comment">Your feedback matters, so feel free to leave us a comment:</label>
-                            <textarea class="form-control" rows="5" name="comment" id="comment" placeholder="enter your comment" th:pattern="${patterns.textLong}"></textarea>
+                            <textarea class="form-control" rows="5" name="comment" id="comment" placeholder="enter your comment" th:pattern="${@environment.getProperty('validation.regex.text-long')}"></textarea>
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <hr/>

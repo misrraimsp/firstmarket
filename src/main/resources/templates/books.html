@@ -36,7 +36,7 @@
                 <div class="col-sm-3 my-3">
                     <!-- search query -->
                     <div class="input-group">
-                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${patterns.textQuery}">
+                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${@environment.getProperty('validation.regex.text-query')}">
                         <div class="input-group-append">
                             <button class="btn btn-info btn-sm" id="searchTextBoxButton">
                                 <i class="fas fa-search"></i>
@@ -221,6 +221,7 @@
             <!-- footer -->
             <div th:replace="fragments/components::footer"></div>
         </div>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/ajaxCart.js}"></script>
         <script th:src="@{/js/accordion.js}"></script>
         <script th:src="@{/js/searchCriteria.js}"></script>

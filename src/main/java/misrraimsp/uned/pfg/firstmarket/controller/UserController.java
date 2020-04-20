@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.*;
@@ -31,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Calendar;
+import java.util.Objects;
 
 @Controller
 public class UserController {
@@ -40,29 +40,25 @@ public class UserController {
     private CatServer catServer;
     private ApplicationEventPublisher applicationEventPublisher;
     private MessageSource messageSource;
-    private ValidationRegexProperties validationRegexProperties;
 
     @Autowired
     public UserController(UserServer userServer,
                           PasswordEncoder passwordEncoder,
                           CatServer catServer,
                           ApplicationEventPublisher applicationEventPublisher,
-                          MessageSource messageSource,
-                          ValidationRegexProperties validationRegexProperties) {
+                          MessageSource messageSource) {
 
         this.userServer = userServer;
         this.passwordEncoder = passwordEncoder;
         this.catServer = catServer;
         this.applicationEventPublisher = applicationEventPublisher;
         this.messageSource = messageSource;
-        this.validationRegexProperties = validationRegexProperties;
     }
 
     @GetMapping("/newUser")
     public String showNewUserForm(Model model) {
         model.addAttribute("userForm", new UserForm());
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
         return "newUser";
     }
 
@@ -75,7 +71,7 @@ public class UserController {
             hasError = true;
             if (errors.hasGlobalErrors()){
                 for (ObjectError objectError : errors.getGlobalErrors()){
-                    if (objectError.getCode().equals("PasswordMatches")){
+                    if (Objects.equals(objectError.getCode(), "PasswordMatches")){
                         errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
                     }
                     else { // TODO log this state
@@ -120,7 +116,6 @@ public class UserController {
         }
         if (hasError) {
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("patterns", validationRegexProperties);
             return "newUser";
         }
         // complete process
@@ -177,7 +172,6 @@ public class UserController {
             model.addAttribute("firstName", user.getProfile().getFirstName());
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("patterns", validationRegexProperties);
             return "editEmail";
         }
         // trigger email confirmation
@@ -196,7 +190,6 @@ public class UserController {
     public String showResetPasswordForm(Model model, @AuthenticationPrincipal User authUser) {
         if (authUser == null) {
             model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("patterns", validationRegexProperties);
             return "resetPassword";
         }
         // authenticated users are not allowed to trigger the reset password process
@@ -311,7 +304,6 @@ public class UserController {
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("passwordForm", new PasswordForm());
-            model.addAttribute("patterns", validationRegexProperties);
             return "editPassword";
         }
         return "redirect:/home";
@@ -392,7 +384,6 @@ public class UserController {
             model.addAttribute("cartSize", user.getCart().getCartSize());
         }
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
     }
 
     @GetMapping("/user/cart")
@@ -428,7 +419,6 @@ public class UserController {
         model.addAttribute("cartSize", user.getCart().getCartSize());
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("deletionReasons", DeletionReason.values());
-        model.addAttribute("patterns", validationRegexProperties);
         return "deleteUser";
     }
 
@@ -455,7 +445,6 @@ public class UserController {
             model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
             model.addAttribute("deletionReasons", DeletionReason.values());
-            model.addAttribute("patterns", validationRegexProperties);
             return "deleteUser";
         }
         // complete deletion

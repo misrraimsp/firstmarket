@@ -16,14 +16,14 @@
                         <!-- email -->
                         <div class="form-group">
                             <label for="email">E-mail:</label>
-                            <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${patterns.email}">
+                            <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${@environment.getProperty('validation.regex.email')}">
                             <div class="invalid-feedback">Please fill out this field with your email</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('email')"></div>
                         <!-- password -->
                         <div class="form-group">
                             <label for="newPassword">Password:</label>
-                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${patterns.password}" th:title="#{password.invalidFormat}"/>
+                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${@environment.getProperty('validation.regex.password')}" th:title="#{password.invalidFormat}"/>
                             <div class="invalid-feedback" th:text="#{password.invalidFormat}">Please fill out this field with a valid password</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('password')"></div>
@@ -37,14 +37,14 @@
                         <!-- first name -->
                         <div class="form-group">
                             <label for="firstName">First Name:</label>
-                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${patterns.textBasic}">
+                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
                         <!-- last name -->
                         <div class="form-group">
                             <label for="lastName">Last Name:</label>
-                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${patterns.textBasic}">
+                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>

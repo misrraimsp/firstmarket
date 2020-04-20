@@ -1,6 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -22,19 +21,15 @@ public class HomeController {
     private CatServer catServer;
     private UserServer userServer;
 
-    private ValidationRegexProperties validationRegexProperties;
-
     @Autowired
     public HomeController(BookServer bookServer,
                           CatServer catServer,
-                          UserServer userServer,
-                          ValidationRegexProperties validationRegexProperties) {
+                          UserServer userServer) {
 
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.userServer = userServer;
 
-        this.validationRegexProperties = validationRegexProperties;
     }
 
     @GetMapping("/")
@@ -61,14 +56,12 @@ public class HomeController {
 
         model.addAttribute("pageOfEntities", bookServer.findAll(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
         return "home";
     }
 
     @GetMapping("/login")
     public String showLogin(Model model) {
         model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("patterns", validationRegexProperties);
         return "login";
     }
 
