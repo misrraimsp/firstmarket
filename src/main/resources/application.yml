@@ -69,6 +69,7 @@ mail:
       port: 587
    address: afirstmarket@gmail.com
    pw: expedienteXD3
+   content-type: text/html
 
 ---
 

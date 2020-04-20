@@ -30,6 +30,9 @@ public class MailServer {
     @Value("${mail.pw}")
     private String senderPassword;
 
+    @Value("${mail.content-type}")
+    private String contentType;
+
     private Properties properties;
 
     public MailServer(){
@@ -50,7 +53,7 @@ public class MailServer {
         message.setFrom(new InternetAddress(senderAddress));
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(mailMessage.getTo()));
         message.setSubject(mailMessage.getSubject());
-        message.setContent(mailMessage.getText(), "text/html");
+        message.setContent(mailMessage.getText(), contentType);
 
         Transport.send(message);
     }
