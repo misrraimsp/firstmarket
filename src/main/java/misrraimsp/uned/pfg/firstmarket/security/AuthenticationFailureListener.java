@@ -17,18 +17,18 @@ import java.util.Calendar;
 @Component
 public class AuthenticationFailureListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
 
-    private LoginAttemptService loginAttemptService;
+    private LockManager lockManager;
     private UserServer userServer;
     private MailServer mailServer;
     private SecurityLockProperties securityLockProperties;
 
     @Autowired
-    public AuthenticationFailureListener(LoginAttemptService loginAttemptService,
+    public AuthenticationFailureListener(LockManager lockManager,
                                          UserServer userServer,
                                          MailServer mailServer,
                                          SecurityLockProperties securityLockProperties) {
 
-        this.loginAttemptService = loginAttemptService;
+        this.lockManager = lockManager;
         this.userServer = userServer;
         this.mailServer = mailServer;
         this.securityLockProperties = securityLockProperties;
@@ -39,9 +39,9 @@ public class AuthenticationFailureListener implements ApplicationListener<Authen
         String email = (String) event.getAuthentication().getPrincipal();
         if (userServer.emailExists(email)){
             // cache failure
-            loginAttemptService.loginFailed(email);
+            lockManager.loginFail(email);
             // send email if just locked
-            if (loginAttemptService.isLocked(email)) {
+            if (lockManager.isLocked(email)) {
                 User user = userServer.getUserByEmail(email);
                 // Build the email message
                 Calendar calendar = Calendar.getInstance();

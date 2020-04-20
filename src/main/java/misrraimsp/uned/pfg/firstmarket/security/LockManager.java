@@ -11,13 +11,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class LoginAttemptService {
+public class LockManager {
 
     private LoadingCache<String, Integer> loginFailuresCache;
     private SecurityLockProperties securityLockProperties;
 
     @Autowired
-    public LoginAttemptService(SecurityLockProperties securityLockProperties) {
+    public LockManager(SecurityLockProperties securityLockProperties) {
         super();
         this.securityLockProperties = securityLockProperties;
         // specify the load-new-key operation
@@ -34,11 +34,11 @@ public class LoginAttemptService {
         ;
     }
 
-    public void loginSucceeded(String key) {
+    public void loginSuccess(String key) {
         loginFailuresCache.invalidate(key);
     }
 
-    public void loginFailed(String key) {
+    public void loginFail(String key) {
         int attempts;
         try {
             attempts = loginFailuresCache.get(key);

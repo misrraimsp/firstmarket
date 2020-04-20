@@ -59,6 +59,17 @@ pagination:
       book-home: 20
       book-search: 15
    default-index: 0
+
+mail:
+   smtp:
+      auth: true
+      starttls:
+         enable: true
+      host: smtp.gmail.com
+      port: 587
+   address: afirstmarket@gmail.com
+   pw: expedienteXD3
+
 ---
 
 spring:

@@ -1,5 +1,6 @@
-package misrraimsp.uned.pfg.firstmarket.security;
+package misrraimsp.uned.pfg.firstmarket.config;
 
+import misrraimsp.uned.pfg.firstmarket.security.CustomAuthenticationFailureHandler;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

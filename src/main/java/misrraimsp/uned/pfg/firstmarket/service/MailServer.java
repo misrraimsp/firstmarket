@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.MailMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.mail.*;
@@ -11,22 +12,33 @@ import java.util.Properties;
 @Service
 public class MailServer {
 
-    private Properties properties;
+    @Value("${mail.smtp.auth}")
+    private String auth;
 
-    private static final String senderAddress = "afirstmarket@gmail.com";
-    private static final String senderPassword = "expedienteXD3";
+    @Value("${mail.smtp.starttls.enable}")
+    private String enable;
+
+    @Value("${mail.smtp.host}")
+    private String host;
+
+    @Value("${mail.smtp.port}")
+    private String port;
+
+    @Value("${mail.address}")
+    private String senderAddress;
+
+    @Value("${mail.pw}")
+    private String senderPassword;
+
+    private Properties properties;
 
     public MailServer(){
         properties = new Properties();
-        properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.smtp.host", "smtp.gmail.com");
-        properties.put("mail.smtp.port", "587");
     }
-
 
     public void send(MailMessage mailMessage) throws MessagingException {
 
+        loadProperties();
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -41,5 +53,12 @@ public class MailServer {
         message.setContent(mailMessage.getText(), "text/html");
 
         Transport.send(message);
+    }
+
+    private void loadProperties() {
+        properties.put("mail.smtp.auth", auth);
+        properties.put("mail.smtp.starttls.enable", enable);
+        properties.put("mail.smtp.host", host);
+        properties.put("mail.smtp.port", port);
     }
 }

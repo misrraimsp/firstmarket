@@ -10,7 +10,7 @@ import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.model.*;
-import misrraimsp.uned.pfg.firstmarket.security.LoginAttemptService;
+import misrraimsp.uned.pfg.firstmarket.security.LockManager;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
@@ -44,7 +44,7 @@ public class UserServer implements UserDetailsService {
     private SecurityTokenProperties securityTokenProperties;
     private SecurityRandomPasswordProperties securityRandomPasswordProperties;
 
-    private LoginAttemptService loginAttemptService;
+    private LockManager lockManager;
 
     @Autowired
     public UserServer(UserRepository userRepository,
@@ -56,7 +56,7 @@ public class UserServer implements UserDetailsService {
                       PurchaseServer purchaseServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
-                      LoginAttemptService loginAttemptService) {
+                      LockManager lockManager) {
 
         this.userRepository = userRepository;
         this.securityTokenRepository = securityTokenRepository;
@@ -70,7 +70,7 @@ public class UserServer implements UserDetailsService {
         this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
 
-        this.loginAttemptService = loginAttemptService;
+        this.lockManager = lockManager;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class UserServer implements UserDetailsService {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
-        } else if (loginAttemptService.isLocked(email)) {
+        } else if (lockManager.isLocked(email)) {
             throw new LockedException("locked");
         } else {
             return user;

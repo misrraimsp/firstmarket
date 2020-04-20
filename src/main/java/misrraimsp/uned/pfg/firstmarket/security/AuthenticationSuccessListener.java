@@ -7,17 +7,17 @@ import org.springframework.security.authentication.event.AuthenticationSuccessEv
 import org.springframework.stereotype.Component;
 
 @Component
-public class AuthenticationSuccessEventListener implements ApplicationListener<AuthenticationSuccessEvent> {
+public class AuthenticationSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
-    private LoginAttemptService loginAttemptService;
+    private LockManager lockManager;
 
     @Autowired
-    public AuthenticationSuccessEventListener(LoginAttemptService loginAttemptService) {
-        this.loginAttemptService = loginAttemptService;
+    public AuthenticationSuccessListener(LockManager lockManager) {
+        this.lockManager = lockManager;
     }
 
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
         User user = (User) event.getAuthentication().getPrincipal();
-        loginAttemptService.loginSucceeded(user.getUsername());
+        lockManager.loginSuccess(user.getUsername());
     }
 }
