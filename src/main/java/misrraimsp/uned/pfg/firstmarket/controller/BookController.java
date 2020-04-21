@@ -10,6 +10,8 @@ import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,6 +34,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 public class BookController {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private BookServer bookServer;
     private CatServer catServer;
@@ -133,6 +137,12 @@ public class BookController {
                             @RequestParam(required = false) String q, //TODO validate this param
                             Model model,
                             @AuthenticationPrincipal User authUser){
+
+        LOGGER.trace("this is a trace message");
+        LOGGER.debug("this is a debug message");
+        LOGGER.info("this is an info message - {}", pageSize);
+        LOGGER.warn("this is a warn message");
+        LOGGER.error("this is an error message");
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),

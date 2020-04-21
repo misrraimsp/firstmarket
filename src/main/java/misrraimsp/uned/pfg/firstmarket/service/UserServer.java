@@ -15,6 +15,8 @@ import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;
 import org.passay.PasswordGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.LockedException;
@@ -31,6 +33,8 @@ import java.util.*;
 
 @Service
 public class UserServer implements UserDetailsService {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private UserRepository userRepository;
     private SecurityTokenRepository securityTokenRepository;
@@ -247,8 +251,7 @@ public class UserServer implements UserDetailsService {
             }
             securityTokenRepository.deleteById(securityToken.getId());
         });
-        //int numDeleted = securityTokenRepository.deleteByExpiryDateBefore(present);
-        System.out.println("Deleted at " + present + ": " + securityTokens.size());
+        LOGGER.info("Garbage collection: number of tokens deleted - {}", securityTokens.size());
     }
 
     public UserDeletion createUserDeletion(Long userId, String deletionReason, String comment) {

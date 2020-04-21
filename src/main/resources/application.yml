@@ -12,7 +12,8 @@ spring:
 
 schedule:
    garbage-collection:
-      cron: 0 15,30,45 * ? * *
+      #cron: 0 00,10,20,30,40, * ? * *
+      cron: 0 */5 * ? * *
       #fixed-rate-string: PT60S
 
 validation:
