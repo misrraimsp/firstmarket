@@ -1,11 +1,16 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ImagesWrapper;
+import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
+import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +35,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Controller
 public class ImageController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private ImageServer imageServer;
     private BookServer bookServer;
     private CatServer catServer;
@@ -42,20 +49,37 @@ public class ImageController {
         this.imageServer = imageServer;
         this.bookServer = bookServer;
         this.catServer = catServer;
+
+        LOGGER.trace("{} created", this.getClass().getName());
     }
 
     @GetMapping("/image/{id}")
-    public void showImageById(@PathVariable("id") Long id,
+    public String showImageById(@PathVariable("id") Long id,
                               HttpServletResponse response) {
 
+        InputStream inputStream = null;
         try {
             Image image = imageServer.findById(id);
             response.setContentType(image.getMimeType());
-            InputStream is = new ByteArrayInputStream(image.getData());
-            IOUtils.copy(is, response.getOutputStream());
-        } catch (IOException | IllegalArgumentException e) {
-            // TODO log this situation
+            inputStream = new ByteArrayInputStream(image.getData());
+            IOUtils.copy(inputStream, response.getOutputStream());
+        } catch (ImageNotFoundException e) {
+            LOGGER.warn("Image not found", e);
+            return "redirect:/home";
+        } catch (IOException e) {
+            LOGGER.error("File exception", e);
+            return "redirect:/home";
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    LOGGER.error("InputStream closing exception", e);
+                    return "redirect:/home";
+                }
+            }
         }
+        return null;
     }
 
     @GetMapping("/admin/images")
@@ -82,8 +106,12 @@ public class ImageController {
         try {
             imagesWrapper.getImages().forEach(image -> imageServer.persist(image));
         }
-        catch (IllegalArgumentException e) {
-            // TODO log this situation
+        catch (ImageNotFoundException e) {
+            LOGGER.error("Trying to persist an image with an id that not exist", e);
+            return "redirect:/home";
+        }
+        catch (BadImageException e) {
+            LOGGER.error("Trying to persist an image without data or id", e);
             return "redirect:/home";
         }
         return "redirect:/admin/images";
@@ -93,19 +121,17 @@ public class ImageController {
     public ModelAndView processSetDefaultImage(@RequestParam(name = "id") Optional<Long> optImageId,
                                                @RequestParam(name = "pn") Optional<String> optPageNo) {
 
-        AtomicBoolean badIdArgument = new AtomicBoolean(false);
+        AtomicBoolean imageNotFound = new AtomicBoolean(false);
         optImageId.ifPresent(imageId -> {
             try {
                 imageServer.setDefaultImage(imageId);
-            } catch (IllegalArgumentException e){
-                badIdArgument.set(true);
-            } catch (Exception e){
-                badIdArgument.set(true);
+            } catch (ImageNotFoundException e){
+                LOGGER.warn("Trying to set a non-existent image as default", e);
+                imageNotFound.set(true);
             }
         });
         ModelAndView modelAndView = new ModelAndView();
-        if (badIdArgument.get()) {
-            // TODO log this situation
+        if (imageNotFound.get()) {
             modelAndView.setViewName("redirect:/home");
             return modelAndView;
         }
@@ -116,18 +142,18 @@ public class ImageController {
 
     @GetMapping("/admin/deleteImage/{id}")
     public String deleteImage(@PathVariable("id") Long imageId) {
-
         try {
             if (imageServer.isDefaultImage(imageId)) {
-                // TODO log this situation
-                System.out.println("trying to delete default image");
+                LOGGER.warn("Trying to delete the default image (id={})", imageId);
                 return "redirect:/home";
             }
             bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
             imageServer.deleteById(imageId);
-        } catch (IllegalArgumentException e) {
-            // TODO log this situation
-            System.out.println("image does not exist: " + e.getMessage());
+        } catch (ImageNotFoundException e) {
+            LOGGER.warn("Trying to delete a non-existent image", e);
+            return "redirect:/home";
+        } catch (NoDefaultImageException e) {
+            LOGGER.error("There is no default image", e);
             return "redirect:/home";
         }
         return "redirect:/admin/images";

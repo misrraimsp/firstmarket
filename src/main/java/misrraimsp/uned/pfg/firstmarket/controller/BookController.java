@@ -57,6 +57,8 @@ public class BookController {
         this.userServer = userServer;
 
         this.frontEndProperties = frontEndProperties;
+
+        LOGGER.trace("{} created", this.getClass().getName());
     }
 
     @GetMapping("/book/{id}")

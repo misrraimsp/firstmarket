@@ -15,7 +15,7 @@ public interface ImageRepository extends CrudRepository<Image, Long> {
     @Query(value = "SELECT id,null AS data,is_default,mime_type,name FROM image ", nativeQuery = true)
     List<Image> getAllMetaInfo();
 
-    Image findByIsDefaultIsTrue();
+    List<Image> findByIsDefaultIsTrue();
 
     @Query(value = "SELECT id,1 AS data,is_default,mime_type,name FROM image ", nativeQuery = true)
     Page<Image> getPageOfMetaInfo(Pageable pageable);

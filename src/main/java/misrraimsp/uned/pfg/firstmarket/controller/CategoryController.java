@@ -4,6 +4,8 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +23,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Controller
 public class CategoryController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private CatServer catServer;
     private BookServer bookServer;
 
@@ -30,6 +34,7 @@ public class CategoryController {
 
         this.catServer = catServer;
         this.bookServer = bookServer;
+        LOGGER.trace("{} created", this.getClass().getName());
     }
 
     @GetMapping("/admin/loadCategories")

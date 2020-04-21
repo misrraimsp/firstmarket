@@ -1,6 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
+import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -28,7 +31,7 @@ public class ImageServer {
      * @param image
      * @return image or repositoryImage
      */
-    public Image persist(Image image) throws IllegalArgumentException {
+    public Image persist(Image image) throws ImageNotFoundException, BadImageException {
         if (image.getId() != null){ // image is already persisted
             return this.findById(image.getId());
         }
@@ -37,13 +40,12 @@ public class ImageServer {
             return (duplicatedImage != null) ? duplicatedImage : imageRepository.save(image);
         }
         else {
-            throw new IllegalArgumentException("Trying to persist an image without id or data");
+            throw new BadImageException();
         }
     }
 
     public Image findById(Long id) {
-        return imageRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("File not found with id " + id));
+        return imageRepository.findById(id).orElseThrow(() -> new ImageNotFoundException(id));
     }
 
     public List<Image> getAllMetaInfo() {
@@ -54,11 +56,15 @@ public class ImageServer {
         imageRepository.deleteById(id);
     }
 
-    public Image getDefaultImage() {
-        return imageRepository.findByIsDefaultIsTrue();
+    public Image getDefaultImage() throws NoDefaultImageException {
+        List<Image> images = imageRepository.findByIsDefaultIsTrue();
+        if (images.isEmpty()){
+            throw new NoDefaultImageException();
+        }
+        return images.get(0);
     }
 
-    public boolean isDefaultImage(Long imageId) throws IllegalArgumentException {
+    public boolean isDefaultImage(Long imageId) throws ImageNotFoundException {
         return this.findById(imageId).isDefault();
     }
 
@@ -67,12 +73,19 @@ public class ImageServer {
     }
 
     @Transactional
-    public void setDefaultImage(Long imageId) throws IllegalArgumentException {
-        Image oldDefaultImage = this.getDefaultImage();
+    public void setDefaultImage(Long imageId) throws ImageNotFoundException {
         Image newDefaultImage = this.findById(imageId);
-        oldDefaultImage.setDefault(false);
-        newDefaultImage.setDefault(true);
-        imageRepository.save(oldDefaultImage);
-        imageRepository.save(newDefaultImage);
+        Image oldDefaultImage = null;
+        try {
+            oldDefaultImage = this.getDefaultImage();
+        }
+        finally {
+            if (oldDefaultImage != null) {
+                oldDefaultImage.setDefault(false);
+                imageRepository.save(oldDefaultImage);
+            }
+            newDefaultImage.setDefault(true);
+            imageRepository.save(newDefaultImage);
+        }
     }
 }

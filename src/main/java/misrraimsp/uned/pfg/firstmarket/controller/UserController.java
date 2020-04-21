@@ -12,6 +12,8 @@ import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.model.UserDeletion;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -35,6 +37,8 @@ import java.util.Objects;
 @Controller
 public class UserController {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private UserServer userServer;
     private PasswordEncoder passwordEncoder;
     private CatServer catServer;
@@ -53,6 +57,8 @@ public class UserController {
         this.catServer = catServer;
         this.applicationEventPublisher = applicationEventPublisher;
         this.messageSource = messageSource;
+
+        LOGGER.trace("{} created", this.getClass().getName());
     }
 
     @GetMapping("/newUser")
