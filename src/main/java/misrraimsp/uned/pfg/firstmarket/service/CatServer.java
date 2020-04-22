@@ -5,6 +5,8 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
 import misrraimsp.uned.pfg.firstmarket.converter.CategoryConverter;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatpathRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.CategoryNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.model.Catpath;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,7 @@ public class CatServer {
         this.categoryConverter = categoryConverter;
     }
 
-    public void loadCategories() {
+    public void loadCategories() throws NoRootCategoryException {
         rootCategoryNode = new TreeNode<>(this.getRootCategory());
         directPaths = catpathRepository.getDirectPaths();
         populate(rootCategoryNode);
@@ -67,18 +69,19 @@ public class CatServer {
                 indentedCategory.setName(node.getData().getName());
             }
             else{
-                indentedCategory.setName("" +
-                        getIndent(node.getLevel()) +
-                        "" +
-                        node.getData().getName());
+                indentedCategory.setName(getIndent(node.getLevel()) + node.getData().getName());
             }
             list.add(indentedCategory);
         }
         return list;
     }
 
-    public Category getRootCategory(){
-        return categoryRepository.getRootCategory();
+    public Category getRootCategory() throws NoRootCategoryException {
+        List<Category> categories = categoryRepository.getRootCategory();
+        if (categories.isEmpty()) {
+            throw new NoRootCategoryException();
+        }
+        return categories.get(0);
     }
 
     /**
@@ -180,8 +183,7 @@ public class CatServer {
     }
 
     public Category findCategoryById(Long id) {
-        return categoryRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("Invalid category Id: " + id));
+        return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     private void populate(TreeNode<Category> node) {
@@ -204,7 +206,7 @@ public class CatServer {
         return !(originalCategory.getParent().getId().equals(modifiedCategory.getParent().getId()));
     }
 
-    public String getJSONStringCategories() {
+    public String getJSONStringCategories() throws NoRootCategoryException {
         return this.jsonStringify(this.getRootCategory());
     }
 

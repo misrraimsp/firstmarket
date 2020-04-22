@@ -12,7 +12,7 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
 
     //self-parenthood root category property
     @Query(value = "SELECT * FROM category WHERE id = parent_id", nativeQuery = true)
-    Category getRootCategory();
+    List<Category> getRootCategory();
 
     @Modifying(clearAutomatically = true)
     @Query("UPDATE Category c SET c.name = :name WHERE c.id = :id")
@@ -26,5 +26,4 @@ public interface CategoryRepository extends CrudRepository<Category, Long> {
     @Query("UPDATE Category c SET c.parent.id = :new_parent_id WHERE c.parent.id = :parent_id")
     void updateParentByParentId(@Param("parent_id") Long parent_id, @Param("new_parent_id") Long new_parent_id);
 
-    List<Category> findByParentId(Long id);
 }

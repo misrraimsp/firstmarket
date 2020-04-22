@@ -9,6 +9,7 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.security.LockManager;
 import org.passay.CharacterData;
@@ -122,8 +123,7 @@ public class UserServer implements UserDetailsService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("Invalid user Id: " + id));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public void addBookToCart(Long userId, Long bookId) {

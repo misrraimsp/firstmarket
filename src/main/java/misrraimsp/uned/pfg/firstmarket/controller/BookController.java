@@ -4,7 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
-import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.exception.*;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -62,40 +61,57 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}")
-    public String showBook(@PathVariable("id") Long id, Model model, @AuthenticationPrincipal User authUser){
-        if (authUser != null){
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
+    public String showBook(@PathVariable("id") Long id,
+                           Model model,
+                           @AuthenticationPrincipal User authUser) {
+
+        try {
+            populateModelWithUserInfo(model, authUser);
+            model.addAttribute("book", bookServer.findById(id));
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            return "book";
         }
-        model.addAttribute("book", bookServer.findById(id));
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        return "book";
+        catch (BookNotFoundException e) {
+            LOGGER.warn("Trying to access a non-existent Book", e);
+            return "redirect:/home";
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("There is an authenticated user who is not in the database searching by id", e);
+            return "redirect:/home";
+        }
+
     }
 
     @GetMapping("/admin/bookForm")
-    public String showBookForm(@RequestParam(name = "id") Optional<Long> optBookId, Model model){
-        AtomicBoolean badIdArgument = new AtomicBoolean(false);
+    public String showBookForm(@RequestParam(name = "id") Optional<Long> optBookId,
+                               Model model) {
+
+        AtomicBoolean bookNotFound = new AtomicBoolean(false);
         optBookId.ifPresentOrElse(
                 bookId -> {
                     try {
                         Book book = bookServer.findById(bookId);
                         model.addAttribute("bookForm", bookServer.convertBookToBookForm(book));
-                    } catch (IllegalArgumentException e) {
-                        badIdArgument.set(true);
+                    }
+                    catch (BookNotFoundException e) {
+                        LOGGER.warn("Trying to access a non-existent Book", e);
+                        bookNotFound.set(true);
                     }
                 },
                 () -> model.addAttribute("bookForm", new BookForm())
         );
-        if (badIdArgument.get()) {
-            return "redirect:/books";
+        if (bookNotFound.get()) {
+            return "redirect:/home";
         }
         populateModelToBookForm(model);
         return "bookForm";
     }
 
     @PostMapping("/admin/bookForm")
-    public String processBookForm(@Valid BookForm bookForm, Errors errors, Model model){
+    public String processBookForm(@Valid BookForm bookForm,
+                                  Errors errors,
+                                  Model model) {
+
         if (errors.hasErrors()) {
             populateModelToBookForm(model);
             return "bookForm";
@@ -103,28 +119,42 @@ public class BookController {
         try {
             Book book = bookServer.convertBookFormToBook(bookForm);
             if (book.getId() == null){
-                bookServer.persist(book);
+                book = bookServer.persist(book);
+                LOGGER.trace("Book persisted (id={})", book.getId());
             } else {
                 bookServer.edit(book);
+                LOGGER.trace("Book edited (id={})", book.getId());
             }
-        } catch (IsbnAlreadyExistsException e) {
+        }
+        catch (IsbnAlreadyExistsException e) {
             errors.rejectValue("isbn", "isbn.notUnique");
             populateModelToBookForm(model);
             return "bookForm";
         }
+        catch (ImageNotFoundException e) {
+            LOGGER.error("Trying to persist an Image-with-id that is not in the database searching by its id", e);
+            return "redirect:/home";
+        }
+        catch (BadImageException e) {
+            LOGGER.error("Trying to persist an image without data or id", e);
+            return "redirect:/home";
+        }
+        catch (BookNotFoundException e) {
+            LOGGER.error("Trying to edit a Book that is not in the database searching by its id");
+            return "redirect:/home";
+        }
         return "redirect:/books";
     }
 
-    private void populateModelToBookForm(Model model) {
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("languages", Languages.values());
-    }
-
     @GetMapping("/admin/deleteBook/{id}")
-    public String deleteBook(@PathVariable("id") Long id){
-        bookServer.deleteById(id);
+    public String deleteBook(@PathVariable("id") Long id) {
+        if (bookServer.existsBook(id)) {
+            bookServer.deleteById(id);
+            LOGGER.trace("Book deleted (id={})", id);
+        }
+        else {
+            LOGGER.warn("Trying to delete a non-existent Book (id={})", id);
+        }
         return "redirect:/books";
     }
 
@@ -140,45 +170,69 @@ public class BookController {
                             Model model,
                             @AuthenticationPrincipal User authUser){
 
-        LOGGER.trace("this is a trace message");
-        LOGGER.debug("this is a debug message");
-        LOGGER.info("this is an info message - {}", pageSize);
-        LOGGER.warn("this is a warn message");
-        LOGGER.error("this is an error message");
-
+        // paging
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
-        // root category if not specified
-        if (categoryId == null) {
-            categoryId = catServer.getRootCategory().getId();
+        // category
+        Category category;
+        try {
+            // root category by default
+            if (categoryId == null) {
+                categoryId = catServer.getRootCategory().getId();
+            }
+            category = catServer.findCategoryById(categoryId);
+        }
+        catch (NoRootCategoryException nrc) {
+            LOGGER.error("Root category not found", nrc);
+            return "redirect:/home";
+        }
+        catch (CategoryNotFoundException e) {
+            LOGGER.warn("Trying to find books with a non-existent Category. Root category set by default", e);
+            return "redirect:/books";
         }
 
+        // search
         Page<Book> books = bookServer.findSearchResults(categoryId, priceId, authorId, publisherId, languageId, q, pageable);
         Set<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, frontEndProperties.getNumOfAuthors());
         Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, frontEndProperties.getNumOfPublishers());
         Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, frontEndProperties.getNumOfLanguages());
-        Category category = catServer.findCategoryById(categoryId);
-        List<Category> childrenCategories = catServer.getChildren(category);
-        List<Category> categorySequence = catServer.getCategorySequence(category);
 
-        if (authUser != null){
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
+        // load model
+        try {
+            populateModelWithUserInfo(model, authUser);
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("There is an authenticated user who is not in the database searching by id", e);
+            return "redirect:/home";
         }
         model.addAttribute("pageOfEntities", books);
         model.addAttribute("category", category);
-        model.addAttribute("categorySequence", categorySequence);
-        model.addAttribute("childrenCategories", childrenCategories);
+        model.addAttribute("categorySequence", catServer.getCategorySequence(category));
+        model.addAttribute("childrenCategories", catServer.getChildren(category));
         model.addAttribute("prices", PriceIntervals.values());
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "books";
+    }
+
+    private void populateModelWithUserInfo(Model model, User authUser) throws UserNotFoundException {
+        if (authUser != null) {
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("firstName", user.getProfile().getFirstName());
+            model.addAttribute("cartSize", user.getCart().getCartSize());
+        }
+    }
+
+    private void populateModelToBookForm(Model model) {
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+        model.addAttribute("languages", Languages.values());
     }
 
 }

@@ -5,6 +5,9 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
+import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.Author;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
@@ -43,7 +46,11 @@ public class BookServer {
     }
 
     @Transactional
-    public Book persist(Book book) throws IsbnAlreadyExistsException {
+    public Book persist(Book book) throws
+            IsbnAlreadyExistsException,
+            ImageNotFoundException,
+            BadImageException {
+
         //check for isbn uniqueness
         if (this.isbnExists(book.getIsbn())){
             throw new IsbnAlreadyExistsException("There is a book with that isbn: " +  book.getIsbn());
@@ -57,7 +64,12 @@ public class BookServer {
     }
 
     @Transactional
-    public Book edit(Book book) throws IsbnAlreadyExistsException {
+    public Book edit(Book book) throws
+            IsbnAlreadyExistsException,
+            BookNotFoundException,
+            ImageNotFoundException,
+            BadImageException {
+
         //check for isbn uniqueness (allowing self-uniqueness)
         if (!this.findById(book.getId()).getIsbn().equals(book.getIsbn())){
             if (this.isbnExists(book.getIsbn())){
@@ -80,13 +92,8 @@ public class BookServer {
         return bookRepository.findAll(pageable);
     }
 
-    public Iterable<Book> findAll() {
-        return bookRepository.findAll();
-    }
-
     public Book findById(Long id) {
-        return bookRepository.findById(id).
-                orElseThrow(() -> new IllegalArgumentException("Invalid book Id: " + id));
+        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
     public void deleteById(Long id) {
@@ -127,7 +134,14 @@ public class BookServer {
         return (bookIds.isEmpty()) ? new HashSet<>() : bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
     }
 
-    public Page<Book> findSearchResults(Long categoryId, Set<String> priceIds, Set<Long> authorIds, Set<Long> publisherIds, Set<Languages> languageIds, String q, Pageable pageable) {
+    public Page<Book> findSearchResults(Long categoryId,
+                                        Set<String> priceIds,
+                                        Set<Long> authorIds,
+                                        Set<Long> publisherIds,
+                                        Set<Languages> languageIds,
+                                        String q,
+                                        Pageable pageable) {
+
         Set<Long> idsByCategory = bookRepository.findIdByAncestorCategoryId(categoryId);
         Set<Long> idsByAuthor = (authorIds != null) ? bookRepository.findIdByAuthorIds(authorIds) : null;
         Set<Long> idsByPublisher = (publisherIds != null) ? bookRepository.findIdByPublisherIds(publisherIds) : null;
@@ -189,4 +203,7 @@ public class BookServer {
         return result;
     }
 
+    public boolean existsBook(Long id) {
+        return bookRepository.existsById(id);
+    }
 }

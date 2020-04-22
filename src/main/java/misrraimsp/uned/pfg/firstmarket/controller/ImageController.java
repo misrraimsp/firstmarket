@@ -104,10 +104,13 @@ public class ImageController {
             return "images";
         }
         try {
-            imagesWrapper.getImages().forEach(image -> imageServer.persist(image));
+            imagesWrapper.getImages().forEach(image -> {
+                Image persistedImage = imageServer.persist(image);
+                LOGGER.trace("Image persisted (id={})", persistedImage.getId());
+            });
         }
         catch (ImageNotFoundException e) {
-            LOGGER.error("Trying to persist an image with an id that not exist", e);
+            LOGGER.error("Trying to persist an Image-with-id that is not in the database searching by its id", e);
             return "redirect:/home";
         }
         catch (BadImageException e) {
@@ -125,6 +128,7 @@ public class ImageController {
         optImageId.ifPresent(imageId -> {
             try {
                 imageServer.setDefaultImage(imageId);
+                LOGGER.trace("Default image changed (id={})", imageId);
             } catch (ImageNotFoundException e){
                 LOGGER.warn("Trying to set a non-existent image as default", e);
                 imageNotFound.set(true);
@@ -149,10 +153,13 @@ public class ImageController {
             }
             bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
             imageServer.deleteById(imageId);
-        } catch (ImageNotFoundException e) {
+            LOGGER.trace("Image deleted (id={})", imageId);
+        }
+        catch (ImageNotFoundException e) {
             LOGGER.warn("Trying to delete a non-existent image", e);
             return "redirect:/home";
-        } catch (NoDefaultImageException e) {
+        }
+        catch (NoDefaultImageException e) {
             LOGGER.error("There is no default image", e);
             return "redirect:/home";
         }
