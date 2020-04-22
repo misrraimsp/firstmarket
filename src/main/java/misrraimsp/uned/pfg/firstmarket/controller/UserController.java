@@ -6,19 +6,20 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.*;
+import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.model.UserDeletion;
+import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
+import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
@@ -35,30 +36,25 @@ import java.util.Calendar;
 import java.util.Objects;
 
 @Controller
-public class UserController {
+public class UserController extends BasicController {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
-    private UserServer userServer;
     private PasswordEncoder passwordEncoder;
-    private CatServer catServer;
     private ApplicationEventPublisher applicationEventPublisher;
     private MessageSource messageSource;
 
     @Autowired
     public UserController(UserServer userServer,
-                          PasswordEncoder passwordEncoder,
+                          BookServer bookServer,
                           CatServer catServer,
+                          ImageServer imageServer,
+                          PasswordEncoder passwordEncoder,
                           ApplicationEventPublisher applicationEventPublisher,
                           MessageSource messageSource) {
 
-        this.userServer = userServer;
+        super(userServer, bookServer, catServer, imageServer);
         this.passwordEncoder = passwordEncoder;
-        this.catServer = catServer;
         this.applicationEventPublisher = applicationEventPublisher;
         this.messageSource = messageSource;
-
-        LOGGER.trace("{} created", this.getClass().getName());
     }
 
     @GetMapping("/newUser")
@@ -75,26 +71,28 @@ public class UserController {
         boolean hasError = false;
         if (errors.hasErrors()) {
             hasError = true;
-            if (errors.hasGlobalErrors()){
-                for (ObjectError objectError : errors.getGlobalErrors()){
-                    if (Objects.equals(objectError.getCode(), "PasswordMatches")){
-                        errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
-                    }
-                    else { // TODO log this state
-                        System.out.println(objectError);
-                    }
-                }
-            }
+            handleMatchingPasswordError(errors);
         }
         // manage email-already-exists situations
         else if (userServer.emailExists(userForm.getEmail())) {
-            User user = userServer.getUserByEmail(userForm.getEmail());
+            User user;
+            try {
+                user = userServer.getUserByEmail(userForm.getEmail());
+            }
+            catch (EmailNotFoundException e) {
+                LOGGER.error("Theoretically unreachable state has been met: 'emailExists() say true, but getUserByEmail() throws an EmailNotFoundException' (email={})", userForm.getEmail(), e);
+                return "redirect:/home";
+            }
             // user is suspended (the user has deleted his account)
+            assert user != null;
             if (user.isSuspended()){
                 // there is a valid restart_user token sent waiting for email confirmation
                 if (userServer.isEmailConfirmationAlreadyNeededFor(user.getId(),SecurityEvent.RESTART_USER)){
                     hasError = true;
                     errors.rejectValue("email", "email.checkEmail");
+                    LOGGER.info("Trying to create a new user account with a valid {} token waiting for confirmation at: {}",
+                            SecurityEvent.RESTART_USER.name(),
+                            user.getEmail());
                 }
                 // normal restoring workflow
                 else {
@@ -107,17 +105,25 @@ public class UserController {
                 if (userServer.isEmailConfirmationAlreadyNeededFor(user.getId(),SecurityEvent.NEW_USER)){
                     hasError = true;
                     errors.rejectValue("email", "email.checkEmail");
+                    LOGGER.info("Trying to create a new user account with a valid {} token waiting for confirmation at: {}",
+                            SecurityEvent.NEW_USER.name(),
+                            user.getEmail());
                 }
                 // user is not complete but the new_user token has expired, so the user and the token are deleted and
                 // normal new user workflow goes on
                 else {
                     userServer.garbageCollection();
+                    LOGGER.info("A non-completed user, with expired {} token and email={}, is trying to create a new account. " +
+                            "Token and non-completed user database info has been deleted",
+                            SecurityEvent.NEW_USER.name(),
+                            user.getEmail());
                 }
             }
             // user is completed and not suspended, so that email can not be used again
             else {
                 hasError = true;
                 errors.rejectValue("email", "email.notUnique");
+                LOGGER.info("Trying to create a new user account with an already used email={}", user.getEmail());
             }
         }
         if (hasError) {
@@ -135,6 +141,7 @@ public class UserController {
             else {
                 securityEvent = SecurityEvent.NEW_USER;
                 userId = userServer.persist(userForm, passwordEncoder, null, null).getId();
+                LOGGER.trace("User created (still not completed) (id={})", userId);
             }
             // trigger email confirmation
             applicationEventPublisher.publishEvent(
@@ -142,41 +149,56 @@ public class UserController {
             );
             return "redirect:/emailConfirmationRequest";
         }
-        catch (Exception me) { //TODO log this situation
-            System.out.println("some problem with email sending at /newUser");
-            me.printStackTrace();
+        catch (EmailNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'trying to restore a user with an email " +
+                    "that is not present in the database' (email={})", userForm.getEmail(), e);
+            return "redirect:/home";
+        }
+        catch (Exception e) {
+            LOGGER.error("Some problem with email sending at /newUser", e);
             return "redirect:/home";
         }
     }
 
     @GetMapping("/user/editEmail")
     public String showEditEmailForm(Model model, @AuthenticationPrincipal User authUser) {
-        loadModel(model, authUser);
+        populateModelWithUserInfo(model, authUser);
+        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "editEmail";
     }
 
     @PostMapping("/user/editEmail")
-    public String processEditEmail(@RequestParam String password,
-                                   @RequestParam String editedEmail,
+    public String processEditEmail(@RequestParam(required = false) String password,
+                                   @RequestParam(required = false) String editedEmail,
                                    Model model,
                                    @AuthenticationPrincipal User authUser) {
 
         // error checks
         boolean hasError = false;
         String errorMessage = null;
-        if (!userServer.checkPassword(authUser.getId(), passwordEncoder, password)) { // check password
+        if (password == null) {
+            hasError = true;
+            errorMessage = messageSource.getMessage("password.empty", null, null);
+            LOGGER.debug("password empty on trying to change email (userId={})", authUser.getId());
+        }
+        else if (editedEmail == null) {
+            hasError = true;
+            errorMessage = messageSource.getMessage("email.empty", null, null);
+            LOGGER.debug("email empty on trying to change email (userId={})", authUser.getId());
+        }
+        else if (!userServer.checkPassword(authUser.getId(), passwordEncoder, password)) { // check password
             hasError = true;
             errorMessage = messageSource.getMessage("password.invalid", null, null);
+            LOGGER.debug("password error on trying to change email (userId={})", authUser.getId());
         }
         else if (userServer.emailExists(editedEmail)) { // check email uniqueness
             hasError = true;
             errorMessage = messageSource.getMessage("email.notUnique", null, null);
+            LOGGER.info("Trying email change with an already used one={} (userId={})", authUser.getEmail(), authUser.getId());
         }
         if (hasError) {
-            User user = userServer.findById(authUser.getId());
+            populateModelWithUserInfo(model, authUser);
             model.addAttribute("message", errorMessage);
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
             model.addAttribute("mainCategories", catServer.getMainCategories());
             return "editEmail";
         }
@@ -186,8 +208,9 @@ public class UserController {
                     new OnEmailConfirmationNeededEvent(SecurityEvent.EMAIL_CHANGE, authUser.getId(), editedEmail)
             );
         }
-        catch (Exception me) { //TODO log this situation
-            System.out.println("some problem with email sending");
+        catch (Exception e) {
+            LOGGER.error("Some problem with email sending at /user/editEmail", e);
+            return "redirect:/home";
         }
         return "redirect:/emailConfirmationRequest";
     }
@@ -198,12 +221,18 @@ public class UserController {
             model.addAttribute("mainCategories", catServer.getMainCategories());
             return "resetPassword";
         }
-        // authenticated users are not allowed to trigger the reset password process
+        LOGGER.warn("authenticated users are not allowed to trigger the reset password process (userId={})", authUser.getId());
         return "redirect:/home";
     }
 
     @PostMapping("/resetPassword")
-    public String processResetPassword(@RequestParam String email) {
+    public String processResetPassword(@RequestParam(required = false) String email, Model model) {
+        if (email == null) {
+            model.addAttribute("message", messageSource.getMessage("email.empty", null, null));
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            LOGGER.debug("email empty on trying to reset password");
+            return "resetPassword";
+        }
         try {
             User user = userServer.getUserByEmail(email);
             applicationEventPublisher.publishEvent(
@@ -211,32 +240,32 @@ public class UserController {
             );
             return "redirect:/emailConfirmationRequest";
         }
-        catch (UsernameNotFoundException e) { // catch email not found
+        catch (EmailNotFoundException e) { // catch email not found
+            LOGGER.debug("Trying to reset a password providing a non-existent email={}", email, e);
             return "redirect:/emailConfirmationRequest";
         }
-        catch (Exception me) { //TODO log this situation
-            System.out.println("some problem with email sending at /resetPassword");
-            me.printStackTrace();
+        catch (Exception e) {
+            LOGGER.error("Some problem with email sending at /resetPassword", e);
             return "redirect:/home";
         }
     }
 
     @GetMapping("/emailConfirmationRequest")
     public String showEmailConfirmationRequest(Model model, @AuthenticationPrincipal User authUser){
-        if (authUser != null) {
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-        }
+        populateModelWithUserInfo(model, authUser);
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "emailConfirmationRequest";
     }
 
     @GetMapping("/emailConfirmation")
-    public String processEmailConfirmation(@RequestParam("token") String token,
+    public String processEmailConfirmation(@RequestParam(required = false) String token,
                                            Model model,
                                            @AuthenticationPrincipal User authUser){
 
+        if (token == null) {
+            LOGGER.error("token not found at /emailConfirmation");
+            return "redirect:/home";
+        }
         // error checks
         SecurityToken securityToken = userServer.getSecurityToken(token);
         boolean hasError = false;
@@ -244,17 +273,15 @@ public class UserController {
         if (securityToken == null) { // check for invalid token
             hasError = true;
             errorMessage = messageSource.getMessage("auth.invalidToken", null, null);
+            LOGGER.debug("Trying to confirm email with a non-existent token={}", token);
         }
         else if ((securityToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime()) <= 0) { // check for expired token
             hasError = true;
             errorMessage = messageSource.getMessage("auth.expiredToken", null, null);
+            LOGGER.debug("Trying to confirm email with an expired token={}", token);
         }
         if (hasError) {
-            if (authUser != null) {
-                User user = userServer.findById(authUser.getId());
-                model.addAttribute("firstName", user.getProfile().getFirstName());
-                model.addAttribute("cartSize", user.getCart().getCartSize());
-            }
+            populateModelWithUserInfo(model, authUser);
             model.addAttribute("message", errorMessage);
             model.addAttribute("mainCategories", catServer.getMainCategories());
             return "emailConfirmationError";
@@ -264,6 +291,7 @@ public class UserController {
             switch (securityToken.getSecurityEvent()){
                 case NEW_USER:
                     userServer.setCompletedState(securityToken.getUser().getId(),true);
+                    LOGGER.trace("User created (id={})", securityToken.getUser().getId());
                     userServer.deleteSecurityToken(securityToken.getId());
                     applicationEventPublisher.publishEvent(
                             new OnNewUserEvent(securityToken.getUser().getId())
@@ -271,6 +299,7 @@ public class UserController {
                     return "redirect:/login";
                 case RESTART_USER:
                     userServer.setSuspendedState(securityToken.getUser().getId(),false);
+                    LOGGER.trace("User restored (id={})", securityToken.getUser().getId());
                     userServer.deleteSecurityToken(securityToken.getId());
                     applicationEventPublisher.publishEvent(
                             new OnRestartUserEvent(securityToken.getUser().getId())
@@ -278,6 +307,7 @@ public class UserController {
                     return "redirect:/login";
                 case EMAIL_CHANGE:
                     userServer.editEmail(securityToken.getUser().getId(), securityToken.getEditedEmail());
+                    LOGGER.trace("User email changed (id={})", securityToken.getUser().getId());
                     userServer.deleteSecurityToken(securityToken.getId());
                     applicationEventPublisher.publishEvent(
                             new OnEmailEditionEvent(securityToken.getUser().getId())
@@ -289,30 +319,34 @@ public class UserController {
                             new OnResetPasswordEvent(securityToken.getUser().getId(), randomPassword)
                     );
                     userServer.editPassword(securityToken.getUser().getId(), passwordEncoder, randomPassword);
+                    LOGGER.trace("User password reset (id={})", securityToken.getUser().getId());
                     userServer.deleteSecurityToken(securityToken.getId());
                     return "resetPasswordConfirmation";
                 default:
                     return "redirect:/home";
             }
         }
-        catch (Exception me) { //TODO log this situation
-            System.out.println("some problem with email sending at /emailConfirmation");
-            me.printStackTrace();
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'user(id={}) within a token(id={}) does not exist'",
+                    securityToken.getUser().getId(), securityToken.getId(), e);
+            return "redirect:/home";
+        }
+        catch (Exception e) {
+            LOGGER.error("Some problem with email sending at /emailConfirmation", e);
             return "redirect:/home";
         }
     }
 
-    @GetMapping("/editPassword")
-    public String showEditPasswordForm(Model model, @AuthenticationPrincipal User authUser){
-        if (authUser != null){
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("passwordForm", new PasswordForm());
-            return "editPassword";
+    @GetMapping("/editPassword") //open for user and admin
+    public String showEditPasswordForm(Model model, @AuthenticationPrincipal User authUser) {
+        if (authUser == null) {
+            LOGGER.warn("Not authenticated user trying to GET request edit password process");
+            return "redirect:/home";
         }
-        return "redirect:/home";
+        model.addAttribute("passwordForm", new PasswordForm());
+        populateModelWithUserInfo(model, authUser);
+        model.addAttribute("mainCategories", catServer.getMainCategories());
+        return "editPassword";
     }
 
     @PostMapping("/editPassword")
@@ -322,31 +356,33 @@ public class UserController {
                                       @AuthenticationPrincipal User authUser) {
 
         if (authUser != null){
-            // error checks
-            boolean hasError = false;
-            if (errors.hasErrors()) {
-                hasError = true;
-                if (errors.hasGlobalErrors()){
-                    for (ObjectError objectError : errors.getGlobalErrors()){
-                        if (objectError.getCode().equals("PasswordMatches")){
-                            errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
-                        }
-                        else{//debug TODO log this situation
-                            System.out.println(objectError);
-                        }
-                    }
+            try {
+                // error checks
+                boolean hasError = false;
+                if (errors.hasErrors()) {
+                    hasError = true;
+                    handleMatchingPasswordError(errors);
                 }
+                else if (!userServer.checkPassword(authUser.getId(),passwordEncoder, passwordForm.getCurrentPassword())){
+                    hasError = true;
+                    errors.rejectValue("currentPassword", "password.invalid");
+                    LOGGER.debug("password error on trying to change password (userId={})", authUser.getId());
+                }
+                if (hasError) {
+                    populateModelWithUserInfo(model, authUser);
+                    model.addAttribute("mainCategories", catServer.getMainCategories());
+                    return "editPassword";
+                }
+                // edit password
+                userServer.editPassword(authUser.getId(), passwordEncoder, passwordForm.getPassword());
+                LOGGER.trace("Password changed (userId={})", authUser.getId());
             }
-            else if (!userServer.checkPassword(authUser.getId(),passwordEncoder, passwordForm.getCurrentPassword())){
-                hasError = true;
-                errors.rejectValue("currentPassword", "password.invalid");
+            catch (UserNotFoundException e) {
+                LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
             }
-            if (hasError) {
-                loadModel(model, authUser);
-                return "editPassword";
-            }
-            // edit password
-            userServer.editPassword(authUser.getId(), passwordEncoder, passwordForm.getPassword());
+        }
+        else {
+            LOGGER.warn("Not authenticated user trying to POST request on edit password process");
         }
         return "redirect:/home";
     }
@@ -355,9 +391,11 @@ public class UserController {
     public String showProfileForm(Model model, @AuthenticationPrincipal User authUser){
         try {
             model.addAttribute("profileForm", userServer.getProfileForm(authUser.getId()));
-            loadModel(model, authUser);
-        } catch (IllegalArgumentException e){
-            //TODO log this situation
+            populateModelWithUserInfo(model, authUser);
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
             return "redirect:/home";
         }
         return "profileForm";
@@ -370,59 +408,65 @@ public class UserController {
                                      @AuthenticationPrincipal User authUser) {
 
         if (errors.hasErrors()) {
-            loadModel(model, authUser);
+            populateModelWithUserInfo(model, authUser);
+            model.addAttribute("mainCategories", catServer.getMainCategories());
             return "profileForm";
         }
         try {
             Profile profile = userServer.convertProfileFormToProfile(profileForm);
             userServer.editProfile(authUser.getId(), profile);
-        } catch (IllegalArgumentException e) {
-            //TODO log this situation
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
             return "redirect:/home";
         }
         return "redirect:/home";
     }
 
-    private void loadModel(Model model, @AuthenticationPrincipal User authUser) throws IllegalArgumentException {
-        if (authUser != null){
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-        }
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-    }
-
     @GetMapping("/user/cart")
-    public String showCart(@AuthenticationPrincipal User authUser, Model model){
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
-        model.addAttribute("items", user.getCart().getItems());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        return "cart";
+    public String showCart(@AuthenticationPrincipal User authUser, Model model) {
+        populateModelWithUserInfo(model, authUser);
+        try {
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("items", user.getCart().getItems());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            return "cart";
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
+            return "redirect:/home";
+        }
     }
 
     @GetMapping("/user/purchases")
     public String showPurchases(@AuthenticationPrincipal User authUser, Model model){
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
-        model.addAttribute("purchases", user.getPurchases());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        return "purchases";
+        populateModelWithUserInfo(model, authUser);
+        try {
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("purchases", user.getPurchases());
+            model.addAttribute("mainCategories", catServer.getMainCategories());
+            return "purchases";
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
+            return "redirect:/home";
+        }
     }
 
     @GetMapping("/user/addPurchase")
     public String processAddPurchase(@AuthenticationPrincipal User authUser){
-        userServer.addPurchase(authUser.getId());
+        try {
+            userServer.addPurchase(authUser.getId());
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
+        }
         return "redirect:/home";
     }
 
     @GetMapping("/user/deleteUser")
     public String showDeleteUserForm(Model model, @AuthenticationPrincipal User authUser) {
-        User user = userServer.findById(authUser.getId());
-        model.addAttribute("firstName", user.getProfile().getFirstName());
-        model.addAttribute("cartSize", user.getCart().getCartSize());
+        populateModelWithUserInfo(model, authUser);
         model.addAttribute("mainCategories", catServer.getMainCategories());
         model.addAttribute("deletionReasons", DeletionReason.values());
         return "deleteUser";
@@ -432,41 +476,64 @@ public class UserController {
     @PostMapping("/user/deleteUser")
     public String processDeleteUser(@RequestParam(required = false) String deletionReason,
                                     @RequestParam(required = false) String comment,
-                                    @RequestParam String password,
+                                    @RequestParam(required = false) String password,
                                     Model model,
                                     @AuthenticationPrincipal User authUser,
                                     HttpServletRequest request) {
 
-        User user = userServer.findById(authUser.getId());
-        // error checks
-        boolean hasError = false;
-        String errorMessage = null;
-        if (!userServer.checkPassword(authUser.getId(), passwordEncoder, password)) { // check password
-            hasError = true;
-            errorMessage = messageSource.getMessage("password.invalid", null, null);
-        }
-        if (hasError) {
-            model.addAttribute("message", errorMessage);
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
-            model.addAttribute("deletionReasons", DeletionReason.values());
-            return "deleteUser";
-        }
-        // complete deletion
-        userServer.setSuspendedState(authUser.getId(),true);
-        UserDeletion userDeletion = userServer.createUserDeletion(authUser.getId(), deletionReason, comment);
-        //logout
-        new SecurityContextLogoutHandler().logout(request, null, null);
-        // trigger user removal event
         try {
+            User user = userServer.findById(authUser.getId());
+            // error checks
+            boolean hasError = false;
+            String errorMessage = null;
+            if (password == null) {
+                hasError = true;
+                errorMessage = messageSource.getMessage("password.empty", null, null);
+                LOGGER.debug("password empty on trying to delete account (userId={})", authUser.getId());
+            }
+            else if (!userServer.checkPassword(authUser.getId(), passwordEncoder, password)) { // check password
+                hasError = true;
+                errorMessage = messageSource.getMessage("password.invalid", null, null);
+                LOGGER.debug("password error on trying to delete account (userId={})", authUser.getId());
+            }
+            if (hasError) {
+                model.addAttribute("message", errorMessage);
+                populateModelWithUserInfo(model,authUser);
+                model.addAttribute("mainCategories", catServer.getMainCategories());
+                model.addAttribute("deletionReasons", DeletionReason.values());
+                return "deleteUser";
+            }
+            // complete deletion
+            userServer.setSuspendedState(authUser.getId(),true);
+            LOGGER.trace("User suspended (id={})", authUser.getId());
+            UserDeletion userDeletion = userServer.createUserDeletion(authUser.getId(), deletionReason, comment);
+            // logout
+            new SecurityContextLogoutHandler().logout(request, null, null);
+            // trigger user removal event
             applicationEventPublisher.publishEvent(new OnDeleteUserEvent(userDeletion));
         }
-        catch (Exception me) { //TODO log this situation
-            System.out.println("some problem with email sending at /user/deleteUser");
-            me.printStackTrace();
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
+        }
+        catch (Exception e) {
+            LOGGER.error("Some problem with email sending at /user/deleteUser", e);
         }
         return "redirect:/home";
+    }
+
+    private void handleMatchingPasswordError(Errors errors) {
+        if (errors.hasGlobalErrors()){
+            for (ObjectError objectError : errors.getGlobalErrors()){
+                if (Objects.equals(objectError.getCode(), "PasswordMatches")){
+                    errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
+                    LOGGER.debug("Passwords does not match: {}", objectError.toString());
+                }
+                else {
+                    LOGGER.warn("There has been an unexpected global password-related error: {}", objectError.toString());
+                }
+            }
+        }
+        LOGGER.warn("There has been an unexpected non-global password-related error");
     }
 
 }

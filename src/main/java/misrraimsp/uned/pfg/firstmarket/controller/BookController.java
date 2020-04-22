@@ -10,8 +10,6 @@ import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,32 +30,19 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
-public class BookController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
-    private BookServer bookServer;
-    private CatServer catServer;
-    private ImageServer imageServer;
-    private UserServer userServer;
+public class BookController extends BasicController {
 
     private FrontEndProperties frontEndProperties;
 
     @Autowired
-    public BookController(BookServer bookServer,
+    public BookController(UserServer userServer,
+                          BookServer bookServer,
                           CatServer catServer,
                           ImageServer imageServer,
-                          UserServer userServer,
                           FrontEndProperties frontEndProperties) {
 
-        this.bookServer = bookServer;
-        this.catServer = catServer;
-        this.imageServer = imageServer;
-        this.userServer = userServer;
-
+        super(userServer, bookServer, catServer, imageServer);
         this.frontEndProperties = frontEndProperties;
-
-        LOGGER.trace("{} created", this.getClass().getName());
     }
 
     @GetMapping("/book/{id}")
@@ -218,14 +203,6 @@ public class BookController {
         model.addAttribute("languages", languages);
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "books";
-    }
-
-    private void populateModelWithUserInfo(Model model, User authUser) throws UserNotFoundException {
-        if (authUser != null) {
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-        }
     }
 
     private void populateModelToBookForm(Model model) {

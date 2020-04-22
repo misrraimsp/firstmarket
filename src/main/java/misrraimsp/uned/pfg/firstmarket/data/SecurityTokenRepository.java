@@ -14,8 +14,6 @@ public interface SecurityTokenRepository extends CrudRepository<SecurityToken, L
 
     SecurityToken findByToken(String token);
 
-    //int deleteByExpiryDateBefore(Date date);
-
     Set<SecurityToken> findByExpiryDateBefore(Date date);
 
     Set<SecurityToken> findByUserAndSecurityEventAndExpiryDateAfter(User user, SecurityEvent securityEvent, Date date);

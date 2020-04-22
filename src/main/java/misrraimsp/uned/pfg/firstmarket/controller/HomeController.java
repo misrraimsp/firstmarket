@@ -3,9 +3,8 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
+import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,25 +16,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
-public class HomeController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
-    private BookServer bookServer;
-    private CatServer catServer;
-    private UserServer userServer;
+public class HomeController extends BasicController {
 
     @Autowired
-    public HomeController(BookServer bookServer,
+    public HomeController(UserServer userServer,
+                          BookServer bookServer,
                           CatServer catServer,
-                          UserServer userServer) {
+                          ImageServer imageServer) {
 
-        this.bookServer = bookServer;
-        this.catServer = catServer;
-        this.userServer = userServer;
-
-        LOGGER.trace("{} created", this.getClass().getName());
-
+        super(userServer, bookServer, catServer, imageServer);
     }
 
     @GetMapping("/")
@@ -49,17 +38,12 @@ public class HomeController {
                            Model model,
                            @AuthenticationPrincipal User authUser){
 
-        if (authUser != null){
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("firstName", user.getProfile().getFirstName());
-            model.addAttribute("cartSize", user.getCart().getCartSize());
-        }
-
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
+        populateModelWithUserInfo(model, authUser);
         model.addAttribute("pageOfEntities", bookServer.findAll(pageable));
         model.addAttribute("mainCategories", catServer.getMainCategories());
         return "home";

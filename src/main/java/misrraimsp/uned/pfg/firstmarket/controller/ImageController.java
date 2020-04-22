@@ -8,9 +8,8 @@ import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
+import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,24 +33,15 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
-public class ImageController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
-    private ImageServer imageServer;
-    private BookServer bookServer;
-    private CatServer catServer;
+public class ImageController extends BasicController  {
 
     @Autowired
-    public ImageController(ImageServer imageServer,
+    public ImageController(UserServer userServer,
                            BookServer bookServer,
-                           CatServer catServer) {
+                           CatServer catServer,
+                           ImageServer imageServer) {
 
-        this.imageServer = imageServer;
-        this.bookServer = bookServer;
-        this.catServer = catServer;
-
-        LOGGER.trace("{} created", this.getClass().getName());
+        super(userServer, bookServer, catServer, imageServer);
     }
 
     @GetMapping("/image/{id}")

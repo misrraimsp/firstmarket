@@ -6,8 +6,8 @@ import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
+import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,20 +24,15 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
-public class CategoryController {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-
-    private CatServer catServer;
-    private BookServer bookServer;
+public class CategoryController extends BasicController {
 
     @Autowired
-    public CategoryController(CatServer catServer,
-                              BookServer bookServer) {
+    public CategoryController(UserServer userServer,
+                              BookServer bookServer,
+                              CatServer catServer,
+                              ImageServer imageServer) {
 
-        this.catServer = catServer;
-        this.bookServer = bookServer;
-        LOGGER.trace("{} created", this.getClass().getName());
+        super(userServer, bookServer, catServer, imageServer);
     }
 
     @GetMapping("/admin/loadCategories")

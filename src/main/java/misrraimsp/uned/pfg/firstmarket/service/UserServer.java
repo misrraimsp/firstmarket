@@ -9,6 +9,7 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.security.LockManager;
@@ -90,10 +91,10 @@ public class UserServer implements UserDetailsService {
         }
     }
 
-    public User getUserByEmail(String email) throws IllegalArgumentException {
+    public User getUserByEmail(String email) throws EmailNotFoundException {
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            throw new IllegalArgumentException("email not found");
+            throw new EmailNotFoundException(email);
         }
         return user;
     }
@@ -126,24 +127,24 @@ public class UserServer implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public void addBookToCart(Long userId, Long bookId) {
+    public void addBookToCart(Long userId, Long bookId) throws UserNotFoundException {
         cartServer.addBook(this.findById(userId).getCart(), bookId);
     }
 
-    public void incrementItemFromCart(Long userId, Long itemId) {
+    public void incrementItemFromCart(Long userId, Long itemId) throws UserNotFoundException {
         cartServer.incrementItem(this.findById(userId).getCart(), itemId);
     }
 
-    public void decrementItemFromCart(Long userId, Long itemId) {
+    public void decrementItemFromCart(Long userId, Long itemId) throws UserNotFoundException {
         cartServer.decrementItem(this.findById(userId).getCart(), itemId);
     }
 
-    public void removeItemFromCart(Long userId, Long itemId) {
+    public void removeItemFromCart(Long userId, Long itemId) throws UserNotFoundException {
         cartServer.removeItem(this.findById(userId).getCart(), itemId);
     }
 
     @Transactional
-    public void addPurchase(Long userId) {
+    public void addPurchase(Long userId) throws UserNotFoundException {
         User user = this.findById(userId);
         Purchase newPurchase = purchaseServer.create(cartServer.emptyCart(user.getCart()));
         if (newPurchase == null){
@@ -155,7 +156,7 @@ public class UserServer implements UserDetailsService {
         userRepository.save(user);
     }
 
-    public void editProfile(Long userId, Profile newProfile) throws IllegalArgumentException{
+    public void editProfile(Long userId, Profile newProfile) throws UserNotFoundException {
         profileServer.edit(this.findById(userId).getProfile().getId(), newProfile);
     }
 
@@ -163,31 +164,31 @@ public class UserServer implements UserDetailsService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public User editEmail(Long userId, String editedEmail) {
+    public User editEmail(Long userId, String editedEmail)  throws UserNotFoundException {
         User user = this.findById(userId);
         user.setEmail(editedEmail);
         return userRepository.save(user);
     }
 
-    public User setCompletedState(Long userId, boolean b) {
+    public User setCompletedState(Long userId, boolean b) throws UserNotFoundException {
         User user = this.findById(userId);
         user.setCompleted(b);
         return userRepository.save(user);
     }
 
-    public User setSuspendedState(Long userId, boolean b) {
+    public User setSuspendedState(Long userId, boolean b) throws UserNotFoundException {
         User user = this.findById(userId);
         user.setSuspended(b);
         return userRepository.save(user);
     }
 
-    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password) {
+    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password)  throws UserNotFoundException {
         User user = this.findById(userId);
         user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
 
-    public boolean checkPassword(Long userId, PasswordEncoder passwordEncoder, String candidatePassword) {
+    public boolean checkPassword(Long userId, PasswordEncoder passwordEncoder, String candidatePassword)  throws UserNotFoundException {
         User user = this.findById(userId);
         return this.checkPassword(passwordEncoder, candidatePassword, user.getPassword());
     }
@@ -254,7 +255,7 @@ public class UserServer implements UserDetailsService {
         LOGGER.info("Garbage collection: number of tokens deleted - {}", securityTokens.size());
     }
 
-    public UserDeletion createUserDeletion(Long userId, String deletionReason, String comment) {
+    public UserDeletion createUserDeletion(Long userId, String deletionReason, String comment) throws UserNotFoundException {
         User user = this.findById(userId);
         UserDeletion userDeletion = new UserDeletion();
         userDeletion.setUser(user);
@@ -274,7 +275,7 @@ public class UserServer implements UserDetailsService {
         ).size() != 0;
     }
 
-    public ProfileForm getProfileForm(Long userId) throws IllegalArgumentException {
+    public ProfileForm getProfileForm(Long userId) throws UserNotFoundException {
         return profileServer.convertProfileToProfileForm(this.findById(userId).getProfile());
     }
 
