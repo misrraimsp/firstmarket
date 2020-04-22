@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config.dev;
 
+import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,13 @@ public class DevelopmentMariaDBConfig {
 
         return args -> {
             LOGGER.warn("CommandLineRunner on dev-mariadb");
-            catServer.loadCategories();
+            try {
+                catServer.loadCategories();
+            }
+            catch (NoRootCategoryException e) {
+                LOGGER.error("Root category not found", e);
+                return;
+            }
         };
     }
 }

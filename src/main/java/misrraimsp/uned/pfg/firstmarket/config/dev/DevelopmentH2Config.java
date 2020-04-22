@@ -3,8 +3,11 @@ package misrraimsp.uned.pfg.firstmarket.config.dev;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
+import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +25,8 @@ import java.util.Arrays;
 @Configuration
 public class DevelopmentH2Config {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     @Bean
     public CommandLineRunner dataLoader(BookServer bookServer,
                                         CatServer catServer,
@@ -35,7 +40,7 @@ public class DevelopmentH2Config {
                                         PublisherServer publisherServer) {
 
         return args -> {
-            System.out.println("CommandLineRunner on dev-h2");
+            LOGGER.warn("CommandLineRunner on dev-h2");
 
             //Images
 
@@ -183,7 +188,13 @@ public class DevelopmentH2Config {
 
             //load categories
 
-            catServer.loadCategories();
+            try {
+                catServer.loadCategories();
+            }
+            catch (NoRootCategoryException e) {
+                LOGGER.error("Root category not found", e);
+                return;
+            }
 
             /*Authors
 

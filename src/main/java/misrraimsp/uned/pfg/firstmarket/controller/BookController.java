@@ -94,7 +94,7 @@ public class BookController {
                         model.addAttribute("bookForm", bookServer.convertBookToBookForm(book));
                     }
                     catch (BookNotFoundException e) {
-                        LOGGER.warn("Trying to access a non-existent Book", e);
+                        LOGGER.warn("Trying to edit a non-existent Book", e);
                         bookNotFound.set(true);
                     }
                 },

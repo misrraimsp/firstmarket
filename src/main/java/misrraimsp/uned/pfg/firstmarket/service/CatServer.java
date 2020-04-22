@@ -97,7 +97,7 @@ public class CatServer {
         return sequence;
     }
 
-    public List<Category> getDescendants(Long categoryId) throws IllegalArgumentException{
+    public List<Category> getDescendants(Long categoryId) throws CategoryNotFoundException{
         List<Category> list = new ArrayList<>();
         TreeNode<Category> subtreeRoot = null;
         for (TreeNode<Category> node : rootCategoryNode) {
@@ -107,7 +107,7 @@ public class CatServer {
             }
         }
         if (subtreeRoot == null) {
-            throw new IllegalArgumentException();
+            throw new CategoryNotFoundException(categoryId);
         }
         for (TreeNode<Category> node : subtreeRoot) {
             list.add(node.getData());
@@ -125,7 +125,7 @@ public class CatServer {
     }
 
     @Transactional
-    public void persist(Category category) {
+    public Category persist(Category category) {
         //Update Category info
         Category savedCategory = categoryRepository.save(category);
 
@@ -142,6 +142,8 @@ public class CatServer {
         nuevoCP.setDescendant(savedCategory);
         nuevoCP.setSize(0);
         this.save(nuevoCP);
+
+        return savedCategory;
     }
 
     @Transactional
@@ -170,14 +172,13 @@ public class CatServer {
     }
 
     @Transactional
-    public void deleteById(Long id) {
+    public void deleteCategory(Category deletingCategory) {
         //reducir -1 los catpath de los ancestros a los descendientes de la categoría a eliminar
-        catpathRepository.reduceCatpathsFromAncestorsToDescendantsOf(id);
+        catpathRepository.reduceCatpathsFromAncestorsToDescendantsOf(deletingCategory.getId());
         //eliminar los catpath que tienen a la categoría a eliminar
-        catpathRepository.deleteCatpathsOf(id);
+        catpathRepository.deleteCatpathsOf(deletingCategory.getId());
         //el abuelo de las categorías hijas de la categoría a eliminar pasa a ser su padre
-        Category deletingCategory = this.findCategoryById(id);
-        categoryRepository.updateParentByParentId(id, deletingCategory.getParent().getId());
+        categoryRepository.updateParentByParentId(deletingCategory.getId(), deletingCategory.getParent().getId());
         //eliminar la categoría
         categoryRepository.delete(deletingCategory);
     }
