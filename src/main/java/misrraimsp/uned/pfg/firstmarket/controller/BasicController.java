@@ -9,6 +9,7 @@ import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ObjectError;
@@ -24,17 +25,20 @@ public abstract class BasicController {
     protected BookServer bookServer;
     protected CatServer catServer;
     protected ImageServer imageServer;
+    protected MessageSource messageSource;
 
     @Autowired
     public BasicController(UserServer userServer,
                            BookServer bookServer,
                            CatServer catServer,
-                           ImageServer imageServer) {
+                           ImageServer imageServer,
+                           MessageSource messageSource) {
 
         this.userServer = userServer;
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.imageServer = imageServer;
+        this.messageSource = messageSource;
         LOGGER.trace("{} created", this.getClass().getName());
     }
 

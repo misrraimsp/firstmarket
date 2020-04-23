@@ -16,14 +16,14 @@
                         <!-- firstname -->
                         <div class="form-group">
                             <label for="firstName">First Name:</label>
-                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${patterns.textBasic}">
+                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
                         <!-- lastname -->
                         <div class="form-group">
                             <label for="lastName">Last Name:</label>
-                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${patterns.textBasic}">
+                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>

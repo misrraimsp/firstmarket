@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments/components::head('Not Found')"></head>
+    <body>
+        <div class="container-fluid bg-light">
+            <!-- header -->
+            <div th:replace="fragments/components::header"></div>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
+            <div th:replace="fragments/components::title(text = ${errorTitle})"></div>
+            <!-- Content -->
+            <div class="row bg-white">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <hr class="mb-4 mt-0"/>
+                    <div class="bg-light">
+                        <h4 class="px-2" th:text="${errorMessage}"></h4>
+                        <p class="px-2"><span th:replace="fragments/components::contactUs"></span></p>
+                    </div>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- footer -->
+            <div th:replace="fragments/components::fixedFooter"></div>
+        </div>
+    </body>
+</html>

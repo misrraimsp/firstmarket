@@ -38,21 +38,19 @@ public class UserController extends BasicController {
 
     private PasswordEncoder passwordEncoder;
     private ApplicationEventPublisher applicationEventPublisher;
-    private MessageSource messageSource;
 
     @Autowired
     public UserController(UserServer userServer,
                           BookServer bookServer,
                           CatServer catServer,
                           ImageServer imageServer,
+                          MessageSource messageSource,
                           PasswordEncoder passwordEncoder,
-                          ApplicationEventPublisher applicationEventPublisher,
-                          MessageSource messageSource) {
+                          ApplicationEventPublisher applicationEventPublisher) {
 
-        super(userServer, bookServer, catServer, imageServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource);
         this.passwordEncoder = passwordEncoder;
         this.applicationEventPublisher = applicationEventPublisher;
-        this.messageSource = messageSource;
     }
 
     @GetMapping("/newUser")

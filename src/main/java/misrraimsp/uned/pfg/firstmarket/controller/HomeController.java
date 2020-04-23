@@ -6,6 +6,7 @@ import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -22,9 +23,10 @@ public class HomeController extends BasicController {
     public HomeController(UserServer userServer,
                           BookServer bookServer,
                           CatServer catServer,
-                          ImageServer imageServer) {
+                          ImageServer imageServer,
+                          MessageSource messageSource) {
 
-        super(userServer, bookServer, catServer, imageServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource);
     }
 
     @GetMapping("/")

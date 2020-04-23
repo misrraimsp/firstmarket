@@ -1,6 +1,9 @@
 server:
    servlet:
       context-path: /firstmarket
+   error:
+      whitelabel:
+         enabled: false
 
 spring:
    profiles:

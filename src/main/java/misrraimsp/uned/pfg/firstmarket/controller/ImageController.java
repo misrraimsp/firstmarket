@@ -11,6 +11,7 @@ import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -39,9 +40,10 @@ public class ImageController extends BasicController  {
     public ImageController(UserServer userServer,
                            BookServer bookServer,
                            CatServer catServer,
-                           ImageServer imageServer) {
+                           ImageServer imageServer,
+                           MessageSource messageSource) {
 
-        super(userServer, bookServer, catServer, imageServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource);
     }
 
     private void populateModelToImage(Model model,

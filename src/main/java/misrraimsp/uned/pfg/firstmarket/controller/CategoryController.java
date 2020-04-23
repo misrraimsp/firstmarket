@@ -9,6 +9,7 @@ import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -30,9 +31,10 @@ public class CategoryController extends BasicController {
     public CategoryController(UserServer userServer,
                               BookServer bookServer,
                               CatServer catServer,
-                              ImageServer imageServer) {
+                              ImageServer imageServer,
+                              MessageSource messageSource) {
 
-        super(userServer, bookServer, catServer, imageServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource);
     }
 
     private void populateModelToCategoryForm(Model model) {
