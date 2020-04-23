@@ -267,7 +267,7 @@ public class UserServer implements UserDetailsService {
         return userDeletionRepository.save(userDeletion);
     }
 
-    public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) {
+    public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) throws UserNotFoundException {
         return securityTokenRepository.findByUserAndSecurityEventAndExpiryDateAfter(
                 this.findById(userId),
                 securityEvent,
@@ -281,5 +281,14 @@ public class UserServer implements UserDetailsService {
 
     public Profile convertProfileFormToProfile(ProfileForm profileForm) {
         return profileServer.convertProfileFormToProfile(profileForm);
+    }
+
+    public boolean hasRole(User authUser, String roleName) {
+        for (Role role : authUser.getRoles()) {
+            if (role.getName().equalsIgnoreCase(roleName)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

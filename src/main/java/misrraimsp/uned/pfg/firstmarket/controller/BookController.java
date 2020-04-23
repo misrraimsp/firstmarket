@@ -45,23 +45,24 @@ public class BookController extends BasicController {
         this.frontEndProperties = frontEndProperties;
     }
 
+    private void populateModelToBookForm(Model model) {
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+        model.addAttribute("languages", Languages.values());
+    }
+
     @GetMapping("/book/{id}")
     public String showBook(@PathVariable("id") Long id,
                            Model model,
                            @AuthenticationPrincipal User authUser) {
 
         try {
-            populateModelWithUserInfo(model, authUser);
+            populateModel(model, authUser);
             model.addAttribute("book", bookServer.findById(id));
-            model.addAttribute("mainCategories", catServer.getMainCategories());
             return "book";
         }
         catch (BookNotFoundException e) {
             LOGGER.warn("Trying to access a non-existent Book", e);
-            return "redirect:/home";
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("There is an authenticated user who is not in the database searching by id", e);
             return "redirect:/home";
         }
 
@@ -88,6 +89,7 @@ public class BookController extends BasicController {
         if (bookNotFound.get()) {
             return "redirect:/home";
         }
+        populateModel(model, null);
         populateModelToBookForm(model);
         return "bookForm";
     }
@@ -98,6 +100,7 @@ public class BookController extends BasicController {
                                   Model model) {
 
         if (errors.hasErrors()) {
+            populateModel(model, null);
             populateModelToBookForm(model);
             return "bookForm";
         }
@@ -112,7 +115,9 @@ public class BookController extends BasicController {
             }
         }
         catch (IsbnAlreadyExistsException e) {
+            LOGGER.debug("trying to save a book with an already used isbn={}", bookForm.getIsbn(), e);
             errors.rejectValue("isbn", "isbn.notUnique");
+            populateModel(model, null);
             populateModelToBookForm(model);
             return "bookForm";
         }
@@ -186,13 +191,7 @@ public class BookController extends BasicController {
         Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, frontEndProperties.getNumOfLanguages());
 
         // load model
-        try {
-            populateModelWithUserInfo(model, authUser);
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("There is an authenticated user who is not in the database searching by id", e);
-            return "redirect:/home";
-        }
+        populateModel(model, authUser);
         model.addAttribute("pageOfEntities", books);
         model.addAttribute("category", category);
         model.addAttribute("categorySequence", catServer.getCategorySequence(category));
@@ -201,15 +200,7 @@ public class BookController extends BasicController {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
-        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "books";
-    }
-
-    private void populateModelToBookForm(Model model) {
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("languages", Languages.values());
     }
 
 }

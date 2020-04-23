@@ -36,22 +36,27 @@ public class HomeController extends BasicController {
     public String showHome(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
                            @RequestParam(defaultValue = "${pagination.default-size.book-home}") String pageSize,
                            Model model,
-                           @AuthenticationPrincipal User authUser){
+                           @AuthenticationPrincipal User authUser) {
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
-        populateModelWithUserInfo(model, authUser);
+        populateModel(model, authUser);
         model.addAttribute("pageOfEntities", bookServer.findAll(pageable));
-        model.addAttribute("mainCategories", catServer.getMainCategories());
         return "home";
     }
 
     @GetMapping("/login")
-    public String showLogin(Model model) {
-        model.addAttribute("mainCategories", catServer.getMainCategories());
+    public String showLogin(Model model,
+                            @AuthenticationPrincipal User authUser) {
+
+        if (authUser != null) {
+            LOGGER.warn("Authenticated user trying to GET /login (id={})", authUser.getId());
+            return "redirect:/home";
+        }
+        populateModel(model, null);
         return "login";
     }
 

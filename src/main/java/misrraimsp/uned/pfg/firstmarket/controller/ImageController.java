@@ -44,6 +44,18 @@ public class ImageController extends BasicController  {
         super(userServer, bookServer, catServer, imageServer);
     }
 
+    private void populateModelToImage(Model model,
+                                      String pageNo,
+                                      String pageSize) {
+
+        Pageable pageable = PageRequest.of(
+                Integer.parseInt(pageNo),
+                Integer.parseInt(pageSize),
+                Sort.by("mime_type").descending().and(Sort.by("name").ascending()));
+
+        model.addAttribute("pageOfEntities", imageServer.getPageOfMetaInfo(pageable));
+    }
+
     @GetMapping("/image/{id}")
     public String showImageById(@PathVariable("id") Long id,
                               HttpServletResponse response) {
@@ -54,17 +66,21 @@ public class ImageController extends BasicController  {
             response.setContentType(image.getMimeType());
             inputStream = new ByteArrayInputStream(image.getData());
             IOUtils.copy(inputStream, response.getOutputStream());
-        } catch (ImageNotFoundException e) {
+        }
+        catch (ImageNotFoundException e) {
             LOGGER.warn("Image not found", e);
             return "redirect:/home";
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             LOGGER.error("File exception", e);
             return "redirect:/home";
-        } finally {
+        }
+        finally {
             if (inputStream != null) {
                 try {
                     inputStream.close();
-                } catch (IOException e) {
+                }
+                catch (IOException e) {
                     LOGGER.error("InputStream closing exception", e);
                 }
             }
@@ -75,10 +91,11 @@ public class ImageController extends BasicController  {
     @GetMapping("/admin/images")
     public String showImages(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
                              @RequestParam(defaultValue = "${pagination.default-size.image}") String pageSize,
-                             Model model){
+                             Model model) {
 
+        populateModel(model, null);
+        populateModelToImage(model, pageNo, pageSize);
         model.addAttribute("imagesWrapper", new ImagesWrapper());
-        populateModel(model, pageNo, pageSize);
         return "images";
     }
 
@@ -90,7 +107,8 @@ public class ImageController extends BasicController  {
                                   Model model){
 
         if (errors.hasErrors()) {
-            populateModel(model, pageNo, pageSize);
+            populateModel(model, null);
+            populateModelToImage(model, pageNo, pageSize);
             return "images";
         }
         try {
@@ -145,6 +163,7 @@ public class ImageController extends BasicController  {
             bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
             imageServer.deleteById(imageId);
             LOGGER.trace("Image deleted (id={})", imageId);
+            return "redirect:/admin/images";
         }
         catch (ImageNotFoundException e) {
             LOGGER.warn("Trying to delete a non-existent image", e);
@@ -154,19 +173,5 @@ public class ImageController extends BasicController  {
             LOGGER.error("There is no default image", e);
             return "redirect:/home";
         }
-        return "redirect:/admin/images";
-    }
-
-    private void populateModel(Model model,
-                               String pageNo,
-                               String pageSize) {
-
-        Pageable pageable = PageRequest.of(
-                Integer.parseInt(pageNo),
-                Integer.parseInt(pageSize),
-                Sort.by("mime_type").descending().and(Sort.by("name").ascending()));
-
-        model.addAttribute("pageOfEntities", imageServer.getPageOfMetaInfo(pageable));
-        model.addAttribute("mainCategories", catServer.getMainCategories());
     }
 }

@@ -35,6 +35,11 @@ public class CategoryController extends BasicController {
         super(userServer, bookServer, catServer, imageServer);
     }
 
+    private void populateModelToCategoryForm(Model model) {
+        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
+        model.addAttribute("descendants", new ArrayList<>());
+    }
+
     @GetMapping("/admin/loadCategories")
     public String loadCategories(){
         try {
@@ -51,8 +56,8 @@ public class CategoryController extends BasicController {
     @GetMapping("/admin/categories")
     public String showCategories(Model model) {
         try {
+            populateModel(model, null);
             model.addAttribute("jsonStringCategories", catServer.getJSONStringCategories());
-            model.addAttribute("mainCategories", catServer.getMainCategories());
         }
         catch (NoRootCategoryException e) {
             LOGGER.error("Root category not found", e);
@@ -62,7 +67,9 @@ public class CategoryController extends BasicController {
     }
 
     @GetMapping("/admin/categoryForm")
-    public String showCategoryForm(@RequestParam(name = "id") Optional<Long> optCategoryId, Model model){
+    public String showCategoryForm(@RequestParam(name = "id") Optional<Long> optCategoryId,
+                                   Model model) {
+
         AtomicBoolean categoryNotFound = new AtomicBoolean(false);
         optCategoryId.ifPresentOrElse(
                 categoryId -> {
@@ -84,13 +91,18 @@ public class CategoryController extends BasicController {
         if (categoryNotFound.get()) {
             return "redirect:/admin/categories";
         }
+        populateModel(model, null);
         return "categoryForm";
     }
 
     @PostMapping("/admin/categoryForm")
-    public String processCategoryForm(@Valid CategoryForm categoryForm, Errors errors, Model model){
+    public String processCategoryForm(@Valid CategoryForm categoryForm,
+                                      Errors errors,
+                                      Model model) {
+
         boolean isEdition = categoryForm.getCategoryId() != null;
         if (errors.hasErrors()) {
+            populateModel(model, null);
             populateModelToCategoryForm(model);
             if (isEdition){
                 try {
@@ -111,12 +123,6 @@ public class CategoryController extends BasicController {
             LOGGER.trace("Category persisted (id={})", category.getId());
         }
         return "redirect:/admin/loadCategories";
-    }
-
-    private void populateModelToCategoryForm(Model model) {
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("mainCategories", catServer.getMainCategories());
-        model.addAttribute("descendants", new ArrayList<>());
     }
 
     @Transactional
