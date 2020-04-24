@@ -222,9 +222,11 @@
             <div th:replace="fragments/components::footer"></div>
         </div>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
-        <script th:src="@{/js/ajaxCart.js}"></script>
         <script th:src="@{/js/accordion.js}"></script>
         <script th:src="@{/js/searchCriteria.js}"></script>
+        <!-- ajax cart -->
+        <a th:href="@{/login}" id="loginLink" style="display: none"></a>
+        <script th:src="@{/js/ajaxCart.js}"></script>
         <!-- pagination functionality -->
         <script th:replace="fragments/components::paginationMvcVariables"></script>
         <script th:src="@{/js/paginationLinks.js}"></script>

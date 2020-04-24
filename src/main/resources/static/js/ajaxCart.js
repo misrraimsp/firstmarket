@@ -4,10 +4,11 @@
 
 'use strict';
 
-let extractNumber = (str) => str.slice(str.indexOf("-") + 1);
 
 document.addEventListener("DOMContentLoaded", function() {
     let ajaxObject, i, button;
+
+    let extractNumber = (str) => str.slice(str.indexOf("-") + 1);
 
     //addBook
     let addBookButtons = document.getElementsByClassName("addBook");
@@ -16,16 +17,20 @@ document.addEventListener("DOMContentLoaded", function() {
         button.addEventListener("click", function(e) {
             ajaxObject = new XMLHttpRequest();
             let id = extractNumber(e.currentTarget.getAttribute("id"));
+            ajaxObject.open(
+                "GET",
+                "http://localhost:8080/firstmarket/ajaxCart/addBook/" + id,
+                true);
+            ajaxObject.setRequestHeader('isAjaxCartRequested', '1');
+            ajaxObject.send();
             ajaxObject.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("cart").setAttribute("data-count", this.responseText);
                 }
+                if (this.readyState == 4 && this.status == 401) {
+                    document.getElementById("loginLink").click();
+                }
             };
-            ajaxObject.open(
-                "GET",
-                "http://localhost:8080/firstmarket/user/addBook/" + id,
-                true);
-            ajaxObject.send();
         }, false);
     }
 
@@ -36,17 +41,21 @@ document.addEventListener("DOMContentLoaded", function() {
         button.addEventListener("click", function(e) {
             ajaxObject = new XMLHttpRequest();
             let id = extractNumber(e.currentTarget.getAttribute("id"));
+            ajaxObject.open(
+                "GET",
+                "http://localhost:8080/firstmarket/ajaxCart/incrementItem/" + id,
+                true);
+            ajaxObject.setRequestHeader('isAjaxCartRequested', '1');
+            ajaxObject.send();
             ajaxObject.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("cart").setAttribute("data-count", this.responseText);
                     document.getElementById("iq-" + id).innerHTML++;
                 }
+                if (this.readyState == 4 && this.status == 401) {
+                    document.getElementById("loginLink").click();
+                }
             };
-            ajaxObject.open(
-                "GET",
-                "http://localhost:8080/firstmarket/user/incrementItem/" + id,
-                true);
-            ajaxObject.send();
         }, false);
     }
 
@@ -57,6 +66,12 @@ document.addEventListener("DOMContentLoaded", function() {
         button.addEventListener("click", function(e) {
             ajaxObject = new XMLHttpRequest();
             let id = extractNumber(e.currentTarget.getAttribute("id"));
+            ajaxObject.open(
+                "GET",
+                "http://localhost:8080/firstmarket/ajaxCart/decrementItem/" + id,
+                true);
+            ajaxObject.setRequestHeader('isAjaxCartRequested', '1');
+            ajaxObject.send();
             ajaxObject.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("cart").setAttribute("data-count", this.responseText);
@@ -67,12 +82,10 @@ document.addEventListener("DOMContentLoaded", function() {
                         document.getElementById("i-" + id).style.display = "none";
                     }
                 }
+                if (this.readyState == 4 && this.status == 401) {
+                    document.getElementById("loginLink").click();
+                }
             };
-            ajaxObject.open(
-                "GET",
-                "http://localhost:8080/firstmarket/user/decrementItem/" + id,
-                true);
-            ajaxObject.send();
         }, false);
     }
 
@@ -83,17 +96,21 @@ document.addEventListener("DOMContentLoaded", function() {
         button.addEventListener("click", function(e) {
             ajaxObject = new XMLHttpRequest();
             let id = extractNumber(e.currentTarget.getAttribute("id"));
+            ajaxObject.open(
+                "GET",
+                "http://localhost:8080/firstmarket/ajaxCart/removeItem/" + id,
+                true);
+            ajaxObject.setRequestHeader('isAjaxCartRequested', '1');
+            ajaxObject.send();
             ajaxObject.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("cart").setAttribute("data-count", this.responseText);
                     document.getElementById("i-" + id).style.display = "none";
                 }
+                if (this.readyState == 4 && this.status == 401) {
+                    document.getElementById("loginLink").click();
+                }
             };
-            ajaxObject.open(
-                "GET",
-                "http://localhost:8080/firstmarket/user/removeItem/" + id,
-                true);
-            ajaxObject.send();
         }, false);
     }
 

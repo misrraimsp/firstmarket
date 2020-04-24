@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.CartRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Cart;
 import misrraimsp.uned.pfg.firstmarket.model.Item;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +32,7 @@ public class CartServer {
     }
 
     @Transactional
-    public void addBook(Cart cart, Long bookId) {
+    public void addBook(Cart cart, Long bookId) throws BookNotFoundException, ItemNotFoundException {
         List<Item> items = cart.getItems();
         //check if item already exist on user cart
         boolean needsCreation = true;
@@ -55,7 +57,7 @@ public class CartServer {
     }
 
     @Transactional
-    public void incrementItem(Cart cart, Long itemId) {
+    public void incrementItem(Cart cart, Long itemId) throws ItemNotFoundException {
         itemServer.increment(itemId);
         cart.setLastModified(LocalDateTime.now());
         cartRepository.save(cart);
@@ -67,7 +69,7 @@ public class CartServer {
      * in appropriate position
      */
     @Transactional
-    public void decrementItem(Cart cart, Long itemId) {
+    public void decrementItem(Cart cart, Long itemId) throws ItemNotFoundException {
         List<Item> items = cart.getItems();
         Item deletingItem = null;
         for (Item i : items) {
@@ -94,7 +96,7 @@ public class CartServer {
     }
 
     @Transactional
-    public void removeItem(Cart cart, Long itemId) {
+    public void removeItem(Cart cart, Long itemId) throws ItemNotFoundException {
         //update cart
         Item deletingItem = itemServer.findById(itemId);
         List<Item> items = cart.getItems();

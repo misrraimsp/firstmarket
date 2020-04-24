@@ -9,7 +9,9 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.security.LockManager;
@@ -127,19 +129,36 @@ public class UserServer implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public void addBookToCart(Long userId, Long bookId) throws UserNotFoundException {
+    public void addBookToCart(Long userId,
+                              Long bookId) throws
+            UserNotFoundException,
+            BookNotFoundException,
+            ItemNotFoundException {
+
         cartServer.addBook(this.findById(userId).getCart(), bookId);
     }
 
-    public void incrementItemFromCart(Long userId, Long itemId) throws UserNotFoundException {
+    public void incrementItemFromCart(Long userId,
+                                      Long itemId) throws
+            UserNotFoundException,
+            ItemNotFoundException {
+
         cartServer.incrementItem(this.findById(userId).getCart(), itemId);
     }
 
-    public void decrementItemFromCart(Long userId, Long itemId) throws UserNotFoundException {
+    public void decrementItemFromCart(Long userId,
+                                      Long itemId) throws
+            UserNotFoundException,
+            ItemNotFoundException {
+
         cartServer.decrementItem(this.findById(userId).getCart(), itemId);
     }
 
-    public void removeItemFromCart(Long userId, Long itemId) throws UserNotFoundException {
+    public void removeItemFromCart(Long userId,
+                                   Long itemId) throws
+            UserNotFoundException,
+            ItemNotFoundException {
+
         cartServer.removeItem(this.findById(userId).getCart(), itemId);
     }
 

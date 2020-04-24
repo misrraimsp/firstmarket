@@ -106,7 +106,9 @@
             </div>
             <!-- footer -->
             <div th:replace="fragments/components::footer"></div>
-            <script th:src="@{/js/ajaxCart.js}"></script>
         </div>
+        <!-- ajax cart -->
+        <a th:href="@{/login}" id="loginLink" style="display: none"></a>
+        <script th:src="@{/js/ajaxCart.js}"></script>
     </body>
 </html>
