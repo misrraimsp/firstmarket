@@ -216,6 +216,8 @@
                 <!-- right margin  -->
                 <div class="col-sm-1"></div>
             </div>
+            <!-- snackbar -->
+            <div th:replace="fragments/components::snackbar"></div>
             <!-- modal -->
             <div th:replace="fragments/components::deletingModal(entity = 'Book')"></div>
             <!-- footer -->
@@ -232,8 +234,8 @@
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationLegend.js}"></script>
         <!-- modal functionality -->
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
         <script>
-            let baseUrl = "http://localhost:8080/firstmarket/admin/deleteBook/";
             document.addEventListener("DOMContentLoaded", function() {
                 document.dispatchEvent(new CustomEvent('custom-htmlReady'));
             }, false);

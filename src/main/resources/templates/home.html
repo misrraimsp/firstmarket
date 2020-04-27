@@ -47,13 +47,16 @@
                     </div>
                 </div>
             </div>
-            <!-- books -->
+            <!-- main content -->
             <div class="row mt-4">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
+                    <!-- books -->
                     <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
                         <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${pageOfEntities}">
+                            <!-- card image -->
                             <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-image card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
+                            <!-- card body -->
                             <div class="card-body">
                                 <a th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none"><p class="card-title text-responsive text-info font-weight-bold" th:text="${book.title}">title</p></a>
                                 <div class="card-text">
@@ -64,16 +67,22 @@
                                     </small>
                                 </div>
                             </div>
+                            <!-- card footer -->
                             <div class="card-footer d-flex align-items-baseline">
                                 <div class="card-text mr-auto">
                                     <strong>
                                         <span th:text="${book.price}">price</span>€
                                     </strong>
                                 </div>
-                                <div>
+                                <div sec:authorize="!hasRole('ADMIN')">
                                     <button class="addBook btn btn-outline-info btn-sm" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
                                         <i class="fas fa-cart-plus mx-1 fa-lg"></i>
                                     </button>
+                                </div>
+                                <div sec:authorize="hasRole('ADMIN')">
+                                    <a class="btn btn-outline-info btn-sm" th:href="@{/admin/bookForm?id={id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                                        <i class="fas fa-pen mx-1 fa-lg"></i>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -81,6 +90,8 @@
                 </div>
                 <div class="col-sm-1"></div>
             </div>
+            <!-- snackbar -->
+            <div th:replace="fragments/components::snackbar"></div>
             <!-- pagination -->
             <div class="row mt-4">
                 <div class="col-sm-4"></div>
@@ -97,6 +108,7 @@
             <!-- footer -->
             <div th:replace="fragments/components::footer"></div>
         </div>
+        <script th:src="@{/js/enableTooltips.js}"></script>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <!-- ajax cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>

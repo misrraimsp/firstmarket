@@ -33,14 +33,15 @@
             <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <!-- tooltips -->
+        <script th:src="@{/js/enableTooltips.js}"></script>
+        <!-- categories dynamically generation -->
         <script th:utext="'let jsonStringCategories = \'' + ${jsonStringCategories} + '\';'"></script>
         <script th:src="@{/js/categoriesBuilder.js}"></script>
         <script th:src="@{/js/categoriesStyler.js}"></script>
         <!-- modal functionality -->
-        <script>
-            let baseUrl = "http://localhost:8080/firstmarket/admin/deleteCategory/";
-            // custom-htmlReady event is triggered at the end of categoriesBuilder job
-        </script>
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteCategory/\';'"></script>
+        <!--custom-htmlReady event is triggered at the end of categoriesBuilder job-->
         <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>

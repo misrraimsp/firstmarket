@@ -26,6 +26,10 @@ document.addEventListener("DOMContentLoaded", function() {
             ajaxObject.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
                     document.getElementById("cart").setAttribute("data-count", this.responseText);
+                    // snackbar
+                    let sbar = document.getElementById("snackbar");
+                    sbar.className = "show";
+                    setTimeout(function(){ sbar.className = sbar.className.replace("show", ""); }, 3000);
                 }
                 if (this.readyState == 4 && this.status == 401) {
                     document.getElementById("loginLink").click();

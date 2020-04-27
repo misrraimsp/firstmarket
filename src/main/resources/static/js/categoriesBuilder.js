@@ -49,6 +49,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         editCat = document.createElement("a");
         editCat.setAttribute("class", "btn btn-sm btn-outline-secondary");
+        editCat.setAttribute("data-toggle", "tooltip");
+        editCat.setAttribute("title", "Edit Category");
         editCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/categoryForm?id=" + category.id);
 
         editIcon = document.createElement("i");
@@ -60,6 +62,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
         deleteCat = document.createElement("button");
         deleteCat.setAttribute("class", "modalTrigger btn btn-sm btn-outline-secondary");
+        deleteCat.setAttribute("data-toggle", "tooltip");
+        deleteCat.setAttribute("title", "Delete Category");
         deleteCat.setAttribute("id", "del-" + category.id);
 
         deleteIcon = document.createElement("i");

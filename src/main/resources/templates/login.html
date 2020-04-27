@@ -29,13 +29,17 @@
                             <input class="form-control" type="password" id="password" placeholder="enter password" name="password" required>
                             <div class="invalid-feedback">Please fill out this field</div>
                         </div>
-                        <button class="btn btn-info px-5" type="submit">Login</button>
+                        <button class="btn btn-info px-5 mb-3" type="submit">Login</button>
                     </form>
                     <!-- new user link -->
-                    <span>New? Click <a class="text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
+                    <div class="mb-3">
+                        <span>New? Click <a class="text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
+                    </div>
                     <!-- forgot password? link -->
-                    <br/>
-                    <span>Forgot your password? Click <a class="text-info" th:href="@{/resetPassword}" style="text-decoration: none">here</a> to restore it.</span>
+                    <hr/>
+                    <div class="small text-muted mb-3">
+                        <span>Forgot your password? Click <a class="text-info" th:href="@{/resetPassword}" style="text-decoration: none">here</a> to restore it.</span>
+                    </div>
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
