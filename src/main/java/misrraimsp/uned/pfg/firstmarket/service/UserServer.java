@@ -274,13 +274,11 @@ public class UserServer implements UserDetailsService {
         LOGGER.info("Garbage collection: number of tokens deleted - {}", securityTokens.size());
     }
 
-    public UserDeletion createUserDeletion(Long userId, String deletionReason, String comment) throws UserNotFoundException {
+    public UserDeletion createUserDeletion(Long userId, DeletionReason deletionReason, String comment) throws UserNotFoundException {
         User user = this.findById(userId);
         UserDeletion userDeletion = new UserDeletion();
         userDeletion.setUser(user);
-        userDeletion.setDeletionReason((deletionReason == null) ?
-                DeletionReason.OTHER : DeletionReason.values()[Integer.parseInt(deletionReason)]
-        );
+        userDeletion.setDeletionReason((deletionReason == null) ? DeletionReason.OTHER : deletionReason);
         userDeletion.setComment(comment);
         userDeletion.setDate(Calendar.getInstance().getTime());
         return userDeletionRepository.save(userDeletion);

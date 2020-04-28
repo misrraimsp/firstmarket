@@ -9,7 +9,7 @@ public class CategoryForm {
 
     private Long categoryId;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String name;
 
     private Category parent;

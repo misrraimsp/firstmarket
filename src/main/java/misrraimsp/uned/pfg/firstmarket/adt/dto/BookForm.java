@@ -19,7 +19,7 @@ public class BookForm {
     @ValidIsbn
     private String isbn;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String title;
 
     private Long categoryId;
@@ -29,40 +29,40 @@ public class BookForm {
 
     private Long storedImageId;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorFirstName0;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorLastName0;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorFirstName1;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorLastName1;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorFirstName2;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorLastName2;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorFirstName3;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorLastName3;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorFirstName4;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorLastName4;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String publisherName;
 
-    @ValidPattern(pattern = "textLong", message = "{text.long}")
+    @ValidPattern(pattern = "textLong", message = "{validation.regex.text-long}")
     private String description;
 
     @ValidNumber(name = "pages", message = "{validation.numeric.pages}")
@@ -70,7 +70,7 @@ public class BookForm {
 
     private Languages language;
 
-    @ValidPattern(pattern = "price", message = "{price.notValid}")
+    @ValidPattern(pattern = "price", message = "{validation.regex.price}")
     private String price;
 
     @ValidNumber(name = "stock", message = "{validation.numeric.stock}")

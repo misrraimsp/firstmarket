@@ -78,7 +78,7 @@
                                 <!-------------------------------------------------------------------------Description-->
                                 <div class="form-group">
                                     <label for="description">Description:</label>
-                                    <textarea class="form-control" rows="5" th:field="*{description}" id="description" placeholder="enter description" th:pattern="${@environment.getProperty('validation.regex.text-long')}"></textarea>
+                                    <textarea class="form-control" rows="5" th:field="*{description}" id="description" placeholder="enter description"></textarea>
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('description')"></div>

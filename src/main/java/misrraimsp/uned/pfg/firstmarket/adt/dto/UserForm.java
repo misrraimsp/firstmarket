@@ -16,9 +16,9 @@ public class UserForm implements MatchingPassword {
     private String password;
     private String matchingPassword;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String firstName;
 
-    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String lastName;
 }

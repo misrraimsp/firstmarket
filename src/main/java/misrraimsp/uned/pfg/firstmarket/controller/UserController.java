@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.UserDeletionForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
@@ -493,14 +494,13 @@ public class UserController extends BasicController {
 
         populateModel(model, authUser);
         model.addAttribute("deletionReasons", DeletionReason.values());
+        model.addAttribute("userDeletionForm", new UserDeletionForm());
         return "deleteUser";
     }
 
-    //TODO validate comment input
     @PostMapping("/user/deleteUser")
-    public String processDeleteUser(@RequestParam(required = false) String deletionReason,
-                                    @RequestParam(required = false) String comment,
-                                    @RequestParam(required = false) String password,
+    public String processDeleteUser(@Valid UserDeletionForm userDeletionForm,
+                                    Errors errors,
                                     Model model,
                                     @AuthenticationPrincipal User authUser,
                                     HttpServletRequest request) {
@@ -508,27 +508,28 @@ public class UserController extends BasicController {
         try {
             // error checks
             boolean hasError = false;
-            String errorMessage = null;
-            if (password == null) {
+            if (errors.hasErrors()) {
                 hasError = true;
-                errorMessage = messageSource.getMessage("password.empty", null, null);
-                LOGGER.debug("password empty on trying to delete account (userId={})", authUser.getId());
+                LOGGER.debug("validation error on trying to delete account (userId={})", authUser.getId());
             }
-            else if (!userServer.checkPassword(authUser.getId(), passwordEncoder, password)) { // check password
+            if (!userServer.checkPassword(authUser.getId(), passwordEncoder, userDeletionForm.getPassword())) {
                 hasError = true;
-                errorMessage = messageSource.getMessage("password.invalid", null, null);
+                errors.rejectValue("password", "password.invalid");
                 LOGGER.debug("password error on trying to delete account (userId={})", authUser.getId());
             }
             if (hasError) {
                 populateModel(model,authUser);
-                model.addAttribute("message", errorMessage);
                 model.addAttribute("deletionReasons", DeletionReason.values());
                 return "deleteUser";
             }
             // complete deletion
             userServer.setSuspendedState(authUser.getId(),true);
             LOGGER.trace("User suspended (id={})", authUser.getId());
-            UserDeletion userDeletion = userServer.createUserDeletion(authUser.getId(), deletionReason, comment);
+            UserDeletion userDeletion = userServer.createUserDeletion(
+                    authUser.getId(),
+                    userDeletionForm.getDeletionReason(),
+                    userDeletionForm.getComment()
+            );
             // logout
             new SecurityContextLogoutHandler().logout(request, null, null);
             // trigger user removal event
