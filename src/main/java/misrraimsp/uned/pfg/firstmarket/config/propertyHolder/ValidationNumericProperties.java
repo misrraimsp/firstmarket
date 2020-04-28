@@ -9,13 +9,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "validation.numeric")
 public class ValidationNumericProperties {
 
-
-    private int pagesMin = 1;
-    private int pagesMax = 5000;
-
-    private int stockMin = 0;
-    private int stockMax = 100000000;
-
+    private int[] pages = {1,2000}; // min, max
+    private int[] stock = {0,1000000}; // min, max
     private int imageMaxSize = 500;
 
 }

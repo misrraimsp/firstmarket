@@ -23,10 +23,8 @@ schedule:
 
 validation:
    numeric:
-      pages-min: 1
-      pages-max: 5000
-      stock-min: 0
-      stock-max: 100000000
+      pages: 1,5000 # min,max
+      stock: 0,100000000 # min,max
       image-max-size: 512000 # in bytes (500KB)
    regex:
       email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$

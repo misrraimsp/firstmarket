@@ -3,7 +3,10 @@ package misrraimsp.uned.pfg.firstmarket.adt.dto;
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.*;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidImage;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidIsbn;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidNumber;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidPattern;
 
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;
@@ -13,64 +16,64 @@ public class BookForm {
 
     private Long bookId;
 
-    @ValidIsbn(message = "{isbn.error}")
+    @ValidIsbn
     private String isbn;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String title;
 
     private Long categoryId;
 
-    @ValidImage(message = "{image.error}")
+    @ValidImage
     private Image image;
 
     private Long storedImageId;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorFirstName0;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorLastName0;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorFirstName1;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorLastName1;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorFirstName2;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorLastName2;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorFirstName3;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorLastName3;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorFirstName4;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String authorLastName4;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String publisherName;
 
-    @ValidTextLong(message = "{text.long}")
+    @ValidPattern(pattern = "textLong", message = "{text.long}")
     private String description;
 
-    @ValidNumPages(message = "{number.range}")
-    private int numPages;
+    @ValidNumber(name = "pages", message = "{validation.numeric.pages}")
+    private int pages;
 
     private Languages language;
 
-    @ValidPrice(message = "{price.notValid}")
+    @ValidPattern(pattern = "price", message = "{price.notValid}")
     private String price;
 
-    @ValidStock(message = "{number.range}")
+    @ValidNumber(name = "stock", message = "{validation.numeric.stock}")
     private int stock;
 
     @PastOrPresent(message = "{year.notValid}")

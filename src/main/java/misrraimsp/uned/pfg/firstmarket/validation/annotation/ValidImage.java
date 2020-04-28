@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = ImageValidator.class)
 @Documented
 public @interface ValidImage {
-    String message() default "image error";
+    String message() default "{image.error}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

@@ -175,15 +175,15 @@
                                 </div>
                                 <!-------------------------------------------------------------------------Pages-->
                                 <div class="form-group">
-                                    <label for="numPages">Number of Pages:</label>
-                                    <input class="form-control" type="number" th:field="*{numPages}" id="numPages" placeholder="enter number of pages" th:min="${@environment.getProperty('validation.numeric.pages-min')}" th:max="${@environment.getProperty('validation.numeric.pages-max')}">
+                                    <label for="pages">Number of Pages:</label>
+                                    <input class="form-control" type="number" th:field="*{pages}" id="pages" placeholder="enter number of pages" th:min="${@environment.getProperty('validation.numeric.pages').split(',')[0]}" th:max="${@environment.getProperty('validation.numeric.pages').split(',')[1]}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
-                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('numPages')"></div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('pages')"></div>
                                 <!-------------------------------------------------------------------------Stock-->
                                 <div class="form-group">
                                     <label for="stock">Units in Stock:</label>
-                                    <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${@environment.getProperty('validation.numeric.stock-min')}" th:max="${@environment.getProperty('validation.numeric.stock-max')}">
+                                    <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${@environment.getProperty('validation.numeric.stock').split(',')[0]}" th:max="${@environment.getProperty('validation.numeric.stock').split(',')[1]}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('stock')"></div>

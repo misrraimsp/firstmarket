@@ -1,14 +1,14 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidTextBasic;
+import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidPattern;
 
 @Data
 public class ProfileForm {
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String firstName;
 
-    @ValidTextBasic(message = "{text.basic}")
+    @ValidPattern(pattern = "textBasic", message = "{text.basic}")
     private String lastName;
 }

@@ -38,7 +38,7 @@ public class Book {
 
     private String description;
 
-    private int numPages;
+    private int pages;
 
     private Languages language;
 

@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = IsbnValidator.class)
 @Documented
 public @interface ValidIsbn {
-    String message() default "ISBN checksum error";
+    String message() default "{isbn.error}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

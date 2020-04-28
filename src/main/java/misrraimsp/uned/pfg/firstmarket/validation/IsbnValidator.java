@@ -3,6 +3,8 @@ package misrraimsp.uned.pfg.firstmarket.validation;
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidIsbn;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -14,10 +16,9 @@ import java.util.regex.Pattern;
 
 public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
 
-    private ValidationRegexProperties validationRegexProperties;
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private Pattern pattern;
-    private Matcher matcher;
+    private ValidationRegexProperties validationRegexProperties;
 
     @Autowired
     public IsbnValidator(ValidationRegexProperties validationRegexProperties){
@@ -33,8 +34,8 @@ public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
     }
 
     private boolean validateFormat(String isbn) {
-        pattern = Pattern.compile(validationRegexProperties.getIsbnCode());
-        matcher = pattern.matcher(isbn);
+        Pattern pattern = Pattern.compile(validationRegexProperties.getIsbnCode());
+        Matcher matcher = pattern.matcher(isbn);
         return matcher.matches();
     }
 
@@ -42,12 +43,17 @@ public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
         List<Integer> numbers = this.getNumbers(isbn);
         int size = numbers.size();
         if (size == 10){
+            LOGGER.trace("Validating an ISBN code that is 10 digits in length");
             return checksum10(numbers);
         }
         else if (size == 13){
+            LOGGER.trace("Validating an ISBN code that is 13 digits in length");
             return checksum13(numbers);
         }
-        else return false;
+        else {
+            LOGGER.trace("Validating an ISBN code that is not 10 or 13 digits in length");
+            return false;
+        }
     }
 
     private List<Integer> getNumbers(String isbn) {

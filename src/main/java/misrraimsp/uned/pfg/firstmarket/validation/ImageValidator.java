@@ -4,6 +4,8 @@ import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericPr
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidImage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.ConstraintValidator;
@@ -14,11 +16,10 @@ import java.util.regex.Pattern;
 
 public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private ValidationRegexProperties validationRegexProperties;
     private ValidationNumericProperties validationNumericProperties;
-
-    private Pattern pattern;
-    private Matcher matcher;
 
     @Autowired
     public ImageValidator(ValidationRegexProperties validationRegexProperties,
@@ -35,13 +36,16 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
     public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
         if (object == null) {
             return true; //needed in case of using a stored image on newBook and editBook workflow
-        } else if (object instanceof Collection<?>) {
+        }
+        else if (object instanceof Collection<?>) {
             return this.validateImageCollection((Collection<Image>) object);
-        } else if (object instanceof Image){
+        }
+        else if (object instanceof Image){
             return this.validateImage((Image) object);
         }
         else {
-            throw new IllegalArgumentException("trying to use ImageValidator with an argument that is not of type Image, Collection<Image> or NULL");
+            LOGGER.warn("Trying to use ImageValidator with an argument that is not of type Image, Collection<Image> or NULL");
+            return false;
         }
     }
 
@@ -60,8 +64,8 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
     }
 
     private boolean validateName(String name) {
-        pattern = Pattern.compile(validationRegexProperties.getImageName());
-        matcher = pattern.matcher(name);
+        Pattern pattern = Pattern.compile(validationRegexProperties.getImageName());
+        Matcher matcher = pattern.matcher(name);
         return matcher.matches();
     }
 
@@ -70,8 +74,8 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
     }
 
     private boolean validateMimeType(String mimeType) {
-        pattern = Pattern.compile(validationRegexProperties.getImageMimeType());
-        matcher = pattern.matcher(mimeType);
+        Pattern pattern = Pattern.compile(validationRegexProperties.getImageMimeType());
+        Matcher matcher = pattern.matcher(mimeType);
         return matcher.matches();
     }
 

@@ -261,7 +261,7 @@ public class DevelopmentH2Config {
             bookForm1.setAuthorLastName4("");
             bookForm1.setPublisherName("Anaya");
             bookForm1.setLanguage(Languages.Spanish);
-            bookForm1.setNumPages(123);
+            bookForm1.setPages(123);
             bookForm1.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
             bookForm1.setPrice("19.99");
@@ -291,7 +291,7 @@ public class DevelopmentH2Config {
             bookForm2.setAuthorLastName4("");
             bookForm2.setPublisherName("Manning");
             bookForm2.setLanguage(Languages.English);
-            bookForm2.setNumPages(100);
+            bookForm2.setPages(100);
             bookForm2.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
             bookForm2.setPrice("59.89");
@@ -321,7 +321,7 @@ public class DevelopmentH2Config {
             bookForm3.setAuthorLastName4("");
             bookForm3.setPublisherName("Cabildo de Gran Canaria");
             bookForm3.setLanguage(Languages.German);
-            bookForm3.setNumPages(422);
+            bookForm3.setPages(422);
             bookForm3.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
             bookForm3.setPrice("0");
@@ -350,7 +350,7 @@ public class DevelopmentH2Config {
             bookForm4.setAuthorLastName4("Escohotado");
             bookForm4.setPublisherName("Planeta");
             bookForm4.setLanguage(Languages.French);
-            bookForm4.setNumPages(111);
+            bookForm4.setPages(111);
             bookForm4.setDescription("Breve comentario sobre los principales " +
                     "temas relacionados con la conectividad de computadores");
             bookForm4.setPrice("0.01");
@@ -380,7 +380,7 @@ public class DevelopmentH2Config {
             bookForm5.setAuthorLastName4("");
             bookForm5.setPublisherName("Cambridge");
             bookForm5.setLanguage(Languages.Portuguese);
-            bookForm5.setNumPages(128);
+            bookForm5.setPages(128);
             bookForm5.setDescription("");
             bookForm5.setPrice("19.99");
             bookForm5.setStock(100);
@@ -409,7 +409,7 @@ public class DevelopmentH2Config {
             bookForm6.setAuthorLastName4("");
             bookForm6.setPublisherName("Uned");
             bookForm6.setLanguage(Languages.Estonian);
-            bookForm6.setNumPages(123);
+            bookForm6.setPages(123);
             bookForm6.setDescription("");
             bookForm6.setPrice("55");
             bookForm6.setStock(100);
@@ -438,7 +438,7 @@ public class DevelopmentH2Config {
             bookForm7.setAuthorLastName4("");
             bookForm7.setPublisherName("Espasa");
             bookForm7.setLanguage(Languages.Czech);
-            bookForm7.setNumPages(599);
+            bookForm7.setPages(599);
             bookForm7.setDescription("");
             bookForm7.setPrice("14.99");
             bookForm7.setStock(1000);
@@ -467,7 +467,7 @@ public class DevelopmentH2Config {
             bookForm8.setAuthorLastName4("");
             bookForm8.setPublisherName("Alianza");
             bookForm8.setLanguage(Languages.Polish);
-            bookForm8.setNumPages(344);
+            bookForm8.setPages(344);
             bookForm8.setDescription("");
             bookForm8.setPrice("99.99");
             bookForm8.setStock(100);
@@ -496,7 +496,7 @@ public class DevelopmentH2Config {
             bookForm9.setAuthorLastName4("");
             bookForm9.setPublisherName("Anaya");
             bookForm9.setLanguage(Languages.Basque);
-            bookForm9.setNumPages(12);
+            bookForm9.setPages(12);
             bookForm9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
                     " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
             bookForm9.setPrice("199.95");

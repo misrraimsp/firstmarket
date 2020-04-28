@@ -31,7 +31,7 @@ public class BookConverter {
         book.setAuthors(this.convertBookFormAuthors(bookForm.getAuthors()));
         book.setPublisher(this.convertBookFormPublisher(bookForm.getPublisherName()));
         book.setDescription(bookForm.getDescription());
-        book.setNumPages(bookForm.getNumPages());
+        book.setPages(bookForm.getPages());
         book.setLanguage(bookForm.getLanguage());
         book.setPrice(this.convertBookFormPrice(bookForm.getPrice()));
         book.setStock(bookForm.getStock());
@@ -124,7 +124,7 @@ public class BookConverter {
         //
         bookForm.setPublisherName((book.getPublisher() != null) ? book.getPublisher().getName() : "");
         bookForm.setDescription(book.getDescription());
-        bookForm.setNumPages(book.getNumPages());
+        bookForm.setPages(book.getPages());
         bookForm.setLanguage(book.getLanguage());
         bookForm.setPrice(book.getPrice().toString());
         bookForm.setStock(book.getStock());
