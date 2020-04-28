@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.converter.MultipartFileToImageConverter;
+import misrraimsp.uned.pfg.firstmarket.converter.StringToDeletionReasonConverter;
 import misrraimsp.uned.pfg.firstmarket.converter.StringToLanguageConverter;
 import misrraimsp.uned.pfg.firstmarket.converter.StringToYearConverter;
 import org.springframework.context.MessageSource;
@@ -26,6 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new MultipartFileToImageConverter());
         registry.addConverter(new StringToYearConverter());
         registry.addConverter(new StringToLanguageConverter());
+        registry.addConverter(new StringToDeletionReasonConverter());
     }
 
     @Bean
