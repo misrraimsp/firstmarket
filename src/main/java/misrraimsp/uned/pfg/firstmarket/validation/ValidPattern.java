@@ -1,12 +1,10 @@
-package misrraimsp.uned.pfg.firstmarket.validation.annotation;
-
-import misrraimsp.uned.pfg.firstmarket.validation.ValidPatternValidator;
+package misrraimsp.uned.pfg.firstmarket.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
 import java.lang.annotation.*;
 
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.LOCAL_VARIABLE})
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = ValidPatternValidator.class)
 @Documented

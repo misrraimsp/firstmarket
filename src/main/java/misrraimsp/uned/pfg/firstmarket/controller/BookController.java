@@ -11,6 +11,7 @@ import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +30,8 @@ import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class BookController extends BasicController {
@@ -158,9 +161,22 @@ public class BookController extends BasicController {
                             @RequestParam(required = false) Set<Long> authorId,
                             @RequestParam(required = false) Set<Long> publisherId,
                             @RequestParam(required = false) Set<Languages> languageId,
-                            @RequestParam(required = false) String q, //TODO validate this param
+                            @RequestParam(required = false) String q,
+                            @Value(value = "${validation.regex.text-query:.*}") String qRegex,
                             Model model,
                             @AuthenticationPrincipal User authUser){
+
+        // ad hoc validation
+        boolean qIsValid = true;
+        if (q != null) {
+            Pattern pattern = Pattern.compile(qRegex);
+            Matcher matcher = pattern.matcher(q);
+            qIsValid = matcher.matches();
+            LOGGER.debug("String({}) validation with patternName(textQuery) (regex={}) has been {}", q, qRegex, qIsValid);
+            if (!qIsValid) {
+                q = null;
+            }
+        }
 
         // paging
         Pageable pageable = PageRequest.of(
@@ -202,6 +218,9 @@ public class BookController extends BasicController {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
+        if (!qIsValid) {
+            model.addAttribute("message", messageSource.getMessage("validation.regex.text-query", null, null));
+        }
         return "books";
     }
 

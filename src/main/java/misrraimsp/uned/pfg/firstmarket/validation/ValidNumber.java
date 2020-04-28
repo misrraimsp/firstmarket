@@ -1,6 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.validation.annotation;
-
-import misrraimsp.uned.pfg.firstmarket.validation.ValidNumberValidator;
+package misrraimsp.uned.pfg.firstmarket.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

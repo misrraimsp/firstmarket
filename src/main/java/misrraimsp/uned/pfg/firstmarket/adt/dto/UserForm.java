@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.PasswordMatches;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidPattern;
+import misrraimsp.uned.pfg.firstmarket.validation.PasswordMatches;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 
 @Data

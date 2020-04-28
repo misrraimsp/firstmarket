@@ -3,10 +3,10 @@ package misrraimsp.uned.pfg.firstmarket.adt.dto;
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidImage;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidIsbn;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidNumber;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidPattern;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidIsbn;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidNumber;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;

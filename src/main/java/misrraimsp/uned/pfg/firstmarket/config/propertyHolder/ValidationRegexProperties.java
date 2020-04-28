@@ -9,22 +9,24 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "validation.regex")
 public class ValidationRegexProperties {
 
-    private String email = ".";
+    private final String defaultRegex = ".*";
 
-    private String password = ".";
+    private String email = defaultRegex;
 
-    private String textBasic = ".";
-    private String textLong = ".";
-    private String textQuery = ".";
+    private String password = defaultRegex;
 
-    private String isbnCode = ".";
-    private String isbnFilter = ".";
+    private String textBasic = defaultRegex;
+    private String textLong = defaultRegex;
+    private String textQuery = defaultRegex;
 
-    private String imageMimeType = ".";
-    private String imageName = ".";
+    private String isbnCode = defaultRegex;
+    private String isbnFilter = defaultRegex;
 
-    private String year = ".";
+    private String imageMimeType = defaultRegex;
+    private String imageName = defaultRegex;
 
-    private String price = ".";
+    private String year = defaultRegex;
+
+    private String price = defaultRegex;
 
 }

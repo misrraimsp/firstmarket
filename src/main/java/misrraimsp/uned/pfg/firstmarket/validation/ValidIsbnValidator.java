@@ -2,7 +2,6 @@ package misrraimsp.uned.pfg.firstmarket.validation;
 
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidIsbn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +13,14 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IsbnValidator implements ConstraintValidator<ValidIsbn, String> {
+public class ValidIsbnValidator implements ConstraintValidator<ValidIsbn, String> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private ValidationRegexProperties validationRegexProperties;
 
     @Autowired
-    public IsbnValidator(ValidationRegexProperties validationRegexProperties){
+    public ValidIsbnValidator(ValidationRegexProperties validationRegexProperties){
         this.validationRegexProperties = validationRegexProperties;
     }
 

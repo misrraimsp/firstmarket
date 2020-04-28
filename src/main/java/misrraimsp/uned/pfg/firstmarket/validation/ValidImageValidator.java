@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.validation;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
+public class ValidImageValidator implements ConstraintValidator<ValidImage, Object> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -22,8 +21,8 @@ public class ImageValidator implements ConstraintValidator<ValidImage, Object> {
     private ValidationNumericProperties validationNumericProperties;
 
     @Autowired
-    public ImageValidator(ValidationRegexProperties validationRegexProperties,
-                          ValidationNumericProperties validationNumericProperties){
+    public ValidImageValidator(ValidationRegexProperties validationRegexProperties,
+                               ValidationNumericProperties validationNumericProperties){
 
         this.validationRegexProperties = validationRegexProperties;
         this.validationNumericProperties = validationNumericProperties;

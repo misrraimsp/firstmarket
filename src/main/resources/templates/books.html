@@ -35,15 +35,16 @@
                 <a style="display: none" id="trigger"></a>
                 <div class="col-sm-3 my-3">
                     <!-- search query -->
+                    <div th:replace="fragments/components::backendRequestParamError"></div>
                     <div class="input-group">
-                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher..." th:pattern="${@environment.getProperty('validation.regex.text-query')}">
+                        <input class="form-control form-control-sm" id="queryTextBox" type="text" placeholder="title, ISBN, author, publisher...">
                         <div class="input-group-append">
                             <button class="btn btn-info btn-sm" id="searchTextBoxButton">
                                 <i class="fas fa-search"></i>
                             </button>
                         </div>
                     </div>
-                    <!-- alert box text query -->
+                    <!-- info box text query -->
                     <div class="alert alert-info alert-dismissible mt-1 mb-0 p-0 d-flex" id="textQueryAlertBox">
                         <small class="ml-2 mr-auto mt-1">Java</small>
                         <button class="btn btn-outline-info btn-sm border-0 my-0">
@@ -223,7 +224,6 @@
             <!-- footer -->
             <div th:replace="fragments/components::footer"></div>
         </div>
-        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/accordion.js}"></script>
         <script th:src="@{/js/searchCriteria.js}"></script>
         <!-- ajax cart -->

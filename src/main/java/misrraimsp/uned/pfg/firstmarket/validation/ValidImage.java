@@ -1,6 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.validation.annotation;
-
-import misrraimsp.uned.pfg.firstmarket.validation.ImageValidator;
+package misrraimsp.uned.pfg.firstmarket.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,7 +6,7 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ImageValidator.class)
+@Constraint(validatedBy = ValidImageValidator.class)
 @Documented
 public @interface ValidImage {
     String message() default "{image.error}";

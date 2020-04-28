@@ -1,7 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidPattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,16 @@ public class ValidPatternValidator implements ConstraintValidator<ValidPattern, 
 
     @Override
     public boolean isValid(String text, ConstraintValidatorContext constraintValidatorContext) {
+        if (text == null) return true;
         try {
             Field regexField = ValidationRegexProperties.class.getDeclaredField(fieldName);
             regexField.setAccessible(true);
-            Pattern pattern = Pattern.compile((String) regexField.get(validationRegexProperties));
+            String regex = (String) regexField.get(validationRegexProperties);
+            Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(text);
-            return matcher.matches();
+            boolean isValid = matcher.matches();
+            LOGGER.debug("String({}) validation with patternName({}) (regex={}) has been {}", text, fieldName, regex, isValid);
+            return isValid;
         }
         catch (NoSuchFieldException e) {
             LOGGER.warn("No such field={} on {} class. Exception: {}", fieldName, validationRegexProperties.getClass(), e);

@@ -1,7 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.validation;
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationNumericProperties;
-import misrraimsp.uned.pfg.firstmarket.validation.annotation.ValidNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

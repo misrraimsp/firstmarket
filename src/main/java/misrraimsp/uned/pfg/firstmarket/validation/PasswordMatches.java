@@ -1,6 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.validation.annotation;
-
-import misrraimsp.uned.pfg.firstmarket.validation.IsbnValidator;
+package misrraimsp.uned.pfg.firstmarket.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,10 +6,11 @@ import java.lang.annotation.*;
 
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = IsbnValidator.class)
+@Constraint(validatedBy = PasswordMatchesValidator.class)
 @Documented
-public @interface ValidIsbn {
-    String message() default "{isbn.error}";
+public @interface PasswordMatches {
+
+    String message() default "{password.notMatching}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
