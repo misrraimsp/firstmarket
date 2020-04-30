@@ -84,7 +84,7 @@
                                 <!--cart-->
                                 <li class="nav-item" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
                                     <a class="nav-link" th:href="@{/user/cart}" data-toggle="tooltip" title="View Cart">
-                                            <span class="fa-stack has-badge mx-2" id="cart" th:data-count="${cartSize}">
+                                            <span class="fa-stack has-badge mx-2" id="cartIcon" th:data-count="${cartSize}">
                                                 <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
                                                 <i class="fa fa-shopping-cart fa-stack-2x info-over-secondary"></i>
                                             </span>

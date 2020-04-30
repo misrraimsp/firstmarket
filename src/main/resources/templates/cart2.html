@@ -29,8 +29,8 @@
                             </div>
                             <!-- delete items -->
                             <div class="my-3">
-                                <button class="btn btn-sm btn-outline-secondary" id="removeItems" >
-                                    <span class="font-weight-lighter small mr-2">Remove selected</span><i class='fas fa-times'></i>
+                                <button class="btn btn-sm btn-outline-secondary" ajax="removeItems">
+                                    <span class="font-weight-lighter small mr-2">Remove selected</span><i class='fas fa-trash'></i>
                                 </button>
                             </div>
                         </div>
@@ -85,25 +85,24 @@
                                 <!-- quantity -->
                                 <div class="col-sm-2">
                                     <div class="d-flex justify-content-center">
-                                        <button class="decrementItem btn btn-sm btn-outline-info mx-1" th:id="'di-' + ${item.id}" data-toggle="tooltip" title="Decrement Quantity">
+                                        <!-- decrement -->
+                                        <button class="btn btn-sm btn-outline-info mx-1" ajax="decrementItem" th:id="'di-' + ${item.id}" data-toggle="tooltip" title="Decrement Quantity">
                                             <i class="fas fa-minus fa-sm"></i>
                                         </button>
+                                        <!-- number -->
                                         <div class="mx-1">
                                             <span th:id="'iq-' + ${item.id}" th:text="${item.quantity}">quantity</span>
                                         </div>
-                                        <button class="incrementItem btn btn-sm btn-outline-info mx-1" th:id="'ii-' + ${item.id}" data-toggle="tooltip" title="Increment Quantity">
+                                        <!-- increment -->
+                                        <button class="btn btn-sm btn-outline-info mx-1" ajax="incrementItem" th:id="'ii-' + ${item.id}" data-toggle="tooltip" title="Increment Quantity">
                                             <i class="fas fa-plus fa-sm"></i>
                                         </button>
                                     </div>
                                 </div>
                                 <!-- total price -->
                                 <div class="col-sm-2 d-flex justify-content-end">
+                                    <p th:id="'ibp-' + ${item.id}" style="display: none" th:text="${item.book.price}"></p>
                                     <p>€ <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
-                                    <!--
-                                    <button class="removeItem" th:id="'ri-' + ${item.id}" data-toggle="tooltip" title="Delete Item">
-                                        <i class='fas fa-trash-alt' style='color:red'></i>
-                                    </button>
-                                    -->
                                 </div>
                             </div>
                         </div>
@@ -123,7 +122,7 @@
                                 <!-- number of books -->
                                 <div class="d-flex justify-content-between">
                                     <div><p>Number of books:</p></div>
-                                    <div><p id="cartSize" th:text="${cartSize}">38</p></div>
+                                    <div><p id="numOfBooks" th:text="${cartSize}">38</p></div>
                                 </div>
                                 <!-- subtotal price -->
                                 <div class="d-flex justify-content-between">

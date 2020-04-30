@@ -93,7 +93,7 @@
                 <!-- right side buttons -->
                 <div class="col-sm-2 bg-white" >
                     <div sec:authorize="!hasRole('ADMIN')">
-                        <button class="addBook btn btn-outline-info btn-lg align-center" th:id="'ab-' + ${book.id}">
+                        <button class="btn btn-outline-info btn-lg align-center" ajax="addBook" th:id="'ab-' + ${book.id}">
                             Add to Cart<i class="fas fa-cart-plus ml-2"></i>
                         </button>
                     </div>

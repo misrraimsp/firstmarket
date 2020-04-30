@@ -176,7 +176,7 @@
                                     <div class="row d-flex flex-column">
                                         <!-- user actions -->
                                         <div class="col-sm-12 my-3" sec:authorize="!hasRole('ADMIN')">
-                                            <button class="addBook btn btn-outline-info btn-sm btn-block align-center" th:id="'ab-' + ${book.id}">
+                                            <button class="btn btn-outline-info btn-sm btn-block align-center" ajax="addBook" th:id="'ab-' + ${book.id}">
                                                 Add to Cart<i class="fas fa-cart-plus ml-2"></i>
                                             </button>
                                         </div>
