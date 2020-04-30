@@ -3,7 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import javax.validation.constraints.Positive;
+import java.math.BigDecimal;
 
 @Data
 @Entity
@@ -16,6 +16,11 @@ public class Item {
     @OneToOne
     private Book book;
 
-    @Positive(message = "{number.positive}")
+    //@Positive(message = "{number.positive}")
     private int quantity;
+
+
+    public BigDecimal getPrice() {
+        return book.getPrice().multiply(new BigDecimal(quantity));
+    }
 }
