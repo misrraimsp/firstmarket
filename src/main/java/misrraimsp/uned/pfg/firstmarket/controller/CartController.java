@@ -15,12 +15,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Set;
 
 @RestController
 public class CartController extends BasicController {
@@ -177,8 +179,8 @@ public class CartController extends BasicController {
         return null;
     }
 
-    @GetMapping("/ajaxCart/removeItem/{id}")
-    public ResponseEntity<?> processRemoveItem(@PathVariable("id") Long itemId,
+    @GetMapping("/ajaxCart/removeItems")
+    public ResponseEntity<?> processRemoveItem(@RequestParam(required = false) Set<Long> ids,
                                                HttpServletRequest httpServletRequest,
                                                HttpServletResponse httpServletResponse) {
 
@@ -188,24 +190,31 @@ public class CartController extends BasicController {
             Principal userPrincipal = httpServletRequest.getUserPrincipal();
             String ajaxCartRequested =  httpServletRequest.getHeader("isAjaxCartRequested");
             if (ajaxCartRequested == null || !ajaxCartRequested.equals("1")) {
-                LOGGER.warn("Missing 'isAjaxCartRequested' proper header on removing cart item(id={}). Redirected to /home", itemId);
+                LOGGER.warn("Missing 'isAjaxCartRequested' proper header on removing cart items(ids={}). Redirected to /home", ids);
                 httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/home");
             }
             else if (userPrincipal == null) {
-                LOGGER.debug("Anonymous user trying to remove cart item(id={}). Login requested", itemId);
+                LOGGER.debug("Anonymous user trying to remove cart items(ids={}). Login requested", ids);
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            else if (ids.isEmpty()) {
+                LOGGER.warn("Trying to remove items without providing its ids. Redirected to /home");
+                httpServletResponse.sendRedirect(httpServletRequest.getContextPath() + "/home");
             }
             else {
                 userEmail = userPrincipal.getName();
                 authUser = userServer.getUserByEmail(userEmail);
-                userServer.removeItemFromCart(authUser.getId(), itemId);
-                LOGGER.debug("Item(id={}) removed from user(id={}) cart", itemId, authUser.getId());
+                User finalAuthUser = authUser;
+                ids.forEach(id -> {
+                    userServer.removeItemFromCart(finalAuthUser.getId(), id);
+                    LOGGER.debug("Item(id={}) removed from user(id={}) cart", id, finalAuthUser.getId());
+                });
                 return new ResponseEntity<>(authUser.getCart().getCartSize(), HttpStatus.OK);
             }
         }
         catch (ItemNotFoundException e) {
             assert authUser != null;
-            LOGGER.error("Trying to remove a non-existent item(id={}) from user(id={}) cart", itemId, authUser.getId(), e);
+            LOGGER.error("Trying to remove a non-existent item(id={}) from user(id={}) cart", ids, authUser.getId(), e);
         }
         catch (EmailNotFoundException e) {
             LOGGER.error("Theoretically unreachable state has been met: 'authenticated userEmail={} does not exist'", userEmail, e);

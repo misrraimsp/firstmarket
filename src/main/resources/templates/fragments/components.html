@@ -160,8 +160,10 @@
             <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>
         </div>
 
-        <div th:fragment="purchaseButton(subject,action)">
-            <a class="btn btn-outline-info btn-sm my-2 btn-block" th:href="@{/{param1}/{param2}(param1=${subject},param2=${action})}">Check out</a>
+        <div th:fragment="purchaseButton">
+            <form th:action="@{/user/addPurchase}" method="GET">
+                <button class="btn btn-outline-info btn-sm my-2 btn-block" type="submit" id="purchase">Check out</button>
+            </form>
         </div>
 
         <!-- login error -->

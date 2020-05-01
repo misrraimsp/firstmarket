@@ -453,7 +453,7 @@ public class UserController extends BasicController {
             User user = userServer.findById(authUser.getId());
             model.addAttribute("cart", user.getCart());
             populateModel(model, authUser);
-            return "cart2";
+            return "cart";
         }
         catch (UserNotFoundException e) {
             LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);

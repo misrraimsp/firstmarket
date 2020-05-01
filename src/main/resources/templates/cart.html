@@ -4,53 +4,156 @@
       lang="en">
     <head th:replace="fragments/components::head('Cart')"></head>
     <body>
-        <div class="container-fluid">
+        <div class="container-fluid bg-light">
             <!-- header -->
-            <header th:replace="fragments/components::header"></header>
+            <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <!-- title -->
-            <div th:replace="fragments/components::title(text = 'Cart')"></div>
             <!-- main content -->
-            <div class="row">
-                <div class="col-sm-2 bg-white"></div>
-                <div class="col-sm-8 bg-light">
-                    <table class="table">
-                        <thead class="thead-light">
-                        <tr>
-                            <th>ISBN</th>
-                            <th>Title</th>
-                            <th>Image</th>
-                            <th>Quantity</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:id="'i-' + ${item.id}" th:each="item : ${items}">
-                            <td><span th:text="${item.book.isbn}">isbn</span></td>
-                            <td><span th:text="${item.book.title}">title</span></td>
-                            <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
-                            <td><span th:id="'iq-' + ${item.id}" th:text="${item.quantity}">quantity</span></td>
-                            <td>
-                                <button class="incrementItem" th:id="'ii-' + ${item.id}" data-toggle="tooltip" title="Increment Quantity">
-                                    <i class="far fa-plus-square"></i>
-                                </button><br/>
-                                <button class="decrementItem" th:id="'di-' + ${item.id}" data-toggle="tooltip" title="Decrement Quantity">
-                                    <i class="far fa-minus-square"></i>
-                                </button><br/>
-                                <button class="removeItem" th:id="'ri-' + ${item.id}" data-toggle="tooltip" title="Delete Item">
-                                    <i class='fas fa-trash-alt' style='color:red'></i>
+            <div class="row my-5">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- cart items -->
+                <div class="col-sm-7">
+                    <div class="row d-flex flex-column">
+                        <!-- items header -->
+                        <div class="col-sm-12 d-flex justify-content-between bg-white">
+                            <!-- select all items -->
+                            <div class="my-3">
+                                <div class="pretty p-default p-round p-thick">
+                                    <input type="checkbox" id="selectAll"/>
+                                    <div class="state p-info-o">
+                                        <label th:for="selectAll"><span class="font-weight-light">Select All</span></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- delete items -->
+                            <div class="my-3">
+                                <button class="btn btn-sm btn-outline-secondary" ajax="removeItems" id="removeItems">
+                                    <span class="font-weight-lighter small mr-2">Remove selected</span><i class='fas fa-trash'></i>
                                 </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div th:replace="fragments/components::purchaseButton('user','addPurchase')"></div>
+                            </div>
+                        </div>
+                        <!-- items -->
+                        <div class="col-sm-12" th:id="'i-' + ${item.id}" th:each="item : ${cart.items}">
+                            <div class="row my-3 d-flex align-items-center bg-white">
+                                <!-- select item -->
+                                <div class="col-sm-1">
+                                    <div class="pretty p-default p-round p-thick">
+                                        <input type="checkbox" th:id="'icb-' + ${item.id}" data-toggle="tooltip" title="Select this Item"/>
+                                        <div class="state p-info-o">
+                                            <label th:for="'icb-' + ${item.id}"></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- image -->
+                                <div class="col-sm-2">
+                                    <a th:href="@{/book/{id}(id=${item.book.id})}"><img class="img-fluid my-3" th:src="@{/image/{id}(id=${item.book.image.id})}" alt="book image"/></a>
+                                </div>
+                                <!-- book info -->
+                                <div class="col-sm-5">
+                                    <!-- title -->
+                                    <div class="mt-3">
+                                        <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
+                                            <p th:unless="${item.book.title.isBlank()}">
+                                                <span th:text="${item.book.title}">title</span>
+                                            </p>
+                                            <p th:if="${item.book.title.isBlank()}">
+                                                <span><small><i>unknown title</i></small></span>
+                                            </p>
+                                        </a>
+                                    </div>
+                                    <!-- authors -->
+                                    <div>
+                                        <p th:unless="${item.book.authorsString.isBlank()}">
+                                            <strong><span th:text="${item.book.authorsString}"></span></strong>
+                                        </p>
+                                        <p th:if="${item.book.authorsString.isBlank()}">
+                                            <span><small><i>unknown authors</i></small></span>
+                                        </p>
+                                    </div>
+                                    <!-- publisher -->
+                                    <div>
+                                        <p th:if="${item.book.publisher ne null}">
+                                            <small>Published by </small><strong><span th:text="${item.book.publisher.name}"></span></strong>
+                                        </p>
+                                        <p th:unless="${item.book.publisher ne null}">
+                                            <small><i>unknown publisher</i></small>
+                                        </p>
+                                    </div>
+                                </div>
+                                <!-- quantity -->
+                                <div class="col-sm-2">
+                                    <div class="d-flex justify-content-center">
+                                        <!-- decrement -->
+                                        <button class="btn btn-sm btn-outline-info mx-1" ajax="decrementItem" th:id="'di-' + ${item.id}" data-toggle="tooltip" title="Decrement Quantity">
+                                            <i class="fas fa-minus fa-sm"></i>
+                                        </button>
+                                        <!-- number -->
+                                        <div class="mx-1">
+                                            <span th:id="'iq-' + ${item.id}" th:text="${item.quantity}">quantity</span>
+                                        </div>
+                                        <!-- increment -->
+                                        <button class="btn btn-sm btn-outline-info mx-1" ajax="incrementItem" th:id="'ii-' + ${item.id}" data-toggle="tooltip" title="Increment Quantity">
+                                            <i class="fas fa-plus fa-sm"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- total price -->
+                                <div class="col-sm-2 d-flex justify-content-end">
+                                    <p th:id="'ibp-' + ${item.id}" style="display: none" th:text="${item.book.price}"></p>
+                                    <p>€ <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-2 bg-white"></div>
+                <!-- check out panel -->
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10 d-flex flex-column bg-white">
+                            <!-- panel title -->
+                            <div class="d-flex justify-content-center mt-3 mb-5">
+                                <strong>Purchase Summary</strong>
+                            </div>
+                            <!-- purchase info -->
+                            <div class="d-flex flex-column">
+                                <!-- number of books -->
+                                <div class="d-flex justify-content-between">
+                                    <div><p>Number of books:</p></div>
+                                    <div><p id="numOfBooks" th:text="${cartSize}">38</p></div>
+                                </div>
+                                <!-- subtotal price -->
+                                <div class="d-flex justify-content-between">
+                                    <div><p>Subtotal:</p></div>
+                                    <div><p>€ <span id="subtotal" th:text="${cart.getPrice()}">380</span></p></div>
+                                </div>
+                                <!-- total saving -->
+                                <div class="d-flex justify-content-between">
+                                    <div><p>Discount:</p></div>
+                                    <div><p>€ <span id="discount">0</span></p></div>
+                                </div>
+                            </div>
+                            <!-- purchase -->
+                            <div class="d-flex flex-column mt-3">
+                                <!-- final price -->
+                                <div class="d-flex justify-content-between">
+                                    <div><strong>Total:</strong></div>
+                                    <div><strong>€ <span id="total" th:text="${cart.getPrice()}">380</span></strong></div>
+                                </div>
+                                <!-- purchase button -->
+                                <div th:replace="fragments/components::purchaseButton"></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
             </div>
             <!-- footer -->
-            <footer th:replace="fragments/components::footer"></footer>
+            <div th:replace="fragments/components::footer"></div>
         </div>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- ajax cart -->
