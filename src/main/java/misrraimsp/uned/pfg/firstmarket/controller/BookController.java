@@ -105,6 +105,11 @@ public class BookController extends BasicController {
                                   Model model) {
 
         if (errors.hasErrors()) {
+            System.out.println(errors.getErrorCount());
+            System.out.println(errors.getFieldErrorCount());
+            errors.getFieldErrors().forEach(fieldError -> {
+                System.out.println(fieldError.getField());
+            });
             populateModel(model, null);
             populateModelToBookForm(model);
             return "bookForm";

@@ -5,9 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.model.Author;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -31,8 +29,8 @@ public class AuthorServer {
         return authorRepository.findByFirstNameAndLastName(firstName, lastName);
     }
 
-    public List<Author> persist(List<Author> authors) {
-        List<Author> savedAuthors = new ArrayList<>();
+    public Set<Author> persist(Set<Author> authors) {
+        Set<Author> savedAuthors = new HashSet<>();
         authors.forEach(author -> savedAuthors.add(this.persist(author)));
         return savedAuthors;
     }

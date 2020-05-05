@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config.dev;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.AuthorForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
@@ -20,6 +21,7 @@ import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Arrays;
+import java.util.Set;
 
 @Profile("dev-h2")
 @Configuration
@@ -249,16 +251,12 @@ public class DevelopmentH2Config {
             bookForm1.setCategoryId(computers.getId());
             bookForm1.setImage(img1);
             bookForm1.setStoredImageId(null);
-            bookForm1.setAuthorFirstName0("Julio");
-            bookForm1.setAuthorLastName0("Verne");
-            bookForm1.setAuthorFirstName1("");
-            bookForm1.setAuthorLastName1("");
-            bookForm1.setAuthorFirstName2("Julio");
-            bookForm1.setAuthorLastName2("Verne");
-            bookForm1.setAuthorFirstName3("");
-            bookForm1.setAuthorLastName3("");
-            bookForm1.setAuthorFirstName4("");
-            bookForm1.setAuthorLastName4("");
+            bookForm1.setAuthors(Set.of(
+                    new AuthorForm("Julio", "Verne"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("Julio", "Verne"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm1.setPublisherName("Anaya");
             bookForm1.setLanguage(Languages.Spanish);
             bookForm1.setPages(123);
@@ -279,16 +277,12 @@ public class DevelopmentH2Config {
             bookForm2.setCategoryId(music.getId());
             bookForm2.setImage(img2);
             bookForm2.setStoredImageId(null);
-            bookForm2.setAuthorFirstName0("Julio");
-            bookForm2.setAuthorLastName0("Verne");
-            bookForm2.setAuthorFirstName1("Miguel");
-            bookForm2.setAuthorLastName1("Delibes");
-            bookForm2.setAuthorFirstName2("");
-            bookForm2.setAuthorLastName2("");
-            bookForm2.setAuthorFirstName3("");
-            bookForm2.setAuthorLastName3("");
-            bookForm2.setAuthorFirstName4("");
-            bookForm2.setAuthorLastName4("");
+            bookForm2.setAuthors(Set.of(
+                    new AuthorForm("Julio", "Verne"),
+                    new AuthorForm("Miguel", "Delibes"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm2.setPublisherName("Manning");
             bookForm2.setLanguage(Languages.English);
             bookForm2.setPages(100);
@@ -309,16 +303,12 @@ public class DevelopmentH2Config {
             bookForm3.setCategoryId(computers.getId());
             bookForm3.setImage(img3);
             bookForm3.setStoredImageId(null);
-            bookForm3.setAuthorFirstName0("Miguel");
-            bookForm3.setAuthorLastName0("Delibes");
-            bookForm3.setAuthorFirstName1("Pablo");
-            bookForm3.setAuthorLastName1("Iglesias");
-            bookForm3.setAuthorFirstName2("Julio");
-            bookForm3.setAuthorLastName2("Verne");
-            bookForm3.setAuthorFirstName3("");
-            bookForm3.setAuthorLastName3("");
-            bookForm3.setAuthorFirstName4("");
-            bookForm3.setAuthorLastName4("");
+            bookForm3.setAuthors(Set.of(
+                    new AuthorForm("Miguel", "Delibes"),
+                    new AuthorForm("Pablo", "Iglesias"),
+                    new AuthorForm("Julio", "Verne"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm3.setPublisherName("Cabildo de Gran Canaria");
             bookForm3.setLanguage(Languages.German);
             bookForm3.setPages(422);
@@ -338,16 +328,12 @@ public class DevelopmentH2Config {
             bookForm4.setCategoryId(computers.getId());
             bookForm4.setImage(img4);
             bookForm4.setStoredImageId(null);
-            bookForm4.setAuthorFirstName0("");
-            bookForm4.setAuthorLastName0("");
-            bookForm4.setAuthorFirstName1("");
-            bookForm4.setAuthorLastName1("");
-            bookForm4.setAuthorFirstName2("");
-            bookForm4.setAuthorLastName2("");
-            bookForm4.setAuthorFirstName3("");
-            bookForm4.setAuthorLastName3("");
-            bookForm4.setAuthorFirstName4("Antonio");
-            bookForm4.setAuthorLastName4("Escohotado");
+            bookForm4.setAuthors(Set.of(
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("Antonio", "Escohotado")));
             bookForm4.setPublisherName("Planeta");
             bookForm4.setLanguage(Languages.French);
             bookForm4.setPages(111);
@@ -368,16 +354,12 @@ public class DevelopmentH2Config {
             bookForm5.setCategoryId(art.getId());
             bookForm5.setImage(null);
             bookForm5.setStoredImageId(img1.getId());
-            bookForm5.setAuthorFirstName0("Julio");
-            bookForm5.setAuthorLastName0("Verne");
-            bookForm5.setAuthorFirstName1("");
-            bookForm5.setAuthorLastName1("");
-            bookForm5.setAuthorFirstName2("Julio");
-            bookForm5.setAuthorLastName2("Cesar");
-            bookForm5.setAuthorFirstName3("");
-            bookForm5.setAuthorLastName3("");
-            bookForm5.setAuthorFirstName4("");
-            bookForm5.setAuthorLastName4("");
+            bookForm5.setAuthors(Set.of(
+                    new AuthorForm("Julio", "Verne"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("Julio", "Cesar"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm5.setPublisherName("Cambridge");
             bookForm5.setLanguage(Languages.Portuguese);
             bookForm5.setPages(128);
@@ -397,16 +379,12 @@ public class DevelopmentH2Config {
             bookForm6.setCategoryId(tech.getId());
             bookForm6.setImage(null);
             bookForm6.setStoredImageId(img3.getId());
-            bookForm6.setAuthorFirstName0("");
-            bookForm6.setAuthorLastName0("");
-            bookForm6.setAuthorFirstName1("");
-            bookForm6.setAuthorLastName1("");
-            bookForm6.setAuthorFirstName2("");
-            bookForm6.setAuthorLastName2("");
-            bookForm6.setAuthorFirstName3("");
-            bookForm6.setAuthorLastName3("");
-            bookForm6.setAuthorFirstName4("");
-            bookForm6.setAuthorLastName4("");
+            bookForm6.setAuthors(Set.of(
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm6.setPublisherName("Uned");
             bookForm6.setLanguage(Languages.Estonian);
             bookForm6.setPages(123);
@@ -426,16 +404,12 @@ public class DevelopmentH2Config {
             bookForm7.setCategoryId(computers.getId());
             bookForm7.setImage(null);
             bookForm7.setStoredImageId(img2.getId());
-            bookForm7.setAuthorFirstName0("Misrraim");
-            bookForm7.setAuthorLastName0("Suarez");
-            bookForm7.setAuthorFirstName1("");
-            bookForm7.setAuthorLastName1("");
-            bookForm7.setAuthorFirstName2("Andrea");
-            bookForm7.setAuthorLastName2("Grau");
-            bookForm7.setAuthorFirstName3("");
-            bookForm7.setAuthorLastName3("");
-            bookForm7.setAuthorFirstName4("");
-            bookForm7.setAuthorLastName4("");
+            bookForm7.setAuthors(Set.of(
+                    new AuthorForm("Misrraim", "Suarez"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("Andrea", "Grau"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm7.setPublisherName("Espasa");
             bookForm7.setLanguage(Languages.Czech);
             bookForm7.setPages(599);
@@ -455,16 +429,12 @@ public class DevelopmentH2Config {
             bookForm8.setCategoryId(tech.getId());
             bookForm8.setImage(img4);
             bookForm8.setStoredImageId(null);
-            bookForm8.setAuthorFirstName0("");
-            bookForm8.setAuthorLastName0("Messi");
-            bookForm8.setAuthorFirstName1("   ");
-            bookForm8.setAuthorLastName1("            ");
-            bookForm8.setAuthorFirstName2("Cristiano");
-            bookForm8.setAuthorLastName2("Ronaldo");
-            bookForm8.setAuthorFirstName3("");
-            bookForm8.setAuthorLastName3("");
-            bookForm8.setAuthorFirstName4("");
-            bookForm8.setAuthorLastName4("");
+            bookForm8.setAuthors(Set.of(
+                    new AuthorForm("", "Messi"),
+                    new AuthorForm("   ", "            "),
+                    new AuthorForm("Cristiano", "Ronaldo"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm8.setPublisherName("Alianza");
             bookForm8.setLanguage(Languages.Polish);
             bookForm8.setPages(344);
@@ -484,16 +454,12 @@ public class DevelopmentH2Config {
             bookForm9.setCategoryId(art.getId());
             bookForm9.setImage(img1);
             bookForm9.setStoredImageId(null);
-            bookForm9.setAuthorFirstName0("");
-            bookForm9.setAuthorLastName0("");
-            bookForm9.setAuthorFirstName1("");
-            bookForm9.setAuthorLastName1("");
-            bookForm9.setAuthorFirstName2("Julio");
-            bookForm9.setAuthorLastName2("Verne");
-            bookForm9.setAuthorFirstName3("");
-            bookForm9.setAuthorLastName3("");
-            bookForm9.setAuthorFirstName4("");
-            bookForm9.setAuthorLastName4("");
+            bookForm9.setAuthors(Set.of(
+                    new AuthorForm("", ""),
+                    new AuthorForm("", ""),
+                    new AuthorForm("Julio", "Verne"),
+                    new AuthorForm("", ""),
+                    new AuthorForm("", "")));
             bookForm9.setPublisherName("Anaya");
             bookForm9.setLanguage(Languages.Basque);
             bookForm9.setPages(12);

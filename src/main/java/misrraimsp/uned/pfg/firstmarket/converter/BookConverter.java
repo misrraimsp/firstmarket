@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
+import misrraimsp.uned.pfg.firstmarket.adt.dto.AuthorForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.model.*;
@@ -8,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Component
 public class BookConverter {
@@ -47,7 +48,15 @@ public class BookConverter {
         bookForm.setCategoryId(book.getCategory().getId());
         bookForm.setStoredImageId(book.getImage().getId());
         //authors
-        List<Author> authors = book.getAuthors();
+        Set<AuthorForm> authorForms = new HashSet<>();
+        book.getAuthors().forEach(author -> {
+            AuthorForm authorForm = new AuthorForm();
+            authorForm.setFirstName(author.getFirstName());
+            authorForm.setLastName(author.getLastName());
+            authorForms.add(authorForm);
+        });
+        bookForm.setAuthors(authorForms);
+        /*
         int size = authors.size();
         if (size == 1){
             bookForm.setAuthorFirstName0(authors.get(0).getFirstName());
@@ -121,6 +130,8 @@ public class BookConverter {
             bookForm.setAuthorFirstName4("");
             bookForm.setAuthorLastName4("");
         }
+
+         */
         //
         bookForm.setPublisherName((book.getPublisher() != null) ? book.getPublisher().getName() : "");
         bookForm.setDescription(book.getDescription());
@@ -151,20 +162,17 @@ public class BookConverter {
         return storedImage;
     }
 
-    private List<Author> convertBookFormAuthors(String bookFormAuthors) {
-        List<Author> authors = new ArrayList<>();
-        if (bookFormAuthors.isBlank()) {
+    private Set<Author> convertBookFormAuthors(Set<AuthorForm> authorForms) {
+        Set<Author> authors = new HashSet<>();
+        if (authorForms.isEmpty()) {
             return authors;
         }
-        for (String formBookAuthor : bookFormAuthors.split(";")){
-            String [] authorParts = formBookAuthor.split(",");
+        authorForms.forEach(authorForm -> {
             Author author = new Author();
-            author.setFirstName(authorParts[0]);
-            author.setLastName(authorParts[1]);
-            if (!authors.contains(author)) {
-                authors.add(author); // avoiding books with author repeated
-            }
-        }
+            author.setFirstName(authorForm.getFirstName());
+            author.setLastName(authorForm.getLastName());
+            authors.add(author);
+        });
         return authors;
     }
 

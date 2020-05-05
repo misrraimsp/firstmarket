@@ -8,8 +8,11 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidIsbn;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidNumber;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
+import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 public class BookForm {
@@ -29,6 +32,10 @@ public class BookForm {
 
     private Long storedImageId;
 
+    @Valid
+    private Set<AuthorForm> authors = new HashSet<>();
+
+    /*
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorFirstName0;
 
@@ -59,6 +66,8 @@ public class BookForm {
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String authorLastName4;
 
+     */
+
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String publisherName;
 
@@ -80,6 +89,7 @@ public class BookForm {
     private Year year;
 
 
+    /*
     public String getAuthors(){
         String authors = "";
         authors += format(authorFirstName0, authorLastName0);
@@ -93,4 +103,6 @@ public class BookForm {
     private String format(String firstName, String lastName) {
         return (firstName.isBlank() && lastName.isBlank()) ? "" : (firstName + "," + lastName + ";");
     }
+
+     */
 }

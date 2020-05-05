@@ -86,74 +86,19 @@
                             <div class="col-sm-6 bg-light">
                                 <!-------------------------------------------------------------------------Authors-->
                                 <div id="authors">
-                                    <!------------------------------------------------Author 0-->
-                                    <div id="author0">
-                                        <label for="authorFirstName0">Author/s:</label>
+                                    <div th:id="'author-' + ${i.index}" th:each="author,i : ${bookForm.authors}">
+                                        <label th:for="authorFirstName-0" th:if="${i.first}">Author/s:</label>
                                         <div class="input-group mb-3">
-                                            <input class="form-control" type="text" th:field="*{authorFirstName0}" id="authorFirstName0" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <input class="form-control" type="text" th:field="*{authorLastName0}" id="authorLastName0" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <div class="input-group-append">
+                                            <input class="form-control" type="text" th:field="*{authors[__${i.index}__].firstName}" th:id="'authorFirstName-' + ${i.index}" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                            <input class="form-control" type="text" th:field="*{authors[__${i.index}__].lastName}" th:id="'authorLastName-' + ${i.index}" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+
+                                            <div class="input-group-append" th:if="${i.last}">
                                                 <button class="btn btn-outline-info" style="display: block" type="button" id="showAuthor1" title="Add Author"><i class="fas fa-plus"></i></button>
                                             </div>
+
                                             <div class="invalid-feedback">Please fill out this field correctly</div>
                                         </div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorFirstName0')"></div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorLastName0')"></div>
-                                    </div>
-                                    <!------------------------------------------------Author 1-->
-                                    <div id="author1" style="display: none">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control" type="text" th:field="*{authorFirstName1}" id="authorFirstName1" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <input class="form-control" type="text" th:field="*{authorLastName1}" id="authorLastName1" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-info" style="display: none" type="button" id="showAuthor2" title="Add Author"><i class="fas fa-plus"></i></button>
-                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor1" title="Delete Author"><i class="fas fa-minus"></i></button>
-                                            </div>
-                                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                                        </div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorFirstName1')"></div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorLastName1')"></div>
-                                    </div>
-                                    <!------------------------------------------------Author 2-->
-                                    <div id="author2" style="display: none">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control" type="text" th:field="*{authorFirstName2}" id="authorFirstName2" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <input class="form-control" type="text" th:field="*{authorLastName2}" id="authorLastName2" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-info" style="display: none" type="button" id="showAuthor3" title="Add Author"><i class="fas fa-plus"></i></button>
-                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor2" title="Delete Author"><i class="fas fa-minus"></i></button>
-                                            </div>
-                                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                                        </div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorFirstName2')"></div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorLastName2')"></div>
-                                    </div>
-                                    <!------------------------------------------------Author 3-->
-                                    <div id="author3" style="display: none">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control" type="text" th:field="*{authorFirstName3}" id="authorFirstName3" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <input class="form-control" type="text" th:field="*{authorLastName3}" id="authorLastName3" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-info" style="display: none" type="button" id="showAuthor4" title="Add Author"><i class="fas fa-plus"></i></button>
-                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor3" title="Delete Author"><i class="fas fa-minus"></i></button>
-                                            </div>
-                                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                                        </div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorFirstName3')"></div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorLastName3')"></div>
-                                    </div>
-                                    <!------------------------------------------------Author 4-->
-                                    <div id="author4" style="display: none">
-                                        <div class="input-group mb-3">
-                                            <input class="form-control" type="text" th:field="*{authorFirstName4}" id="authorFirstName4" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <input class="form-control" type="text" th:field="*{authorLastName4}" id="authorLastName4" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-outline-secondary" style="display: none" type="button" id="hideAuthor4" title="Delete Author"><i class="fas fa-minus"></i></button>
-                                            </div>
-                                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                                        </div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorFirstName4')"></div>
-                                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('authorLastName4')"></div>
+                                        <!--<div th:replace="fragments/components::backendSpecificObjectFieldErrors('authors[].firstName')"></div>-->
                                     </div>
                                 </div>
                                 <!-------------------------------------------------------------------------ISBN-->
@@ -213,6 +158,6 @@
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/isbnChecksum.js}"></script>
         <script th:src="@{/js/binaryInputSwitch.js}"></script>
-        <script th:src="@{/js/manageAuthors.js}"></script>
+        <!--<script th:src="@{/js/manageAuthors.js}"></script>-->
     </body>
 </html>
