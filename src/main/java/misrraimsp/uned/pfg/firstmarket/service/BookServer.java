@@ -5,10 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
-import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.exception.*;
 import misrraimsp.uned.pfg.firstmarket.model.Author;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
@@ -113,7 +110,7 @@ public class BookServer {
                 });
     }
 
-    public Book convertBookFormToBook(BookForm bookForm) {
+    public Book convertBookFormToBook(BookForm bookForm) throws BookFormAuthorsConversionException {
         return bookConverter.convertBookFormToBook(bookForm);
     }
 

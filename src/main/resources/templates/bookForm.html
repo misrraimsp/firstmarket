@@ -85,20 +85,41 @@
                             </div>
                             <div class="col-sm-6 bg-light">
                                 <!-------------------------------------------------------------------------Authors-->
-                                <div id="authors">
-                                    <div th:id="'author-' + ${i.index}" th:each="author,i : ${bookForm.authors}">
-                                        <label th:for="authorFirstName-0" th:if="${i.first}">Author/s:</label>
-                                        <div class="input-group mb-3">
-                                            <input class="form-control" type="text" th:field="*{authors[__${i.index}__].firstName}" th:id="'authorFirstName-' + ${i.index}" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                                            <input class="form-control" type="text" th:field="*{authors[__${i.index}__].lastName}" th:id="'authorLastName-' + ${i.index}" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-
-                                            <div class="input-group-append" th:if="${i.last}">
-                                                <button class="btn btn-outline-info" style="display: block" type="button" id="showAuthor1" title="Add Author"><i class="fas fa-plus"></i></button>
-                                            </div>
-
-                                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                                <!-- label -->
+                                <label>Author/s:</label>
+                                <!-- authorsFirstName backend errors -->
+                                <div class="mt-n2" th:if="${#fields.hasErrors('authorsFirstName')}">
+                                    <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors('authorsFirstName')}">
+                                        <button class="close" type="button" data-dismiss="alert">&times;</button>
+                                        <strong>Check first and last name: </strong><span th:text="${error}"></span>
+                                    </div>
+                                </div>
+                                <!-- authorsLastName backend errors -->
+                                <div class="mt-n2" th:if="${!#fields.hasErrors('authorsFirstName') && #fields.hasErrors('authorsLastName')}">
+                                    <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors('authorsLastName')}">
+                                        <button class="close" type="button" data-dismiss="alert">&times;</button>
+                                        <strong>Check last name: </strong><span th:text="${error}"></span>
+                                    </div>
+                                </div>
+                                <!-- authors -->
+                                <div id="dynamicAuthors">
+                                    <!-- author -->
+                                    <div class="input-group mb-3" th:each="fn,i : ${bookForm.authorsFirstName}">
+                                        <!-- firstName -->
+                                        <input class="form-control" type="text" name="authorsFirstName" th:value="${bookForm.authorsFirstName[__${i.index}__]}" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                        <!-- lastName -->
+                                        <input class="form-control" type="text" name="authorsLastName" th:value="${bookForm.authorsLastName[__${i.index}__]}" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                        <!-- dynamic authors buttons -->
+                                        <div th:if="${i.last}" class="input-group-append" id="authorButtons">
+                                            <button class="btn btn-outline-secondary" id="removeAuthor" th:style="${i.size > 1}?'display: block':'display: none'" type="button">
+                                                <i class="fas fa-minus"></i>
+                                            </button>
+                                            <button class="btn btn-outline-info" id="addAuthor" type="button">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
                                         </div>
-                                        <!--<div th:replace="fragments/components::backendSpecificObjectFieldErrors('authors[].firstName')"></div>-->
+                                        <!-- frontEnd error -->
+                                        <div class="invalid-feedback">Please fill out this field correctly</div>
                                     </div>
                                 </div>
                                 <!-------------------------------------------------------------------------ISBN-->
@@ -158,6 +179,7 @@
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/isbnChecksum.js}"></script>
         <script th:src="@{/js/binaryInputSwitch.js}"></script>
-        <!--<script th:src="@{/js/manageAuthors.js}"></script>-->
+        <!-- dynamic authors -->
+        <script th:src="@{/js/dynamicAuthors.js}"></script>
     </body>
 </html>

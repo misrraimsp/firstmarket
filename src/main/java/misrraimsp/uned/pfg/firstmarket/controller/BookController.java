@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,14 +83,24 @@ public class BookController extends BasicController {
                 bookId -> {
                     try {
                         Book book = bookServer.findById(bookId);
-                        model.addAttribute("bookForm", bookServer.convertBookToBookForm(book));
+                        BookForm bookForm = bookServer.convertBookToBookForm(book);
+                        if (bookForm.getAuthorsFirstName().size() == 0) {
+                            bookForm.setAuthorsFirstName(Collections.singletonList(""));
+                            bookForm.setAuthorsLastName(Collections.singletonList(""));
+                        }
+                        model.addAttribute("bookForm", bookForm);
                     }
                     catch (BookNotFoundException e) {
                         LOGGER.warn("Trying to edit a non-existent Book", e);
                         bookNotFound.set(true);
                     }
                 },
-                () -> model.addAttribute("bookForm", new BookForm())
+                () -> {
+                    BookForm bookForm = new BookForm();
+                    bookForm.setAuthorsFirstName(Collections.singletonList(""));
+                    bookForm.setAuthorsLastName(Collections.singletonList(""));
+                    model.addAttribute("bookForm", bookForm);
+                }
         );
         if (bookNotFound.get()) {
             return "redirect:/home";
@@ -105,11 +116,6 @@ public class BookController extends BasicController {
                                   Model model) {
 
         if (errors.hasErrors()) {
-            System.out.println(errors.getErrorCount());
-            System.out.println(errors.getFieldErrorCount());
-            errors.getFieldErrors().forEach(fieldError -> {
-                System.out.println(fieldError.getField());
-            });
             populateModel(model, null);
             populateModelToBookForm(model);
             return "bookForm";
@@ -130,6 +136,10 @@ public class BookController extends BasicController {
             populateModel(model, null);
             populateModelToBookForm(model);
             return "bookForm";
+        }
+        catch (BookFormAuthorsConversionException e) {
+            LOGGER.error("BookForm conversion error", e);
+            return "redirect:/home";
         }
         catch (ImageNotFoundException e) {
             LOGGER.error("Trying to persist an Image-with-id that is not in the database searching by its id", e);

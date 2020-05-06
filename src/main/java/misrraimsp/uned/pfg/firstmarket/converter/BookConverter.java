@@ -1,15 +1,17 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.AuthorForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
+import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Component
@@ -22,14 +24,14 @@ public class BookConverter {
         this.validationRegexProperties = validationRegexProperties;
     }
 
-    public Book convertBookFormToBook(BookForm bookForm) {
+    public Book convertBookFormToBook(BookForm bookForm) throws BookFormAuthorsConversionException {
         Book book = new Book();
         book.setId(bookForm.getBookId());
         book.setIsbn(this.convertBookFormIsbn(bookForm.getIsbn()));
         book.setTitle(bookForm.getTitle());
         book.setCategory(this.convertBookFormCategoryId(bookForm.getCategoryId()));
         book.setImage(this.convertBookFormImage(bookForm.getStoredImageId(), bookForm.getImage()));
-        book.setAuthors(this.convertBookFormAuthors(bookForm.getAuthors()));
+        book.setAuthors(this.convertBookFormAuthors(bookForm.getAuthorsFirstName(), bookForm.getAuthorsLastName()));
         book.setPublisher(this.convertBookFormPublisher(bookForm.getPublisherName()));
         book.setDescription(bookForm.getDescription());
         book.setPages(bookForm.getPages());
@@ -48,14 +50,14 @@ public class BookConverter {
         bookForm.setCategoryId(book.getCategory().getId());
         bookForm.setStoredImageId(book.getImage().getId());
         //authors
-        Set<AuthorForm> authorForms = new HashSet<>();
+        List<String> authorsFirstName = new ArrayList<>();
+        List<String> authorsLastName = new ArrayList<>();
         book.getAuthors().forEach(author -> {
-            AuthorForm authorForm = new AuthorForm();
-            authorForm.setFirstName(author.getFirstName());
-            authorForm.setLastName(author.getLastName());
-            authorForms.add(authorForm);
+            authorsFirstName.add(author.getFirstName());
+            authorsLastName.add(author.getLastName());
         });
-        bookForm.setAuthors(authorForms);
+        bookForm.setAuthorsFirstName(authorsFirstName);
+        bookForm.setAuthorsLastName(authorsLastName);
         /*
         int size = authors.size();
         if (size == 1){
@@ -162,17 +164,26 @@ public class BookConverter {
         return storedImage;
     }
 
-    private Set<Author> convertBookFormAuthors(Set<AuthorForm> authorForms) {
+    private Set<Author> convertBookFormAuthors(List<String> authorsFirstName, List<String> authorsLastName) {
+        int numOfAuthors = authorsFirstName.size();
+        if (numOfAuthors != authorsLastName.size()) {
+            throw new BookFormAuthorsConversionException(
+                    "Authors firstNames.size=" + numOfAuthors + " and lastNames.size=" + authorsLastName.size() + " are not equal");
+        }
         Set<Author> authors = new HashSet<>();
-        if (authorForms.isEmpty()) {
+        if (numOfAuthors == 0) {
             return authors;
         }
-        authorForms.forEach(authorForm -> {
-            Author author = new Author();
-            author.setFirstName(authorForm.getFirstName());
-            author.setLastName(authorForm.getLastName());
-            authors.add(author);
-        });
+        for (int i = 0; i < numOfAuthors; i++) {
+            String firstName = authorsFirstName.get(i);
+            String lastName = authorsLastName.get(i);
+            if (!firstName.isBlank() || !lastName.isBlank()) {
+                Author author = new Author();
+                author.setFirstName(firstName);
+                author.setLastName(lastName);
+                authors.add(author);
+            }
+        }
         return authors;
     }
 

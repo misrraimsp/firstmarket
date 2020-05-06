@@ -8,10 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ValidPatternValidator implements ConstraintValidator<ValidPattern, String> {
+public class ValidPatternValidator implements ConstraintValidator<ValidPattern, Object> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -29,8 +30,29 @@ public class ValidPatternValidator implements ConstraintValidator<ValidPattern, 
     }
 
     @Override
-    public boolean isValid(String text, ConstraintValidatorContext constraintValidatorContext) {
-        if (text == null) return true;
+    public boolean isValid(Object object, ConstraintValidatorContext constraintValidatorContext) {
+        if (object == null) return true;
+        else if (object instanceof Collection<?>) {
+            return this.validateStringCollection((Collection<String>) object);
+        }
+        else if (object instanceof String) {
+            return this.validateString((String) object);
+        }
+        else {
+            LOGGER.warn("Trying to use PatternValidator with an argument that is not of type String, Collection<String> or NULL");
+            return false;
+        }
+    }
+
+    private boolean validateStringCollection(Collection<String> texts) {
+        boolean valid = true;
+        for (String text : texts){
+            valid = valid && this.validateString(text);
+        }
+        return valid;
+    }
+
+    private boolean validateString(String text) {
         try {
             Field regexField = ValidationRegexProperties.class.getDeclaredField(fieldName);
             regexField.setAccessible(true);

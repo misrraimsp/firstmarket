@@ -8,11 +8,10 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidIsbn;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidNumber;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
-import javax.validation.Valid;
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class BookForm {
@@ -32,41 +31,11 @@ public class BookForm {
 
     private Long storedImageId;
 
-    @Valid
-    private Set<AuthorForm> authors = new HashSet<>();
-
-    /*
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorFirstName0;
+    private List<String> authorsFirstName = new ArrayList<>();
 
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorLastName0;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorFirstName1;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorLastName1;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorFirstName2;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorLastName2;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorFirstName3;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorLastName3;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorFirstName4;
-
-    @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private String authorLastName4;
-
-     */
+    private List<String> authorsLastName = new ArrayList<>();
 
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String publisherName;
@@ -88,21 +57,4 @@ public class BookForm {
     @PastOrPresent(message = "{year.notValid}")
     private Year year;
 
-
-    /*
-    public String getAuthors(){
-        String authors = "";
-        authors += format(authorFirstName0, authorLastName0);
-        authors += format(authorFirstName1, authorLastName1);
-        authors += format(authorFirstName2, authorLastName2);
-        authors += format(authorFirstName3, authorLastName3);
-        authors += format(authorFirstName4, authorLastName4);
-        return authors;
-    }
-
-    private String format(String firstName, String lastName) {
-        return (firstName.isBlank() && lastName.isBlank()) ? "" : (firstName + "," + lastName + ";");
-    }
-
-     */
 }
