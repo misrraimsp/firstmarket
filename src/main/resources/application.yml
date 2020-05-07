@@ -29,7 +29,7 @@ validation:
    regex:
       email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$
       password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$ # The password must be at least 8 characters, with at least one lowercase, one uppercase and one number
-      text-basic: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,30}$
+      text-basic: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,150}$
       text-long: ^[\s\w\-.,:;"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,1000}$
       text-query: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,100}$
       isbn-code: ^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[\- ]){3})[\- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[\- ]){4})[\- 0-9]{17}$)(?:97[89][\- ]?)?[0-9]{1,5}[\- ]?[0-9]+[\- ]?[0-9]+[\- ]?[0-9X]$
@@ -52,6 +52,9 @@ security:
       size: 10
 
 front-end:
+   home:
+      title-max-size: 30
+      authors-max: 2
    search-criteria:
       num-of-authors: 4
       num-of-publishers: 5
