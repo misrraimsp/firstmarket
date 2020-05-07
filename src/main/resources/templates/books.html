@@ -177,17 +177,17 @@
                                         <!-- user actions -->
                                         <div class="col-sm-12 my-3" sec:authorize="!hasRole('ADMIN')">
                                             <button class="btn btn-outline-info btn-sm btn-block align-center" ajax="addBook" th:id="'ab-' + ${book.id}">
-                                                Add to Cart<i class="fas fa-cart-plus ml-2"></i>
+                                                Add to Cart<i class="fas fa-cart-plus ml-3"></i>
                                             </button>
                                         </div>
                                         <!-- admin actions -->
                                         <div class="col-sm-12 my-3" sec:authorize="hasRole('ADMIN')">
                                             <div class="d-flex flex-column">
                                                 <a class="btn btn-outline-secondary btn-sm align-center mb-3" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
-                                                    Edit Book<i class="fas fa-pen ml-2"></i>
+                                                    Edit Book<i class="fas fa-pen ml-3"></i>
                                                 </a>
                                                 <button class="modalTrigger btn btn-outline-secondary btn-sm align-center" th:id="'del-' + ${book.id}">
-                                                    Delete Book<i class="fas fa-trash-alt ml-2"></i>
+                                                    Delete Book<i class="fas fa-trash-alt ml-3"></i>
                                                 </button>
                                             </div>
                                         </div>

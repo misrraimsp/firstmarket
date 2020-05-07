@@ -83,17 +83,23 @@
                         </div>
                         <!-- action buttons -->
                         <div class="col-sm-4" >
-                            <!-- addBook to cart button -->
+                            <!-- user-role specific buttons -->
                             <div sec:authorize="!hasRole('ADMIN')">
+                                <!-- addBook to cart button -->
                                 <button class="btn btn-outline-info btn-lg align-center btn-block" ajax="addBook" th:id="'ab-' + ${book.id}">
-                                    Add to Cart<i class="fas fa-cart-plus ml-2"></i>
+                                    Add to Cart<i class="fas fa-cart-plus ml-3"></i>
                                 </button>
                             </div>
-                            <!-- editBook button -->
+                            <!-- admin-role specific buttons -->
                             <div sec:authorize="hasRole('ADMIN')">
-                                <a class="btn btn-outline-info btn-lg align-center btn-block" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
-                                    Edit Book<i class="fas fa-pen fa-2x ml-2"></i>
+                                <!-- editBook button -->
+                                <a class="btn btn-sm btn-outline-secondary btn-block" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
+                                    Edit Book<i class="fas fa-pen ml-3"></i>
                                 </a>
+                                <!-- deleteBook button -->
+                                <button class="modalTrigger btn btn-sm btn-outline-secondary btn-block my-3" th:id="'del-' + ${book.id}">
+                                    Delete Book<i class="fas fa-trash-alt ml-3"></i>
+                                </button>
                             </div>
                             <!-- go back button -->
                             <div>
@@ -118,11 +124,21 @@
             </div>
             <!-- snackbar -->
             <div th:replace="fragments/components::snackbar"></div>
+            <!-- modal -->
+            <div th:replace="fragments/components::deletingModal(entity = 'Book')"></div>
             <!-- footer -->
             <div th:replace="fragments/components::fixedFooter"></div>
         </div>
         <!-- ajax add book to cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
+        <!-- modal functionality -->
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                document.dispatchEvent(new CustomEvent('custom-htmlReady'));
+            }, false);
+        </script>
+        <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>
