@@ -11,10 +11,19 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Data
 public class BookForm {
+
+    public BookForm() {
+        authorsFirstName = Collections.singletonList("");
+        authorsLastName = Collections.singletonList("");
+        pages = 1;
+        year = Year.now();
+        language = Languages.Spanish;
+    }
 
     private Long bookId;
 

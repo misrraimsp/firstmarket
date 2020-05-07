@@ -27,7 +27,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -84,10 +83,6 @@ public class BookController extends BasicController {
                     try {
                         Book book = bookServer.findById(bookId);
                         BookForm bookForm = bookServer.convertBookToBookForm(book);
-                        if (bookForm.getAuthorsFirstName().size() == 0) {
-                            bookForm.setAuthorsFirstName(Collections.singletonList(""));
-                            bookForm.setAuthorsLastName(Collections.singletonList(""));
-                        }
                         model.addAttribute("bookForm", bookForm);
                     }
                     catch (BookNotFoundException e) {
@@ -95,12 +90,7 @@ public class BookController extends BasicController {
                         bookNotFound.set(true);
                     }
                 },
-                () -> {
-                    BookForm bookForm = new BookForm();
-                    bookForm.setAuthorsFirstName(Collections.singletonList(""));
-                    bookForm.setAuthorsLastName(Collections.singletonList(""));
-                    model.addAttribute("bookForm", bookForm);
-                }
+                () -> model.addAttribute("bookForm", new BookForm())
         );
         if (bookNotFound.get()) {
             return "redirect:/home";

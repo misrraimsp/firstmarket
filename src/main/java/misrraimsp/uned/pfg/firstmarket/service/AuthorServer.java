@@ -2,6 +2,8 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.AuthorRepository;
 import misrraimsp.uned.pfg.firstmarket.model.Author;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +13,8 @@ import java.util.Set;
 @Service
 public class AuthorServer {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private AuthorRepository authorRepository;
 
     @Autowired
@@ -19,10 +23,26 @@ public class AuthorServer {
     }
 
     public Author persist(Author author) {
-        author.setFirstName(author.getFirstName().toUpperCase());
-        author.setLastName(author.getLastName().toUpperCase());
+        LOGGER.debug("Trying to persist this author(id={}, firstname={}, lastname={})",
+                author.getId(),
+                author.getFirstName(),
+                author.getLastName());
         Author storedAuthor = this.findByFirstNameAndLastName(author.getFirstName(), author.getLastName());
-        return (storedAuthor != null) ? storedAuthor : authorRepository.save(author);
+        if (storedAuthor != null) {
+            LOGGER.debug("But author already exists(id={}, firstname={}, lastname={})",
+                    storedAuthor.getId(),
+                    storedAuthor.getFirstName(),
+                    storedAuthor.getLastName());
+            return storedAuthor;
+        }
+        else {
+            Author persistedAuthor = authorRepository.save(author);
+            LOGGER.debug("And author persisted(id={}, firstname={}, lastname={}) successfully",
+                    persistedAuthor.getId(),
+                    persistedAuthor.getFirstName(),
+                    persistedAuthor.getLastName());
+            return persistedAuthor;
+        }
     }
 
     public Author findByFirstNameAndLastName(String firstName, String lastName) {

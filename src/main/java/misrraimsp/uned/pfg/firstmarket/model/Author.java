@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -20,33 +21,25 @@ public class Author {
     private String lastName;
 
 
-    /**
-     * Esta igualdad evita que autores con diferencias entre mayúsculas/minúsculas sean diferentes
-     */
+    // case insensitive
     @Override
     public boolean equals(final Object o) {
         if (o == this) return true;
         if (!(o instanceof Author)) return false;
+
         final Author other = (Author) o;
-        if (!other.canEqual((Object) this)) return false;
 
-        final Object this$firstName = this.getFirstName().toUpperCase();
-        final Object other$firstName = other.getFirstName().toUpperCase();
-        if (this$firstName == null ? other$firstName != null : !this$firstName.equals(other$firstName)) return false;
+        final String this$firstName = this.getFirstName();
+        final String other$firstName = other.getFirstName();
+        if (this$firstName == null ? other$firstName != null : !this$firstName.equalsIgnoreCase(other$firstName)) return false;
 
-        final Object this$lastName = this.getLastName().toUpperCase();
-        final Object other$lastName = other.getLastName().toUpperCase();
-        if (this$lastName == null ? other$lastName != null : !this$lastName.equals(other$lastName)) return false;
+        final String this$lastName = this.getLastName();
+        final String other$lastName = other.getLastName();
+        if (this$lastName == null ? other$lastName != null : !this$lastName.equalsIgnoreCase(other$lastName)) return false;
 
-        final Object this$id = this.getId();
-        final Object other$id = other.getId();
-        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-
-        return true;
-    }
-
-    protected boolean canEqual(final Object other) {
-        return other instanceof Author;
+        final Long this$id = this.getId();
+        final Long other$id = other.getId();
+        return Objects.equals(this$id, other$id);
     }
 
     @Override

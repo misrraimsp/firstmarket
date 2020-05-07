@@ -4,18 +4,19 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Year;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class BookConverter {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private ValidationRegexProperties validationRegexProperties;
 
@@ -50,91 +51,21 @@ public class BookConverter {
         bookForm.setCategoryId(book.getCategory().getId());
         bookForm.setStoredImageId(book.getImage().getId());
         //authors
-        List<String> authorsFirstName = new ArrayList<>();
-        List<String> authorsLastName = new ArrayList<>();
-        book.getAuthors().forEach(author -> {
-            authorsFirstName.add(author.getFirstName());
-            authorsLastName.add(author.getLastName());
-        });
-        bookForm.setAuthorsFirstName(authorsFirstName);
-        bookForm.setAuthorsLastName(authorsLastName);
-        /*
-        int size = authors.size();
-        if (size == 1){
-            bookForm.setAuthorFirstName0(authors.get(0).getFirstName());
-            bookForm.setAuthorLastName0(authors.get(0).getLastName());
-            bookForm.setAuthorFirstName1("");
-            bookForm.setAuthorLastName1("");
-            bookForm.setAuthorFirstName2("");
-            bookForm.setAuthorLastName2("");
-            bookForm.setAuthorFirstName3("");
-            bookForm.setAuthorLastName3("");
-            bookForm.setAuthorFirstName4("");
-            bookForm.setAuthorLastName4("");
+        {
+            if (book.getAuthors().isEmpty()) {
+                bookForm.setAuthorsFirstName(Collections.singletonList(""));
+                bookForm.setAuthorsLastName(Collections.singletonList(""));
+            } else {
+                List<String> authorsFirstName = new ArrayList<>();
+                List<String> authorsLastName = new ArrayList<>();
+                book.getAuthors().forEach(author -> {
+                    authorsFirstName.add(author.getFirstName());
+                    authorsLastName.add(author.getLastName());
+                });
+                bookForm.setAuthorsFirstName(authorsFirstName);
+                bookForm.setAuthorsLastName(authorsLastName);
+            }
         }
-        else if (size == 2){
-            bookForm.setAuthorFirstName0(authors.get(0).getFirstName());
-            bookForm.setAuthorLastName0(authors.get(0).getLastName());
-            bookForm.setAuthorFirstName1(authors.get(1).getFirstName());
-            bookForm.setAuthorLastName1(authors.get(1).getLastName());
-            bookForm.setAuthorFirstName2("");
-            bookForm.setAuthorLastName2("");
-            bookForm.setAuthorFirstName3("");
-            bookForm.setAuthorLastName3("");
-            bookForm.setAuthorFirstName4("");
-            bookForm.setAuthorLastName4("");
-        }
-        else if (size == 3){
-            bookForm.setAuthorFirstName0(authors.get(0).getFirstName());
-            bookForm.setAuthorLastName0(authors.get(0).getLastName());
-            bookForm.setAuthorFirstName1(authors.get(1).getFirstName());
-            bookForm.setAuthorLastName1(authors.get(1).getLastName());
-            bookForm.setAuthorFirstName2(authors.get(2).getFirstName());
-            bookForm.setAuthorLastName2(authors.get(2).getLastName());
-            bookForm.setAuthorFirstName3("");
-            bookForm.setAuthorLastName3("");
-            bookForm.setAuthorFirstName4("");
-            bookForm.setAuthorLastName4("");
-        }
-        else if (size == 4){
-            bookForm.setAuthorFirstName0(authors.get(0).getFirstName());
-            bookForm.setAuthorLastName0(authors.get(0).getLastName());
-            bookForm.setAuthorFirstName1(authors.get(1).getFirstName());
-            bookForm.setAuthorLastName1(authors.get(1).getLastName());
-            bookForm.setAuthorFirstName2(authors.get(2).getFirstName());
-            bookForm.setAuthorLastName2(authors.get(2).getLastName());
-            bookForm.setAuthorFirstName3(authors.get(3).getFirstName());
-            bookForm.setAuthorLastName3(authors.get(3).getLastName());
-            bookForm.setAuthorFirstName4("");
-            bookForm.setAuthorLastName4("");
-        }
-        else if (size == 5){
-            bookForm.setAuthorFirstName0(authors.get(0).getFirstName());
-            bookForm.setAuthorLastName0(authors.get(0).getLastName());
-            bookForm.setAuthorFirstName1(authors.get(1).getFirstName());
-            bookForm.setAuthorLastName1(authors.get(1).getLastName());
-            bookForm.setAuthorFirstName2(authors.get(2).getFirstName());
-            bookForm.setAuthorLastName2(authors.get(2).getLastName());
-            bookForm.setAuthorFirstName3(authors.get(3).getFirstName());
-            bookForm.setAuthorLastName3(authors.get(3).getLastName());
-            bookForm.setAuthorFirstName4(authors.get(4).getFirstName());
-            bookForm.setAuthorLastName4(authors.get(4).getLastName());
-        }
-        else {
-            bookForm.setAuthorFirstName0("");
-            bookForm.setAuthorLastName0("");
-            bookForm.setAuthorFirstName1("");
-            bookForm.setAuthorLastName1("");
-            bookForm.setAuthorFirstName2("");
-            bookForm.setAuthorLastName2("");
-            bookForm.setAuthorFirstName3("");
-            bookForm.setAuthorLastName3("");
-            bookForm.setAuthorFirstName4("");
-            bookForm.setAuthorLastName4("");
-        }
-
-         */
-        //
         bookForm.setPublisherName((book.getPublisher() != null) ? book.getPublisher().getName() : "");
         bookForm.setDescription(book.getDescription());
         bookForm.setPages(book.getPages());
@@ -165,16 +96,35 @@ public class BookConverter {
     }
 
     private Set<Author> convertBookFormAuthors(List<String> authorsFirstName, List<String> authorsLastName) {
-        int numOfAuthors = authorsFirstName.size();
-        if (numOfAuthors != authorsLastName.size()) {
-            throw new BookFormAuthorsConversionException(
-                    "Authors firstNames.size=" + numOfAuthors + " and lastNames.size=" + authorsLastName.size() + " are not equal");
+        int numOfFirstNames = authorsFirstName.size();
+        int numOfLastNames = authorsLastName.size();
+        if (numOfFirstNames != numOfLastNames) {
+            if (numOfFirstNames == 0 && numOfLastNames == 1) {
+                authorsFirstName.add("");
+                LOGGER.debug(
+                        "Authors firstNames.size={} and lastNames.size={} does not match. Added empty string to author firstNames",
+                        numOfFirstNames,
+                        numOfLastNames
+                );
+            }
+            else if (numOfFirstNames == 1 && numOfLastNames == 0) {
+                authorsLastName.add("");
+                LOGGER.debug(
+                        "Authors firstNames.size={} and lastNames.size={} does not match. Added empty string to author lastNames",
+                        numOfFirstNames,
+                        numOfLastNames
+                );
+            }
+            else {
+                throw new BookFormAuthorsConversionException(
+                        "Authors firstNames.size=" + numOfFirstNames + " and lastNames.size=" + numOfLastNames + " does not match in an unexpected way");
+            }
         }
         Set<Author> authors = new HashSet<>();
-        if (numOfAuthors == 0) {
+        if (numOfFirstNames == 0) {
             return authors;
         }
-        for (int i = 0; i < numOfAuthors; i++) {
+        for (int i = 0; i < numOfFirstNames; i++) {
             String firstName = authorsFirstName.get(i);
             String lastName = authorsLastName.get(i);
             if (!firstName.isBlank() || !lastName.isBlank()) {
