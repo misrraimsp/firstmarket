@@ -133,43 +133,48 @@
                                     <div class="mt-3">
                                         <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
                                             <p th:unless="${book.title.isBlank()}">
-                                                <span th:text="${book.title}">title</span>
+                                                <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('front-end.books.title-max-size')}__))}"></strong>
                                             </p>
                                             <p th:if="${book.title.isBlank()}">
-                                                <span><small><i>unknown title</i></small></span>
+                                                <small><i>unknown title</i></small>
                                             </p>
                                         </a>
                                     </div>
                                     <!-- authors -->
-                                    <div>
-                                        <p th:unless="${book.authorsString.isBlank()}">
-                                            <strong><span th:text="${book.authorsString}"></span></strong>
+                                    <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
+                                        <p th:if="${stats.index < __${@environment.getProperty('front-end.books.authors-max')}__}" class="text-dark small" th:classappend="${stats.last}? 'mt-1 mb-3' : 'my-1'">
+                                            <strong th:if="${author.lastName.isBlank()}" th:text="'-, ' + ${author.firstName}"></strong>
+                                            <strong th:if="${author.firstName.isBlank()}" th:text="${author.lastName} + ', -'"></strong>
+                                            <strong th:if="${!author.lastName.isBlank() && !author.firstName.isBlank()}" th:text="${author.lastName} + ', ' + ${author.firstName}"></strong>
                                         </p>
-                                        <p th:if="${book.authorsString.isBlank()}">
-                                            <span><small><i>unknown authors</i></small></span>
+                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('front-end.books.authors-max')}__}" class="text-dark font-weight-light mb-3 mt-n1 small">
+                                            <small><span th:text="${stats.size - __${@environment.getProperty('front-end.books.authors-max')}__}">restOfAuthors</span> more author/s</small>
                                         </p>
                                     </div>
+                                    <p th:if="${book.authors.size() eq 0}">
+                                        <small class="text-secondary font-weight-light"><i>unknown author</i></small>
+                                    </p>
                                     <!-- publisher -->
                                     <div>
-                                        <p th:if="${book.publisher ne null}">
-                                            <small>Published by </small><strong><span th:text="${book.publisher.name}"></span></strong>
+                                        <p th:if="${book.publisher ne null}" class="text-dark small">
+                                            <span class="font-weight-light">Published by </span><strong th:text="${book.publisher.name}"></strong>
                                         </p>
                                         <p th:unless="${book.publisher ne null}">
-                                            <small><i>unknown publisher</i></small>
+                                            <small class="text-secondary font-weight-light"><i>unknown publisher</i></small>
                                         </p>
                                     </div>
-                                    <!-- language -->
+                                    <!-- isbn -->
+                                    <p class="mb-3 text-dark small">
+                                        <span class="font-weight-light">ISBN </span><strong th:text="${book.isbn}"></strong>
+                                    </p>
+                                    <!-- language
                                     <div>
                                         <p class="my-0"><small><span th:text="${book.language}"></span></small></p>
-                                    </div>
-                                    <!-- category -->
+                                    </div>-->
+                                    <!-- category
                                     <div>
                                         <p class="my-0"><small><span th:text="${book.category.name}"></span></small></p>
-                                    </div>
-                                    <!-- isbn -->
-                                    <div>
-                                        <p class="mb-3"><small>ISBN-<span th:text="${book.isbn}"></span></small></p>
-                                    </div>
+                                    </div>-->
                                 </div>
                                 <!-- actions -->
                                 <div class="col-sm-3 bg-white">
@@ -193,7 +198,9 @@
                                         </div>
                                         <!-- price -->
                                         <div class="col-sm-12">
-                                            <p><strong>EUR <span th:text="${book.price}"></span></strong></p>
+                                            <p class="text-dark">
+                                                <span class="font-weight-light">EUR </span><strong th:text="${book.price}"></strong>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>

@@ -53,7 +53,13 @@ security:
 
 front-end:
    home:
-      title-max-size: 30
+      title-max-size: 20
+      authors-max: 2
+   cart:
+      title-max-size: 40
+      authors-max: 2
+   books:
+      title-max-size: 60
       authors-max: 2
    search-criteria:
       num-of-authors: 4

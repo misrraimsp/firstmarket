@@ -60,33 +60,29 @@
                             <div class="card-body">
                                 <!-- title -->
                                 <div class="card-title text-responsive">
-                                    <a th:unless="${book.title.isBlank()}" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
-                                        <p class="text-info font-weight-bold" th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('front-end.home.title-max-size')}__))}"></p>
+                                    <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
+                                        <p th:unless="${book.title.isBlank()}">
+                                            <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('front-end.home.title-max-size')}__))}"></strong>
+                                        </p>
+                                        <p th:if="${book.title.isBlank()}">
+                                            <small><i>unknown title</i></small>
+                                        </p>
                                     </a>
-                                    <p th:if="${book.title.isBlank()}" class="text-secondary">
-                                        <small class="font-weight-light"><i>title unknown</i></small>
-                                    </p>
                                 </div>
                                 <!-- authors -->
                                 <div class="card-text text-responsive">
                                     <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
-                                        <div th:if="${stats.index < __${@environment.getProperty('front-end.home.authors-max')}__}">
-                                            <div th:if="${author.lastName.isBlank()}">
-                                                <p class="text-dark my-1" th:text="'-, ' + ${author.firstName}"></p>
-                                            </div>
-                                            <div th:if="${author.firstName.isBlank()}">
-                                                <p class="text-dark my-1" th:text="${author.lastName} + ', -'"></p>
-                                            </div>
-                                            <div th:if="${!author.lastName.isBlank() && !author.firstName.isBlank()}">
-                                                <p class="text-dark my-1" th:text="${author.lastName} + ', ' + ${author.firstName}"></p>
-                                            </div>
-                                        </div>
-                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('front-end.home.authors-max')}__}" class="text-dark my-1">
-                                            <small class="font-weight-light"><span th:text="${stats.size - __${@environment.getProperty('front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
+                                        <p th:if="${stats.index < __${@environment.getProperty('front-end.home.authors-max')}__}" class="text-dark small my-1">
+                                            <span th:if="${author.lastName.isBlank()}" th:text="'-, ' + ${author.firstName}"></span>
+                                            <span th:if="${author.firstName.isBlank()}" th:text="${author.lastName} + ', -'"></span>
+                                            <span th:if="${!author.lastName.isBlank() && !author.firstName.isBlank()}" th:text="${author.lastName} + ', ' + ${author.firstName}"></span>
+                                        </p>
+                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('front-end.home.authors-max')}__}" class="text-dark font-weight-light mb-0 mt-n1 small">
+                                            <small><span th:text="${stats.size - __${@environment.getProperty('front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
                                         </p>
                                     </div>
                                     <p th:if="${book.authors.size() eq 0}">
-                                        <small class="text-secondary font-weight-light"><i>author unknown</i></small>
+                                        <small class="text-secondary font-weight-light"><i>unknown author</i></small>
                                     </p>
                                 </div>
                             </div>
