@@ -143,9 +143,7 @@
                                     <!-- authors -->
                                     <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
                                         <p th:if="${stats.index < __${@environment.getProperty('front-end.books.authors-max')}__}" class="text-dark small" th:classappend="${stats.last}? 'mt-1 mb-3' : 'my-1'">
-                                            <strong th:if="${author.lastName.isBlank()}" th:text="'-, ' + ${author.firstName}"></strong>
-                                            <strong th:if="${author.firstName.isBlank()}" th:text="${author.lastName} + ', -'"></strong>
-                                            <strong th:if="${!author.lastName.isBlank() && !author.firstName.isBlank()}" th:text="${author.lastName} + ', ' + ${author.firstName}"></strong>
+                                            <strong><span th:replace="fragments/components::author"></span></strong>
                                         </p>
                                         <p th:if="${stats.last && stats.size > __${@environment.getProperty('front-end.books.authors-max')}__}" class="text-dark font-weight-light mb-3 mt-n1 small">
                                             <small><span th:text="${stats.size - __${@environment.getProperty('front-end.books.authors-max')}__}">restOfAuthors</span> more author/s</small>

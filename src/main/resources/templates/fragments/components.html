@@ -166,6 +166,9 @@
             </form>
         </div>
 
+        <!-- author string -->
+        <span th:fragment="author" th:text="(${author.lastName.isBlank()}? '-' : ${author.lastName}) + ', ' + (${author.firstName.isBlank()}? '-' : ${author.firstName})"></span>
+
         <!-- login error -->
         <div th:fragment="loginError" class="my-2" th:if="${param.error != null}">
             <div class="alert alert-danger alert-dismissible fade show">
