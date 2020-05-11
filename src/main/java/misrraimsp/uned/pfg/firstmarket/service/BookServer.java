@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
@@ -131,20 +132,14 @@ public class BookServer {
         return (bookIds.isEmpty()) ? new HashSet<>() : bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
     }
 
-    public Page<Book> findSearchResults(Long categoryId,
-                                        Set<String> priceIds,
-                                        Set<Long> authorIds,
-                                        Set<Long> publisherIds,
-                                        Set<Languages> languageIds,
-                                        String q,
-                                        Pageable pageable) {
+    public Page<Book> findSearchResults(SearchCriteria searchCriteria, Pageable pageable) {
 
-        Set<Long> idsByCategory = bookRepository.findIdByAncestorCategoryId(categoryId);
-        Set<Long> idsByAuthor = (authorIds != null) ? bookRepository.findIdByAuthorIds(authorIds) : null;
-        Set<Long> idsByPublisher = (publisherIds != null) ? bookRepository.findIdByPublisherIds(publisherIds) : null;
-        Set<Long> idsByLanguage = (languageIds != null) ? bookRepository.findIdByLanguageIds(languageIds) : null;
-        Set<Long> idsByPrice  = (priceIds != null) ? this.getIdsByPriceIntervals(priceIds) : null;
-        Set<Long> idsByQ  = (q != null) ? this.getIdsByQueryText(q) : null;
+        Set<Long> idsByCategory = bookRepository.findIdByAncestorCategoryId(searchCriteria.getCategoryId());
+        Set<Long> idsByAuthor = (searchCriteria.getAuthorId() != null) ? bookRepository.findIdByAuthorIds(searchCriteria.getAuthorId()) : null;
+        Set<Long> idsByPublisher = (searchCriteria.getPublisherId() != null) ? bookRepository.findIdByPublisherIds(searchCriteria.getPublisherId()) : null;
+        Set<Long> idsByLanguage = (searchCriteria.getLanguageId() != null) ? bookRepository.findIdByLanguageIds(searchCriteria.getLanguageId()) : null;
+        Set<Long> idsByPrice  = (searchCriteria.getPriceId() != null) ? this.getIdsByPriceIntervals(searchCriteria.getPriceId()) : null;
+        Set<Long> idsByQ  = (searchCriteria.getQ() != null) ? this.getIdsByQueryText(searchCriteria.getQ()) : null;
 
         Set<Long> resultIds = intersect(idsByCategory, idsByPrice, idsByAuthor, idsByPublisher, idsByLanguage, idsByQ);
         if (resultIds.size() == 0){
@@ -166,12 +161,9 @@ public class BookServer {
         return idsByQ;
     }
 
-    private Set<Long> getIdsByPriceIntervals(Set<String> priceIds) {
+    private Set<Long> getIdsByPriceIntervals(Set<PriceIntervals> priceIds) {
         Set<Long> idsByPrice = new HashSet<>();
-        for (String priceIntervalIndex : priceIds){
-            PriceIntervals pi = PriceIntervals.values()[Integer.parseInt(priceIntervalIndex)];
-            idsByPrice.addAll(bookRepository.findIdByPrice(pi.getLowLimit(), pi.getHighLimit()));
-        }
+        priceIds.forEach(pi -> idsByPrice.addAll(bookRepository.findIdByPrice(pi.getLowLimit(), pi.getHighLimit())));
         return idsByPrice;
     }
 

@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
@@ -11,7 +12,6 @@ import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,8 +30,6 @@ import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Controller
 public class BookController extends BasicController {
@@ -161,27 +159,10 @@ public class BookController extends BasicController {
     @GetMapping("/books")
     public String showBooks(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
                             @RequestParam(defaultValue = "${pagination.default-size.book-search}") String pageSize,
-                            @RequestParam(required = false) Long categoryId,
-                            @RequestParam(required = false) Set<String> priceId,
-                            @RequestParam(required = false) Set<Long> authorId,
-                            @RequestParam(required = false) Set<Long> publisherId,
-                            @RequestParam(required = false) Set<Languages> languageId,
-                            @RequestParam(required = false) String q,
-                            @Value(value = "${validation.regex.text-query:.*}") String qRegex,
+                            @Valid SearchCriteria searchCriteria,
+                            Errors errors,
                             Model model,
                             @AuthenticationPrincipal User authUser){
-
-        // ad hoc validation
-        boolean qIsValid = true;
-        if (q != null) {
-            Pattern pattern = Pattern.compile(qRegex);
-            Matcher matcher = pattern.matcher(q);
-            qIsValid = matcher.matches();
-            LOGGER.debug("String({}) validation with patternName(textQuery) (regex={}) has been {}", q, qRegex, qIsValid);
-            if (!qIsValid) {
-                q = null;
-            }
-        }
 
         // paging
         Pageable pageable = PageRequest.of(
@@ -189,14 +170,19 @@ public class BookController extends BasicController {
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
+        if (errors.hasErrors()) {
+            searchCriteria.setQ(null);
+            model.addAttribute("message", messageSource.getMessage("validation.regex.text-query", null, null));
+        }
+
         // category
         Category category;
         try {
             // root category by default
-            if (categoryId == null) {
-                categoryId = catServer.getRootCategory().getId();
+            if (searchCriteria.getCategoryId() == null) {
+                searchCriteria.setCategoryId(catServer.getRootCategory().getId());
             }
-            category = catServer.findCategoryById(categoryId);
+            category = catServer.findCategoryById(searchCriteria.getCategoryId());
         }
         catch (NoRootCategoryException nrc) {
             LOGGER.error("Root category not found", nrc);
@@ -208,10 +194,10 @@ public class BookController extends BasicController {
         }
 
         // search
-        Page<Book> books = bookServer.findSearchResults(categoryId, priceId, authorId, publisherId, languageId, q, pageable);
-        Set<Author> authors = bookServer.findTopAuthorsByCategoryId(categoryId, frontEndProperties.getNumOfAuthors());
-        Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(categoryId, frontEndProperties.getNumOfPublishers());
-        Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(categoryId, frontEndProperties.getNumOfLanguages());
+        Page<Book> books = bookServer.findSearchResults(searchCriteria, pageable);
+        Set<Author> authors = bookServer.findTopAuthorsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
+        Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
+        Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
 
         // load model
         populateModel(model, authUser);
@@ -223,9 +209,6 @@ public class BookController extends BasicController {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
-        if (!qIsValid) {
-            model.addAttribute("message", messageSource.getMessage("validation.regex.text-query", null, null));
-        }
         return "books";
     }
 
