@@ -1,21 +1,21 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 
-public class StringToPriceIntervalConverter implements Converter<String, PriceIntervals> {
+public class StringToPriceIntervalConverter implements Converter<String, PriceInterval> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public PriceIntervals convert(String s) {
-        if (PriceIntervals.values().length == 0) {
+    public PriceInterval convert(String s) {
+        if (PriceInterval.values().length == 0) {
             LOGGER.error("There is no PriceInterval defined that can be used");
             return null;
         }
-        int maxIndex = PriceIntervals.values().length - 1;
+        int maxIndex = PriceInterval.values().length - 1;
         int index;
         try {
             index = Integer.parseInt(s);
@@ -28,6 +28,6 @@ public class StringToPriceIntervalConverter implements Converter<String, PriceIn
             LOGGER.warn("PriceInterval index string out of bound. Defaults to index=0");
             index = 0;
         }
-        return PriceIntervals.values()[index];
+        return PriceInterval.values()[index];
     }
 }

@@ -53,6 +53,13 @@ security:
 
 front-end:
    home:
+      jum:
+         title:
+            text: FirstMarket
+            speed: 50
+         subtitle:
+            text: ', where books belong'
+            speed: 50
       title-max-size: 20
       authors-max: 2
    cart:

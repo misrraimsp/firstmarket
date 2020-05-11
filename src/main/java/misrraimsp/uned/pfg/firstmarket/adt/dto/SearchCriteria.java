@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 import java.util.Set;
@@ -11,10 +11,10 @@ import java.util.Set;
 public class SearchCriteria {
 
     private Long categoryId;
-    private Set<PriceIntervals> priceId;
+    private Set<PriceInterval> priceId;
     private Set<Long> authorId;
     private Set<Long> publisherId;
-    private Set<Languages> languageId;
+    private Set<Language> languageId;
 
     @ValidPattern(pattern = "textQuery", message = "{validation.regex.text-query}")
     private String q;

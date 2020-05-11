@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config.staticParameter;
 
-public enum Languages {
+public enum Language {
     Bulgarian,
     Croatian,
     Czech,

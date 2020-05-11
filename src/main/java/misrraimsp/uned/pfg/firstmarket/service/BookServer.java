@@ -2,8 +2,8 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.*;
@@ -127,7 +127,7 @@ public class BookServer {
         return publisherServer.findTopPublishersByCategoryId(categoryId, numTopPublishers);
     }
 
-    public Set<Languages> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
+    public Set<Language> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
         Set<Long> bookIds = bookRepository.findIdByAncestorCategoryId(categoryId);
         return (bookIds.isEmpty()) ? new HashSet<>() : bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
     }
@@ -161,7 +161,7 @@ public class BookServer {
         return idsByQ;
     }
 
-    private Set<Long> getIdsByPriceIntervals(Set<PriceIntervals> priceIds) {
+    private Set<Long> getIdsByPriceIntervals(Set<PriceInterval> priceIds) {
         Set<Long> idsByPrice = new HashSet<>();
         priceIds.forEach(pi -> idsByPrice.addAll(bookRepository.findIdByPrice(pi.getLowLimit(), pi.getHighLimit())));
         return idsByPrice;

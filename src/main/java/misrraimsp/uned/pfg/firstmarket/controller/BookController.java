@@ -3,8 +3,8 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceIntervals;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.exception.*;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.BookServer;
@@ -51,7 +51,7 @@ public class BookController extends BasicController {
     private void populateModelToBookForm(Model model) {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("languages", Languages.values());
+        model.addAttribute("languages", Language.values());
     }
 
     @GetMapping("/book/{id}")
@@ -197,7 +197,7 @@ public class BookController extends BasicController {
         Page<Book> books = bookServer.findSearchResults(searchCriteria, pageable);
         Set<Author> authors = bookServer.findTopAuthorsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
         Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
-        Set<Languages> languages = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
+        Set<Language> languages = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
 
         // load model
         populateModel(model, authUser);
@@ -205,7 +205,7 @@ public class BookController extends BasicController {
         model.addAttribute("category", category);
         model.addAttribute("categorySequence", catServer.getCategorySequence(category));
         model.addAttribute("childrenCategories", catServer.getChildren(category));
-        model.addAttribute("prices", PriceIntervals.values());
+        model.addAttribute("prices", PriceInterval.values());
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);

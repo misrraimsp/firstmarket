@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidIsbn;
@@ -22,7 +22,7 @@ public class BookForm {
         authorsLastName = Collections.singletonList("");
         pages = 1;
         year = Year.now();
-        language = Languages.Spanish;
+        language = Language.Spanish;
     }
 
     private Long bookId;
@@ -55,7 +55,7 @@ public class BookForm {
     @ValidNumber(name = "pages", message = "{validation.numeric.pages}")
     private int pages;
 
-    private Languages language;
+    private Language language;
 
     @ValidPattern(pattern = "price", message = "{validation.regex.price}")
     private String price;

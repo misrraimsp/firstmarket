@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -40,7 +40,7 @@ public class Book {
 
     private int pages;
 
-    private Languages language;
+    private Language language;
 
     private BigDecimal price;
 

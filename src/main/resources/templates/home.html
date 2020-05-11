@@ -16,7 +16,8 @@
                     <div class="jumbotron jumbotron-fluid mb-0">
                         <!-- main message -->
                         <h1 class="text-center">
-                            <span class="font-weight-bold text-dark">firstmarket</span><small>, where books belong</small>
+                            <strong class="text-dark font-weight-light" id="mainTitle" th:attrappend="tw-text=${(@environment.getProperty('front-end.home.jum.title.text') ne null) ? @environment.getProperty('front-end.home.jum.title.text') : ' '}, tw-speed=${(@environment.getProperty('front-end.home.jum.title.speed') ne null) ? @environment.getProperty('front-end.home.jum.title.speed') : 0}"></strong>
+                            <small class="font-weight-lighter" id="secondaryTitle" th:attrappend="tw-text=${(@environment.getProperty('front-end.home.jum.subtitle.text') ne null) ? @environment.getProperty('front-end.home.jum.subtitle.text') : ' '}, tw-speed=${(@environment.getProperty('front-end.home.jum.subtitle.speed') ne null) ? @environment.getProperty('front-end.home.jum.subtitle.speed') : 0}"></small>
                         </h1>
                         <!-- admin message -->
                         <div class="text-center" sec:authorize="hasRole('ADMIN')">
@@ -126,6 +127,7 @@
             <div th:replace="fragments/components::footer"></div>
         </div>
         <script th:src="@{/js/enableTooltips.js}"></script>
+        <script th:src="@{/js/typeWriter.js}"></script>
         <!-- ajax add book to cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>

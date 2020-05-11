@@ -2,7 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.config.staticParameter;
 
 import java.math.BigDecimal;
 
-public enum PriceIntervals {
+public enum PriceInterval {
 
     PRICE_0("€ 0-5", 0, 5),
     PRICE_1("€ 5-10", 5, 10),
@@ -15,7 +15,7 @@ public enum PriceIntervals {
     private final int lowLimit;
     private final int highLimit;
 
-    PriceIntervals(String text, int lowLimit, int highLimit) {
+    PriceInterval(String text, int lowLimit, int highLimit) {
         this.text = text;
         this.lowLimit = lowLimit;
         this.highLimit = highLimit;

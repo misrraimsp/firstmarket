@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.data;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Languages;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +28,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
                         "SELECT language, COUNT(*) FROM book b WHERE b.id IN :bookIds GROUP BY language ORDER BY 2 DESC LIMIT :numTopLanguages" +
                     ") AS aux"
     )
-    Set<Languages> findTopLanguagesByBookIds(@Param("bookIds") Set<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
+    Set<Language> findTopLanguagesByBookIds(@Param("bookIds") Set<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
 
     Page<Book> findAll(Pageable pageable);
 
@@ -48,7 +48,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     Set<Long> findIdByPublisherIds(@Param("publisherIds") Set<Long> publisherIds);
 
     @Query("SELECT b.id FROM Book b WHERE b.language IN :languageIds")
-    Set<Long> findIdByLanguageIds(@Param("languageIds") Set<Languages> languageIds);
+    Set<Long> findIdByLanguageIds(@Param("languageIds") Set<Language> languageIds);
 
     @Query("SELECT b.id FROM Book b WHERE b.price >= :lowLimit AND b.price < :highLimit")
     Set<Long> findIdByPrice(@Param("lowLimit") BigDecimal lowLimit, @Param("highLimit") BigDecimal highLimit);
