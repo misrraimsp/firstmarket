@@ -4,10 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
 import misrraimsp.uned.pfg.firstmarket.exception.CategoryNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
-import misrraimsp.uned.pfg.firstmarket.service.BookServer;
-import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
@@ -32,9 +29,10 @@ public class CategoryController extends BasicController {
                               BookServer bookServer,
                               CatServer catServer,
                               ImageServer imageServer,
-                              MessageSource messageSource) {
+                              MessageSource messageSource,
+                              PurchaseServer purchaseServer) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource);
+        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
     }
 
     private void populateModelToCategoryForm(Model model) {

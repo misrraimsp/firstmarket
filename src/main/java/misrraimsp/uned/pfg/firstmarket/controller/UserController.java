@@ -8,15 +8,13 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.ProfileNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.model.UserDeletion;
-import misrraimsp.uned.pfg.firstmarket.service.BookServer;
-import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
@@ -46,10 +44,11 @@ public class UserController extends BasicController {
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
+                          PurchaseServer purchaseServer,
                           PasswordEncoder passwordEncoder,
                           ApplicationEventPublisher applicationEventPublisher) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource);
+        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
         this.passwordEncoder = passwordEncoder;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -434,13 +433,13 @@ public class UserController extends BasicController {
             return "profileForm";
         }
         try {
-            Profile profile = userServer.convertProfileFormToProfile(profileForm);
-            userServer.editProfile(authUser.getId(), profile);
-            LOGGER.trace("User profile edited (id={})", authUser.getId());
+            Profile editedProfile = userServer.convertProfileFormToProfile(profileForm);
+            userServer.editProfile(editedProfile);
+            LOGGER.debug("User(id={}) has edited its Profile(id={}) successfully", authUser.getId(), profileForm.getProfileId());
             return "redirect:/home";
         }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
+        catch (ProfileNotFoundException e) {
+            LOGGER.warn("User(id={}) trying to edit a non-existent Profile(id={})", authUser.getId(), profileForm.getProfileId(), e);
             return "redirect:/home";
         }
     }
@@ -467,7 +466,7 @@ public class UserController extends BasicController {
 
         try {
             User user = userServer.findById(authUser.getId());
-            model.addAttribute("purchases", user.getPurchases());
+            model.addAttribute("purchases", purchaseServer.getPurchasesByUser(user));
             populateModel(model, authUser);
             return "purchases";
         }

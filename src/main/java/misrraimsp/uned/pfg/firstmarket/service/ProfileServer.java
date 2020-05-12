@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.converter.ProfileConverter;
 import misrraimsp.uned.pfg.firstmarket.data.ProfileRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.ProfileNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,13 @@ public class ProfileServer {
         return profileRepository.save(profile);
     }
 
-    public void edit(Long profileId, Profile newProfile) {
-        newProfile.setId(profileId);
-        profileRepository.save(newProfile);
+    public Profile edit(Profile editedProfile) {
+        if (profileRepository.existsById(editedProfile.getId())) {
+            return profileRepository.save(editedProfile);
+        }
+        else {
+            throw new ProfileNotFoundException(editedProfile.getId());
+        }
     }
 
     public ProfileForm convertProfileToProfileForm(Profile profile) {

@@ -38,9 +38,6 @@ public class User implements UserDetails {
     @OneToOne
     private Cart cart;
 
-    @OneToMany
-    private List<Purchase> purchases = new ArrayList<>();
-
     public String getUsername(){
         return email;
     }
@@ -69,5 +66,9 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return completed && !suspended;
+    }
+
+    public String toString() {
+        return "id: " + id + "; email: " + email;
     }
 }

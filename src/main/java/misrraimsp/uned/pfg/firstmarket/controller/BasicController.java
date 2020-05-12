@@ -2,10 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.BookServer;
-import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,19 +23,22 @@ public abstract class BasicController {
     protected CatServer catServer;
     protected ImageServer imageServer;
     protected MessageSource messageSource;
+    protected PurchaseServer purchaseServer;
 
     @Autowired
     public BasicController(UserServer userServer,
                            BookServer bookServer,
                            CatServer catServer,
                            ImageServer imageServer,
-                           MessageSource messageSource) {
+                           MessageSource messageSource,
+                           PurchaseServer purchaseServer) {
 
         this.userServer = userServer;
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.imageServer = imageServer;
         this.messageSource = messageSource;
+        this.purchaseServer = purchaseServer;
         LOGGER.trace("{} created", this.getClass().getName());
     }
 

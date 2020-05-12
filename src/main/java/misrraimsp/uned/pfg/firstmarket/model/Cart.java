@@ -7,8 +7,8 @@ import org.hibernate.annotations.LazyCollectionOption;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -20,7 +20,7 @@ public class Cart {
 
     @OneToMany
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Item> items = new ArrayList<>();
+    private Set<Item> items = new HashSet<>();
 
     //@PastOrPresent(message = "{date.notValid}")
     private LocalDateTime lastModified;

@@ -10,8 +10,8 @@ host-address: http://localhost:8080
 spring:
    profiles:
       active:
-         - dev-mariadb
-         #- dev-h2
+         #- dev-mariadb
+         - dev-h2
    #jpa:
       #show-sql: true
 

@@ -8,31 +8,118 @@
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <div th:replace="fragments/components::title(text = 'Edit Profile')"></div>
+            <!-- title -->
             <div class="row">
-                <div class="col-sm-3 bg-white"></div>
+                <div class="col-sm-2 bg-white"></div>
+                <div class="col-sm-10 bg-white">
+                    <h2 class="text-dark my-5 font-weight-light">Edit Profile</h2>
+                </div>
+            </div>
+            <!-- main content -->
+            <div class="row">
+                <div class="col-sm-2 bg-white"></div>
+                <!-- profile form -->
                 <div class="col-sm-6 bg-light">
                     <form class="needs-validation" novalidate th:action="@{/user/profileForm}" th:object="${profileForm}" method="POST" action="#">
-                        <!-- firstname -->
-                        <div class="form-group">
-                            <label for="firstName">First Name:</label>
-                            <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        <input type="hidden" th:field="*{profileId}"/>
+                        <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
+                        <div class="form-row">
+                            <div class="col-sm-6 bg-light">
+                                <!-------------------------------------------------------------------------firstname-->
+                                <div class="form-group">
+                                    <label class="mt-1" for="firstName">First Name:</label>
+                                    <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
+                                <!------------------------------------------------------------------------- phone -->
+                                <div class="form-group">
+                                    <label for="phone">Phone Number:</label>
+                                    <input class="form-control" type="text" th:field="*{phone}" id="phone" placeholder="enter your phone number" th:pattern="${@environment.getProperty('validation.regex.phone')}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('phone')"></div>
+                            </div>
+                            <div class="col-sm-6 bg-light">
+                                <!-------------------------------------------------------------------------lastname-->
+                                <div class="form-group">
+                                    <label class="mt-1" for="lastName">Last Name:</label>
+                                    <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>
+                                <!------------------------------------------------------------------------- gender -->
+                                <div class="form-group">
+                                    <label for="gender">Gender:</label>
+                                    <select class="custom-select" th:field="*{gender}" id="gender" >
+                                        <option th:each="gen : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender).values()}"
+                                                th:value="${gen}"
+                                                th:text="${gen.text}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 bg-light">
+                                <!------------------------------------------------------------------------- birthdate -->
+                                <label>Date of Birth :</label>
+                                <div class="input-group mb-3">
+                                    <!-- year -->
+                                    <select class="custom-select" th:field="*{year}" id="year" >
+                                        <option th:each="y : ${T(java.util.stream.IntStream).rangeClosed(1900,T(java.time.Year).now().getValue()).boxed().sorted(T(java.util.Collections).reverseOrder()).collect(T(java.util.stream.Collectors).toList())}"
+                                                th:value="${y}"
+                                                th:text="${y}">
+                                        </option>
+                                    </select>
+                                    <!-- month -->
+                                    <select class="custom-select" th:field="*{month}" id="month" >
+                                        <option th:each="m : ${T(java.time.Month).values()}"
+                                                th:value="${m}"
+                                                th:text="${m.getDisplayName('SHORT', 'ROOT')}">
+                                        </option>
+                                    </select>
+                                    <!-- day -->
+                                    <select class="custom-select" th:field="*{day}" id="day" >
+                                        <option th:each="d : ${T(java.util.stream.IntStream).rangeClosed(1,31).boxed().collect(T(java.util.stream.Collectors).toList())}"
+                                                th:value="${d}"
+                                                th:text="${d}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 bg-light">
+                                <!-- save or cancel -->
+                                <button th:replace="fragments/components::saveButton"></button>
+                                <a th:replace="fragments/components::cancelButtonToHome"></a>
+                            </div>
                         </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
-                        <!-- lastname -->
-                        <div class="form-group">
-                            <label for="lastName">Last Name:</label>
-                            <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                        </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>
-                        <!-- save or cancel -->
-                        <button th:replace="fragments/components::saveButton"></button>
-                        <a th:replace="fragments/components::cancelButtonToHome"></a>
                     </form>
                 </div>
-                <div class="col-sm-3 bg-white"></div>
+                <!-- action buttons -->
+                <div class="col-sm-3 bg-light">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10 py-4">
+                            <!-- edit email button -->
+                            <div class="my-3">
+                                <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/user/editEmail}">Change Email</a>
+                            </div>
+                            <!-- edit password button -->
+                            <div class="my-3">
+                                <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/editPassword}">Change Password</a>
+                            </div>
+                            <!-- edit address button -->
+                            <div class="my-3">
+                                <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/editAddress}">My Addresses</a>
+                            </div>
+                            <hr class="my-3">
+                            <!-- delete account button -->
+                            <div class="my-3">
+                                <a class="btn btn-sm btn-outline-danger btn-block font-weight-lighter" th:href="@{/user/deleteUser}">Delete Account</a>
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                </div>
+                <div class="col-sm-2 bg-white"></div>
             </div>
             <footer th:replace="fragments/components::fixedFooter"></footer>
         </div>

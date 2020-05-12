@@ -1,10 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.BookServer;
-import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.context.MessageSource;
@@ -25,9 +22,10 @@ public class CustomErrorController extends BasicController implements ErrorContr
                                  BookServer bookServer,
                                  CatServer catServer,
                                  ImageServer imageServer,
-                                 MessageSource messageSource) {
+                                 MessageSource messageSource,
+                                 PurchaseServer purchaseServer) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource);
+        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
     }
 
     @Override

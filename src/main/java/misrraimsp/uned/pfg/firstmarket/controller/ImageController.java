@@ -5,10 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
 import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.service.BookServer;
-import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -41,9 +38,10 @@ public class ImageController extends BasicController  {
                            BookServer bookServer,
                            CatServer catServer,
                            ImageServer imageServer,
-                           MessageSource messageSource) {
+                           MessageSource messageSource,
+                           PurchaseServer purchaseServer) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource);
+        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
     }
 
     private void populateModelToImage(Model model,

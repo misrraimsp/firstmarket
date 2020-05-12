@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Service
 public class CartServer {
@@ -33,7 +33,7 @@ public class CartServer {
 
     @Transactional
     public void addBook(Cart cart, Long bookId) throws BookNotFoundException, ItemNotFoundException {
-        List<Item> items = cart.getItems();
+        Set<Item> items = cart.getItems();
         //check if item already exist on user cart
         boolean needsCreation = true;
         for (Item i : items) {
@@ -45,7 +45,7 @@ public class CartServer {
             }
         }
         if(needsCreation){
-            //create and persist item
+            //persist and persist item
             Item newItem = itemServer.create(bookId);
             //update cart
             items.add(newItem);
@@ -70,7 +70,7 @@ public class CartServer {
      */
     @Transactional
     public void decrementItem(Cart cart, Long itemId) throws ItemNotFoundException {
-        List<Item> items = cart.getItems();
+        Set<Item> items = cart.getItems();
         Item deletingItem = null;
         for (Item i : items) {
             if (i.getId().equals(itemId)) {
@@ -99,7 +99,7 @@ public class CartServer {
     public void removeItem(Cart cart, Long itemId) throws ItemNotFoundException {
         //update cart
         Item deletingItem = itemServer.findById(itemId);
-        List<Item> items = cart.getItems();
+        Set<Item> items = cart.getItems();
         items.remove(deletingItem);
         cart.setItems(items);
         cart.setLastModified(LocalDateTime.now());
@@ -108,9 +108,9 @@ public class CartServer {
         itemServer.delete(deletingItem);
     }
 
-    public List<Item> emptyCart(Cart cart) {
-        List<Item> items = cart.getItems();
-        cart.setItems(new ArrayList<>());
+    public Set<Item> emptyCart(Cart cart) {
+        Set<Item> items = cart.getItems();
+        cart.setItems(new HashSet<>());
         cartRepository.save(cart);
         return items;
     }

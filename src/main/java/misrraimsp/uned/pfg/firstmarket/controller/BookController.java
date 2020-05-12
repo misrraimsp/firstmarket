@@ -7,10 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.exception.*;
 import misrraimsp.uned.pfg.firstmarket.model.*;
-import misrraimsp.uned.pfg.firstmarket.service.BookServer;
-import misrraimsp.uned.pfg.firstmarket.service.CatServer;
-import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -42,16 +39,16 @@ public class BookController extends BasicController {
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
+                          PurchaseServer purchaseServer,
                           FrontEndProperties frontEndProperties) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource);
+        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
         this.frontEndProperties = frontEndProperties;
     }
 
     private void populateModelToBookForm(Model model) {
         model.addAttribute("indentedCategories", catServer.getIndentedCategories());
         model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
-        model.addAttribute("languages", Language.values());
     }
 
     @GetMapping("/book/{id}")

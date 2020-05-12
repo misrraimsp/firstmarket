@@ -112,8 +112,7 @@ public class UserServer implements UserDetailsService {
             cart.setLastModified(LocalDateTime.now());
         }
         Profile profile = new Profile();
-        profile.setFirstName(userForm.getFirstName());
-        profile.setLastName(userForm.getLastName());
+        profile.setFirstName("user");
         User user = new User();
         user.setCompleted(false);
         user.setSuspended(false);
@@ -165,18 +164,12 @@ public class UserServer implements UserDetailsService {
     @Transactional
     public void addPurchase(Long userId) throws UserNotFoundException {
         User user = this.findById(userId);
-        Purchase newPurchase = purchaseServer.create(cartServer.emptyCart(user.getCart()));
-        if (newPurchase == null){
-            return;
-        }
-        List<Purchase> purchases = user.getPurchases();
-        purchases.add(newPurchase);
-        user.setPurchases(purchases);
-        userRepository.save(user);
+        Set<Item> items = cartServer.emptyCart(user.getCart());
+        purchaseServer.persist(items, user);
     }
 
-    public void editProfile(Long userId, Profile newProfile) throws UserNotFoundException {
-        profileServer.edit(this.findById(userId).getProfile().getId(), newProfile);
+    public void editProfile(Profile editedProfile) {
+        profileServer.edit(editedProfile);
     }
 
     public boolean emailExists(String email) {

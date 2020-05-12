@@ -50,8 +50,8 @@ public class Category {
 		result = result * PRIME + ($id == null ? 43 : $id.hashCode());
 		final Object $name = this.getName();
 		result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-		final Object $parent = this.getParent();
-		result = result * PRIME + ($parent == null ? 43 : $parent.hashCode());
+		//final Object $parent = this.getParent();
+		//result = result * PRIME + ($parent == null ? 43 : $parent.hashCode());
 		return result;
 	}
 }

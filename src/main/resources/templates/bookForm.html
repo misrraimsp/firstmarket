@@ -133,7 +133,7 @@
                                 <div class="form-group">
                                     <label for="language">Language:</label>
                                     <select class="custom-select" th:field="*{language}" id="language">
-                                        <option th:each="lan : ${languages}"
+                                        <option th:each="lan : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language).values()}"
                                                 th:value="${lan.name()}"
                                                 th:text="${lan.name()}">
                                         </option>

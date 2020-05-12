@@ -2,7 +2,10 @@ package misrraimsp.uned.pfg.firstmarket.config.dev;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.data.ProfileRepository;
+import misrraimsp.uned.pfg.firstmarket.data.PurchaseRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.*;
@@ -17,10 +20,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Profile("dev-h2")
 @Configuration
@@ -38,7 +43,9 @@ public class DevelopmentH2Config {
                                         ItemServer itemServer,
                                         CartServer cartServer,
                                         AuthorServer authorServer,
-                                        PublisherServer publisherServer) {
+                                        PublisherServer publisherServer,
+                                        PurchaseRepository purchaseRepository,
+                                        ProfileRepository profileRepository) {
 
         return args -> {
             LOGGER.warn("CommandLineRunner on dev-h2");
@@ -449,6 +456,11 @@ public class DevelopmentH2Config {
             item2.setQuantity(2);
             itemServer.persist(item2);
 
+            Item item3 = new Item();
+            item3.setBook(book3);
+            item3.setQuantity(3);
+            itemServer.persist(item3);
+
             //Carts
 
             Cart cart1 = new Cart();
@@ -462,7 +474,7 @@ public class DevelopmentH2Config {
              */
 
             Cart cart3 = new Cart();
-            cart3.setItems(Arrays.asList(item1, item2));
+            cart3.setItems(Set.of(item1, item2));
             cart3.setLastModified(LocalDateTime.now());
             cartServer.persist(cart3);
 
@@ -482,29 +494,50 @@ public class DevelopmentH2Config {
             userForm1.setEmail("admin@fm.com");
             userForm1.setPassword("admin");
             userForm1.setMatchingPassword("admin");
-            userForm1.setFirstName("ad");
-            userForm1.setLastName("ad");
-            User admin = userServer.persist(userForm1, passwordEncoder, Arrays.asList(role1), cart1);
+            User admin = userServer.persist(userForm1, passwordEncoder, Collections.singletonList(role1), cart1);
+            misrraimsp.uned.pfg.firstmarket.model.Profile adminProfile = admin.getProfile();
+            adminProfile.setFirstName("adminFirstName");
+            adminProfile.setLastName("adminLastName");
+            adminProfile.setPhone("666 333 666");
+            adminProfile.setBirthDate(LocalDate.ofYearDay(1969, 200));
+            adminProfile.setGender(Gender.UNDEFINED);
+            profileRepository.save(adminProfile);
             userServer.setCompletedState(admin.getId(),true);
 
             UserForm userForm2 = new UserForm();
             userForm2.setEmail("suarezperezmisrraim@gmail.com");
             userForm2.setPassword("misrra");
             userForm2.setMatchingPassword("misrra");
-            userForm2.setFirstName("mis");
-            userForm2.setLastName("mis");
             User misrra = userServer.persist(userForm2, passwordEncoder, null, null);
+            misrraimsp.uned.pfg.firstmarket.model.Profile misrraProfile = misrra.getProfile();
+            misrraProfile.setFirstName("Misrraim");
+            misrraProfile.setLastName("Suárez");
+            misrraProfile.setPhone("111 222 333");
+            misrraProfile.setBirthDate(LocalDate.ofYearDay(2000, 1));
+            misrraProfile.setGender(Gender.MALE);
+            profileRepository.save(misrraProfile);
             userServer.setCompletedState(misrra.getId(),true);
 
             UserForm userForm3 = new UserForm();
             userForm3.setEmail("andrea@fm.com");
             userForm3.setPassword("andrea");
             userForm3.setMatchingPassword("andrea");
-            userForm3.setFirstName("Andrea");
-            userForm3.setLastName("andre");
-            User andrea = userServer.persist(userForm3, passwordEncoder, Arrays.asList(role2), cart3);
+            User andrea = userServer.persist(userForm3, passwordEncoder, Collections.singletonList(role2), cart3);
+            misrraimsp.uned.pfg.firstmarket.model.Profile andreaProfile = andrea.getProfile();
+            andreaProfile.setFirstName("Andrea");
+            andreaProfile.setLastName("Grau");
+            andreaProfile.setPhone("123 456 789");
+            andreaProfile.setBirthDate(LocalDate.ofYearDay(1990, 365));
+            andreaProfile.setGender(Gender.FEMALE);
+            profileRepository.save(andreaProfile);
             userServer.setCompletedState(andrea.getId(),true);
 
+            //Purchases
+            Purchase purchase1 = new Purchase();
+            purchase1.setItems(Set.of(item3));
+            purchase1.setUser(andrea);
+            purchase1.setCreated(LocalDateTime.now());
+            purchaseRepository.save(purchase1);
 
         };
     }

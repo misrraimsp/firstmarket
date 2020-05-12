@@ -1,18 +1,19 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
-@Entity
 @Data
-public class Profile {
+@Entity
+public class Address {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne
+    private User user;
 
     private String firstName;
 
@@ -20,9 +21,11 @@ public class Profile {
 
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
+    private String streetAddress;
 
-    private LocalDate birthDate;
+    private String zipCode;
 
+    private String province;
+
+    private String country;
 }
