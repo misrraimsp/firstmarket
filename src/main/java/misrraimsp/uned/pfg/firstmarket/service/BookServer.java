@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class BookServer {
@@ -142,6 +144,7 @@ public class BookServer {
         Set<Long> idsByQ  = (searchCriteria.getQ() != null) ? this.getIdsByQueryText(searchCriteria.getQ()) : null;
 
         Set<Long> resultIds = intersect(idsByCategory, idsByPrice, idsByAuthor, idsByPublisher, idsByLanguage, idsByQ);
+        assert resultIds != null;
         if (resultIds.size() == 0){
             resultIds.add(0L);
         }
@@ -149,16 +152,44 @@ public class BookServer {
     }
 
     private Set<Long> getIdsByQueryText(String q) {
-        Set<Long> idsByQ = new HashSet<>();
+        Set<Long> idsByQ = new HashSet<>(getIdsByQueryTextFromIsbn(q));
         String[] qs = q.split("\\s+");
         for (String query : qs){
-            idsByQ.addAll(bookRepository.findIdByTitleLike("%" + query + "%"));
-            idsByQ.addAll(bookRepository.findIdByIsbnLike("%" + query + "%"));
-            idsByQ.addAll(bookRepository.findIdByPublisherNameLike("%" + query + "%"));
-            idsByQ.addAll(bookRepository.findIdByAuthorFirstNameLike("%" + query + "%"));
-            idsByQ.addAll(bookRepository.findIdByAuthorLastNameLike("%" + query + "%"));
+            if (!query.isBlank()) {
+                idsByQ.addAll(bookRepository.findIdByTitleLike("%" + query + "%"));
+                idsByQ.addAll(bookRepository.findIdByPublisherNameLike("%" + query + "%"));
+                idsByQ.addAll(bookRepository.findIdByAuthorFirstNameLike("%" + query + "%"));
+                idsByQ.addAll(bookRepository.findIdByAuthorLastNameLike("%" + query + "%"));
+            }
         }
         return idsByQ;
+    }
+
+    private Set<Long> getIdsByQueryTextFromIsbn(String q) {
+        Set<Long> ids = new HashSet<>();
+        if (q.isBlank()) return ids;
+        extractIsbnsFromQ(q).forEach(isbn -> ids.addAll(bookRepository.findIdByIsbnLike("%" + isbn + "%")));
+        return ids;
+    }
+
+    private Set<String> extractIsbnsFromQ(String q) {
+        Set<String> isbns = new HashSet<>();
+        Pattern pattern;
+        Matcher matcher;
+
+        //isbn13
+        pattern = Pattern.compile("(\\d){13}");
+        matcher = pattern.matcher(q);
+        while (matcher.find()) {
+            isbns.add(q.substring(matcher.start(), matcher.end()));
+        }
+        //isbn10
+        pattern = Pattern.compile("(\\d){9}[xX1-9]");
+        matcher = pattern.matcher(q);
+        while (matcher.find()) {
+            isbns.add(q.substring(matcher.start(), matcher.end()));
+        }
+        return isbns;
     }
 
     private Set<Long> getIdsByPriceIntervals(Set<PriceInterval> priceIds) {
