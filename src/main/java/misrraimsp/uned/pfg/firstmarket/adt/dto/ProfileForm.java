@@ -19,7 +19,7 @@ public class ProfileForm implements DateContainer {
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String lastName;
 
-    //@ValidPattern(pattern = "phone", message = "{validation.regex.phone}")
+    @ValidPattern(pattern = "phone", message = "{validation.regex.phone}")
     private String phone;
 
     private Gender gender;

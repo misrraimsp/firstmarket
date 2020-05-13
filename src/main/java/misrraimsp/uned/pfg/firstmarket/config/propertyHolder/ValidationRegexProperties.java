@@ -29,4 +29,6 @@ public class ValidationRegexProperties {
 
     private String price = defaultRegex;
 
+    private String phone = defaultRegex;
+
 }

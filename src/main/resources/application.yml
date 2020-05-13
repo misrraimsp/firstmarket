@@ -39,6 +39,7 @@ validation:
       image-name: ^[ \w\-.]{1,30}$
       year: ^[\d]{1,4}$
       price: ^[\d]{0,9}([.][\d]{1,2})*$ # dependency with PriceIntervals enum, so keep an eye on it
+      phone: ^(\+)?(\([0-9]{0,4}\))?(([0-9\s.\-]){9,15})?$ # poor but enough approximation
 
 security:
    lock:
