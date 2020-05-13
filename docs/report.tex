@@ -1,123 +1,154 @@
-\documentclass[a4paper,11pt]{report}
+\documentclass[a4paper]{report}
 
 \author{Misrraim~Su\'arez~P\'erez}
 \title{FirstMarket}
 
+\usepackage{comment}
 \begin{document}
 
     \maketitle
     \tableofcontents
 
-    \section{An\'alisis}
-    \subsection{Requisitos}
-    La aplicaci\'on debe admitir los roles y capacidades siguientes:
-    \begin{enumerate}
-        \item Usuario an\'onimo (UA).
-        \begin{itemize}
-            \item Por defecto, al acceder al sitio web se hace como UA, sin ninguna validacion ni credencial. Basta con acceder a la pagina (url) de inicio de la aplicacion.
-            \item Un UA debe poder realizar b\'usquedas de libros, es decir, debe tener pleno acceso a la exploracion del cat\'alogo.
-            \item La plena exploracion del catalogo debe permitir realizar busquedas filtradas segun 0, 1 o mas criterios, tales como: categoria, titulo o autor.
-            \item Un UA debe poder visualizar informacion detallada de un libro, por ejemplo de entre los obtenidos tras una busqueda.
-            \item Un UA debe poder consultar las promociones disponibles.
-            \item Un UA debe poder registrarse en el sistema completando un formulario (nombre, contrase\~na, direccion de correo electronico, etc.).
-            \item finalizado el proceso de registro, el nuevo UR debe recibir confirmacion por e-mail
-            \item en su caso, un UA debe poder hacer login en el sistema.
-            \item en su caso, un UA debe poder realizar el procedimiento de recuperacion de contrase\~na.
-        \end{itemize}
-        \item Usuario registrado (UR). Este perfil representa a un usuario que ha pasado de an\'onimo a registrado. Un UR posee todas las capacidades del UA, m\'as otras espec\'\i{}ficas suyas, a saber:
-        \begin{itemize}
-            \item Poder editar la informacion de su perfil de usuario.
-            \item Realizar pedidos y efectuar los correspondientes pagos a traves de una pasarela segura.
-            \item  Disponer de un carrito virtual para la gestion de la compra.
-            \item En el carrito se debe poder introducir, modificar la cantidad o eliminar libros (esto ultimo de uno en uno o todos a la vez).
-            \item en cualquier momento del proceso de realizar un pedido, el UR debe poder cancelarlo
-            \item Tras una compra, el UR debe recibir confirmacion en su correo electronico
-            \item un UR debe poder consultar el estado de sus pedidos
-            \item Puntuar (de alguna manera, p.e. estrellas del 1 al 5) un determinado libro que haya adquirido. Debe poder hacerlo en cualquier momento tras la compra.
-            \item Consultar un historico de sus transacciones, detallando los libros comprados, la fecha de la compra y el precio de cada uno.
-            \item Darse de baja como UR.
-            \item Cerrar sesion.
-            \item Un UR debe poder ponerse en contacto con el admin a traves de un formulario de contacto, recibiendo confirmacion por e-mail tras el envio del mismo.
-        \end{itemize}
-        \item Usuario Administrador
-        \begin{itemize}
-            \item Ver y editar (a\~nadir, modificar, eliminar) la jerarquia de categorias (CRUD categorias).
-            \item Ver y editar (a\~nadir, modificar, eliminar) la informacion relativa a los libros (titulo, autor/es, editorial, precio, disponibilidad, \ldots) (CRUD libros).
-            \item Crear, modificar o eliminar promociones de libros (CRUD promos).
-            \item Tener acceso a la informacion de los UR, salvo sus contrase\~nas.
-            \item Dar de baja a un UR.
-            \item Visualizar la informacion de los pedidos, tanto los que esten en curso como los finalizados.
-            \item Poder alterar el estado de un pedido.
-            \item Poder generar informes (p.e. ventas durante un determinado periodo con su importe y la facturacion total).
-        \end{itemize}
-    \end{enumerate}
+    \section{An\'alisis}\label{sec:an'alisis}
 
-    Adem\'as de lo anterior, la aplicaci\'on debe:
-    \begin{enumerate}
-        \item[a)] garantizar la persistencia de los datos referentes a UR, pedidos, pagos, productos y sus categor\'\i{}as
-        \item[b)] mostrar un mensaje de error cuando un usuario introduzca incorrectamente sus credenciales de autenticaci\'on
-    \end{enumerate}
+        \subsection{Requisitos}\label{subsec:requisitos}
 
-    \subsection{Casos de Uso}
+            La aplicaci\'on debe admitir los roles y capacidades siguientes:
+            \begin{enumerate}
+                \item Usuario an\'onimo (UA).
+                \begin{itemize}
+                    \item Por defecto, al acceder al sitio web se hace como UA, sin ninguna validacion ni credencial. Basta con acceder a la pagina (url) de inicio de la aplicacion.
+                    \item Un UA debe poder realizar b\'usquedas de libros, es decir, debe tener pleno acceso a la exploracion del cat\'alogo.
+                    \item La plena exploraci\'on del cat\'alogo debe permitir realizar b\'usque\-das filtradas seg\'un 0, 1 o m\'as criterios, tales como: categor\'\i{}a, t\'\i{}tulo o autor.
+                    \item Un UA debe poder visualizar informacion detallada de un libro, por ejemplo de entre los obtenidos tras una busqueda.
+                    \item Un UA debe poder consultar las promociones disponibles.
+                    \item Un UA debe poder registrarse en el sistema completando un formulario (nombre, contrase\~na, direccion de correo electronico, etc.).
+                    \item finalizado el proceso de registro, el nuevo UR debe recibir confirmacion por e-mail
+                    \item en su caso, un UA debe poder hacer login en el sistema.
+                    \item en su caso, un UA debe poder realizar el procedimiento de recuperacion de contrase\~na.
+                \end{itemize}
+                \item Usuario registrado (UR). Este perfil representa a un usuario que ha pasado de an\'onimo a registrado. Un UR posee todas las capacidades del UA, m\'as otras espec\'\i{}ficas suyas, a saber:
+                \begin{itemize}
+                    \item Poder editar la informacion de su perfil de usuario.
+                    \item Realizar pedidos y efectuar los correspondientes pagos a traves de una pasarela segura.
+                    \item Disponer de un carrito virtual para la gestion de la compra.
+                    \item En el carrito se debe poder introducir, modificar la cantidad o eliminar libros (esto ultimo de uno en uno o todos a la vez).
+                    \item en cualquier momento del proceso de realizar un pedido, el UR debe poder cancelarlo
+                    \item Tras una compra, el UR debe recibir confirmacion en su correo electronico
+                    \item un UR debe poder consultar el estado de sus pedidos
+                    \item Puntuar (de alguna manera, p.e. estrellas del 1 al 5) un determinado libro que haya adquirido. Debe poder hacerlo en cualquier momento tras la compra.
+                    \item Consultar un historico de sus transacciones, detallando los libros comprados, la fecha de la compra y el precio de cada uno.
+                    \item Darse de baja como UR.
+                    \item Cerrar sesion.
+                    \item Un UR debe poder ponerse en contacto con el admin a traves de un formulario de contacto, recibiendo confirmacion por e-mail tras el envio del mismo.
+                \end{itemize}
+                \item Usuario Administrador
+                \begin{itemize}
+                    \item Ver y editar (a\~nadir, modificar, eliminar) la jerarquia de categorias (CRUD categorias).
+                    \item Ver y editar (a\~nadir, modificar, eliminar) la informacion relativa a los libros (titulo, autor/es, editorial, precio, disponibilidad, \ldots) (CRUD libros).
+                    \item Crear, modificar o eliminar promociones de libros (CRUD promos).
+                    \item Tener acceso a la informacion de los UR, salvo sus contrase\~nas.
+                    \item Dar de baja a un UR.
+                    \item Visualizar la informacion de los pedidos, tanto los que esten en curso como los finalizados.
+                    \item Poder alterar el estado de un pedido.
+                    \item Poder generar informes (p.e. ventas durante un determinado periodo con su importe y la facturacion total).
+                \end{itemize}
+            \end{enumerate}
 
-    %Caso de uso: [The use case name and functional area/package it resides in.]
+            Adem\'as de lo anterior, la aplicaci\'on debe:
+            \begin{enumerate}
+                \item[a)] garantizar la persistencia de los datos referentes a UR, pedidos, pagos, productos y sus categor\'\i{}as
+                \item[b)] mostrar un mensaje de error cuando un usuario introduzca incorrectamente sus credenciales de autenticaci\'on
+            \end{enumerate}
 
-    %Descripci\'on: [A brief description of this Use Case Specification.]
+        \subsection{Casos de Uso}\label{subsec:casos-de-uso}
 
-    %Actores implicados:
+            \subsubsection{CU01\_RecuperarContrase\~na}
+                Un usuario previamente registrado en el sistema intenta acceder al mismo, pero no recuerda su contrasena. El sistema intentar\'a crear una nueva contrasena y enviarsela al e-mail del usuario.
+                \begin{itemize}
+                    \item[+] Actores implicados: Usuario An\'onimo.
+                    \item[+] Flujo principal:
+                    \begin{enumerate}
+                        \item El usuario hace click en la opci\'on \emph{?`olvid\'o su contrase\~na?}.
+                        \item El sistema presenta un formulario donde introducir la direccion de e-mail.
+                        \item El usuario introduce y envia su direccion de e-mail.
+                        \item El sistema comprueba la direccion de e-mail.
+                        \item Comprobacion correcta. El sistema envia un e-mail con un link de confirmacion a la direccion proporcionada, e informa de ello al usuario por pantalla.
+                        \item Link no caducado. El usuario accede a su e-mail y hace click en el link, confirmando que efectivamente la direccion proporcionada es la suya.
+                        \item El sistema genera una nueva contrasena y se la asigna al usuario.
+                        \item El sistema envia la nueva contrasena a la direccion de e-mail del usuario, y le avisa de ello por pantalla.
+                    \end{enumerate}
+                    \item[+] Flujo alternativo: \emph{usuario\_no\_registrado}. La direccion proporcionada no se encuentra registrada en el sistema.
+                    \begin{itemize}
+                        \item[5.b.] El sistema no envia correo alguno pero, por razones de seguridad, desde el punto de vista del usuario este flujo alternativo es indistinguible del proncipal.
+                    \end{itemize}
+                    \item[+] Flujo excepcional: \emph{time\_out}. El usuario no confirma su direccion de e-mail dentro de un plazo determinado.
+                    \begin{itemize}
+                        \item[6.b.] El sistema detecta el timeout e invalida el link de confirmacion enviado. Si el usuario hace click en el link caducado se le informara de dicha condicion.
+                    \end{itemize}
+                \end{itemize}
 
-    %Pre-Condiciones: [A constraint that must be true when a use case is invoked]
+            \subsubsection{CU02\_Alta}
+                Proceso por el cual se crea un nuevo usuario registrado.
+                \begin{itemize}
+                    \item[+] Actores implicados: Usuario An\'onimo.
+                    \item[+] Flujo principal:
+                    \begin{enumerate}
+                        \item[1.] El usuario hace click en el link de nuevo registro, disponible en la p\'agina de \emph{login}.
+                        \item[2.] El sistema presenta un formulario donde introducir la direcci\'on de e-mail y la contrase\~na.
+                        \item[3.] El usuario introduce y env\'\i{}a la informaci\'on pedida.
+                        \item[4.] El sistema comprueba la informaci\'on proporcionada.
+                        \item[5.] El sistema crea una nueva cuenta de usuario, pero la mantiene inactiva a la espera de confirmar la direcci\'on de email.
+                        \item[6.] El sistema env\'\i{}a un email con un link de confirmaci\'on a la direcci\'on proporcionada, e informa al usuario por pantalla.
+                        \item[7.] El usuario accede a su e-mail y hace click en el link enviado, confirmando que la direcci\'on de email es suya.
+                        \item[8.] El sistema activa la cuenta de usuario.
+                        \item[9.] El sistema env\'\i{}a al usuario un email de bienvenida.
+                        \item[10.] El sistema redirige al usuario a la p\'agina de \emph{login}.
+                    \end{enumerate}
+                    \item[+] Flujo alternativo: \emph{usuario\_ya\_registrado}. La direcci\'on proporcionada se encuentra registrada en el sistema.
+                    \begin{itemize}
+                        \item[5.b.] El sistema no crea una nueva cuenta de usuario.
+                        Por razones de seguridad, la manera en que el sistema informa al usuario tras esta situacion es indistinguible del flujo principal,
+                        de forma que no se pueda deducir que ese email ya tiene cuenta asociada en el sistema.
+                    \end{itemize}
+                    \item[+] Flujo alternativo: \emph{link\_ya\_enviado}. El sistema est\'a a la espera de la confirmacion de un link valido en esta direccion de email.
+                    \begin{itemize}
+                        \item[5.b.] El sistema no crea una nueva cuenta de usuario. Se informa al usuario acerca de una condicion de error \-{}generica, por seguridad\- en relacion
+                        con la direccion de email proporcionada, pidiendose que compruebe su direcci\'on de email.
+                    \end{itemize}
+                    \item[+] Flujo excepcional: \emph{time\_out}. El usuario no confirma su direccion de e-mail dentro de un plazo determinado.
+                    \begin{itemize}
+                        \item[7.b.] El sistema detecta el timeout e invalida el link de confirmacion enviado. Si el usuario hace click en el link caducado se le informara de dicha condicion.
+                    \end{itemize}
+                \end{itemize}
 
-    %Flujo principal: [The part of a use case that describes its most common implementation.  The basic flow is written assuming that no errors or alternatives exist.  Provide a short description of what the base flow should accomplish.]
+            \subsubsection{CU03\_Login}
+                Proceso por el cual un usuario se autentica en el sistema.
+                \begin{itemize}
+                    \item[+] Actores implicados: Usuario An\'onimo.
+                    \item[+] Flujo principal:
+                    \begin{enumerate}
+                        \item[1.] El usuario hace click en el link de \emph{login}, o intenta realizar alguna operaci\'on
+                        que requiera autenticaci\'on (por ejemplo, a\~nadir un libro al carrito).
+                        \item[2.] El sistema presenta el formulario de acceso (direcci\'on de email y la contrase\~na).
+                        \item[3.] El usuario introduce y env\'\i{}a la informaci\'on pedida.
+                        \item[4.] El sistema comprueba las credenciales.
+                        \item[5.] El sistema redirige al usuario a la p\'agina principal.
+                    \end{enumerate}
+                    \item[+] Flujo alternativo: \emph{fallo\_autenticaci\'on}. El email no se encuentra registrado en el sistema, o la contrase\~na proporcionada no es correcta.
+                    \begin{itemize}
+                        \item[5.b.] El sistema informa al usuario acerca de un fallo gen\'erico de autenticaci\'on, de forma que,
+                        por razones de seguridad, no se pueda deducir si el email proporcionado se encuentra registrado en el sistema.
+                    \end{itemize}
+                    \item[+] Flujo alternativo: \emph{bloqueo\_cuenta}. El usuario an\'onimo realiza, dentro de un marco de tiempo (configurable), un n\'umero de intentos (configurable) de login con contrase\~na err\'onea.
+                    \begin{itemize}
+                        \item[5.b.] El sistema bloquea la cuenta asociada al email para prevenir ataques por fuerza bruta.
+                        \item[6.] El sistema informa al usuario por pantalla y mediante el env\'\i{}o de un email.
+                        \item[7.] Pasado el tiempo de seguridad (configurable), el sistema desbloquea la cuenta del usuario.
+                    \end{itemize}
+                    \item[+] Post-Condiciones: El usuario pasa a tener rol de usuario registrado en el sistema.
+                \end{itemize}
 
-    %1. < workflow step>
-    %2. The use case ends.
-
-    %Flujo alternativo: <name of alternate workflow> [A brief description of the alternate workflow.]
-
-    %1. < workflow step>
-    %2. The use case ends.
-
-    %Flujo excepcional: [The part of a use case that describes its error conditions.] <name of exception workflow> [A brief description of the exception workflow.]
-
-    %1. < workflow step>
-    %2. The use case resumes at step 2 of the base flow.
-
-    %Requisitos especiales: [The special requirements of the use case are included here.  These requirements are not covered by the workflow as it has been described in the sections above.] <Name of Special Requirement> [A brief description of the special requirement.]
-
-    %Post-Condiciones: [A constraint that must be true when a use case has ended]
-
-    %Puntos de extensi\'on:
-    %<<Includes>>
-    %[In Unified Modeling Language (UML), a relationship from a base use case to an included use case specifying how the behavior defined for the included use case can be inserted into the behavior defined for the base use case.]
-    %<<Extends>>
-    %[In UML, a relationship from an extending use case to a base use case specifying how the behavior defined for the extending use case can be optionally inserted into the behavior defined for the base use case.]
-
-
-    \subsubsection{CU01\_RecuperarContrase\~na}
-    Un usuario previamente registrado en el sistema intenta acceder al mismo, pero no recuerda su contrasena. El sistema intentar\'a crear una nueva contrasena y enviarsela al e-mail del usuario.
-    \begin{itemize}
-        \item[+] Actores implicados: Usuario An\'onimo.
-        \item[+] Flujo principal:
-        \begin{enumerate}
-            \item El usuario hace click en la opci\'on \emph{?`olvid\'o su contrase\~na?}.
-            \item El sistema presenta un formulario donde introducir la direccion de e-mail.
-            \item El usuario introduce y envia su direccion de e-mail.
-            \item El sistema comprueba la direccion de e-mail.
-            \item Comprobacion correcta. El sistema envia un e-mail con un link de confirmacion a la direccion proporcionada, e informa de ello al usuario por pantalla.
-            \item Link no caducado. El usuario accede a su e-mail y hace click en el link, confirmando que efectivamente la direccion proporcionada es la suya.
-            \item El sistema genera una nueva contrasena y se la asigna al usuario.
-            \item El sistema envia la nueva contrasena a la direccion de e-mail del usuario, y le avisa de ello por pantalla.
-        \end{enumerate}
-        \item [+] Flujo alternativo: \emph{usuario\_no\_registrado}. La direccion proporcionada no se encuentra registrada en el sistema.
-        \begin{itemize}
-            \item [5.b.] El sistema no envia correo alguno pero, por razones de seguridad, desde el punto de vista del usuario este flujo alternativo es indistinguible del proncipal.
-        \end{itemize}
-        \item[+] Flujo excepcional: \emph{time\_out}. El usuario no confirma su direccion de e-mail dentro de un plazo determinado.
-        \begin{itemize}
-            \item [6.b.] El sistema detecta el timeout e invalida el link de confirmacion enviado. Si el usuario hace click en el link caducado se le informara de dicha condicion.
-        \end{itemize}
-    \end{itemize}
-
+    
 
 \end{document}
