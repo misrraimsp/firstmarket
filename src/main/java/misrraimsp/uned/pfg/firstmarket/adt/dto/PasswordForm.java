@@ -7,7 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 @Data
 @PasswordMatches
-public class PasswordForm implements MatchingPassword {
+public class PasswordForm implements TwinPasswordContainer {
 
     private String currentPassword;
 

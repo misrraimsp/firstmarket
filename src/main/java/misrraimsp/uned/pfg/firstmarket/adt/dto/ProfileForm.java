@@ -2,12 +2,14 @@ package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
+import misrraimsp.uned.pfg.firstmarket.validation.ValidDate;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 import java.time.Month;
 
 @Data
-public class ProfileForm {
+@ValidDate
+public class ProfileForm implements DateContainer {
 
     private Long profileId;
 
@@ -17,7 +19,7 @@ public class ProfileForm {
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String lastName;
 
-    @ValidPattern(pattern = "phone", message = "{validation.regex.phone}")
+    //@ValidPattern(pattern = "phone", message = "{validation.regex.phone}")
     private String phone;
 
     private Gender gender;

@@ -65,7 +65,7 @@
                                 <div class="input-group mb-3">
                                     <!-- year -->
                                     <select class="custom-select" th:field="*{year}" id="year" >
-                                        <option th:each="y : ${T(java.util.stream.IntStream).rangeClosed(1900,T(java.time.Year).now().getValue()).boxed().sorted(T(java.util.Collections).reverseOrder()).collect(T(java.util.stream.Collectors).toList())}"
+                                        <option th:each="y : ${T(java.util.stream.IntStream).rangeClosed(__${@environment.getProperty('validation.numeric.profile-min-year')}__,T(java.time.Year).now().getValue()).boxed().sorted(T(java.util.Collections).reverseOrder()).collect(T(java.util.stream.Collectors).toList())}"
                                                 th:value="${y}"
                                                 th:text="${y}">
                                         </option>
@@ -85,6 +85,7 @@
                                         </option>
                                     </select>
                                 </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('year')"></div>
                             </div>
                             <div class="col-sm-12 bg-light">
                                 <!-- save or cancel -->

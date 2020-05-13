@@ -16,10 +16,9 @@ public class SecurityToken {
 
     private String token;
 
+    @Enumerated(EnumType.STRING)
     private SecurityEvent securityEvent;
 
-    //@OneToOne(fetch = FetchType.EAGER)
-    //@JoinColumn(nullable = false)
     @ManyToOne
     private User user;
 

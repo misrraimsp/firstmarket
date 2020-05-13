@@ -7,7 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 @Data
 @PasswordMatches
-public class UserForm implements MatchingPassword {
+public class UserForm implements TwinPasswordContainer {
 
     @ValidPattern(pattern = "email", message = "{email.invalidFormat}")
     private String email;

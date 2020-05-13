@@ -7,10 +7,10 @@ import java.lang.annotation.*;
 @Documented
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PasswordMatchesValidator.class)
-public @interface PasswordMatches {
+@Constraint(validatedBy = ValidDateValidator.class)
+public @interface ValidDate {
 
-    String message() default "{password.notMatching}";
+    String message() default "{date.invalid}";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

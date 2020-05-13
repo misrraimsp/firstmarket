@@ -23,6 +23,7 @@ schedule:
 
 validation:
    numeric:
+      profile-min-year: 1900
       pages: 1,5000 # min,max
       stock: 0,100000000 # min,max
       image-max-size: 512000 # in bytes (500KB)

@@ -81,9 +81,9 @@ public class UserController extends BasicController {
             // error checks
             boolean isRestarting = false;
             boolean hasError = false;
-            if (errors.hasErrors()) {
+            if (errors.hasGlobalErrors()) {
                 hasError = true;
-                handleMatchingPasswordError(errors);
+                handleGlobalErrors(errors);
             }
             // manage email-already-exists situations
             else if (userServer.emailExists(userForm.getEmail())) {
@@ -380,9 +380,9 @@ public class UserController extends BasicController {
             try {
                 // error checks
                 boolean hasError = false;
-                if (errors.hasErrors()) {
+                if (errors.hasGlobalErrors()) {
                     hasError = true;
-                    handleMatchingPasswordError(errors);
+                    handleGlobalErrors(errors);
                 }
                 else if (!userServer.checkPassword(authUser.getId(),passwordEncoder, passwordForm.getCurrentPassword())){
                     hasError = true;
@@ -429,6 +429,9 @@ public class UserController extends BasicController {
                                      @AuthenticationPrincipal User authUser) {
 
         if (errors.hasErrors()) {
+            if (errors.hasGlobalErrors()) {
+                handleGlobalErrors(errors);
+            }
             populateModel(model, authUser);
             return "profileForm";
         }

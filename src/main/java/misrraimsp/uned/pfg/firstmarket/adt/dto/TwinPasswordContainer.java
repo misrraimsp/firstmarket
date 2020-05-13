@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
-public interface MatchingPassword {
+public interface TwinPasswordContainer {
 
     String getPassword();
     String getMatchingPassword();

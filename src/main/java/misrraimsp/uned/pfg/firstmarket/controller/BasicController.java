@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
 
 import java.util.Objects;
 
@@ -39,7 +38,7 @@ public abstract class BasicController {
         this.imageServer = imageServer;
         this.messageSource = messageSource;
         this.purchaseServer = purchaseServer;
-        LOGGER.trace("{} created", this.getClass().getName());
+        LOGGER.debug("{} created", this.getClass().getName());
     }
 
     protected void populateModel(Model model, User authUser) {
@@ -56,19 +55,21 @@ public abstract class BasicController {
         model.addAttribute("mainCategories", catServer.getMainCategories());
     }
 
-    protected void handleMatchingPasswordError(Errors errors) {
-        if (errors.hasGlobalErrors()){
-            for (ObjectError objectError : errors.getGlobalErrors()){
-                if (Objects.equals(objectError.getCode(), "PasswordMatches")){
-                    errors.rejectValue("matchingPassword", "password.notMatching", objectError.getDefaultMessage());
+    protected void handleGlobalErrors(Errors errors) {
+        errors.getGlobalErrors().forEach(objectError -> {
+            switch (Objects.requireNonNull(objectError.getCode())) {
+                case "PasswordMatches":
+                    errors.rejectValue("matchingPassword", "password.notMatching", Objects.requireNonNull(objectError.getDefaultMessage()));
                     LOGGER.debug("Passwords does not match: {}", objectError.toString());
-                }
-                else {
-                    LOGGER.warn("There has been an unexpected global password-related error: {}", objectError.toString());
-                }
+                    break;
+                case "ValidDate":
+                    errors.rejectValue("year", "date.invalid", Objects.requireNonNull(objectError.getDefaultMessage()));
+                    LOGGER.debug("Date is not valid: {}", objectError.toString());
+                    break;
+                default:
+                    LOGGER.warn("There has been an unexpected global error: {}", objectError.toString());
             }
-        }
-        LOGGER.warn("There has been an unexpected non-global password-related error");
+        });
     }
 
 }

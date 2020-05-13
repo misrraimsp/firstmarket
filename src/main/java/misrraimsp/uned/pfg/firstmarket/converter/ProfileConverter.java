@@ -35,15 +35,15 @@ public class ProfileConverter {
     }
 
     private Integer getProfileFormDay(LocalDate date) {
-        return date.getDayOfMonth();
+        return (date != null) ? date.getDayOfMonth() : null;
     }
 
     private Month getProfileFormMonth(LocalDate date) {
-        return date.getMonth();
+        return (date != null) ? date.getMonth() : null;
     }
 
     private Integer getProfileFormYear(LocalDate date) {
-        return date.getYear();
+        return (date != null) ? date.getYear() : null;
     }
 
 }

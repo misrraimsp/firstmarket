@@ -181,7 +181,7 @@
         <div th:fragment="backendRequestParamError" class="my-2" th:if="${message != null}">
             <div class="alert alert-danger alert-dismissible fade show mb-1">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Error: </strong><span th:text="${message}"></span>
+                <small><strong>Error: </strong><span th:text="${message}"></span></small>
             </div>
         </div>
 
@@ -189,7 +189,7 @@
         <div th:fragment="backendGenericObjectFieldErrors" class="mt-1" th:if="${#fields.hasErrors()}">
             <div class="alert alert-danger alert-dismissible fade show mb-2">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Server Validation Error: </strong><span th:text="#{validation.generic}"></span>
+                <small><strong>Server Validation Error: </strong><span th:text="#{validation.generic}"></span></small>
             </div>
         </div>
 
@@ -197,7 +197,7 @@
         <div th:fragment="backendSpecificObjectFieldErrors(field)" class="mt-n2" th:if="${#fields.hasErrors(field)}">
             <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors(field)}">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                <strong>Error: </strong><span th:text="${error}"></span>
+                <small><strong>Error: </strong><span th:text="${error}"></span></small>
             </div>
         </div>
 
