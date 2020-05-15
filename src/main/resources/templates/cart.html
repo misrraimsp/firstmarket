@@ -102,7 +102,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- check out panel -->
+                <!-- checkout panel -->
                 <div class="col-sm-3">
                     <div class="row">
                         <div class="col-sm-1"></div>
@@ -136,8 +136,10 @@
                                     <div><strong>Total:</strong></div>
                                     <div><strong>€ <span id="total" th:text="${cart.getPrice()}">380</span></strong></div>
                                 </div>
-                                <!-- purchase button -->
-                                <div th:replace="fragments/components::purchaseButton"></div>
+                                <!-- checkout button -->
+                                <form th:action="@{/user/checkout}" method="GET">
+                                    <button class="btn btn-outline-info btn-sm my-2 btn-block" type="submit">Checkout</button>
+                                </form>
                             </div>
                         </div>
                         <div class="col-sm-1"></div>

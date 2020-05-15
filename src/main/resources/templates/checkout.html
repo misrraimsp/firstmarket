@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments/components::head('Checkout')"></head>
+    <body>
+        <div class="container-fluid">
+            <!-- header -->
+            <header th:replace="fragments/components::header"></header>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
+            <div th:replace="fragments/components::title(text = 'Checkout')"></div>
+            <!-- main content -->
+            <div class="row">
+                <div class="col-sm-3 bg-white"></div>
+                <div class="col-sm-6 bg-light">
+                    <form class="needs-validation" novalidate id='checkout-form' th:action="@{/user/checkout}" method="POST" action="#">
+
+                        <input type='hidden' th:value='${amount/100}' name='amount' />
+                        <h1>Price:<span th:text='${amount/100}' /></h1>
+                        <script
+                                src='https://checkout.stripe.com/checkout.js'
+                                class='stripe-button'
+                                th:attr='data-key=${stripePublicKey}, data-amount=${amount}'
+                                data-name='FirstMarket Services'
+                                data-description='Test Checkout'
+                                data-image='http://www.stackabuse.com/assets/images/sa-java-dark.svg?v=b5a08453df'
+                                data-locale='auto'
+                                data-zip-code='false'>
+                        </script>
+
+                        <!-- new email -->
+                        <div class="form-group">
+                            <label for="editedEmail">New E-mail:</label>
+                            <input class="form-control" type="email" name="editedEmail" id="editedEmail" placeholder="enter the new email" required th:pattern="${@environment.getProperty('validation.regex.email')}">
+                            <div class="invalid-feedback">Please fill out this field with your email</div>
+                        </div>
+                        <!-- password -->
+                        <div class="form-group">
+                            <label for="password">Your Password:</label>
+                            <input class="form-control" type="password" name="password" id="password" placeholder="enter your password" required />
+                            <div class="invalid-feedback">Please introduce your current password</div>
+                        </div>
+                        <!-- save or cancel -->
+                        <button th:replace="fragments/components::saveButton"></button>
+                        <a th:replace="fragments/components::cancelButtonToHome"></a>
+                    </form>
+                </div>
+                <div class="col-sm-3 bg-white"></div>
+            </div>
+            <!-- footer -->
+            <footer th:replace="fragments/components::fixedFooter"></footer>
+        </div>
+        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
+    </body>
+</html>
