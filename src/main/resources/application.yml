@@ -25,7 +25,7 @@ payment:
    stripe:
       key:
          public: pk_test_iLddVaUD1AOnudl6q5v2LEKt00Xk2Yz1R6
-         private: someprivatekey_bitch
+         private:  #someprivatekey_bitch
 
 validation:
    numeric:

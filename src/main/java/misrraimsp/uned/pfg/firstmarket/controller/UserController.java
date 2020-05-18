@@ -50,7 +50,9 @@ public class UserController extends BasicController {
 
     @Value("${payment.stripe.key.public}")
     private String stripePublicKey = "somePublicKey_bitch";
-    private String endpointSecret = "whsec_RPwfSwPifc97J8zmhKoSgMjIU0SI3pDg";
+
+    @Value("${payment.stripe.key.private}")
+    private String stripeSecretKey = "someSecretKey_bitch";
 
     @Autowired
     public UserController(UserServer userServer,
@@ -497,7 +499,7 @@ public class UserController extends BasicController {
     public String showCheckout(Model model,
                                @AuthenticationPrincipal User authUser) {
 
-        Stripe.apiKey = stripePublicKey;
+        Stripe.apiKey = stripeSecretKey;
 
         try {
             PaymentIntent paymentIntent = PaymentIntent.create(PaymentIntentCreateParams
@@ -509,7 +511,7 @@ public class UserController extends BasicController {
             );
             model.addAttribute("client_secret", paymentIntent.getClientSecret());
             populateModel(model, authUser);
-            return "checkout2";
+            return "checkout";
         }
         catch (StripeException e) {
             LOGGER.warn("Stripe - Some exception occurred", e);
@@ -522,65 +524,92 @@ public class UserController extends BasicController {
                                 @RequestHeader("Stripe-Signature") String sigHeader,
                                 HttpServletResponse response) {
 
-        // Getting the event
-        Event event;
-        try {
-            event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+        // dev-localhost
+        if (sigHeader.equals("localdev")) {
+            //PaymentIntent paymentIntent = new Gson().fromJson(payload, PaymentIntent.class);
+            // Deal with each scenario
+            switch(payload) {
+                case "succeeded":
+                    // Fulfil the customer's purchase
+                    LOGGER.debug("Stripe (localdev) - Succeeded: payment-intent");
+                    response.setStatus(200);
+                    return;
+                case "payment_failed":
+                    // Notify the customer that payment failed
+                    LOGGER.debug("Stripe (localdev) - Failed: payment-intent");
+                    response.setStatus(200);
+                    return;
+                default:
+                    // Unexpected event type
+                    LOGGER.debug("Stripe (localdev) - Unexpected event type");
+                    response.setStatus(400);
+            }
         }
-        catch (JsonSyntaxException e) {
-            // Invalid payload
-            LOGGER.warn("Stripe - Invalid payload", e);
-            response.setStatus(400);
-            return;
-        }
-        catch (SignatureVerificationException e) {
-            // Invalid signature
-            LOGGER.warn("Stripe - Invalid signature", e);
-            response.setStatus(400);
-            return;
-        }
-
-        // Deserialize the nested object inside the event
-        assert event != null;
-        EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
-        StripeObject stripeObject;
-        if (deserializer.getObject().isPresent()) {
-            stripeObject = deserializer.getObject().get();
-        }
+        // web deployed
         else {
-            LOGGER.warn("Stripe - Event deserialization failed, probably due to an API version mismatch.");
-            response.setStatus(400);
-            return;
-        }
+            String endpointSecret = "anotherSecret_bitch";
 
-        // Getting the payment-intent
-        PaymentIntent paymentIntent;
-        if (stripeObject instanceof PaymentIntent) {
-            paymentIntent = (PaymentIntent) stripeObject;
-        }
-        else {
-            // for now other objects other than PaymentIntent are not accepted
-            LOGGER.debug("Stripe - An object other than PaymentIntent has been sent to the listener");
-            response.setStatus(400);
-            return;
-        }
-
-        // Deal with each scenario
-        switch(event.getType()) {
-            case "payment_intent.succeeded":
-                // Fulfil the customer's purchase
-                LOGGER.debug("Stripe - Succeeded: payment-intent id={}", paymentIntent.getId());
-                response.setStatus(200);
-                return;
-            case "payment_intent.payment_failed":
-                // Notify the customer that payment failed
-                LOGGER.debug("Stripe - Failed: payment-intent id={}", paymentIntent.getId());
-                response.setStatus(200);
-                return;
-            default:
-                // Unexpected event type
-                LOGGER.debug("Stripe - Unexpected event type");
+            // Getting the event
+            Event event;
+            try {
+                event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+            }
+            catch (JsonSyntaxException e) {
+                // Invalid payload
+                LOGGER.warn("Stripe - Invalid payload", e);
                 response.setStatus(400);
+                return;
+            }
+            catch (SignatureVerificationException e) {
+                // Invalid signature
+                LOGGER.warn("Stripe - Invalid signature", e);
+                response.setStatus(400);
+                return;
+            }
+
+
+            // Deserialize the nested object inside the event
+            assert event != null;
+            EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
+            StripeObject stripeObject;
+            if (deserializer.getObject().isPresent()) {
+                stripeObject = deserializer.getObject().get();
+            }
+            else {
+                LOGGER.warn("Stripe - Event deserialization failed, probably due to an API version mismatch.");
+                response.setStatus(400);
+                return;
+            }
+
+            // Getting the payment-intent
+            PaymentIntent paymentIntent;
+            if (stripeObject instanceof PaymentIntent) {
+                paymentIntent = (PaymentIntent) stripeObject;
+            }
+            else {
+                // for now other objects other than PaymentIntent are not accepted
+                LOGGER.debug("Stripe - An object other than PaymentIntent has been sent to the listener");
+                response.setStatus(400);
+                return;
+            }
+
+            // Deal with each scenario
+            switch(event.getType()) {
+                case "payment_intent.succeeded":
+                    // Fulfil the customer's purchase
+                    LOGGER.debug("Stripe - Succeeded: payment-intent id={}", paymentIntent.getId());
+                    response.setStatus(200);
+                    return;
+                case "payment_intent.payment_failed":
+                    // Notify the customer that payment failed
+                    LOGGER.debug("Stripe - Failed: payment-intent id={}", paymentIntent.getId());
+                    response.setStatus(200);
+                    return;
+                default:
+                    // Unexpected event type
+                    LOGGER.debug("Stripe - Unexpected event type");
+                    response.setStatus(400);
+            }
         }
 
     }

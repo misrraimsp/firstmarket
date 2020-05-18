@@ -2,7 +2,19 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/components::head('Checkout')"></head>
+    <head>
+        <meta charset="UTF-8">
+        <title>Checkout</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+        <link type="text/css" rel="stylesheet" th:href="@{/css/fmstyle.css}" />
+    </head>
     <body>
         <div class="container-fluid">
             <!-- header -->
@@ -15,36 +27,29 @@
             <div class="row">
                 <div class="col-sm-3 bg-white"></div>
                 <div class="col-sm-6 bg-light">
-                    <form class="needs-validation" novalidate id='checkout-form' th:action="@{/user/checkout}" method="POST" action="#">
+                    <form id='payment-form' th:action="@{/user/checkout}" method="POST" action="#">
 
-                        <input type='hidden' th:value='${amount/100}' name='amount' />
-                        <h1>Price:<span th:text='${amount/100}' /></h1>
-                        <script
-                                src='https://checkout.stripe.com/checkout.js'
-                                class='stripe-button'
-                                th:attr='data-key=${stripePublicKey}, data-amount=${amount}'
-                                data-name='FirstMarket Services'
-                                data-description='Test Checkout'
-                                data-image='http://www.stackabuse.com/assets/images/sa-java-dark.svg?v=b5a08453df'
-                                data-locale='auto'
-                                data-zip-code='false'>
-                        </script>
+                        <!-------------------------------------------------------------------------Title-->
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input class="form-control" type="text" id="title" placeholder="enter title" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>
+                        <!-- card element -->
+                        <div class="form-group">
+                            <label for="card-element">Debit or Credit Card:</label>
+                            <div class="form-control" id="card-element" style='height: 2.4em; padding-top: .7em;'>
+                                <!-- card element here -->
+                            </div>
+                        </div>
 
-                        <!-- new email -->
-                        <div class="form-group">
-                            <label for="editedEmail">New E-mail:</label>
-                            <input class="form-control" type="email" name="editedEmail" id="editedEmail" placeholder="enter the new email" required th:pattern="${@environment.getProperty('validation.regex.email')}">
-                            <div class="invalid-feedback">Please fill out this field with your email</div>
-                        </div>
-                        <!-- password -->
-                        <div class="form-group">
-                            <label for="password">Your Password:</label>
-                            <input class="form-control" type="password" name="password" id="password" placeholder="enter your password" required />
-                            <div class="invalid-feedback">Please introduce your current password</div>
-                        </div>
-                        <!-- save or cancel -->
-                        <button th:replace="fragments/components::saveButton"></button>
-                        <a th:replace="fragments/components::cancelButtonToHome"></a>
+                        <!-- error -->
+                        <div id="card-errors" role="alert" style="color: red; font-size: small"></div>
+
+                        <!-- Pay button -->
+                        <button class="btn btn-sm btn-info px-5 my-3" type="submit" id="card-button" th:attr="data-secret=${client_secret}">Pay</button>
+                        <!-- Cancel button -->
+                        <a class="btn btn-sm btn-secondary px-5 my-3 text-white" th:href="@{/home}">Cancel</a>
                     </form>
                 </div>
                 <div class="col-sm-3 bg-white"></div>
@@ -52,6 +57,8 @@
             <!-- footer -->
             <footer th:replace="fragments/components::fixedFooter"></footer>
         </div>
+        <!-- checkout -->
+        <script th:src="@{/js/checkout.js}"></script>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
     </body>
 </html>
