@@ -20,10 +20,7 @@ import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.ProfileNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.model.Profile;
-import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
-import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.model.UserDeletion;
+import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -40,6 +37,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.util.Calendar;
 
 @Controller
@@ -502,19 +500,26 @@ public class UserController extends BasicController {
         Stripe.apiKey = stripeSecretKey;
 
         try {
+            User user = userServer.findById(authUser.getId());
+            Cart cart = user.getCart();
             PaymentIntent paymentIntent = PaymentIntent.create(PaymentIntentCreateParams
                     .builder()
                     .setCurrency("eur")
-                    .setAmount(1099L)
+                    .setAmount(cart.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
                     .putMetadata("integration_check", "accept_a_payment")
                     .build()
             );
             model.addAttribute("client_secret", paymentIntent.getClientSecret());
+            model.addAttribute("cart", cart);
             populateModel(model, authUser);
             return "checkout";
         }
         catch (StripeException e) {
             LOGGER.warn("Stripe - Some exception occurred", e);
+            return "redirect:/home";
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
             return "redirect:/home";
         }
     }

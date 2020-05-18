@@ -443,6 +443,27 @@ public class DevelopmentH2Config {
             book9 = bookServer.persist(book9);
             //System.out.println(book9);
 
+            BookForm bookForm10 = new BookForm();
+            bookForm10.setIsbn("9788413184449");
+            bookForm10.setTitle("");
+            bookForm10.setCategoryId(art.getId());
+            bookForm10.setImage(img1);
+            bookForm10.setStoredImageId(null);
+            bookForm10.setAuthorsFirstName(List.of(""));
+            bookForm10.setAuthorsLastName(List.of(""));
+            bookForm10.setPublisherName("");
+            bookForm10.setLanguage(Language.Basque);
+            bookForm10.setPages(12);
+            bookForm10.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
+                    " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
+            bookForm10.setPrice("199.95");
+            bookForm10.setStock(100);
+            bookForm10.setYear(Year.of(2000));
+            //System.out.println("formBook10: " + formBook10);
+            Book book10 = bookServer.convertBookFormToBook(bookForm10);
+            book10 = bookServer.persist(book10);
+            //System.out.println(book10);
+
 
             //Items
 

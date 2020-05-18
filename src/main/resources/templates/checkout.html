@@ -24,38 +24,132 @@
             <!-- title -->
             <div th:replace="fragments/components::title(text = 'Checkout')"></div>
             <!-- main content -->
-            <div class="row">
-                <div class="col-sm-3 bg-white"></div>
-                <div class="col-sm-6 bg-light">
-                    <form id='payment-form' th:action="@{/user/checkout}" method="POST" action="#">
-
-                        <!-------------------------------------------------------------------------Title-->
-                        <div class="form-group">
-                            <label for="title">Title:</label>
-                            <input class="form-control" type="text" id="title" placeholder="enter title" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+            <div class="row bg-white">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- checkout form -->
+                <div class="col-sm-7">
+                    <form class="needs-validation" novalidate id='payment-form' th:action="@{/user/checkout}" method="POST" action="#">
+                        <!-------------------------------------------------------------------------full name-->
+                        <label class="mt-1 text-dark font-weight-light">Contact details</label>
+                        <!-- full name -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">First name</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Last name</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
-                        <!-- card element -->
+                        <!-- phone -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Phone number</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="phone" style="max-width: 25%" th:pattern="${@environment.getProperty('validation.regex.phone')}">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Email</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="email" th:pattern="${@environment.getProperty('validation.regex.email')}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>
+                        <!-------------------------------------------------------------------------full address-->
+                        <label class="mt-1 text-dark font-weight-light">Full Address</label>
+                        <!-- street and zip -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Address</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="address" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Zip code</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="zip" style="max-width: 20%" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>
+                        <!-- country and province -->
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Country</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="country" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Province</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="province" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>
+                        <!-------------------------------------------------------------------------payment info-->
+                        <label class="text-dark font-weight-light" for="card-element">Credit/Debit Card</label>
                         <div class="form-group">
-                            <label for="card-element">Debit or Credit Card:</label>
                             <div class="form-control" id="card-element" style='height: 2.4em; padding-top: .7em;'>
                                 <!-- card element here -->
                             </div>
+                            <div id="card-errors" role="alert" style="color: red; font-size: small">
+                                <!-- card error here -->
+                            </div>
                         </div>
-
-                        <!-- error -->
-                        <div id="card-errors" role="alert" style="color: red; font-size: small"></div>
-
-                        <!-- Pay button -->
-                        <button class="btn btn-sm btn-info px-5 my-3" type="submit" id="card-button" th:attr="data-secret=${client_secret}">Pay</button>
-                        <!-- Cancel button -->
-                        <a class="btn btn-sm btn-secondary px-5 my-3 text-white" th:href="@{/home}">Cancel</a>
+                        <!-------------------------------------------------------------------------action buttons-->
+                        <div class="d-flex my-2">
+                            <!-- Pay button -->
+                            <button class="btn btn-info px-5 mr-auto font-weight-bolder" type="submit" id="card-button" th:attr="data-secret=${client_secret}">Pay <span th:text="${cart.price}"></span>€</button>
+                            <!-- Cancel button -->
+                            <a class="btn btn-outline-secondary px-3 font-weight-light" th:href="@{/home}">Cancel</a>
+                        </div>
                     </form>
                 </div>
-                <div class="col-sm-3 bg-white"></div>
+                <!-- purchase summary -->
+                <div class="col-sm-3">
+                    <div class="row">
+                        <div class="col-sm-1"></div>
+                        <div class="col-sm-10 d-flex flex-column">
+                            <!-- panel title -->
+                            <div class="d-flex justify-content-center mt-3">
+                                <p class="font-weight-light">Purchase Summary</p>
+                            </div>
+                            <!-- purchase info -->
+                            <div class="d-flex flex-column">
+                                <!-- single book -->
+                                <div class="d-flex my-3" th:each="item : ${cart.items}">
+                                    <div class="text-info mr-auto">
+                                        <div class="d-flex flex-column">
+                                            <!-- title -->
+                                            <div class="small">
+                                                <p class="my-0" th:unless="${item.book.title.isBlank()}">
+                                                    <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('front-end.checkout.title-max-size')}__))}">Book title</span>
+                                                </p>
+                                                <p class="my-0" th:if="${item.book.title.isBlank()}">
+                                                    <small><i>unknown title</i></small>
+                                                </p>
+                                            </div>
+                                            <!-- price composition -->
+                                            <div class="my-0 small">
+                                                <small><span th:text="${item.quantity}"></span> x <span th:text="${item.book.price}"></span>€</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="small">
+                                        <p class="my-0"><span class="font-weight-light">EUR </span><span th:text="${item.price}">100</span></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- final price -->
+                            <div class="d-flex justify-content-between my-3">
+                                <div><strong>Total:</strong></div>
+                                <div><p><span class="font-weight-light">EUR </span><strong id="total" th:text="${cart.getPrice()}">380</strong></p></div>
+                            </div>
+                        </div>
+                        <div class="col-sm-1"></div>
+                    </div>
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
             </div>
             <!-- footer -->
-            <footer th:replace="fragments/components::fixedFooter"></footer>
+            <footer th:replace="fragments/components::footer"></footer>
         </div>
         <!-- checkout -->
         <script th:src="@{/js/checkout.js}"></script>

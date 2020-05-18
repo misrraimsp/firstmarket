@@ -21,11 +21,13 @@ public class Address {
 
     private String phone;
 
+    private String email;
+
     private String streetAddress;
 
     private String zipCode;
 
-    private String province;
-
     private String country;
+
+    private String province;
 }

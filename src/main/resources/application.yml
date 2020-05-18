@@ -70,6 +70,8 @@ front-end:
             speed: 50
       title-max-size: 20
       authors-max: 2
+   checkout:
+      title-max-size: 20
    cart:
       title-max-size: 40
       authors-max: 2

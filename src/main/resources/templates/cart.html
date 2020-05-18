@@ -96,7 +96,7 @@
                                 <!-- total price -->
                                 <div class="col-sm-2 d-flex justify-content-end">
                                     <p th:id="'ibp-' + ${item.id}" style="display: none" th:text="${item.book.price}"></p>
-                                    <p>€ <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
+                                    <p>EUR <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
                                 </div>
                             </div>
                         </div>
