@@ -22,8 +22,15 @@ public class Cart {
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Item> items = new HashSet<>();
 
-    //@PastOrPresent(message = "{date.notValid}")
     private LocalDateTime lastModified;
+
+    private boolean isCommitted;
+
+    private LocalDateTime committedAt;
+
+    private String piId;
+
+    private String piClientSecret;
 
     public int getCartSize(){
         int sum = 0;

@@ -1,15 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import com.google.gson.JsonSyntaxException;
-import com.stripe.Stripe;
-import com.stripe.exception.SignatureVerificationException;
-import com.stripe.exception.StripeException;
-import com.stripe.model.Event;
-import com.stripe.model.EventDataObjectDeserializer;
-import com.stripe.model.PaymentIntent;
-import com.stripe.model.StripeObject;
-import com.stripe.net.Webhook;
-import com.stripe.param.PaymentIntentCreateParams;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserDeletionForm;
@@ -20,10 +10,12 @@ import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.ProfileNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.Profile;
+import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
+import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.UserDeletion;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,12 +24,12 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.math.BigDecimal;
 import java.util.Calendar;
 
 @Controller
@@ -45,12 +37,6 @@ public class UserController extends BasicController {
 
     private PasswordEncoder passwordEncoder;
     private ApplicationEventPublisher applicationEventPublisher;
-
-    @Value("${payment.stripe.key.public}")
-    private String stripePublicKey = "somePublicKey_bitch";
-
-    @Value("${payment.stripe.key.private}")
-    private String stripeSecretKey = "someSecretKey_bitch";
 
     @Autowired
     public UserController(UserServer userServer,
@@ -491,132 +477,6 @@ public class UserController extends BasicController {
             LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
             return "redirect:/home";
         }
-    }
-
-    @GetMapping("/user/checkout")
-    public String showCheckout(Model model,
-                               @AuthenticationPrincipal User authUser) {
-
-        Stripe.apiKey = stripeSecretKey;
-
-        try {
-            User user = userServer.findById(authUser.getId());
-            Cart cart = user.getCart();
-            PaymentIntent paymentIntent = PaymentIntent.create(PaymentIntentCreateParams
-                    .builder()
-                    .setCurrency("eur")
-                    .setAmount(cart.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
-                    .putMetadata("integration_check", "accept_a_payment")
-                    .build()
-            );
-            model.addAttribute("client_secret", paymentIntent.getClientSecret());
-            model.addAttribute("cart", cart);
-            populateModel(model, authUser);
-            return "checkout";
-        }
-        catch (StripeException e) {
-            LOGGER.warn("Stripe - Some exception occurred", e);
-            return "redirect:/home";
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            return "redirect:/home";
-        }
-    }
-
-    @PostMapping("/listener")
-    public void processCheckout(@RequestBody String payload,
-                                @RequestHeader("Stripe-Signature") String sigHeader,
-                                HttpServletResponse response) {
-
-        // dev-localhost
-        if (sigHeader.equals("localdev")) {
-            //PaymentIntent paymentIntent = new Gson().fromJson(payload, PaymentIntent.class);
-            // Deal with each scenario
-            switch(payload) {
-                case "succeeded":
-                    // Fulfil the customer's purchase
-                    LOGGER.debug("Stripe (localdev) - Succeeded: payment-intent");
-                    response.setStatus(200);
-                    return;
-                case "payment_failed":
-                    // Notify the customer that payment failed
-                    LOGGER.debug("Stripe (localdev) - Failed: payment-intent");
-                    response.setStatus(200);
-                    return;
-                default:
-                    // Unexpected event type
-                    LOGGER.debug("Stripe (localdev) - Unexpected event type");
-                    response.setStatus(400);
-            }
-        }
-        // web deployed
-        else {
-            String endpointSecret = "anotherSecret_bitch";
-
-            // Getting the event
-            Event event;
-            try {
-                event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
-            }
-            catch (JsonSyntaxException e) {
-                // Invalid payload
-                LOGGER.warn("Stripe - Invalid payload", e);
-                response.setStatus(400);
-                return;
-            }
-            catch (SignatureVerificationException e) {
-                // Invalid signature
-                LOGGER.warn("Stripe - Invalid signature", e);
-                response.setStatus(400);
-                return;
-            }
-
-
-            // Deserialize the nested object inside the event
-            assert event != null;
-            EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
-            StripeObject stripeObject;
-            if (deserializer.getObject().isPresent()) {
-                stripeObject = deserializer.getObject().get();
-            }
-            else {
-                LOGGER.warn("Stripe - Event deserialization failed, probably due to an API version mismatch.");
-                response.setStatus(400);
-                return;
-            }
-
-            // Getting the payment-intent
-            PaymentIntent paymentIntent;
-            if (stripeObject instanceof PaymentIntent) {
-                paymentIntent = (PaymentIntent) stripeObject;
-            }
-            else {
-                // for now other objects other than PaymentIntent are not accepted
-                LOGGER.debug("Stripe - An object other than PaymentIntent has been sent to the listener");
-                response.setStatus(400);
-                return;
-            }
-
-            // Deal with each scenario
-            switch(event.getType()) {
-                case "payment_intent.succeeded":
-                    // Fulfil the customer's purchase
-                    LOGGER.debug("Stripe - Succeeded: payment-intent id={}", paymentIntent.getId());
-                    response.setStatus(200);
-                    return;
-                case "payment_intent.payment_failed":
-                    // Notify the customer that payment failed
-                    LOGGER.debug("Stripe - Failed: payment-intent id={}", paymentIntent.getId());
-                    response.setStatus(200);
-                    return;
-                default:
-                    // Unexpected event type
-                    LOGGER.debug("Stripe - Unexpected event type");
-                    response.setStatus(400);
-            }
-        }
-
     }
 
     @GetMapping("/user/deleteUser")

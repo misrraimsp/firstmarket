@@ -7,10 +7,9 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.*;
-import misrraimsp.uned.pfg.firstmarket.model.Author;
-import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.model.Publisher;
+import misrraimsp.uned.pfg.firstmarket.model.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -24,6 +23,8 @@ import java.util.regex.Pattern;
 
 @Service
 public class BookServer {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private BookRepository bookRepository;
     private BookConverter bookConverter;
@@ -225,5 +226,34 @@ public class BookServer {
 
     public boolean existsBook(Long id) {
         return bookRepository.existsById(id);
+    }
+
+    @Transactional
+    public void removeFromStock(Set<Item> items) throws BookNotFoundException, BookOutOfStockException {
+        items.forEach(item -> {
+            Book storedBook = this.findById(item.getBook().getId());
+            int originalStock = storedBook.getStock();
+            int editedStock = originalStock - item.getQuantity();
+            if (editedStock < 0) {
+                throw new BookOutOfStockException(item);
+            }
+            else {
+                storedBook.setStock(editedStock);
+                bookRepository.save(storedBook);
+                LOGGER.debug("Book(id={}) stock decrease from {} to {}", storedBook.getId(), originalStock, editedStock);
+            }
+        });
+    }
+
+    @Transactional
+    public void restoreStock(Set<Item> items) throws BookNotFoundException {
+        items.forEach(item -> {
+            Book storedBook = this.findById(item.getBook().getId());
+            int originalStock = storedBook.getStock();
+            int editedStock = originalStock + item.getQuantity();
+            storedBook.setStock(editedStock);
+            bookRepository.save(storedBook);
+            LOGGER.debug("Book(id={}) stock increase from {} to {}", storedBook.getId(), originalStock, editedStock);
+        });
     }
 }

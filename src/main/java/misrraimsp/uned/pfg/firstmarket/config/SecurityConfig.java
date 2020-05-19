@@ -52,17 +52,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/home")
 
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
                 // Make H2-Console non-secured; for debug purposes
                 .and()
                 .csrf()
                 .disable()
                 //.ignoringAntMatchers("/h2-console/**")
 
-                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
-                //.and()
-                //.headers()
-                //.frameOptions()
-                //.sameOrigin()
         ;
     }
 

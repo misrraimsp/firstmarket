@@ -26,6 +26,8 @@ payment:
       key:
          public: pk_test_iLddVaUD1AOnudl6q5v2LEKt00Xk2Yz1R6
          private:  #someprivatekey_bitch
+      pi-minutes: 1
+      limit-of-naps: 2
 
 validation:
    numeric:

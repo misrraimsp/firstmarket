@@ -128,36 +128,19 @@ public class UserServer implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public void addBookToCart(Long userId,
-                              Long bookId) throws
-            UserNotFoundException,
-            BookNotFoundException,
-            ItemNotFoundException {
-
+    public void addBookToCart(Long userId, Long bookId) throws UserNotFoundException, BookNotFoundException, ItemNotFoundException {
         cartServer.addBook(this.findById(userId).getCart(), bookId);
     }
 
-    public void incrementItemFromCart(Long userId,
-                                      Long itemId) throws
-            UserNotFoundException,
-            ItemNotFoundException {
-
+    public void incrementItemFromCart(Long userId, Long itemId) throws UserNotFoundException, ItemNotFoundException {
         cartServer.incrementItem(this.findById(userId).getCart(), itemId);
     }
 
-    public void decrementItemFromCart(Long userId,
-                                      Long itemId) throws
-            UserNotFoundException,
-            ItemNotFoundException {
-
+    public void decrementItemFromCart(Long userId, Long itemId) throws UserNotFoundException, ItemNotFoundException {
         cartServer.decrementItem(this.findById(userId).getCart(), itemId);
     }
 
-    public void removeItemFromCart(Long userId,
-                                   Long itemId) throws
-            UserNotFoundException,
-            ItemNotFoundException {
-
+    public void removeItemFromCart(Long userId, Long itemId) throws UserNotFoundException, ItemNotFoundException {
         cartServer.removeItem(this.findById(userId).getCart(), itemId);
     }
 

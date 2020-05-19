@@ -95,7 +95,7 @@
                         <!-------------------------------------------------------------------------action buttons-->
                         <div class="d-flex my-2">
                             <!-- Pay button -->
-                            <button class="btn btn-info px-5 mr-auto font-weight-bolder" type="submit" id="card-button" th:attr="data-secret=${client_secret}">Pay <span th:text="${cart.price}"></span>€</button>
+                            <button class="btn btn-info px-5 mr-auto font-weight-bolder" type="submit" id="card-button" th:attr="data-secret=${cart.piClientSecret}">Pay €<span th:text="${cart.price}"></span></button>
                             <!-- Cancel button -->
                             <a class="btn btn-outline-secondary px-3 font-weight-light" th:href="@{/home}">Cancel</a>
                         </div>
