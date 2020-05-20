@@ -14,4 +14,12 @@ public class Payment {
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     private Long id;
+
+    private String stripePaymentIntentId;
+
+    private Long amount;
+
+    private String currency;
+
+    private String description;
 }

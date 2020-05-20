@@ -22,9 +22,9 @@ public class HomeController extends BasicController {
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
-                          PurchaseServer purchaseServer) {
+                          OrderServer orderServer) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
     }
 
     @GetMapping("/")

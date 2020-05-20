@@ -39,10 +39,10 @@ public class BookController extends BasicController {
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
-                          PurchaseServer purchaseServer,
+                          OrderServer orderServer,
                           FrontEndProperties frontEndProperties) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.frontEndProperties = frontEndProperties;
     }
 

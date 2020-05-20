@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.Set;
 
 @Service
@@ -108,18 +107,4 @@ public class CartServer {
         itemServer.delete(deletingItem);
     }
 
-    public Set<Item> emptyCart(Cart cart) {
-        Set<Item> items = cart.getItems();
-        cart.setItems(new HashSet<>());
-        cartRepository.save(cart);
-        return items;
-    }
-
-    public double getTotalPrice(Cart cart){
-        double sum = 0;
-        for (Item item : cart.getItems()){
-            sum += item.getQuantity() * item.getBook().getPrice().doubleValue();
-        }
-        return sum;
-    }
 }

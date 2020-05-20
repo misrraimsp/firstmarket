@@ -5,9 +5,35 @@ document.addEventListener("DOMContentLoaded", function() {
     //dev
     let simulateWebhook = function (result) {
         let xmlHttpRequest = new XMLHttpRequest();
-        let content = (result.error) ? result.error.message : result.paymentIntent.status;
+        let content;
+        if (result.error) {
+            content = result.error.paymentIntent.status + "-" + result.error.paymentIntent.id;
+        }
+        else {
+            switch (result.paymentIntent.status) {
+                case "succeeded":
+                    content = "payment_intent.succeeded";
+                    break;
+                case "canceled":
+                    content = "payment_intent.canceled";
+                    break;
+                case "requires_payment_method":
+                    content = "payment_intent.payment_failed";
+                    break;
+                case "processing":
+                    content = "payment_intent.processing";
+                    break;
+                case "requires_confirmation":
+                case "requires_action":
+                case "requires_capture":
+                default:
+                    content = "(status)" + result.paymentIntent.status;
+                    break;
+            }
+            content += "-" + result.paymentIntent.id;
+        }
         xmlHttpRequest.open("POST", 'http://localhost:8080/firstmarket/listener', true);
-        xmlHttpRequest.setRequestHeader('Stripe-Signature', 'localdev');
+        xmlHttpRequest.setRequestHeader('Stripe-Signature', 'local-dev');
         xmlHttpRequest.send(content);
         xmlHttpRequest.onreadystatechange = function() {
             if (this.readyState === 4) {

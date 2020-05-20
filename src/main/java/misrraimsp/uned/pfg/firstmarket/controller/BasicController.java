@@ -22,7 +22,7 @@ public abstract class BasicController {
     protected CatServer catServer;
     protected ImageServer imageServer;
     protected MessageSource messageSource;
-    protected PurchaseServer purchaseServer;
+    protected OrderServer orderServer;
 
     @Autowired
     public BasicController(UserServer userServer,
@@ -30,14 +30,14 @@ public abstract class BasicController {
                            CatServer catServer,
                            ImageServer imageServer,
                            MessageSource messageSource,
-                           PurchaseServer purchaseServer) {
+                           OrderServer orderServer) {
 
         this.userServer = userServer;
         this.bookServer = bookServer;
         this.catServer = catServer;
         this.imageServer = imageServer;
         this.messageSource = messageSource;
-        this.purchaseServer = purchaseServer;
+        this.orderServer = orderServer;
         LOGGER.debug("{} created", this.getClass().getName());
     }
 

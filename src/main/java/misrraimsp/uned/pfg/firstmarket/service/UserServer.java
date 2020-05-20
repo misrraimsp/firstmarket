@@ -47,7 +47,7 @@ public class UserServer implements UserDetailsService {
     private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
-    private PurchaseServer purchaseServer;
+    private OrderServer orderServer;
 
     private SecurityTokenProperties securityTokenProperties;
     private SecurityRandomPasswordProperties securityRandomPasswordProperties;
@@ -61,7 +61,7 @@ public class UserServer implements UserDetailsService {
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
-                      PurchaseServer purchaseServer,
+                      OrderServer orderServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
                       LockManager lockManager) {
@@ -73,7 +73,7 @@ public class UserServer implements UserDetailsService {
         this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
-        this.purchaseServer = purchaseServer;
+        this.orderServer = orderServer;
 
         this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
@@ -142,13 +142,6 @@ public class UserServer implements UserDetailsService {
 
     public void removeItemFromCart(Long userId, Long itemId) throws UserNotFoundException, ItemNotFoundException {
         cartServer.removeItem(this.findById(userId).getCart(), itemId);
-    }
-
-    @Transactional
-    public void addPurchase(Long userId) throws UserNotFoundException {
-        User user = this.findById(userId);
-        Set<Item> items = cartServer.emptyCart(user.getCart());
-        purchaseServer.persist(items, user);
     }
 
     public void editProfile(Profile editedProfile) {

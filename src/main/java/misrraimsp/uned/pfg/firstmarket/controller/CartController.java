@@ -25,19 +25,15 @@ import java.util.Set;
 @RestController
 public class CartController extends BasicController {
 
-    private CheckoutServer checkoutServer;
-
     @Autowired
     public CartController(UserServer userServer,
                           BookServer bookServer,
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
-                          PurchaseServer purchaseServer,
-                          CheckoutServer checkoutServer) {
+                          OrderServer orderServer) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
-        this.checkoutServer = checkoutServer;
+        super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
     }
 
     @GetMapping("/ajaxCart/addBook/{id}")
@@ -62,7 +58,7 @@ public class CartController extends BasicController {
                 userEmail = userPrincipal.getName();
                 authUser = userServer.getUserByEmail(userEmail);
                 if (authUser.getCart().isCommitted()) {
-                    checkoutServer.unCommitCart(authUser.getCart());
+                    orderServer.unCommitCart(authUser);
                 }
                 userServer.addBookToCart(authUser.getId(), bookId);
                 LOGGER.debug("Book(id={}) added into user(id={}) cart", bookId, authUser.getId());
@@ -117,7 +113,7 @@ public class CartController extends BasicController {
                 userEmail = userPrincipal.getName();
                 authUser = userServer.getUserByEmail(userEmail);
                 if (authUser.getCart().isCommitted()) {
-                    checkoutServer.unCommitCart(authUser.getCart());
+                    orderServer.unCommitCart(authUser);
                 }
                 userServer.incrementItemFromCart(authUser.getId(), itemId);
                 LOGGER.debug("Item(id={}) incremented inside user(id={}) cart", itemId, authUser.getId());
@@ -172,7 +168,7 @@ public class CartController extends BasicController {
                 userEmail = userPrincipal.getName();
                 authUser = userServer.getUserByEmail(userEmail);
                 if (authUser.getCart().isCommitted()) {
-                    checkoutServer.unCommitCart(authUser.getCart());
+                    orderServer.unCommitCart(authUser);
                 }
                 userServer.decrementItemFromCart(authUser.getId(), itemId);
                 LOGGER.debug("Item(id={}) decremented inside user(id={}) cart", itemId, authUser.getId());
@@ -231,7 +227,7 @@ public class CartController extends BasicController {
                 userEmail = userPrincipal.getName();
                 authUser = userServer.getUserByEmail(userEmail);
                 if (authUser.getCart().isCommitted()) {
-                    checkoutServer.unCommitCart(authUser.getCart());
+                    orderServer.unCommitCart(authUser);
                 }
                 User finalAuthUser = authUser;
                 ids.forEach(id -> {

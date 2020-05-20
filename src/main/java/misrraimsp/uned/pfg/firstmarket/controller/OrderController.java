@@ -10,6 +10,8 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.BookOutOfStockException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
@@ -30,7 +32,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
-public class CheckoutController extends BasicController {
+public class OrderController extends BasicController {
 
     @Value("${payment.stripe.key.public}")
     private String spk = "somePublicKey_bitch";
@@ -38,21 +40,34 @@ public class CheckoutController extends BasicController {
     @Value("${payment.stripe.key.private}")
     private String ssk = "someSecretKey_bitch";
 
-    private CheckoutServer checkoutServer;
     private ApplicationEventPublisher applicationEventPublisher;
 
-    public CheckoutController(UserServer userServer,
-                              BookServer bookServer,
-                              CatServer catServer,
-                              ImageServer imageServer,
-                              MessageSource messageSource,
-                              PurchaseServer purchaseServer,
-                              CheckoutServer checkoutServer,
-                              ApplicationEventPublisher applicationEventPublisher) {
+    public OrderController(UserServer userServer,
+                           BookServer bookServer,
+                           CatServer catServer,
+                           ImageServer imageServer,
+                           MessageSource messageSource,
+                           OrderServer orderServer,
+                           ApplicationEventPublisher applicationEventPublisher) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
-        this.checkoutServer = checkoutServer;
+        super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.applicationEventPublisher = applicationEventPublisher;
+    }
+
+    @GetMapping("/user/orders")
+    public String showOrders(Model model,
+                             @AuthenticationPrincipal User authUser) {
+
+        try {
+            User user = userServer.findById(authUser.getId());
+            model.addAttribute("orders", orderServer.getOrdersByUser(user));
+            populateModel(model, authUser);
+            return "orders";
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
+            return "redirect:/home";
+        }
     }
 
     @GetMapping("/user/checkout")
@@ -65,12 +80,12 @@ public class CheckoutController extends BasicController {
             User user = userServer.findById(authUser.getId());
             Cart cart = user.getCart();
             if (cart.isCommitted()) {
-                LOGGER.debug("Cart(id={}) is already committed (pi id={})", cart.getId(), cart.getPiId());
+                LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), cart.getId(), cart.getPiId());
             }
             else {
-                cart = checkoutServer.commitCart(cart);
-                applicationEventPublisher.publishEvent(new OnCartCommittedEvent(cart));
-                LOGGER.debug("cart-committed event published (cartId={})", cart.getId());
+                cart = orderServer.commitCart(user);
+                applicationEventPublisher.publishEvent(new OnCartCommittedEvent(user));
+                LOGGER.debug("cart-committed event published (userId={}, cartId={})", user.getId(), cart.getId());
             }
             model.addAttribute("cart", cart);
             populateModel(model, authUser);
@@ -99,10 +114,24 @@ public class CheckoutController extends BasicController {
                                    @RequestHeader("Stripe-Signature") String sigHeader,
                                    HttpServletResponse response) {
 
+        String eventType;
+        PaymentIntent paymentIntent;
+
         // dev-localhost
-        if (sigHeader.equals("localdev")) {
+        if (sigHeader.equals("local-dev")) {
+            String[] parts = payload.split("-");
+            eventType = parts[0];
+            try {
+                paymentIntent = PaymentIntent.retrieve(parts[1]);
+            }
+            catch (StripeException e) {
+                LOGGER.warn("Stripe - Some exception occurred", e);
+                response.setStatus(500);
+                return;
+            }
             //PaymentIntent paymentIntent = new Gson().fromJson(payload, PaymentIntent.class);
             // Deal with each scenario
+            /*
             switch(payload) {
                 case "succeeded":
                     // Fulfil the customer's purchase
@@ -119,6 +148,7 @@ public class CheckoutController extends BasicController {
                     LOGGER.debug("Stripe (localdev) - Unexpected event type");
                     response.setStatus(400);
             }
+             */
         }
         // web deployed
         else {
@@ -142,7 +172,6 @@ public class CheckoutController extends BasicController {
                 return;
             }
 
-
             // Deserialize the nested object inside the event
             assert event != null;
             EventDataObjectDeserializer deserializer = event.getDataObjectDeserializer();
@@ -152,41 +181,66 @@ public class CheckoutController extends BasicController {
             }
             else {
                 LOGGER.warn("Stripe - Event deserialization failed, probably due to an API version mismatch.");
-                response.setStatus(400);
+                response.setStatus(200);
                 return;
             }
 
             // Getting the payment-intent
-            PaymentIntent paymentIntent;
+            //PaymentIntent paymentIntent;
             if (stripeObject instanceof PaymentIntent) {
                 paymentIntent = (PaymentIntent) stripeObject;
             }
             else {
                 // for now other objects other than PaymentIntent are not accepted
                 LOGGER.debug("Stripe - An object other than PaymentIntent has been sent to the listener");
-                response.setStatus(400);
+                response.setStatus(200);
                 return;
             }
 
-            // Deal with each scenario
-            switch(event.getType()) {
-                case "payment_intent.succeeded":
-                    // Fulfil the customer's purchase
-                    LOGGER.debug("Stripe - Succeeded: payment-intent id={}", paymentIntent.getId());
-                    response.setStatus(200);
-                    return;
-                case "payment_intent.payment_failed":
-                    // Notify the customer that payment failed
-                    LOGGER.debug("Stripe - Failed: payment-intent id={}", paymentIntent.getId());
-                    response.setStatus(200);
-                    return;
-                default:
-                    // Unexpected event type
-                    LOGGER.debug("Stripe - Unexpected event type");
-                    response.setStatus(400);
-            }
+            eventType = event.getType();
         }
 
+        // Retrieve user
+        String piUserId = paymentIntent.getMetadata().get("user-id");
+        if (piUserId == null || piUserId.isBlank()) {
+            LOGGER.error("Stripe - No user identification within PaymentIntent(id={}) sent to the stripe listener", paymentIntent.getId());
+            return;
+        }
+        try {
+            User user = userServer.findById(Long.parseLong(piUserId));
+            switch(eventType) {
+                case "payment_intent.succeeded":
+                    LOGGER.debug("Stripe - user(id={}) PaymentIntent(id={}) SUCCEEDED", user.getId(), paymentIntent.getId());
+                    applicationEventPublisher.publishEvent(new OnPaymentSuccessEvent(user));
+                    LOGGER.debug("payment_intent.succeeded event published (userId={})", user.getId());
+                    break;
+                case "payment_intent.canceled":
+                    LOGGER.debug("Stripe - user(id={}) PaymentIntent(id={}) CANCELED", user.getId(), paymentIntent.getId());
+                    applicationEventPublisher.publishEvent(new OnPaymentCancellationEvent(user));
+                    LOGGER.debug("payment_intent.succeeded event published (userId={})", user.getId());
+                    break;
+                case "payment_intent.payment_failed":
+                    // Notify the customer that payment failed
+                    LOGGER.debug("Stripe - user(id={}) PaymentIntent(id={}) FAILED", user.getId(), paymentIntent.getId());
+                    break;
+                case "payment_intent.created":
+                case "payment_intent.processing":
+                case "payment_intent.amount_capturable_updated":
+                    // unhandled event type
+                    LOGGER.debug("Stripe - UNHANDLED event (type={}) received related with user(id={}) PaymentIntent(id={})", eventType, user.getId(), paymentIntent.getId());
+                    break;
+                default:
+                    // Unexpected event type
+                    LOGGER.error("Stripe - UNEXPECTED event (type={}) received related with user(id={}) PaymentIntent(id={})", eventType, user.getId(), paymentIntent.getId());
+            }
+        }
+        catch (UserNotFoundException e) {
+            LOGGER.error("Stripe - No user(id={}) found with PaymentIntent(id={}) info sent to the stripe listener", piUserId, paymentIntent.getId());
+        }
+        catch (BookNotFoundException e) {
+            LOGGER.error("Theoretically unreachable state has been met: registered book does not exist. Exception: ", e);
+        }
+        response.setStatus(200);
     }
 
 }

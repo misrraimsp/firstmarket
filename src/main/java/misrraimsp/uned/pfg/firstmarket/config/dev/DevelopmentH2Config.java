@@ -4,8 +4,8 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.ProfileRepository;
-import misrraimsp.uned.pfg.firstmarket.data.PurchaseRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.*;
@@ -44,7 +44,7 @@ public class DevelopmentH2Config {
                                         CartServer cartServer,
                                         AuthorServer authorServer,
                                         PublisherServer publisherServer,
-                                        PurchaseRepository purchaseRepository,
+                                        OrderRepository orderRepository,
                                         ProfileRepository profileRepository) {
 
         return args -> {
@@ -553,12 +553,12 @@ public class DevelopmentH2Config {
             profileRepository.save(andreaProfile);
             userServer.setCompletedState(andrea.getId(),true);
 
-            //Purchases
-            Purchase purchase1 = new Purchase();
-            purchase1.setItems(Set.of(item3));
-            purchase1.setUser(andrea);
-            purchase1.setCreated(LocalDateTime.now());
-            purchaseRepository.save(purchase1);
+            //Orders
+            Order order1 = new Order();
+            order1.setItems(Set.of(item3));
+            order1.setUser(andrea);
+            order1.setCreatedAt(LocalDateTime.now());
+            orderRepository.save(order1);
 
         };
     }

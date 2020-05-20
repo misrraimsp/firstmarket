@@ -44,11 +44,11 @@ public class UserController extends BasicController {
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
-                          PurchaseServer purchaseServer,
+                          OrderServer orderServer,
                           PasswordEncoder passwordEncoder,
                           ApplicationEventPublisher applicationEventPublisher) {
 
-        super(userServer, bookServer, catServer, imageServer, messageSource, purchaseServer);
+        super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.passwordEncoder = passwordEncoder;
         this.applicationEventPublisher = applicationEventPublisher;
     }
@@ -456,22 +456,6 @@ public class UserController extends BasicController {
             model.addAttribute("cart", user.getCart());
             populateModel(model, authUser);
             return "cart";
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            return "redirect:/home";
-        }
-    }
-
-    @GetMapping("/user/purchases")
-    public String showPurchases(Model model,
-                                @AuthenticationPrincipal User authUser) {
-
-        try {
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("purchases", purchaseServer.getPurchasesByUser(user));
-            populateModel(model, authUser);
-            return "purchases";
         }
         catch (UserNotFoundException e) {
             LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);

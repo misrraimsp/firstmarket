@@ -9,23 +9,24 @@ import java.util.Set;
 
 @Data
 @Entity
-public class Purchase {
+@Table(name="PEDIDO")
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany
-    private Set<Item> items = new HashSet<>();
-
     @ManyToOne
     private User user;
 
-    @ManyToOne
-    private Address address;//restringido a ser una direccion del usuario
+    @OneToMany
+    private Set<Item> items = new HashSet<>();
+
+    @OneToOne
+    private ShippingInfo shippingInfo;
 
     @OneToOne
     private Payment payment;
 
-    private LocalDateTime created;
+    private LocalDateTime createdAt;
 }
