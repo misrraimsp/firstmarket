@@ -35,7 +35,7 @@
                             </div>
                         </div>
                         <!-- items -->
-                        <div class="col-sm-12" th:id="'i-' + ${item.id}" th:each="item : ${cart.items}">
+                        <div class="col-sm-12" th:id="'i-' + ${item.id}" th:each="item : ${user.cart.items}">
                             <div class="row my-3 d-flex align-items-center bg-white">
                                 <!-- select item -->
                                 <div class="col-sm-1">
@@ -116,12 +116,12 @@
                                 <!-- number of books -->
                                 <div class="d-flex justify-content-between">
                                     <div><p>Number of books:</p></div>
-                                    <div><p id="numOfBooks" th:text="${cartSize}">38</p></div>
+                                    <div><p id="numOfBooks" th:text="${user.cart.size}">38</p></div>
                                 </div>
                                 <!-- subtotal price -->
                                 <div class="d-flex justify-content-between">
                                     <div><p>Subtotal:</p></div>
-                                    <div><p>€ <span id="subtotal" th:text="${cart.getPrice()}">380</span></p></div>
+                                    <div><p>€ <span id="subtotal" th:text="${user.cart.price}">380</span></p></div>
                                 </div>
                                 <!-- total saving -->
                                 <div class="d-flex justify-content-between">
@@ -134,7 +134,7 @@
                                 <!-- final price -->
                                 <div class="d-flex justify-content-between">
                                     <div><strong>Total:</strong></div>
-                                    <div><strong>€ <span id="total" th:text="${cart.getPrice()}">380</span></strong></div>
+                                    <div><strong>€ <span id="total" th:text="${user.cart.price}">380</span></strong></div>
                                 </div>
                                 <!-- checkout button -->
                                 <form th:action="@{/user/checkout}" method="GET">

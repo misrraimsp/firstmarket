@@ -28,46 +28,47 @@
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
                 <!-- checkout form -->
-                <div class="col-sm-7">
+                <div class="col-sm-6">
                     <form class="needs-validation" novalidate id='payment-form' th:action="@{/user/checkout}" method="POST" action="#">
-                        <!-------------------------------------------------------------------------full name-->
-                        <label class="mt-1 text-dark font-weight-light">Contact details</label>
-                        <!-- full name -->
+                        <!-------------------------------------------------------------------------Recipient details-->
+                        <label class="mt-3 text-dark font-weight-light">Recipient details</label>
                         <div class="input-group mb-3">
+                            <!-- full name -->
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">First name</small></span>
+                                <span class="input-group-text"><small class="font-weight-lighter">Name</small></span>
                             </div>
-                            <input class="form-control" type="text" id="firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <!-- phone -->
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">Last name</small></span>
-                            </div>
-                            <input class="form-control" type="text" id="lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
-                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                        </div>
-                        <!-- phone -->
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">Phone number</small></span>
+                                <span class="input-group-text"><small class="font-weight-lighter">Phone</small></span>
                             </div>
                             <input class="form-control" type="text" id="phone" style="max-width: 25%" th:pattern="${@environment.getProperty('validation.regex.phone')}">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">Email</small></span>
-                            </div>
-                            <input class="form-control" type="text" id="email" th:pattern="${@environment.getProperty('validation.regex.email')}">
+                            <!-- error -->
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
-                        <!-------------------------------------------------------------------------full address-->
-                        <label class="mt-1 text-dark font-weight-light">Full Address</label>
-                        <!-- street and zip -->
+                        <!-------------------------------------------------------------------------Shipping address-->
+                        <label class="mt-1 text-dark font-weight-light">Shipping address</label>
+                        <!-- street line1-->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Address</small></span>
                             </div>
-                            <input class="form-control" type="text" id="address" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="line1" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>
+                        <!-- street line2-->
+                        <input class="form-control mb-3" type="text" id="line2" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                        <div class="invalid-feedback">Please fill out this field correctly</div>
+                        <!-- city and postal code -->
+                        <div class="input-group mb-3">
                             <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">Zip code</small></span>
+                                <span class="input-group-text"><small class="font-weight-lighter">City</small></span>
                             </div>
-                            <input class="form-control" type="text" id="zip" style="max-width: 20%" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="city" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Postal Code</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="postalCode" required style="max-width: 25%" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <!-- country and province -->
@@ -75,14 +76,14 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Country</small></span>
                             </div>
-                            <input class="form-control" type="text" id="country" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="country" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Province</small></span>
                             </div>
-                            <input class="form-control" type="text" id="province" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="province" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
-                        <!-------------------------------------------------------------------------payment info-->
+                        <!-------------------------------------------------------------------------Payment info-->
                         <label class="text-dark font-weight-light" for="card-element">Credit/Debit Card</label>
                         <div class="form-group">
                             <div class="form-control" id="card-element" style='height: 2.4em; padding-top: .7em;'>
@@ -92,54 +93,58 @@
                                 <!-- card error here -->
                             </div>
                         </div>
-                        <!-------------------------------------------------------------------------action buttons-->
+                        <!-------------------------------------------------------------------------Action buttons-->
                         <div class="d-flex my-2">
                             <!-- Pay button -->
-                            <button class="btn btn-info px-5 mr-auto font-weight-bolder" type="submit" id="card-button" th:attr="data-secret=${cart.piClientSecret}">Pay €<span th:text="${cart.price}"></span></button>
+                            <button class="btn btn-info px-5 mr-auto" type="submit" id="card-button" th:attr="data-secret=${user.cart.piClientSecret}"><span class="font-weight-bolder">Pay </span><span class="font-weight-lighter">€</span><span class="font-weight-bolder" th:text="${user.cart.price}"></span></button>
                             <!-- Cancel button -->
-                            <a class="btn btn-outline-secondary px-3 font-weight-light" th:href="@{/home}">Cancel</a>
+                            <button class="btn btn-outline-secondary px-3" id="cancel"><span class="font-weight-lighter small">Cancel</span></button>
                         </div>
                     </form>
                 </div>
                 <!-- purchase summary -->
-                <div class="col-sm-3">
+                <div class="col-sm-4">
                     <div class="row">
                         <div class="col-sm-1"></div>
-                        <div class="col-sm-10 d-flex flex-column">
+                        <div class="col-sm-10 d-flex flex-column bg-light">
                             <!-- panel title -->
                             <div class="d-flex justify-content-center mt-3">
-                                <p class="font-weight-light">Purchase Summary</p>
+                                <p class="text-dark font-weight-light">Purchase Summary</p>
                             </div>
                             <!-- purchase info -->
                             <div class="d-flex flex-column">
                                 <!-- single book -->
-                                <div class="d-flex my-3" th:each="item : ${cart.items}">
-                                    <div class="text-info mr-auto">
+                                <div class="d-flex my-3 align-items-end" th:each="item : ${user.cart.items}">
+                                    <!-- left content -->
+                                    <div class="mr-auto">
                                         <div class="d-flex flex-column">
-                                            <!-- title -->
-                                            <div class="small">
-                                                <p class="my-0" th:unless="${item.book.title.isBlank()}">
-                                                    <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('front-end.checkout.title-max-size')}__))}">Book title</span>
-                                                </p>
-                                                <p class="my-0" th:if="${item.book.title.isBlank()}">
-                                                    <small><i>unknown title</i></small>
-                                                </p>
+                                            <!-- book title -->
+                                            <div>
+                                                <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
+                                                    <p class="my-0" th:unless="${item.book.title.isBlank()}">
+                                                        <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('front-end.checkout.title-max-size')}__))}">Book title</span>
+                                                    </p>
+                                                    <p class="my-0" th:if="${item.book.title.isBlank()}">
+                                                        <small><i>unknown title</i></small>
+                                                    </p>
+                                                </a>
                                             </div>
                                             <!-- price composition -->
-                                            <div class="my-0 small">
-                                                <small><span th:text="${item.quantity}"></span> x <span th:text="${item.book.price}"></span>€</small>
+                                            <div class="my-0 small text-dark">
+                                                <span th:text="${item.quantity}"></span> x <span class="font-weight-lighter">€</span><span th:text="${item.book.price}"></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="small">
-                                        <p class="my-0"><span class="font-weight-light">EUR </span><span th:text="${item.price}">100</span></p>
+                                    <!-- right content -->
+                                    <div>
+                                        <p class="my-0 small text-dark"><span class="font-weight-lighter">€</span><span th:text="${item.price}">100</span></p>
                                     </div>
                                 </div>
                             </div>
                             <!-- final price -->
-                            <div class="d-flex justify-content-between my-3">
-                                <div><strong>Total:</strong></div>
-                                <div><p><span class="font-weight-light">EUR </span><strong id="total" th:text="${cart.getPrice()}">380</strong></p></div>
+                            <div class="d-flex my-3 text-dark">
+                                <div class="mr-auto"><span class="font-weight-bolder">Total</span></div>
+                                <div><span class="font-weight-lighter">€</span><span class="font-weight-bolder" id="total" th:text="${user.cart.price}">380</span></div>
                             </div>
                         </div>
                         <div class="col-sm-1"></div>

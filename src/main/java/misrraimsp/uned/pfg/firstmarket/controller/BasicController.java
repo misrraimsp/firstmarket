@@ -44,9 +44,7 @@ public abstract class BasicController {
     protected void populateModel(Model model, User authUser) {
         if (authUser != null && userServer.hasRole(authUser, "ROLE_USER")) {
             try {
-                User user = userServer.findById(authUser.getId());
-                model.addAttribute("firstName", user.getProfile().getFirstName());
-                model.addAttribute("cartSize", user.getCart().getCartSize());
+                model.addAttribute("user", userServer.findById(authUser.getId()));
             }
             catch (UserNotFoundException e) {
                 LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);

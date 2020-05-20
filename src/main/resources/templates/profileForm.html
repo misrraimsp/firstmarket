@@ -25,6 +25,18 @@
                         <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
                         <div class="form-row">
                             <div class="col-sm-6 bg-light">
+                                <!-- full name
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">First name</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="firstName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><small class="font-weight-lighter">Last name</small></span>
+                            </div>
+                            <input class="form-control" type="text" id="lastName" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                        </div>-->
                                 <!-------------------------------------------------------------------------firstname-->
                                 <div class="form-group">
                                     <label class="mt-1" for="firstName">First Name:</label>

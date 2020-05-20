@@ -15,7 +15,6 @@ import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.BookOutOfStockException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.model.Cart;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,9 +32,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class OrderController extends BasicController {
-
-    @Value("${payment.stripe.key.public}")
-    private String spk = "somePublicKey_bitch";
 
     @Value("${payment.stripe.key.private}")
     private String ssk = "someSecretKey_bitch";
@@ -78,16 +74,14 @@ public class OrderController extends BasicController {
 
         try {
             User user = userServer.findById(authUser.getId());
-            Cart cart = user.getCart();
-            if (cart.isCommitted()) {
-                LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), cart.getId(), cart.getPiId());
+            if (user.getCart().isCommitted()) {
+                LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getPiId());
             }
             else {
-                cart = orderServer.commitCart(user);
+                orderServer.commitCart(user);
                 applicationEventPublisher.publishEvent(new OnCartCommittedEvent(user));
-                LOGGER.debug("cart-committed event published (userId={}, cartId={})", user.getId(), cart.getId());
+                LOGGER.debug("cart-committed event published (userId={}, cartId={})", user.getId(), user.getCart().getId());
             }
-            model.addAttribute("cart", cart);
             populateModel(model, authUser);
             return "checkout";
         }

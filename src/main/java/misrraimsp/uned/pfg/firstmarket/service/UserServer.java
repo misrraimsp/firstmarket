@@ -47,7 +47,6 @@ public class UserServer implements UserDetailsService {
     private ProfileServer profileServer;
     private RoleServer roleServer;
     private CartServer cartServer;
-    private OrderServer orderServer;
 
     private SecurityTokenProperties securityTokenProperties;
     private SecurityRandomPasswordProperties securityRandomPasswordProperties;
@@ -61,7 +60,6 @@ public class UserServer implements UserDetailsService {
                       ProfileServer profileServer,
                       RoleServer roleServer,
                       CartServer cartServer,
-                      OrderServer orderServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
                       LockManager lockManager) {
@@ -73,7 +71,6 @@ public class UserServer implements UserDetailsService {
         this.profileServer = profileServer;
         this.roleServer = roleServer;
         this.cartServer = cartServer;
-        this.orderServer = orderServer;
 
         this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
@@ -112,7 +109,7 @@ public class UserServer implements UserDetailsService {
             cart.setLastModified(LocalDateTime.now());
         }
         Profile profile = new Profile();
-        profile.setFirstName("user");
+        profile.setFirstName("");
         User user = new User();
         user.setCompleted(false);
         user.setSuspended(false);

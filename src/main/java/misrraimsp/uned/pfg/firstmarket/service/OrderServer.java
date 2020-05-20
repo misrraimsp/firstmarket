@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import com.stripe.param.PaymentIntentCreateParams;
+import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.PaymentRepository;
 import misrraimsp.uned.pfg.firstmarket.data.ShippingInfoRepository;
@@ -23,7 +24,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -70,7 +70,7 @@ public class OrderServer {
     @Transactional
     @Async
     @EventListener
-    public void handlePaymentSuccess(@NotNull OnPaymentSuccessEvent paymentSuccessEvent) {
+    public void handlePaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) {
         User user = paymentSuccessEvent.getUser();
         if (user == null) {
             LOGGER.error("Trying to build a no-user order");
@@ -138,7 +138,7 @@ public class OrderServer {
 
     @Async
     @EventListener
-    public void handlePaymentCancellation(@NotNull OnPaymentCancellationEvent paymentCancellationEvent) {
+    public void handlePaymentCancellation(@NonNull OnPaymentCancellationEvent paymentCancellationEvent) {
         try {
             this.unCommitCart(paymentCancellationEvent.getUser());
         }
@@ -152,7 +152,7 @@ public class OrderServer {
     }
 
     @Transactional(rollbackFor = StripeException.class)
-    public Cart commitCart(@NotNull User user) throws BookNotFoundException, BookOutOfStockException, StripeException {
+    public void commitCart(@NonNull User user) throws BookNotFoundException, BookOutOfStockException, StripeException {
         assert user != null;
         Cart cart = user.getCart();
         assert !cart.isCommitted();
@@ -171,12 +171,10 @@ public class OrderServer {
         cart.setPiClientSecret(paymentIntent.getClientSecret());
         Cart committedCart = cartServer.persist(cart);
         LOGGER.debug("User(id={}) cart(id={}) successfully committed (pi id={})", user.getId(), cart.getId(), cart.getPiId());
-        return committedCart;
     }
 
     @Transactional(rollbackFor = StripeException.class)
-    public Cart unCommitCart(@NotNull User user) throws BookNotFoundException, StripeException {
-        assert user != null;
+    public void unCommitCart(@NonNull User user) throws BookNotFoundException, StripeException {
         Cart cart = user.getCart();
         assert cart.isCommitted();
         bookServer.restoreStock(cart.getItems());
@@ -186,36 +184,37 @@ public class OrderServer {
         PaymentIntent.retrieve(piId).cancel();
         cart.setPiId(null);
         cart.setPiClientSecret(null);
-        Cart uncommittedCart = cartServer.persist(cart);
+        cartServer.persist(cart);
         LOGGER.debug("User(id={}) cart(id={}) successfully un-committed (pi id={})", user.getId(), cart.getId(), piId);
-        return uncommittedCart;
     }
 
     @Async
     @EventListener
-    public void checkCommittedCartExpiration(@NotNull OnCartCommittedEvent cartCommittedEvent) throws PaymentIntentProcessingTimeout {
+    public void handleCommitmentExpiration(@NonNull OnCartCommittedEvent cartCommittedEvent) throws PaymentIntentProcessingTimeout {
         User user = cartCommittedEvent.getUser();
-        Cart cart = cartCommittedEvent.getCommittedCart();
-        assert cart != null;
-        PaymentIntent paymentIntent;
+        assert user != null;
+        assert user.getCart() != null;
+        String paymentIntentId = user.getCart().getPiId();
         try {
-            paymentIntent = PaymentIntent.retrieve(cart.getPiId());
-            LOGGER.debug("User(id{}) committed-cart(id={}) time-frame STARTED (piId={}, piStatus={})", user.getId(), cart.getId(), paymentIntent.getId(), paymentIntent.getStatus());
+            LOGGER.debug("User(id={}) committed-cart(id={}) time-frame STARTED (piId={})", user.getId(), user.getCart().getId(), paymentIntentId);
             //take a nap
             TimeUnit.MINUTES.sleep(napMinutes);
             //wakeup
+            LOGGER.debug("User(id={}) committed-cart(id={}) time-frame ENDED (piId={})", user.getId(), user.getCart().getId(), paymentIntentId);
             int numOfNaps = 1;
-            String piStatus = PaymentIntent.retrieve(cart.getPiId()).getStatus();
+            String piStatus = PaymentIntent.retrieve(paymentIntentId).getStatus();
             while (piStatus.equals("processing") && numOfNaps < limitOfNaps) {
+                LOGGER.debug("User(id={}) committed-cart(id={}) EXTENDED({} time/s) time-frame due to 'processing' piStatus STARTED (piId={})", user.getId(), user.getCart().getId(), numOfNaps, paymentIntentId);
                 //take another nap
                 TimeUnit.MINUTES.sleep(napMinutes);
                 //wakeup
+                LOGGER.debug("User(id={}) committed-cart(id={}) EXTENDED({} time/s) time-frame due to 'processing' piStatus ENDED (piId={})", user.getId(), user.getCart().getId(), numOfNaps, paymentIntentId);
                 numOfNaps++;
-                piStatus = PaymentIntent.retrieve(cart.getPiId()).getStatus();
+                piStatus = PaymentIntent.retrieve(paymentIntentId).getStatus();
             }
             if (piStatus.equals("processing")) {
-                LOGGER.error("User(id={}) PaymentIntent(id={}) with 'processing' status has TIMEOUT", user.getId(), paymentIntent.getId());
-                throw new PaymentIntentProcessingTimeout(paymentIntent.getId());
+                LOGGER.error("User(id={}) PaymentIntent(id={}) with 'processing' status has TIMEOUT", user.getId(), paymentIntentId);
+                throw new PaymentIntentProcessingTimeout(paymentIntentId);
             }
             switch (piStatus) {
                 case "canceled":
@@ -223,13 +222,13 @@ public class OrderServer {
                     break;
                 default:
                     this.unCommitCart(user);
-                    piStatus = PaymentIntent.retrieve(cart.getPiId()).getStatus();
+                    piStatus = PaymentIntent.retrieve(paymentIntentId).getStatus();
             }
-            LOGGER.debug("User(id{}) committed-cart(id={}) time-frame ENDED (piId={}, piStatus={})", user.getId(), cart.getId(), paymentIntent.getId(), piStatus);
+            LOGGER.debug("User(id={}) committed-cart(id={}) expiration handler finished (piId={}, piStatus={})", user.getId(), user.getCart().getId(), paymentIntentId, piStatus);
         }
         catch (InterruptedException e) {
-            assert cart.getId() != null;
-            LOGGER.error("cart-committed event-handler error (userId={}, cartId={}): ", user.getId(), cart.getId(), e);
+            assert user.getCart().getId() != null;
+            LOGGER.error("cart-committed event-handler error (userId={}, cartId={}): ", user.getId(), user.getCart().getId(), e);
         }
         catch (StripeException e) {
             LOGGER.warn("Stripe - Some exception occurred", e);

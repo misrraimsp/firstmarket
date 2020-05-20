@@ -32,7 +32,7 @@ public class Cart {
 
     private String piClientSecret;
 
-    public int getCartSize(){
+    public int getSize(){
         int sum = 0;
         for (Item i : items){
             sum += i.getQuantity();

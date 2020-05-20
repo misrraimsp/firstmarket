@@ -9,25 +9,21 @@ import javax.persistence.*;
 public class Address {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne
     private User user;
 
-    private String firstName;
+    private String line1;
 
-    private String lastName;
+    private String line2;
 
-    private String phone;
+    private String city;
 
-    private String email;
-
-    private String streetAddress;
-
-    private String zipCode;
+    private String postalCode;
 
     private String country;
 
-    private String province;
+    private String province; //or state
 }

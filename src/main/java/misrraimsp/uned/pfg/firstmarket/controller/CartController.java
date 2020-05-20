@@ -62,7 +62,7 @@ public class CartController extends BasicController {
                 }
                 userServer.addBookToCart(authUser.getId(), bookId);
                 LOGGER.debug("Book(id={}) added into user(id={}) cart", bookId, authUser.getId());
-                return new ResponseEntity<>(authUser.getCart().getCartSize(), HttpStatus.OK);
+                return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
             }
         }
         catch (StripeException e) {
@@ -117,7 +117,7 @@ public class CartController extends BasicController {
                 }
                 userServer.incrementItemFromCart(authUser.getId(), itemId);
                 LOGGER.debug("Item(id={}) incremented inside user(id={}) cart", itemId, authUser.getId());
-                return new ResponseEntity<>(authUser.getCart().getCartSize(), HttpStatus.OK);
+                return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
             }
         }
         catch (StripeException e) {
@@ -172,7 +172,7 @@ public class CartController extends BasicController {
                 }
                 userServer.decrementItemFromCart(authUser.getId(), itemId);
                 LOGGER.debug("Item(id={}) decremented inside user(id={}) cart", itemId, authUser.getId());
-                return new ResponseEntity<>(authUser.getCart().getCartSize(), HttpStatus.OK);
+                return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
             }
         }
         catch (StripeException e) {
@@ -234,7 +234,7 @@ public class CartController extends BasicController {
                     userServer.removeItemFromCart(finalAuthUser.getId(), id);
                     LOGGER.debug("Item(id={}) removed from user(id={}) cart", id, finalAuthUser.getId());
                 });
-                return new ResponseEntity<>(authUser.getCart().getCartSize(), HttpStatus.OK);
+                return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
             }
         }
         catch (StripeException e) {

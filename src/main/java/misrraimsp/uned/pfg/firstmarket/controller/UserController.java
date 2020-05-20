@@ -451,16 +451,8 @@ public class UserController extends BasicController {
     public String showCart(Model model,
                            @AuthenticationPrincipal User authUser) {
 
-        try {
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("cart", user.getCart());
-            populateModel(model, authUser);
-            return "cart";
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            return "redirect:/home";
-        }
+        populateModel(model, authUser);
+        return "cart";
     }
 
     @GetMapping("/user/deleteUser")

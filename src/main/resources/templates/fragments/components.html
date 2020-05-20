@@ -79,12 +79,12 @@
                             <ul class="navbar-nav">
                                 <!--user greeting-->
                                 <li class="navbar-text" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
-                                    <small class="text-white">Hi, <span th:text="${firstName}"/>!</small>
+                                    <small class="text-white">Hi <span th:text="${(user.profile.firstName.isBlank())? 'friend' : user.profile.firstName}"/>!</small>
                                 </li>
                                 <!--cart-->
                                 <li class="nav-item" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
                                     <a class="nav-link" th:href="@{/user/cart}" data-toggle="tooltip" title="View Cart">
-                                            <span class="fa-stack has-badge mx-2" id="cartIcon" th:data-count="${cartSize}">
+                                            <span class="fa-stack has-badge mx-2" id="cartIcon" th:data-count="${user.cart.size}">
                                                 <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
                                                 <i class="fa fa-shopping-cart fa-stack-2x info-over-secondary"></i>
                                             </span>
