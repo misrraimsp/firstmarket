@@ -515,7 +515,7 @@ public class DevelopmentH2Config {
             userForm1.setEmail("admin@fm.com");
             userForm1.setPassword("admin");
             userForm1.setMatchingPassword("admin");
-            User admin = userServer.persist(userForm1, passwordEncoder, Collections.singletonList(role1), cart1);
+            User admin = userServer.persist(userForm1, passwordEncoder, Collections.singleton(role1), cart1);
             misrraimsp.uned.pfg.firstmarket.model.Profile adminProfile = admin.getProfile();
             adminProfile.setFirstName("adminFirstName");
             adminProfile.setLastName("adminLastName");
@@ -543,7 +543,7 @@ public class DevelopmentH2Config {
             userForm3.setEmail("andrea@fm.com");
             userForm3.setPassword("andrea");
             userForm3.setMatchingPassword("andrea");
-            User andrea = userServer.persist(userForm3, passwordEncoder, Collections.singletonList(role2), cart3);
+            User andrea = userServer.persist(userForm3, passwordEncoder, Collections.singleton(role2), cart3);
             misrraimsp.uned.pfg.firstmarket.model.Profile andreaProfile = andrea.getProfile();
             andreaProfile.setFirstName("Andrea");
             andreaProfile.setLastName("Grau");

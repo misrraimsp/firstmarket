@@ -100,9 +100,9 @@ public class UserServer implements UserDetailsService {
 
     // role ROLE_USER assigned by default if not specified
     // new cart created if not specified
-    public User persist(UserForm userForm, PasswordEncoder passwordEncoder, List<Role> roles, Cart cart) {
+    public User persist(UserForm userForm, PasswordEncoder passwordEncoder, Set<Role> roles, Cart cart) {
         if (roles == null){
-            roles = Collections.singletonList(roleServer.findByName("ROLE_USER"));
+            roles = Collections.singleton(roleServer.findByName("ROLE_USER"));
         }
         if (cart == null){
             cart = new Cart();

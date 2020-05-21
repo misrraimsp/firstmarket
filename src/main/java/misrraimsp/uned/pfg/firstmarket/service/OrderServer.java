@@ -72,10 +72,6 @@ public class OrderServer {
     @EventListener
     public void handlePaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) {
         User user = paymentSuccessEvent.getUser();
-        if (user == null) {
-            LOGGER.error("Trying to build a no-user order");
-            return;
-        }
         Cart cart = user.getCart();
         if (!cart.isCommitted()){
             LOGGER.error("User(id={}) trying to build a no-committed-cart(id={}) order", user.getId(), cart.getId());
@@ -104,9 +100,7 @@ public class OrderServer {
             return;
         }
         //build address
-        Address address = conversionServer.convertStripeAddressToAddress(stripeAddress);
-        address.setUser(user);
-        address = addressServer.persist(address);
+        Address address = addressServer.persist(conversionServer.convertStripeAddressToAddress(stripeAddress));
         LOGGER.debug("User(id={}) address(id={}) successfully persisted", user.getId(), address.getId());
         //build shipping info
         ShippingInfo shippingInfo = conversionServer.convertStripeShippingDetailsToShippingInfo(shippingDetails);
@@ -119,7 +113,7 @@ public class OrderServer {
         //build order
         Order order = new Order();
         order.setUser(user);
-        order.setItems(cart.getItems());
+        order.setItems(new HashSet<>(cart.getItems()));
         order.setShippingInfo(shippingInfo);
         order.setPayment(payment);
         order.setCreatedAt(LocalDateTime.now());

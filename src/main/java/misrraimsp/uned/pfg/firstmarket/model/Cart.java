@@ -33,18 +33,10 @@ public class Cart {
     private String piClientSecret;
 
     public int getSize(){
-        int sum = 0;
-        for (Item i : items){
-            sum += i.getQuantity();
-        }
-        return sum;
+        return items.stream().mapToInt(Item::getQuantity).sum();
     }
 
     public BigDecimal getPrice() {
-        BigDecimal sum = BigDecimal.ZERO;
-        for (Item item : items){
-            sum = sum.add(item.getPrice());
-        }
-        return sum;
+        return items.stream().map(Item::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 }

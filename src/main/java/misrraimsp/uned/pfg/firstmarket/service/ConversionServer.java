@@ -2,18 +2,17 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
+import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.model.Address;
 import misrraimsp.uned.pfg.firstmarket.model.Payment;
 import misrraimsp.uned.pfg.firstmarket.model.ShippingInfo;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotNull;
 
 @Service
 public class ConversionServer {
 
-    public Address convertStripeAddressToAddress(@NotNull com.stripe.model.Address stripeAddress) {
-        assert stripeAddress != null;
+    public Address convertStripeAddressToAddress(@NonNull com.stripe.model.Address stripeAddress) {
         misrraimsp.uned.pfg.firstmarket.model.Address address = new Address();
         address.setCountry(stripeAddress.getCountry());
         address.setProvince(stripeAddress.getState());
@@ -24,8 +23,7 @@ public class ConversionServer {
         return address;
     }
 
-    public ShippingInfo convertStripeShippingDetailsToShippingInfo(@NotNull ShippingDetails shippingDetails) {
-        assert shippingDetails != null;
+    public ShippingInfo convertStripeShippingDetailsToShippingInfo(@NonNull ShippingDetails shippingDetails) {
         ShippingInfo shippingInfo = new ShippingInfo();
         shippingInfo.setName(shippingDetails.getName());
         shippingInfo.setPhone(shippingDetails.getPhone());
@@ -34,8 +32,7 @@ public class ConversionServer {
         return shippingInfo;
     }
 
-    public Payment convertStripePaymentIntentToPayment(@NotNull PaymentIntent paymentIntent) {
-        assert paymentIntent != null;
+    public Payment convertStripePaymentIntentToPayment(@NonNull PaymentIntent paymentIntent) {
         Payment payment = new Payment();
         payment.setStripePaymentIntentId(paymentIntent.getId());
         payment.setAmount(paymentIntent.getAmount());

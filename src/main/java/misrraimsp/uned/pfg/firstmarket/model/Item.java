@@ -16,7 +16,6 @@ public class Item {
     @OneToOne
     private Book book;
 
-    //@Positive(message = "{number.positive}")
     private int quantity;
 
 

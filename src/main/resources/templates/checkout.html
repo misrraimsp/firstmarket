@@ -29,7 +29,9 @@
                 <div class="col-sm-1"></div>
                 <!-- checkout form -->
                 <div class="col-sm-6">
-                    <form class="needs-validation" novalidate id='payment-form' th:action="@{/user/checkout}" method="POST" action="#">
+                    <form class="needs-validation" novalidate id='payment-form'>
+                        <!-------------------------------------------------------------------------Receipt Email-->
+                        <input type="hidden" id="receiptEmail" th:value="${user.email}">
                         <!-------------------------------------------------------------------------Recipient details-->
                         <label class="mt-3 text-dark font-weight-light">Recipient details</label>
                         <div class="input-group mb-3">
@@ -37,7 +39,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Name</small></span>
                             </div>
-                            <input class="form-control" type="text" id="name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="name" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
                             <!-- phone -->
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Phone</small></span>
@@ -96,9 +98,16 @@
                         <!-------------------------------------------------------------------------Action buttons-->
                         <div class="d-flex my-2">
                             <!-- Pay button -->
-                            <button class="btn btn-info px-5 mr-auto" type="submit" id="card-button" th:attr="data-secret=${user.cart.piClientSecret}"><span class="font-weight-bolder">Pay </span><span class="font-weight-lighter">€</span><span class="font-weight-bolder" th:text="${user.cart.price}"></span></button>
+                            <button class="btn btn-info px-5 mr-auto" type="submit" id="pay" th:attr="data-secret=${user.cart.piClientSecret}" disabled>
+                                <span class="spinner-border spinner-border-sm" id="spinner" style="visibility: hidden"></span>
+                                <span class="font-weight-bolder">Pay </span>
+                                <span class="font-weight-lighter">€</span>
+                                <span class="font-weight-bolder" th:text="${user.cart.price}"></span>
+                            </button>
                             <!-- Cancel button -->
-                            <button class="btn btn-outline-secondary px-3" id="cancel"><span class="font-weight-lighter small">Cancel</span></button>
+                            <a class="btn btn-outline-secondary px-3" th:href="@{/home}">
+                                <span class="font-weight-lighter small">Cancel</span>
+                            </a>
                         </div>
                     </form>
                 </div>
