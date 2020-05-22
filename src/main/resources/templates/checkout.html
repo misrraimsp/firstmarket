@@ -23,6 +23,17 @@
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
             <div th:replace="fragments/components::title(text = 'Checkout')"></div>
+            <!-- payment error -->
+            <div class="row my-1">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- error -->
+                <div class="col-sm-10" id="error-box-hook">
+                    <!-- dynamically generated error box here -->
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
+            </div>
             <!-- main content -->
             <div class="row bg-white">
                 <!-- left margin -->
@@ -101,13 +112,14 @@
                             <button class="btn btn-info px-5 mr-auto" type="submit" id="pay" th:attr="data-secret=${user.cart.piClientSecret}" disabled>
                                 <span class="spinner-border spinner-border-sm" id="spinner" style="visibility: hidden"></span>
                                 <span class="font-weight-bolder">Pay </span>
-                                <span class="font-weight-lighter">€</span>
-                                <span class="font-weight-bolder" th:text="${user.cart.price}"></span>
+                                <span class="font-weight-lighter">€</span><span class="font-weight-bolder" th:text="${user.cart.price}"></span>
                             </button>
                             <!-- Cancel button -->
                             <a class="btn btn-outline-secondary px-3" th:href="@{/home}">
                                 <span class="font-weight-lighter small">Cancel</span>
                             </a>
+                            <!-- success link -->
+                            <a th:href="@{/user/success}" id="successLink" style="display: none"></a>
                         </div>
                     </form>
                 </div>
@@ -167,6 +179,5 @@
         </div>
         <!-- checkout -->
         <script th:src="@{/js/checkout.js}"></script>
-        <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
     </body>
 </html>

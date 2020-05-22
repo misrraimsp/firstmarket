@@ -66,6 +66,14 @@ public class OrderController extends BasicController {
         }
     }
 
+    @GetMapping("/user/success")
+    public String showSuccess(Model model,
+                             @AuthenticationPrincipal User authUser) {
+
+        populateModel(model, authUser);
+        return "success";
+    }
+
     @GetMapping("/user/checkout")
     public String checkout(Model model,
                            @AuthenticationPrincipal User authUser) {
@@ -108,6 +116,7 @@ public class OrderController extends BasicController {
                                    @RequestHeader("Stripe-Signature") String sigHeader,
                                    HttpServletResponse response) {
 
+        LOGGER.debug("enter in listener");
         String eventType;
         PaymentIntent paymentIntent;
 
