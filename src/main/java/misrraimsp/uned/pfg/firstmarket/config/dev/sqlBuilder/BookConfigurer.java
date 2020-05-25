@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 public class BookConfigurer {
 
     private static final String BuiltBookQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtBookQueries.txt";
-    private static final int numBooks = 5000; //5k
+    private static final int numBooks = 1000; //1k
 
     public static void main(String[] args) throws IOException {
         configure();

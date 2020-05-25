@@ -10,10 +10,11 @@ host-address: http://localhost:8080
 spring:
    profiles:
       active:
-         #- dev-mariadb
-         - dev-h2
-   #jpa:
-      #show-sql: true
+         # dev-mariadb
+         - dev-postgres
+         # dev-h2
+   jpa:
+      show-sql: false
 
 schedule:
    garbage-collection:
@@ -121,8 +122,27 @@ spring:
       password: misrra
       driver-class-name: org.mariadb.jdbc.Driver
       initialization-mode: always
-      #schema: classpath:sql/schema.sql
-      #data: classpath:sql/data.sql
+      #schema: classpath:sql/mariadb/schema.sql
+      #data: classpath:sql/mariadb/data.sql
    jpa:
+      hibernate:
+         ddl-auto: none
+
+---
+
+spring:
+   profiles: dev-postgres
+   datasource:
+      url: jdbc:postgresql://localhost:5432/fm
+      username: postgres
+      password: misrra
+      driver-class-name: org.postgresql.Driver
+      initialization-mode: always
+      schema: classpath:sql/postgresql/schema.sql
+      data: classpath:sql/postgresql/data.sql
+   jpa:
+      properties:
+         hibernate:
+            dialect : org.hibernate.dialect.PostgreSQLDialect
       hibernate:
          ddl-auto: none

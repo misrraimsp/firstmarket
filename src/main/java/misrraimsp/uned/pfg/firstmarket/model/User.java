@@ -12,6 +12,7 @@ import java.util.Set;
 
 @Entity
 @Data
+@Table(name="Usuario")
 public class User implements UserDetails {
 
     @Id

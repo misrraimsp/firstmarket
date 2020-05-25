@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name="PEDIDO")
+@Table(name="Pedido")
 public class Order {
 
     @Id
