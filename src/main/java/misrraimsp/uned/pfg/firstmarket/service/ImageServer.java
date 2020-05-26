@@ -92,7 +92,7 @@ public class ImageServer {
     //dev-postgresql
     public void setDefaultData(byte[] bytes) throws NoDefaultImageException {
         Image defaultImage = this.getDefaultImage();
-        if (defaultImage.getData().length == 0) {
+        if (defaultImage.getData() == null) {
             defaultImage.setData(bytes);
             imageRepository.save(defaultImage);
         }

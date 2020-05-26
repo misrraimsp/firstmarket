@@ -31,6 +31,7 @@ public class DevPostgresqlConfig {
             try {
                 //set default image data
                 imageServer.setDefaultData(Files.readAllBytes(Paths.get("img/fm.png")));
+                //imageServer.setDefaultData(Files.readAllBytes(Paths.get("src/main/resources/static/images/logo.png")));
                 //load categories
                 catServer.loadCategories();
             }
