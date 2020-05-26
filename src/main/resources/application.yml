@@ -15,7 +15,8 @@ spring:
       show-sql: false
 
 fm:
-   host-address: http://localhost:8080
+   host-address: https://firstmarket.herokuapp.com/
+   #host-address: http://localhost:8080
    schedule:
       garbage-collection:
          #cron: 0 00,10,20,30,40, * ? * *
@@ -111,32 +112,19 @@ spring:
 spring:
    profiles: dev-postgresql
    datasource:
-      url: jdbc:postgresql://localhost:5432/fm
-      username: postgres
-      password: misrra
+      url: ${JDBC_DATABASE_URL:}
+      #url: jdbc:postgresql://localhost:5432/fm
+      username: ${JDBC_DATABASE_USERNAME}
+      #username: postgres
+      password: ${JDBC_DATABASE_PASSWORD}
+      #password: misrra
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      #schema: classpath:sql/postgresql/schema.sql
-      #data: classpath:sql/postgresql/data.sql
+      schema: classpath:sql/postgresql/schema.sql
+      data: classpath:sql/postgresql/data.sql
    jpa:
       properties:
          hibernate:
             dialect : org.hibernate.dialect.PostgreSQLDialect
       hibernate:
          ddl-auto: none
-
----
-#spring:
-#   profiles: dev-mariadb
-#   datasource:
-#      url: jdbc:mariadb://localhost:3306/fm?serverTimezone=UTC
-#      username: root
-#      password: #somepw
-#      driver-class-name: org.mariadb.jdbc.Driver
-#      initialization-mode: always
-#      schema: classpath:sql/mariadb/schema.sql
-#      data: classpath:sql/mariadb/data.sql
-#   jpa:
-#      hibernate:
-#         ddl-auto: none
-# mariadb profile deprecated
