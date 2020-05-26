@@ -29,7 +29,7 @@ import java.util.Set;
 
 @Profile("dev-h2")
 @Configuration
-public class DevelopmentH2Config {
+public class DevH2Config {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

@@ -133,7 +133,7 @@
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.dispatchEvent(new CustomEvent('custom-htmlReady'));

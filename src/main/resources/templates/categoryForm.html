@@ -21,7 +21,7 @@
                         <!-- name -->
                         <div class="form-group">
                             <label for="name">Name:</label>
-                            <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('name')"></div>

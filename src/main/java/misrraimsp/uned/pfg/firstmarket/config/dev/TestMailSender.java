@@ -29,7 +29,7 @@ public class TestMailSender {
         properties.put("mail.smtp.port", "587");
 
         String senderAddress = "afirstmarket@gmail.com";
-        String senderPassword = "expedienteXD3";
+        String senderPassword = "#";
 
         String recipientAddress = "suarezperezmisrraim@gmail.com";
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "validation.numeric")
+@ConfigurationProperties(prefix = "fm.validation.numeric")
 public class ValidationNumericProperties {
 
     private int[] pages = {1,2000}; // min, max

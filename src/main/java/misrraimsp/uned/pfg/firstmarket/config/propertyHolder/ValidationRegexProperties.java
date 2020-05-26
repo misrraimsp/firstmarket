@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "validation.regex")
+@ConfigurationProperties(prefix = "fm.validation.regex")
 public class ValidationRegexProperties {
 
     private final String defaultRegex = ".*";

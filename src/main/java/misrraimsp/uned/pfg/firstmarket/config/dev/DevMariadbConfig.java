@@ -9,9 +9,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile({"dev-mariadb", "dev-postgres"})
+@Profile("dev-mariadb")
 @Configuration
-public class DevelopmentDBConfig {
+@Deprecated
+public class DevMariadbConfig {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -20,7 +21,7 @@ public class DevelopmentDBConfig {
     public CommandLineRunner dataLoader(CatServer catServer) {
 
         return args -> {
-            LOGGER.warn("CommandLineRunner on external database");
+            LOGGER.warn("CommandLineRunner on dev-mariadb");
             try {
                 catServer.loadCategories();
             }

@@ -116,7 +116,7 @@
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationLegend.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteImage/\';'"></script>
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteImage/\';'"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.dispatchEvent(new CustomEvent('custom-htmlReady'));

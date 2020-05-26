@@ -89,8 +89,8 @@ public class ImageController extends BasicController  {
     }
 
     @GetMapping("/admin/images")
-    public String showImages(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
-                             @RequestParam(defaultValue = "${pagination.default-size.image}") String pageSize,
+    public String showImages(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
+                             @RequestParam(defaultValue = "${fm.pagination.default-size.image}") String pageSize,
                              Model model) {
 
         populateModel(model, null);
@@ -102,8 +102,8 @@ public class ImageController extends BasicController  {
     @PostMapping("/admin/newImage")
     public String processNewImage(@Valid ImagesWrapper imagesWrapper,
                                   Errors errors,
-                                  @RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
-                                  @RequestParam(defaultValue = "${pagination.default-size.image}") String pageSize,
+                                  @RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
+                                  @RequestParam(defaultValue = "${fm.pagination.default-size.image}") String pageSize,
                                   Model model){
 
         if (errors.hasErrors()) {

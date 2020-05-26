@@ -20,7 +20,7 @@ public class NumberGenerator extends Random {
 
     private static final int MIN_ID = 1;
     private static final int MAX_CATEGORY_ID = 310;
-    private static final int MAX_IMAGE_ID = 3;
+    private static final int MAX_IMAGE_ID = 1;
     private static final int MAX_PUBLISHER_ID = 128;
     private static final int MAX_AUTHOR_ID = 512;
 

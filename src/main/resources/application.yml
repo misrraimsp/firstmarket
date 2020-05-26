@@ -5,104 +5,98 @@ server:
       whitelabel:
          enabled: false
 
-host-address: http://localhost:8080
-
 spring:
    profiles:
       active:
-         # dev-mariadb
-         - dev-postgres
-         # dev-h2
+         - dev-postgresql  # comment @Lob on image.data
+         # dev-h2          # un-comment @Lob on image.data
+         # dev-mariadb     # deprecated
    jpa:
       show-sql: false
 
-schedule:
-   garbage-collection:
-      #cron: 0 00,10,20,30,40, * ? * *
-      cron: 0 */5 * ? * *
-      #fixed-rate-string: PT60S
-
-payment:
-   stripe:
-      key:
-         public: pk_test_iLddVaUD1AOnudl6q5v2LEKt00Xk2Yz1R6
-         private:  #someprivatekey_bitch
-      pi-minutes: 1
-      limit-of-naps: 2
-
-validation:
-   numeric:
-      profile-min-year: 1900
-      pages: 1,5000 # min,max
-      stock: 0,100000000 # min,max
-      image-max-size: 512000 # in bytes (500KB)
-   regex:
-      email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$
-      password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$ # The password must be at least 8 characters, with at least one lowercase, one uppercase and one number
-      text-basic: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,150}$
-      text-long: ^[\s\w\-.,:;"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,1000}$
-      text-query: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,100}$
-      isbn-code: ^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[\- ]){3})[\- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[\- ]){4})[\- 0-9]{17}$)(?:97[89][\- ]?)?[0-9]{1,5}[\- ]?[0-9]+[\- ]?[0-9]+[\- ]?[0-9X]$
-      isbn-filter: '[\- ]|^ISBN(?:-1[03])?:?'
-      image-mime-type: ^image\/.*$
-      image-name: ^[ \w\-.]{1,30}$
-      year: ^[\d]{1,4}$
-      price: ^[\d]{0,9}([.][\d]{1,2})*$ # dependency with PriceIntervals enum, so keep an eye on it
-      phone: ^(\+)?(\([0-9]{0,4}\))?(([0-9\s.\-]){9,15})?$ # poor but enough approximation
-
-security:
-   lock:
-      num-of-attempts: 2
-      locking-minutes: 10
-   token:
-      expiration-in-minutes: 2
-   random-password:
-      num-of-lower-case: 2
-      num-of-upper-case: 2
-      num-of-digit: 2
-      size: 10
-
-front-end:
-   home:
-      jum:
-         title:
-            text: FirstMarket
-            speed: 50
-         subtitle:
-            text: ', where books belong'
-            speed: 50
-      title-max-size: 20
-      authors-max: 2
-   checkout:
-      title-max-size: 20
-   cart:
-      title-max-size: 40
-      authors-max: 2
-   books:
-      title-max-size: 60
-      authors-max: 2
-   search-criteria:
-      num-of-authors: 4
-      num-of-publishers: 5
-      num-of-languages: 6
-
-pagination:
-   default-size:
-      image: 5
-      book-home: 20
-      book-search: 15
-   default-index: 0
-
-mail:
-   smtp:
-      auth: true
-      starttls:
-         enable: true
-      host: smtp.gmail.com
-      port: 587
-   address: afirstmarket@gmail.com
-   pw: expedienteXD3
-   content-type: text/html
+fm:
+   host-address: http://localhost:8080
+   schedule:
+      garbage-collection:
+         #cron: 0 00,10,20,30,40, * ? * *
+         cron: 0 */5 * ? * *
+         #fixed-rate-string: PT60S
+   payment:
+      stripe:
+         key:
+            public: pk_test_iLddVaUD1AOnudl6q5v2LEKt00Xk2Yz1R6
+            private:  #someprivatekey_bitch
+         pi-minutes: 1
+         limit-of-naps: 2
+   validation:
+      numeric:
+         profile-min-year: 1900
+         pages: 1,5000 # min,max
+         stock: 0,100000000 # min,max
+         image-max-size: 512000 # in bytes (512KB)
+      regex:
+         email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$
+         password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$ # The password must be at least 8 characters, with at least one lowercase, one uppercase and one number
+         text-basic: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,150}$
+         text-long: ^[\s\w\-.,:;"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,1000}$
+         text-query: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,100}$
+         isbn-code: ^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[\- ]){3})[\- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[\- ]){4})[\- 0-9]{17}$)(?:97[89][\- ]?)?[0-9]{1,5}[\- ]?[0-9]+[\- ]?[0-9]+[\- ]?[0-9X]$
+         isbn-filter: '[\- ]|^ISBN(?:-1[03])?:?'
+         image-mime-type: ^image\/.*$
+         image-name: ^[ \w\-.]{1,30}$
+         year: ^[\d]{1,4}$
+         price: ^[\d]{0,9}([.][\d]{1,2})*$ # dependency with PriceIntervals enum, so keep an eye on it
+         phone: ^(\+)?(\([0-9]{0,4}\))?(([0-9\s.\-]){9,15})?$ # poor but enough approximation
+   security:
+      lock:
+         num-of-attempts: 2
+         locking-minutes: 10
+      token:
+         expiration-in-minutes: 2
+      random-password:
+         num-of-lower-case: 2
+         num-of-upper-case: 2
+         num-of-digit: 2
+         size: 10
+   front-end:
+      home:
+         jum:
+            title:
+               text: FirstMarket
+               speed: 50
+            subtitle:
+               text: ', where books belong'
+               speed: 50
+         title-max-size: 20
+         authors-max: 2
+      checkout:
+         title-max-size: 20
+      cart:
+         title-max-size: 40
+         authors-max: 2
+      books:
+         title-max-size: 60
+         authors-max: 2
+      search-criteria:
+         num-of-authors: 4
+         num-of-publishers: 5
+         num-of-languages: 6
+   pagination:
+      default-size:
+         image: 5
+         book-home: 20
+         book-search: 15
+      default-index: 0
+   mail:
+      smtp:
+         auth: true
+         starttls:
+            enable: true
+         host: smtp.gmail.com
+         port: 587
+      address: afirstmarket@gmail.com
+      pw: #somepw
+      content-type: text/html
 
 ---
 
@@ -115,34 +109,34 @@ spring:
 ---
 
 spring:
-   profiles: dev-mariadb
-   datasource:
-      url: jdbc:mariadb://localhost:3306/fm?serverTimezone=UTC
-      username: root
-      password: misrra
-      driver-class-name: org.mariadb.jdbc.Driver
-      initialization-mode: always
-      #schema: classpath:sql/mariadb/schema.sql
-      #data: classpath:sql/mariadb/data.sql
-   jpa:
-      hibernate:
-         ddl-auto: none
-
----
-
-spring:
-   profiles: dev-postgres
+   profiles: dev-postgresql
    datasource:
       url: jdbc:postgresql://localhost:5432/fm
       username: postgres
       password: misrra
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      schema: classpath:sql/postgresql/schema.sql
-      data: classpath:sql/postgresql/data.sql
+      #schema: classpath:sql/postgresql/schema.sql
+      #data: classpath:sql/postgresql/data.sql
    jpa:
       properties:
          hibernate:
             dialect : org.hibernate.dialect.PostgreSQLDialect
       hibernate:
          ddl-auto: none
+
+---
+#spring:
+#   profiles: dev-mariadb
+#   datasource:
+#      url: jdbc:mariadb://localhost:3306/fm?serverTimezone=UTC
+#      username: root
+#      password: #somepw
+#      driver-class-name: org.mariadb.jdbc.Driver
+#      initialization-mode: always
+#      schema: classpath:sql/mariadb/schema.sql
+#      data: classpath:sql/mariadb/data.sql
+#   jpa:
+#      hibernate:
+#         ddl-auto: none
+# mariadb profile deprecated

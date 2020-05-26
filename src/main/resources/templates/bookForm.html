@@ -23,21 +23,21 @@
                                 <!-------------------------------------------------------------------------Title-->
                                 <div class="form-group">
                                     <label for="title">Title:</label>
-                                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                    <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('title')"></div>
                                 <!-------------------------------------------------------------------------Publisher-->
                                 <div class="form-group">
                                     <label for="publisher">Publisher:</label>
-                                    <input class="form-control" type="text" th:field="*{publisherName}" id="publisher" placeholder="enter publisher name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                    <input class="form-control" type="text" th:field="*{publisherName}" id="publisher" placeholder="enter publisher name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('publisherName')"></div>
                                 <!-------------------------------------------------------------------------Year-->
                                 <div class="form-group">
                                     <label for="year">Year of Publication:</label>
-                                    <input class="form-control" type="text" th:field="*{year}" id="year" placeholder="enter year" th:pattern="${@environment.getProperty('validation.regex.year')}">
+                                    <input class="form-control" type="text" th:field="*{year}" id="year" placeholder="enter year" th:pattern="${@environment.getProperty('fm.validation.regex.year')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('year')"></div>
@@ -106,9 +106,9 @@
                                     <!-- author -->
                                     <div class="input-group mb-3" th:each="fn,i : ${bookForm.authorsFirstName}">
                                         <!-- firstName -->
-                                        <input class="form-control" type="text" name="authorsFirstName" th:value="${bookForm.authorsFirstName[__${i.index}__]}" placeholder="First Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                        <input class="form-control" type="text" name="authorsFirstName" th:value="${bookForm.authorsFirstName[__${i.index}__]}" placeholder="First Name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                         <!-- lastName -->
-                                        <input class="form-control" type="text" name="authorsLastName" th:value="${bookForm.authorsLastName[__${i.index}__]}" placeholder="Last Name" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                                        <input class="form-control" type="text" name="authorsLastName" th:value="${bookForm.authorsLastName[__${i.index}__]}" placeholder="Last Name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                         <!-- dynamic authors buttons -->
                                         <div th:if="${i.last}" class="input-group-append" id="authorButtons">
                                             <button class="btn btn-outline-secondary" id="removeAuthor" th:style="${i.size > 1}?'display: block':'display: none'" type="button">
@@ -125,7 +125,7 @@
                                 <!-------------------------------------------------------------------------ISBN-->
                                 <div class="form-group">
                                     <label for="isbn">ISBN:</label>
-                                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required th:pattern="${@environment.getProperty('validation.regex.isbn-code')}">
+                                    <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required th:pattern="${@environment.getProperty('fm.validation.regex.isbn-code')}">
                                     <div class="invalid-feedback">Please fill out this field with a valid ISBN</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('isbn')"></div>
@@ -142,21 +142,21 @@
                                 <!-------------------------------------------------------------------------Pages-->
                                 <div class="form-group">
                                     <label for="pages">Number of Pages:</label>
-                                    <input class="form-control" type="number" th:field="*{pages}" id="pages" placeholder="enter number of pages" th:min="${@environment.getProperty('validation.numeric.pages').split(',')[0]}" th:max="${@environment.getProperty('validation.numeric.pages').split(',')[1]}">
+                                    <input class="form-control" type="number" th:field="*{pages}" id="pages" placeholder="enter number of pages" th:min="${@environment.getProperty('fm.validation.numeric.pages').split(',')[0]}" th:max="${@environment.getProperty('fm.validation.numeric.pages').split(',')[1]}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('pages')"></div>
                                 <!-------------------------------------------------------------------------Stock-->
                                 <div class="form-group">
                                     <label for="stock">Units in Stock:</label>
-                                    <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${@environment.getProperty('validation.numeric.stock').split(',')[0]}" th:max="${@environment.getProperty('validation.numeric.stock').split(',')[1]}">
+                                    <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${@environment.getProperty('fm.validation.numeric.stock').split(',')[0]}" th:max="${@environment.getProperty('fm.validation.numeric.stock').split(',')[1]}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('stock')"></div>
                                 <!-------------------------------------------------------------------------Price-->
                                 <label for="price">Price:</label>
                                 <div class="input-group mb-3">
-                                    <input class="form-control" type="text" th:field="*{price}" id="price" placeholder="enter price" th:pattern="${@environment.getProperty('validation.regex.price')}">
+                                    <input class="form-control" type="text" th:field="*{price}" id="price" placeholder="enter price" th:pattern="${@environment.getProperty('fm.validation.regex.price')}">
                                     <div class="input-group-append">
                                         <span class="input-group-text">€</span>
                                     </div>

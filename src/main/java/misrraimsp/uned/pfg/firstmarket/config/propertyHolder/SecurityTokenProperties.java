@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "security.token")
+@ConfigurationProperties(prefix = "fm.security.token")
 public class SecurityTokenProperties {
 
     private int expirationInMinutes = 1;

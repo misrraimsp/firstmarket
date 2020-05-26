@@ -16,14 +16,14 @@
                         <!-- email -->
                         <div class="form-group">
                             <label for="email">E-mail:</label>
-                            <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${@environment.getProperty('validation.regex.email')}">
+                            <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
                             <div class="invalid-feedback">Please fill out this field with your email</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('email')"></div>
                         <!-- password -->
                         <div class="form-group">
                             <label for="newPassword">Password:</label>
-                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${@environment.getProperty('validation.regex.password')}" th:title="#{password.invalidFormat}"/>
+                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${@environment.getProperty('fm.validation.regex.password')}" th:title="#{password.invalidFormat}"/>
                             <div class="invalid-feedback" th:text="#{password.invalidFormat}">Please fill out this field with a valid password</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('password')"></div>

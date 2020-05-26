@@ -33,7 +33,7 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class OrderController extends BasicController {
 
-    @Value("${payment.stripe.key.private}")
+    @Value("${fm.payment.stripe.key.private}")
     private String ssk = "someSecretKey_bitch";
 
     private ApplicationEventPublisher applicationEventPublisher;

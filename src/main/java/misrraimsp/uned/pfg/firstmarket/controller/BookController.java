@@ -154,8 +154,8 @@ public class BookController extends BasicController {
     }
 
     @GetMapping("/books")
-    public String showBooks(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
-                            @RequestParam(defaultValue = "${pagination.default-size.book-search}") String pageSize,
+    public String showBooks(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
+                            @RequestParam(defaultValue = "${fm.pagination.default-size.book-search}") String pageSize,
                             @Valid SearchCriteria searchCriteria,
                             Errors errors,
                             Model model,

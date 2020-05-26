@@ -133,7 +133,7 @@
                                     <div class="mt-3">
                                         <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
                                             <p th:unless="${book.title.isBlank()}">
-                                                <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('front-end.books.title-max-size')}__))}"></strong>
+                                                <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.books.title-max-size')}__))}"></strong>
                                             </p>
                                             <p th:if="${book.title.isBlank()}">
                                                 <small><i>unknown title</i></small>
@@ -142,11 +142,11 @@
                                     </div>
                                     <!-- authors -->
                                     <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
-                                        <p th:if="${stats.index < __${@environment.getProperty('front-end.books.authors-max')}__}" class="text-dark small" th:classappend="${stats.last}? 'mt-1 mb-3' : 'my-1'">
+                                        <p th:if="${stats.index < __${@environment.getProperty('fm.front-end.books.authors-max')}__}" class="text-dark small" th:classappend="${stats.last}? 'mt-1 mb-3' : 'my-1'">
                                             <strong><span th:replace="fragments/components::author"></span></strong>
                                         </p>
-                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('front-end.books.authors-max')}__}" class="text-dark font-weight-light mb-3 mt-n1 small">
-                                            <small><span th:text="${stats.size - __${@environment.getProperty('front-end.books.authors-max')}__}">restOfAuthors</span> more author/s</small>
+                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('fm.front-end.books.authors-max')}__}" class="text-dark font-weight-light mb-3 mt-n1 small">
+                                            <small><span th:text="${stats.size - __${@environment.getProperty('fm.front-end.books.authors-max')}__}">restOfAuthors</span> more author/s</small>
                                         </p>
                                     </div>
                                     <p th:if="${book.authors.size() eq 0}">
@@ -239,7 +239,7 @@
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationLegend.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.dispatchEvent(new CustomEvent('custom-htmlReady'));

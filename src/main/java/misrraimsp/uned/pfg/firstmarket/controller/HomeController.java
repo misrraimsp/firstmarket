@@ -33,8 +33,8 @@ public class HomeController extends BasicController {
     }
 
     @GetMapping("/home")
-    public String showHome(@RequestParam(defaultValue = "${pagination.default-index}") String pageNo,
-                           @RequestParam(defaultValue = "${pagination.default-size.book-home}") String pageSize,
+    public String showHome(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
+                           @RequestParam(defaultValue = "${fm.pagination.default-size.book-home}") String pageSize,
                            Model model,
                            @AuthenticationPrincipal User authUser) {
 

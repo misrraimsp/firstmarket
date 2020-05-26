@@ -154,7 +154,7 @@
         <!-- Cancel button (toHome) -->
         <a th:fragment="cancelButtonToHome" class="btn btn-secondary px-5 my-3 text-white" th:href="@{/home}">Cancel</a>
 
-        <span th:fragment="contactUs">If you need help, please contact us at <span class="text-info" th:text="${@environment.getProperty('mail.address')}">email</span></span>
+        <span th:fragment="contactUs">If you need help, please contact us at <span class="text-info" th:text="${@environment.getProperty('fm.mail.address')}">email</span></span>
 
         <div th:fragment="addButton(action)">
             <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>

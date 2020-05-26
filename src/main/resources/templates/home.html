@@ -16,8 +16,8 @@
                     <div class="jumbotron jumbotron-fluid mb-0">
                         <!-- main message -->
                         <h1 class="text-center">
-                            <strong class="text-dark font-weight-light" id="mainTitle" th:attrappend="tw-text=${(@environment.getProperty('front-end.home.jum.title.text') ne null) ? @environment.getProperty('front-end.home.jum.title.text') : ' '}, tw-speed=${(@environment.getProperty('front-end.home.jum.title.speed') ne null) ? @environment.getProperty('front-end.home.jum.title.speed') : 0}"></strong>
-                            <small class="font-weight-lighter" id="secondaryTitle" th:attrappend="tw-text=${(@environment.getProperty('front-end.home.jum.subtitle.text') ne null) ? @environment.getProperty('front-end.home.jum.subtitle.text') : ' '}, tw-speed=${(@environment.getProperty('front-end.home.jum.subtitle.speed') ne null) ? @environment.getProperty('front-end.home.jum.subtitle.speed') : 0}"></small>
+                            <strong class="text-dark font-weight-light" id="mainTitle" th:attrappend="tw-text=${(@environment.getProperty('fm.front-end.home.jum.title.text') ne null) ? @environment.getProperty('fm.front-end.home.jum.title.text') : ' '}, tw-speed=${(@environment.getProperty('fm.front-end.home.jum.title.speed') ne null) ? @environment.getProperty('fm.front-end.home.jum.title.speed') : 0}"></strong>
+                            <small class="font-weight-lighter" id="secondaryTitle" th:attrappend="tw-text=${(@environment.getProperty('fm.front-end.home.jum.subtitle.text') ne null) ? @environment.getProperty('fm.front-end.home.jum.subtitle.text') : ' '}, tw-speed=${(@environment.getProperty('fm.front-end.home.jum.subtitle.speed') ne null) ? @environment.getProperty('fm.front-end.home.jum.subtitle.speed') : 0}"></small>
                         </h1>
                         <!-- admin message -->
                         <div class="text-center" sec:authorize="hasRole('ADMIN')">
@@ -63,7 +63,7 @@
                                 <div class="card-title text-responsive">
                                     <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
                                         <p th:unless="${book.title.isBlank()}">
-                                            <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('front-end.home.title-max-size')}__))}"></strong>
+                                            <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.home.title-max-size')}__))}"></strong>
                                         </p>
                                         <p th:if="${book.title.isBlank()}">
                                             <small><i>unknown title</i></small>
@@ -73,11 +73,11 @@
                                 <!-- authors -->
                                 <div class="card-text text-responsive">
                                     <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
-                                        <p th:if="${stats.index < __${@environment.getProperty('front-end.home.authors-max')}__}" class="text-dark small my-1">
+                                        <p th:if="${stats.index < __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark small my-1">
                                             <span th:replace="fragments/components::author"></span>
                                         </p>
-                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('front-end.home.authors-max')}__}" class="text-dark font-weight-light mb-0 mt-n1 small">
-                                            <small><span th:text="${stats.size - __${@environment.getProperty('front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
+                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark font-weight-light mb-0 mt-n1 small">
+                                            <small><span th:text="${stats.size - __${@environment.getProperty('fm.front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
                                         </p>
                                     </div>
                                     <p th:if="${book.authors.size() eq 0}">

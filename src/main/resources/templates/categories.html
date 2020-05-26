@@ -40,7 +40,7 @@
         <script th:src="@{/js/categoriesBuilder.js}"></script>
         <script th:src="@{/js/categoriesStyler.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('host-address')} + ${#servletContext.contextPath} + '/admin/deleteCategory/\';'"></script>
+        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteCategory/\';'"></script>
         <!--custom-htmlReady event is triggered at the end of categoriesBuilder job-->
         <script th:src="@{/js/modalManager.js}"></script>
     </body>

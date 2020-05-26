@@ -88,4 +88,13 @@ public class ImageServer {
             imageRepository.save(newDefaultImage);
         }
     }
+
+    //dev-postgresql
+    public void setDefaultData(byte[] bytes) throws NoDefaultImageException {
+        Image defaultImage = this.getDefaultImage();
+        if (defaultImage.getData().length == 0) {
+            defaultImage.setData(bytes);
+            imageRepository.save(defaultImage);
+        }
+    }
 }

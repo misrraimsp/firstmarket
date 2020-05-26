@@ -35,10 +35,10 @@ public class OrderServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${payment.stripe.pi-minutes}")
+    @Value("${fm.payment.stripe.pi-minutes}")
     private Long napMinutes = 30L;
 
-    @Value("${payment.stripe.limit-of-naps}")
+    @Value("${fm.payment.stripe.limit-of-naps}")
     private int limitOfNaps = 3;
 
     private OrderRepository orderRepository;

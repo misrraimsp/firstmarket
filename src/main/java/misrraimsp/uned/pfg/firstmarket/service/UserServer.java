@@ -227,7 +227,7 @@ public class UserServer implements UserDetailsService {
     }
 
     @Transactional
-    @Scheduled(cron = "${schedule.garbage-collection.cron}")
+    @Scheduled(cron = "${fm.schedule.garbage-collection.cron}")
     public void garbageCollection() {
         Date present = Calendar.getInstance().getTime();
         Set<SecurityToken> securityTokens = securityTokenRepository.findByExpiryDateBefore(present);

@@ -50,12 +50,12 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Name</small></span>
                             </div>
-                            <input class="form-control" type="text" id="name" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="name" required th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <!-- phone -->
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Phone</small></span>
                             </div>
-                            <input class="form-control" type="text" id="phone" style="max-width: 25%" th:pattern="${@environment.getProperty('validation.regex.phone')}">
+                            <input class="form-control" type="text" id="phone" style="max-width: 25%" th:pattern="${@environment.getProperty('fm.validation.regex.phone')}">
                             <!-- error -->
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
@@ -66,22 +66,22 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Address</small></span>
                             </div>
-                            <input class="form-control" type="text" id="line1" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="line1" required th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <!-- street line2-->
-                        <input class="form-control mb-3" type="text" id="line2" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                        <input class="form-control mb-3" type="text" id="line2" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                         <div class="invalid-feedback">Please fill out this field correctly</div>
                         <!-- city and postal code -->
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">City</small></span>
                             </div>
-                            <input class="form-control" type="text" id="city" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="city" required th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Postal Code</small></span>
                             </div>
-                            <input class="form-control" type="text" id="postalCode" required style="max-width: 25%" th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="postalCode" required style="max-width: 25%" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <!-- country and province -->
@@ -89,11 +89,11 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Country</small></span>
                             </div>
-                            <input class="form-control" type="text" id="country" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="country" required th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Province</small></span>
                             </div>
-                            <input class="form-control" type="text" id="province" required th:pattern="${@environment.getProperty('validation.regex.text-basic')}">
+                            <input class="form-control" type="text" id="province" required th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <!-------------------------------------------------------------------------Payment info-->
@@ -143,7 +143,7 @@
                                             <div>
                                                 <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
                                                     <p class="my-0" th:unless="${item.book.title.isBlank()}">
-                                                        <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('front-end.checkout.title-max-size')}__))}">Book title</span>
+                                                        <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('fm.front-end.checkout.title-max-size')}__))}">Book title</span>
                                                     </p>
                                                     <p class="my-0" th:if="${item.book.title.isBlank()}">
                                                         <small><i>unknown title</i></small>

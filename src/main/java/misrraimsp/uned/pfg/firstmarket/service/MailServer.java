@@ -12,25 +12,25 @@ import java.util.Properties;
 @Service
 public class MailServer {
 
-    @Value("${mail.smtp.auth}")
+    @Value("${fm.mail.smtp.auth}")
     private String auth;
 
-    @Value("${mail.smtp.starttls.enable}")
+    @Value("${fm.mail.smtp.starttls.enable}")
     private String enable;
 
-    @Value("${mail.smtp.host}")
+    @Value("${fm.mail.smtp.host}")
     private String host;
 
-    @Value("${mail.smtp.port}")
+    @Value("${fm.mail.smtp.port}")
     private String port;
 
-    @Value("${mail.address}")
+    @Value("${fm.mail.address}")
     private String senderAddress;
 
-    @Value("${mail.pw}")
+    @Value("${fm.mail.pw}")
     private String senderPassword;
 
-    @Value("${mail.content-type}")
+    @Value("${fm.mail.content-type}")
     private String contentType;
 
     private Properties properties;

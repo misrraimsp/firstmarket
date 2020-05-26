@@ -20,7 +20,7 @@
                         <!-- email -->
                         <div class="form-group">
                             <label for="email">E-mail:</label>
-                            <input class="form-control" type="email" id="email" placeholder="enter email" name="username" required th:pattern="${@environment.getProperty('validation.regex.email')}">
+                            <input class="form-control" type="email" id="email" placeholder="enter email" name="username" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
                             <div class="invalid-feedback">Please fill out this field with your email</div>
                         </div>
                         <!-- password -->

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "security.random-password")
+@ConfigurationProperties(prefix = "fm.security.random-password")
 public class SecurityRandomPasswordProperties {
 
     private int numOfLowerCase = 2;

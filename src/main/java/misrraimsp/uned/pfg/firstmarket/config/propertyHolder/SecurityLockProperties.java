@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "security.lock")
+@ConfigurationProperties(prefix = "fm.security.lock")
 public class SecurityLockProperties {
 
     private int numOfAttempts = 5;
