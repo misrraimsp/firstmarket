@@ -1,9 +1,9 @@
 server:
-   servlet:
-      context-path: /firstmarket
    error:
       whitelabel:
          enabled: false
+   #servlet:
+      #context-path: /firstmarket
 
 spring:
    profiles:
@@ -112,12 +112,9 @@ spring:
 spring:
    profiles: dev-postgresql
    datasource:
-      url: ${JDBC_DATABASE_URL:}
-      #url: jdbc:postgresql://localhost:5432/fm
-      username: ${JDBC_DATABASE_USERNAME}
-      #username: postgres
-      password: ${JDBC_DATABASE_PASSWORD}
-      #password: misrra
+      url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/fm}
+      username: ${JDBC_DATABASE_USERNAME:postgres}
+      password: ${JDBC_DATABASE_PASSWORD:misrra}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
       schema: classpath:sql/postgresql/schema.sql
