@@ -113,7 +113,7 @@ spring:
    datasource:
       url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/fm}
       username: ${JDBC_DATABASE_USERNAME:postgres}
-      password: ${JDBC_DATABASE_PASSWORD:misrra}
+      password: ${JDBC_DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
       schema: classpath:sql/postgresql/schema.sql

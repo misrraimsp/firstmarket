@@ -184,7 +184,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     }
                 } else {
                     //mockWebhook(result.paymentIntent);
-                    setTimeout(function() {
+                    /*setTimeout(function() {
                         if (result.paymentIntent.status === 'succeeded') {
                             document.getElementById("successLink").click();
                         }
@@ -194,7 +194,16 @@ document.addEventListener("DOMContentLoaded", function() {
                             payButton.disabled = true;
                             buildErrorBox("EXCEPTION: ", "An unexpected situation has took place. Please, contact us at afirstmarket@gmail.com", false);
                         }
-                    }, (5 * 1000));
+                    }, (5 * 1000));*/
+                    if (result.paymentIntent.status === 'succeeded') {
+                        document.getElementById("successLink").click();
+                    }
+                    else {
+                        console.log(result.paymentIntent);
+                        spinner.style.visibility = 'hidden';
+                        payButton.disabled = true;
+                        buildErrorBox("EXCEPTION: ", "An unexpected situation has took place. Please, contact us at afirstmarket@gmail.com", false);
+                    }
                 }
             });
         }
