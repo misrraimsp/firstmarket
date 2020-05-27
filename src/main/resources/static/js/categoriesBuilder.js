@@ -6,6 +6,9 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    //env variable
+    let hostUrl = document.getElementById("host").getAttribute("host-address");
+
     // function definitions
     let build = function (category, hookId) {
         let hook = document.getElementById(hookId);
@@ -51,7 +54,7 @@ document.addEventListener("DOMContentLoaded", function() {
         editCat.setAttribute("class", "btn btn-sm btn-outline-secondary");
         editCat.setAttribute("data-toggle", "tooltip");
         editCat.setAttribute("title", "Edit Category");
-        editCat.setAttribute("href", "http://localhost:8080/firstmarket/admin/categoryForm?id=" + category.id);
+        editCat.setAttribute("href",  hostUrl + "admin/categoryForm?id=" + category.id);
 
         editIcon = document.createElement("i");
         editIcon.setAttribute("class", "fas fa-pen");

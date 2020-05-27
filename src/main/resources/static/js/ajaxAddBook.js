@@ -7,11 +7,14 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    // env variable
+    let hostUrl = document.getElementById("host").getAttribute("host-address");
+
     // uninitialized variables
     let xmlHttpRequest, i, id;
 
     // initialized variables
-    let baseUrl = "http://localhost:8080/firstmarket/ajaxCart/";
+    let baseUrl = hostUrl + "ajaxCart/";
     let snackbar = document.getElementById("snackbar");
     let cartIcon = document.getElementById("cartIcon");
     let loginLink = document.getElementById("loginLink");

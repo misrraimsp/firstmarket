@@ -33,6 +33,7 @@
             <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <i th:replace="fragments/components::host-address"></i>
         <!-- tooltips -->
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- categories dynamically generation -->
@@ -40,7 +41,7 @@
         <script th:src="@{/js/categoriesBuilder.js}"></script>
         <script th:src="@{/js/categoriesStyler.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteCategory/\';'"></script>
+        <i th:replace="fragments/components::modal-action(action = 'deleteCategory')"></i>
         <!--custom-htmlReady event is triggered at the end of categoriesBuilder job-->
         <script th:src="@{/js/modalManager.js}"></script>
     </body>

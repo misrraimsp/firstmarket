@@ -2,6 +2,9 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    //env variable
+    let hostUrl = document.getElementById("host").getAttribute("host-address");
+
     //dev
     let mockWebhook = function (paymentIntent) {
         let xmlHttpRequest = new XMLHttpRequest();
@@ -27,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
         }
         content += "-" + paymentIntent.id;
-        xmlHttpRequest.open("POST", 'http://localhost:8080/firstmarket/listener', true);
+        xmlHttpRequest.open("POST", hostUrl + 'listener', true);
         xmlHttpRequest.setRequestHeader('Stripe-Signature', 'local-dev');
         xmlHttpRequest.send(content);
         xmlHttpRequest.onreadystatechange = function() {

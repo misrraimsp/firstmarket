@@ -116,7 +116,8 @@
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationLegend.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteImage/\';'"></script>
+        <i th:replace="fragments/components::host-address"></i>
+        <i th:replace="fragments/components::modal-action(action = 'deleteImage')"></i>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.dispatchEvent(new CustomEvent('custom-htmlReady'));

@@ -7,6 +7,9 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
+    //env variable
+    let hostUrl = document.getElementById("host").getAttribute("host-address");
+
     // uninitialized variables
     let xmlHttpRequest, i, action, id, target, url, itemCheckbox, increment, itemQuantity, itemPrice;
 
@@ -85,9 +88,9 @@ document.addEventListener("DOMContentLoaded", function() {
     };
 
     // initialized variables
-    let baseUrl = "http://localhost:8080/firstmarket/ajaxCart/";
     let cartIcon = document.getElementById("cartIcon");
     let loginLink = document.getElementById("loginLink");
+    let baseUrl = hostUrl + "ajaxCart/";
     let numOfBooks = document.getElementById("numOfBooks");
     let itemCheckboxes = document.querySelectorAll('input[id|="icb"]');
     let masterCheckbox = document.getElementById("selectAll");

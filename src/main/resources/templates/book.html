@@ -129,11 +129,12 @@
             <!-- footer -->
             <div th:replace="fragments/components::fixedFooter"></div>
         </div>
+        <i th:replace="fragments/components::host-address"></i>
         <!-- ajax add book to cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
         <!-- modal functionality -->
-        <script th:utext="'let baseUrl = \'' + ${@environment.getProperty('fm.host-address')} + ${#servletContext.contextPath} + '/admin/deleteBook/\';'"></script>
+        <i th:replace="fragments/components::modal-action(action = 'deleteBook')"></i>
         <script>
             document.addEventListener("DOMContentLoaded", function() {
                 document.dispatchEvent(new CustomEvent('custom-htmlReady'));
