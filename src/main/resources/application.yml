@@ -2,15 +2,12 @@ server:
    error:
       whitelabel:
          enabled: false
-   #servlet:
-      #context-path: /firstmarket
 
 spring:
    profiles:
       active:
          - dev-postgresql  # comment @Lob on image.data
          # dev-h2          # un-comment @Lob on image.data
-         # dev-mariadb     # deprecated
    jpa:
       show-sql: false
 

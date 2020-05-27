@@ -9,22 +9,17 @@ import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
-//import org.springframework.context.MessageSource;
 
 @Component
 public class ResetPasswordListener implements ApplicationListener<OnResetPasswordEvent> {
 
     private MailServer mailServer;
     private UserServer userServer;
-    //private MessageSource messageSource;
 
     @Autowired
-    public ResetPasswordListener(MailServer mailServer, UserServer userServer
-                                    //, MessageSource messageSource
-    ){
+    public ResetPasswordListener(MailServer mailServer, UserServer userServer){
         this.mailServer = mailServer;
         this.userServer = userServer;
-        //this.messageSource = messageSource;
     }
 
     @SneakyThrows

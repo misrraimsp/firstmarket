@@ -45,7 +45,6 @@ public class EmailConfirmationNeededListener implements ApplicationListener<OnEm
         mailMessage.setSubject("FirstMarket Confirm Email");
         String text = "";
         text += messageSource.getMessage("email.confirm", null, null);
-        //text += "<a href='http://localhost:8080/firstmarket/emailConfirmation?token=" + securityToken.getToken() + "'>Confirm Email</a>";
         text += "<a href='" + hostAddress + "emailConfirmation?token=" + securityToken.getToken() + "'>Confirm Email</a>";
         mailMessage.setText(text);
         if (securityEvent.equals(SecurityEvent.EMAIL_CHANGE)) { // change email process
