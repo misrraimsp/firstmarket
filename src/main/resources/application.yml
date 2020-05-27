@@ -15,8 +15,8 @@ spring:
       show-sql: false
 
 fm:
-   #host-address: ${HOST_ADDRESS:http://localhost:8080/}
-   host-address: https://firstmarket.herokuapp.com/
+   host-address: ${HOST_ADDRESS:http://localhost:8080/}
+   #host-address: https://firstmarket.herokuapp.com/
    schedule:
       garbage-collection:
          #cron: 0 00,10,20,30,40, * ? * *
