@@ -9,6 +9,7 @@ import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.MailServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,9 @@ public class EmailConfirmationNeededListener implements ApplicationListener<OnEm
     private UserServer userServer;
     private MailServer mailServer;
     private MessageSource messageSource;
+
+    @Value("${fm.host-address}")
+    private String hostAddress;
 
     @Autowired
     public EmailConfirmationNeededListener(UserServer userServer, MailServer mailServer, MessageSource messageSource){
@@ -41,7 +45,8 @@ public class EmailConfirmationNeededListener implements ApplicationListener<OnEm
         mailMessage.setSubject("FirstMarket Confirm Email");
         String text = "";
         text += messageSource.getMessage("email.confirm", null, null);
-        text += "<a href='http://localhost:8080/firstmarket/emailConfirmation?token=" + securityToken.getToken() + "'>Confirm Email</a>";
+        //text += "<a href='http://localhost:8080/firstmarket/emailConfirmation?token=" + securityToken.getToken() + "'>Confirm Email</a>";
+        text += "<a href='" + hostAddress + "emailConfirmation?token=" + securityToken.getToken() + "'>Confirm Email</a>";
         mailMessage.setText(text);
         if (securityEvent.equals(SecurityEvent.EMAIL_CHANGE)) { // change email process
             mailMessage.setTo(editedEmail);

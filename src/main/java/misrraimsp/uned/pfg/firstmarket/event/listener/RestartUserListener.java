@@ -31,7 +31,7 @@ public class RestartUserListener implements ApplicationListener<OnRestartUserEve
         mailMessage.setSubject("Account Restoration");
         String text = "<h1>Hi " + user.getProfile().getFirstName() + "!</h1>";
         text += "<p>You successfully restart your FirstMarket account. All of your account settings has been restored.</p>";
-        text += "<p>If you do not remember your password, please click <a href='http://localhost:8080/firstmarket/resetPassword'>here</a></p>";
+        //text += "<p>If you do not remember your password, please click <a href='http://localhost:8080/firstmarket/resetPassword'>here</a></p>";
         mailMessage.setText(text);
         mailMessage.setTo(user.getEmail());
         // send email

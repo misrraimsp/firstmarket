@@ -183,6 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             buildErrorBox("ERROR: ", result.error.message, true);
                     }
                 } else {
+                    //local-dev
                     //mockWebhook(result.paymentIntent);
                     /*setTimeout(function() {
                         if (result.paymentIntent.status === 'succeeded') {
