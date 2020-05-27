@@ -16,17 +16,15 @@ spring:
 
 fm:
    host-address: ${HOST_ADDRESS:http://localhost:8080/}
-   #host-address: https://firstmarket.herokuapp.com/
    schedule:
       garbage-collection:
-         #cron: 0 00,10,20,30,40, * ? * *
          cron: 0 */5 * ? * *
          #fixed-rate-string: PT60S
    payment:
       stripe:
          key:
-            public: pk_test_iLddVaUD1AOnudl6q5v2LEKt00Xk2Yz1R6
-            private:  #someprivatekey_bitch
+            public: ${STRIPE_PUBLIC_KEY}
+            private: ${STRIPE_SECRET_KEY}
          pi-minutes: 1
          limit-of-naps: 2
    validation:
@@ -95,8 +93,8 @@ fm:
             enable: true
          host: smtp.gmail.com
          port: 587
-      address: afirstmarket@gmail.com
-      pw: #somepw
+      address: ${MAIL_ADDRESS:afirstmarket@gmail.com}
+      pw: ${MAIL_PW}
       content-type: text/html
 
 ---

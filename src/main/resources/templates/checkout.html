@@ -179,6 +179,7 @@
         </div>
         <!-- checkout -->
         <i th:replace="fragments/components::host-address"></i>
+        <i id="pk" th:attr="pk=${@environment.getProperty('fm.payment.stripe.key.public')}"></i>
         <script th:src="@{/js/checkout.js}"></script>
     </body>
 </html>

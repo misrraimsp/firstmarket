@@ -2,8 +2,9 @@
 
 document.addEventListener("DOMContentLoaded", function() {
 
-    //env variable
+    //env variables
     let hostUrl = document.getElementById("host").getAttribute("host-address");
+    let stripePublicKey = document.getElementById("pk").getAttribute("pk");
 
     //dev
     let mockWebhook = function (paymentIntent) {
@@ -88,16 +89,12 @@ document.addEventListener("DOMContentLoaded", function() {
         document.getElementById("error-box-hook").appendChild(errorBox);
     }
 
-    let pk = 'pk_test_iLddVaUD1AOnudl6q5v2LEKt00Xk2Yz1R6';
-
     let form = document.getElementById('payment-form');
-
     let payButton = document.getElementById("pay");
     let spinner = document.getElementById("spinner");
     let clientSecret = payButton.getAttribute("data-secret");
     let displayError = document.getElementById('card-errors');
-
-    let stripe = Stripe(pk);
+    let stripe = Stripe(stripePublicKey);
     let elements = stripe.elements();
     let cardElement = elements.create('card');
     cardElement.mount('#card-element');
@@ -186,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             buildErrorBox("ERROR: ", result.error.message, true);
                     }
                 } else {
-                    mockWebhook(result.paymentIntent);
+                    //mockWebhook(result.paymentIntent);
                     setTimeout(function() {
                         if (result.paymentIntent.status === 'succeeded') {
                             document.getElementById("successLink").click();
