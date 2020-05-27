@@ -36,6 +36,9 @@ public class OrderController extends BasicController {
     @Value("${fm.payment.stripe.key.private}")
     private String ssk = "someSecretKey_bitch";
 
+    @Value("${fm.payment.stripe.key.webhook}")
+    String endpointSecret = "anotherSecret_bitch";
+
     private ApplicationEventPublisher applicationEventPublisher;
 
     public OrderController(UserServer userServer,
@@ -155,8 +158,6 @@ public class OrderController extends BasicController {
         }
         // web deployed
         else {
-            String endpointSecret = "anotherSecret_bitch";
-
             // Getting the event
             Event event;
             try {

@@ -25,6 +25,7 @@ fm:
          key:
             public: ${STRIPE_PUBLIC_KEY}
             private: ${STRIPE_SECRET_KEY}
+            webhook: ${STRIPE_WEBHOOK_SECRET}
          pi-minutes: 1
          limit-of-naps: 2
    validation:
