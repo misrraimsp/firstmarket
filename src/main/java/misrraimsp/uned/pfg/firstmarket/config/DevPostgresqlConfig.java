@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev;
+package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Profile;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-@Profile("dev-postgresql")
+@Profile("dev-postgresql") //comment @Lob on image.data
 @Configuration
 public class DevPostgresqlConfig {
 
@@ -30,8 +30,7 @@ public class DevPostgresqlConfig {
 
             try {
                 //set default image data
-                imageServer.setDefaultData(Files.readAllBytes(Paths.get("img/fm.png")));
-                //imageServer.setDefaultData(Files.readAllBytes(Paths.get("src/main/resources/static/images/logo.png")));
+                imageServer.setDefaultData(Files.readAllBytes(Paths.get("src/main/resources/static/images/logo.png")));
                 //load categories
                 catServer.loadCategories();
             }

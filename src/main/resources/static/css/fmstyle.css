@@ -190,3 +190,11 @@
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
 /********************************/
+
+/********************************* BS4 alert-danger like on out-of-stock cart elements */
+.out-of-stock {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+/********************************/
+

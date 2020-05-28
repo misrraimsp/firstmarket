@@ -451,6 +451,7 @@ public class UserController extends BasicController {
     public String showCart(Model model,
                            @AuthenticationPrincipal User authUser) {
 
+        model.addAttribute("itemsOutOfStock", null);
         populateModel(model, authUser);
         return "cart";
     }

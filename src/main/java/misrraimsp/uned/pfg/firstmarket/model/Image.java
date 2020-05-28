@@ -21,6 +21,6 @@ public class Image {
 
     private String mimeType;
 
-    //@Lob dev-h2
+    //@Lob //dev-h2
     private byte[] data;
 }

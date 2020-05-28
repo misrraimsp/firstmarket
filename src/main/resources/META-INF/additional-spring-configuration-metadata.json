@@ -1,8 +1,0 @@
-{
-  "properties": [
-    {
-      "name": "schedule.fixedRate.string",
-      "type": "java.lang.String",
-      "description": "This is the fixed delay for scheduled tasks."
-  }
-] }

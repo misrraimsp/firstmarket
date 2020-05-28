@@ -12,7 +12,7 @@ import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.BookOutOfStockException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemsOutOfStockException;
 import misrraimsp.uned.pfg.firstmarket.exception.PaymentIntentProcessingTimeout;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.slf4j.Logger;
@@ -146,24 +146,24 @@ public class OrderServer {
     }
 
     @Transactional(rollbackFor = StripeException.class)
-    public void commitCart(@NonNull User user) throws BookNotFoundException, BookOutOfStockException, StripeException {
+    public void commitCart(@NonNull User user) throws BookNotFoundException, ItemsOutOfStockException, StripeException {
         assert user != null;
         Cart cart = user.getCart();
         assert !cart.isCommitted();
-        bookServer.removeFromStock(cart.getItems());
-        cart.setCommitted(true);
-        cart.setCommittedAt(LocalDateTime.now());
+        bookServer.checkStockFor(cart.getItems());
         PaymentIntent paymentIntent = PaymentIntent.create(PaymentIntentCreateParams
                 .builder()
                 .setCurrency("eur")
                 .setAmount(cart.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
-                .putMetadata("integration_check", "accept_a_payment")
                 .putMetadata("user-id", Long.toString(user.getId()))
                 .build()
         );
+        bookServer.removeFromStock(cart.getItems());
         cart.setPiId(paymentIntent.getId());
         cart.setPiClientSecret(paymentIntent.getClientSecret());
-        Cart committedCart = cartServer.persist(cart);
+        cart.setCommitted(true);
+        cart.setCommittedAt(LocalDateTime.now());
+        cartServer.persist(cart);
         LOGGER.debug("User(id={}) cart(id={}) successfully committed (pi id={})", user.getId(), cart.getId(), cart.getPiId());
     }
 

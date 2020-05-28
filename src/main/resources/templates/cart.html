@@ -9,8 +9,21 @@
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- out-of-stock alert box -->
+            <div class="row mt-3 mb-n4" th:if="${itemsOutOfStock ne null}">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- alert box -->
+                <div class="col-sm-10 px-0">
+                    <div class="alert alert-danger mr-4">
+                        <small>En estos momentos no disponemos -en la cantidad pedida- de los libros resaltados. Por favor, para continuar con la compra disminuya su cantidad</small>
+                    </div>
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
+            </div>
             <!-- main content -->
-            <div class="row my-5">
+            <div class="row my-4">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
                 <!-- cart items -->
@@ -36,7 +49,7 @@
                         </div>
                         <!-- items -->
                         <div class="col-sm-12" th:id="'i-' + ${item.id}" th:each="item : ${user.cart.items}">
-                            <div class="row my-3 d-flex align-items-center bg-white">
+                            <div class="row my-3 d-flex align-items-center" th:classappend="${itemsOutOfStock ne null && itemsOutOfStock.contains(item)} ? 'out-of-stock' : 'bg-white'">
                                 <!-- select item -->
                                 <div class="col-sm-1">
                                     <div class="pretty p-default p-round p-thick">

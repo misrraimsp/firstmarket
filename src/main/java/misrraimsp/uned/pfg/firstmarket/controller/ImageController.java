@@ -114,7 +114,7 @@ public class ImageController extends BasicController  {
         try {
             imagesWrapper.getImages().forEach(image -> {
                 Image persistedImage = imageServer.persist(image);
-                LOGGER.trace("Image persisted (id={})", persistedImage.getId());
+                LOGGER.debug("Image persisted (id={})", persistedImage.getId());
             });
         }
         catch (ImageNotFoundException e) {
@@ -129,20 +129,20 @@ public class ImageController extends BasicController  {
     }
 
     @PostMapping("/admin/setDefaultImage")
-    public ModelAndView processSetDefaultImage(@RequestParam(name = "id") Optional<Long> optImageId,
+    public ModelAndView processSetDefaultImage(ModelAndView modelAndView,
+                                               @RequestParam(name = "id") Optional<Long> optImageId,
                                                @RequestParam(name = "pn") Optional<String> optPageNo) {
 
         AtomicBoolean imageNotFound = new AtomicBoolean(false);
         optImageId.ifPresent(imageId -> {
             try {
                 imageServer.setDefaultImage(imageId);
-                LOGGER.trace("Default image changed (id={})", imageId);
+                LOGGER.debug("Default image changed (id={})", imageId);
             } catch (ImageNotFoundException e){
                 LOGGER.warn("Trying to set a non-existent image as default", e);
                 imageNotFound.set(true);
             }
         });
-        ModelAndView modelAndView = new ModelAndView();
         if (imageNotFound.get()) {
             modelAndView.setViewName("redirect:/home");
             return modelAndView;
@@ -162,7 +162,7 @@ public class ImageController extends BasicController  {
             }
             bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
             imageServer.deleteById(imageId);
-            LOGGER.trace("Image deleted (id={})", imageId);
+            LOGGER.debug("Image deleted (id={})", imageId);
             return "redirect:/admin/images";
         }
         catch (ImageNotFoundException e) {

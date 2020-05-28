@@ -13,7 +13,7 @@ import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.BookOutOfStockException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemsOutOfStockException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
@@ -96,16 +96,20 @@ public class OrderController extends BasicController {
             populateModel(model, authUser);
             return "checkout";
         }
+        catch (ItemsOutOfStockException e) {
+            e.getItems().forEach(item ->
+                    LOGGER.debug("Book(id={}) run out of stock (Item: id={}, quantity={})", item.getBook().getId(), item.getId(), item.getQuantity())
+            );
+            populateModel(model, authUser);
+            model.addAttribute("itemsOutOfStock", e.getItems());
+            return "cart";
+        }
         catch (StripeException e) {
             LOGGER.warn("Stripe - Some exception occurred", e);
             return "redirect:/home";
         }
         catch (UserNotFoundException e) {
             LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            return "redirect:/home";
-        }
-        catch (BookOutOfStockException e) {
-            LOGGER.warn("Book run out of stock. Exception: ", e);
             return "redirect:/home";
         }
         catch (BookNotFoundException e) {

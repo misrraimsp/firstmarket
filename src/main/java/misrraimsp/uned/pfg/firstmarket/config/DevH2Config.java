@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev;
+package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
@@ -27,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-@Profile("dev-h2")
+@Profile("dev-h2") //un-comment @Lob on image.data
 @Configuration
 public class DevH2Config {
 
@@ -53,7 +53,7 @@ public class DevH2Config {
             //Images
 
             Image img0 = new Image();
-            Path path0 = Paths.get("img/fm.png");
+            Path path0 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/fm.png");
             img0.setDefault(true);
             img0.setData(Files.readAllBytes(path0));
             img0.setName(path0.getFileName().toString());
@@ -61,7 +61,7 @@ public class DevH2Config {
             imageServer.persist(img0);
 
             Image img1 = new Image();
-            Path path1 = Paths.get("img/rojo.jpg");
+            Path path1 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/rojo.jpg");
             img1.setDefault(false);
             img1.setData(Files.readAllBytes(path1));
             img1.setName(path1.getFileName().toString());
@@ -69,7 +69,7 @@ public class DevH2Config {
             imageServer.persist(img1);
 
             Image img2 = new Image();
-            Path path2 = Paths.get("img/amarillo.jpg");
+            Path path2 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/amarillo.jpg");
             img2.setDefault(false);
             img2.setData(Files.readAllBytes(path2));
             img2.setName(path2.getFileName().toString());
@@ -77,7 +77,7 @@ public class DevH2Config {
             imageServer.persist(img2);
 
             Image img3 = new Image();
-            Path path3 = Paths.get("img/marron.jpg");
+            Path path3 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/marron.jpg");
             img3.setDefault(false);
             img3.setData(Files.readAllBytes(path3));
             img3.setName(path3.getFileName().toString());
@@ -85,7 +85,7 @@ public class DevH2Config {
             imageServer.persist(img3);
 
             Image img4 = new Image();
-            Path path4 = Paths.get("img/negro.jpg");
+            Path path4 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/negro.jpg");
             img4.setDefault(false);
             img4.setData(Files.readAllBytes(path4));
             img4.setName(path4.getFileName().toString());

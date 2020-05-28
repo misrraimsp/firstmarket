@@ -228,20 +228,30 @@ public class BookServer {
         return bookRepository.existsById(id);
     }
 
-    @Transactional
-    public void removeFromStock(Set<Item> items) throws BookNotFoundException, BookOutOfStockException {
+    public void checkStockFor(Set<Item> items) throws ItemsOutOfStockException {
+        Set<Item> itemsOutOfStock = new HashSet<>();
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());
             int originalStock = storedBook.getStock();
             int editedStock = originalStock - item.getQuantity();
             if (editedStock < 0) {
-                throw new BookOutOfStockException(item);
+                itemsOutOfStock.add(item);
             }
-            else {
-                storedBook.setStock(editedStock);
-                bookRepository.save(storedBook);
-                LOGGER.debug("Book(id={}) stock decrease from {} to {}", storedBook.getId(), originalStock, editedStock);
-            }
+        });
+        if (!itemsOutOfStock.isEmpty()) {
+            throw new ItemsOutOfStockException(itemsOutOfStock);
+        }
+    }
+
+    @Transactional
+    public void removeFromStock(Set<Item> items) throws BookNotFoundException {
+        items.forEach(item -> {
+            Book storedBook = this.findById(item.getBook().getId());
+            int originalStock = storedBook.getStock();
+            int editedStock = originalStock - item.getQuantity();
+            storedBook.setStock(editedStock);
+            bookRepository.save(storedBook);
+            LOGGER.debug("Book(id={}) stock decrease from {} to {}", storedBook.getId(), originalStock, editedStock);
         });
     }
 
