@@ -5,6 +5,8 @@ import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
 import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class ImageServer {
+
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private ImageRepository imageRepository;
 
@@ -33,14 +37,20 @@ public class ImageServer {
      */
     public Image persist(Image image) throws ImageNotFoundException, BadImageException {
         if (image.getId() != null){ // image is already persisted
-            return this.findById(image.getId());
+            try {
+                return this.findById(image.getId());
+            }
+            catch (ImageNotFoundException e) {
+                LOGGER.error("Trying to persist an image-with-id that is not in the database searching by its id");
+                throw e;
+            }
         }
         else if (image.getData() != null) { // check for data field duplicated
             Image duplicatedImage = imageRepository.findByData(image.getData());
             return (duplicatedImage != null) ? duplicatedImage : imageRepository.save(image);
         }
         else {
-            throw new BadImageException();
+            throw new BadImageException("Trying to persist an image without data or id");
         }
     }
 

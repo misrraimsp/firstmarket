@@ -5,7 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
-import misrraimsp.uned.pfg.firstmarket.exception.*;
+import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 public class BookController extends BasicController {
@@ -56,15 +55,9 @@ public class BookController extends BasicController {
                            Model model,
                            @AuthenticationPrincipal User authUser) {
 
-        try {
-            populateModel(model, authUser);
-            model.addAttribute("book", bookServer.findById(id));
-            return "book";
-        }
-        catch (BookNotFoundException e) {
-            LOGGER.warn("Trying to access a non-existent Book", e);
-            return "redirect:/home";
-        }
+        populateModel(model, authUser);
+        model.addAttribute("book", bookServer.findById(id));
+        return "book";
 
     }
 
@@ -72,24 +65,14 @@ public class BookController extends BasicController {
     public String showBookForm(@RequestParam(name = "id") Optional<Long> optBookId,
                                Model model) {
 
-        AtomicBoolean bookNotFound = new AtomicBoolean(false);
         optBookId.ifPresentOrElse(
                 bookId -> {
-                    try {
-                        Book book = bookServer.findById(bookId);
-                        BookForm bookForm = bookServer.convertBookToBookForm(book);
-                        model.addAttribute("bookForm", bookForm);
-                    }
-                    catch (BookNotFoundException e) {
-                        LOGGER.warn("Trying to edit a non-existent Book", e);
-                        bookNotFound.set(true);
-                    }
+                    Book book = bookServer.findById(bookId);
+                    BookForm bookForm = bookServer.convertBookToBookForm(book);
+                    model.addAttribute("bookForm", bookForm);
                 },
                 () -> model.addAttribute("bookForm", new BookForm())
         );
-        if (bookNotFound.get()) {
-            return "redirect:/home";
-        }
         populateModel(model, null);
         populateModelToBookForm(model);
         return "bookForm";
@@ -109,34 +92,18 @@ public class BookController extends BasicController {
             Book book = bookServer.convertBookFormToBook(bookForm);
             if (book.getId() == null){
                 book = bookServer.persist(book);
-                LOGGER.trace("Book persisted (id={})", book.getId());
+                LOGGER.debug("Book persisted (id={})", book.getId());
             } else {
                 bookServer.edit(book);
-                LOGGER.trace("Book edited (id={})", book.getId());
+                LOGGER.debug("Book edited (id={})", book.getId());
             }
         }
         catch (IsbnAlreadyExistsException e) {
-            LOGGER.debug("trying to save a book with an already used isbn={}", bookForm.getIsbn(), e);
+            LOGGER.debug("trying to save a book with an already used isbn={}", bookForm.getIsbn());
             errors.rejectValue("isbn", "isbn.notUnique");
             populateModel(model, null);
             populateModelToBookForm(model);
             return "bookForm";
-        }
-        catch (BookFormAuthorsConversionException e) {
-            LOGGER.error("BookForm conversion error", e);
-            return "redirect:/home";
-        }
-        catch (ImageNotFoundException e) {
-            LOGGER.error("Trying to persist an Image-with-id that is not in the database searching by its id", e);
-            return "redirect:/home";
-        }
-        catch (BadImageException e) {
-            LOGGER.error("Trying to persist an image without data or id", e);
-            return "redirect:/home";
-        }
-        catch (BookNotFoundException e) {
-            LOGGER.error("Trying to edit a Book that is not in the database searching by its id");
-            return "redirect:/home";
         }
         return "redirect:/books";
     }
@@ -145,7 +112,7 @@ public class BookController extends BasicController {
     public String deleteBook(@PathVariable("id") Long id) {
         if (bookServer.existsBook(id)) {
             bookServer.deleteById(id);
-            LOGGER.trace("Book deleted (id={})", id);
+            LOGGER.debug("Book deleted (id={})", id);
         }
         else {
             LOGGER.warn("Trying to delete a non-existent Book (id={})", id);
@@ -173,22 +140,10 @@ public class BookController extends BasicController {
         }
 
         // category
-        Category category;
-        try {
-            // root category by default
-            if (searchCriteria.getCategoryId() == null) {
-                searchCriteria.setCategoryId(catServer.getRootCategory().getId());
-            }
-            category = catServer.findCategoryById(searchCriteria.getCategoryId());
+        if (searchCriteria.getCategoryId() == null) { // root category by default
+            searchCriteria.setCategoryId(catServer.getRootCategory().getId());
         }
-        catch (NoRootCategoryException nrc) {
-            LOGGER.error("Root category not found", nrc);
-            return "redirect:/home";
-        }
-        catch (CategoryNotFoundException e) {
-            LOGGER.warn("Trying to find books with a non-existent Category. Root category set by default", e);
-            return "redirect:/books";
-        }
+        Category category = catServer.findCategoryById(searchCriteria.getCategoryId());
 
         // search
         Page<Book> books = bookServer.findSearchResults(searchCriteria, pageable);

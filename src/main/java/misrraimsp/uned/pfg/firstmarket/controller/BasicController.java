@@ -1,6 +1,5 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.slf4j.Logger;
@@ -43,12 +42,7 @@ public abstract class BasicController {
 
     protected void populateModel(Model model, User authUser) {
         if (authUser != null && userServer.hasRole(authUser, "ROLE_USER")) {
-            try {
-                model.addAttribute("user", userServer.findById(authUser.getId()));
-            }
-            catch (UserNotFoundException e) {
-                LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            }
+            model.addAttribute("user", userServer.findById(authUser.getId()));
         }
         model.addAttribute("mainCategories", catServer.getMainCategories());
     }

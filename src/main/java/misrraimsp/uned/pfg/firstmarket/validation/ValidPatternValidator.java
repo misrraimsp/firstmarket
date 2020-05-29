@@ -60,7 +60,8 @@ public class ValidPatternValidator implements ConstraintValidator<ValidPattern, 
             Pattern pattern = Pattern.compile(regex);
             Matcher matcher = pattern.matcher(text);
             boolean isValid = matcher.matches();
-            LOGGER.debug("String({}) validation with patternName({}) (regex={}) has been {}", text, fieldName, regex, isValid);
+            //LOGGER.debug("String({}) validation with patternName({}) (regex={}) has been {}", text, fieldName, regex, isValid);
+            LOGGER.debug("String validation with patternName({}) has been {}", fieldName, isValid);
             return isValid;
         }
         catch (NoSuchFieldException e) {

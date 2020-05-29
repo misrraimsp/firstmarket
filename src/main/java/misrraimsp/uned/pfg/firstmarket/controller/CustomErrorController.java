@@ -34,40 +34,36 @@ public class CustomErrorController extends BasicController implements ErrorContr
     }
 
     @GetMapping("/error")
-    public String handleError(HttpServletRequest httpServletRequest,
+    public String handleError(HttpServletRequest request,
                               Model model,
                               @AuthenticationPrincipal User authUser) {
 
-        try {
-            populateModel(model, authUser);
-            Object statusObj = httpServletRequest.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-            if (statusObj != null) {
-                int statusCode = Integer.parseInt(statusObj.toString());
-                switch (HttpStatus.valueOf(statusCode)) {
-                    case NOT_FOUND:
-                        LOGGER.debug("404 Not Found Error");
-                        model.addAttribute("errorTitle", messageSource.getMessage("http.error.404.title", null, null));
-                        model.addAttribute("errorMessage", messageSource.getMessage("http.error.404.message", null, null));
-                        break;
-                    case INTERNAL_SERVER_ERROR:
-                        LOGGER.error("500 Internal Server Error");
-                        model.addAttribute("errorTitle", messageSource.getMessage("http.error.500.title", null, null));
-                        model.addAttribute("errorMessage", messageSource.getMessage("http.error.500.message", null, null));
-                        break;
-                    default:
-                        LOGGER.error("Http Error");
-                        model.addAttribute("errorTitle", messageSource.getMessage("http.error.title", null, null));
-                        model.addAttribute("errorMessage", messageSource.getMessage("http.error.message", null, null));
-                }
-                return "httpError";
+        populateModel(model, authUser);
+        Object statusObj = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+        if (statusObj != null) {
+            int statusCode = Integer.parseInt(statusObj.toString());
+            switch (HttpStatus.valueOf(statusCode)) {
+                case NOT_FOUND:
+                    model.addAttribute("errorTitle", messageSource.getMessage("http.error.404.title", null, null));
+                    model.addAttribute("errorMessage", messageSource.getMessage("http.error.404.message", null, null));
+                    break;
+                case INTERNAL_SERVER_ERROR:
+                    model.addAttribute("errorTitle", messageSource.getMessage("http.error.500.title", null, null));
+                    model.addAttribute("errorMessage", messageSource.getMessage("http.error.500.message", null, null));
+                    break;
+                case BAD_REQUEST:
+                    model.addAttribute("errorTitle", messageSource.getMessage("http.error.400.title", null, null));
+                    model.addAttribute("errorMessage", messageSource.getMessage("http.error.400.message", null, null));
+                    break;
+                default:
+                    LOGGER.error("Http Error (other than 400, 404 or 500)");
+                    model.addAttribute("errorTitle", messageSource.getMessage("http.error.title", null, null));
+                    model.addAttribute("errorMessage", messageSource.getMessage("http.error.message", null, null));
             }
-            else {
-                LOGGER.error("There has been a http-error and ERROR_STATUS_CODE couldn't be read");
-                return "redirect:/home";
-            }
+            return "error";
         }
-        catch (Exception e) {
-            LOGGER.error("There has been some error trying to handle a http-error", e);
+        else {
+            LOGGER.error("There has been an error and ERROR_STATUS_CODE couldn't be read");
             return "redirect:/home";
         }
     }

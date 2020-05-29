@@ -70,7 +70,7 @@ public class OrderServer {
     @Transactional
     @Async
     @EventListener
-    public void handlePaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) {
+    public void handlePaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) throws StripeException {
         User user = paymentSuccessEvent.getUser();
         Cart cart = user.getCart();
         if (!cart.isCommitted()){
@@ -81,14 +81,7 @@ public class OrderServer {
             LOGGER.error("User(id={}) trying to build a no-items-cart(id={}) order", user.getId(), cart.getId());
             return;
         }
-        PaymentIntent paymentIntent;
-        try {
-            paymentIntent = PaymentIntent.retrieve(cart.getPiId());
-        }
-        catch (StripeException e) {
-            LOGGER.error("Stripe - Some exception occurred", e);
-            return;
-        }
+        PaymentIntent paymentIntent = PaymentIntent.retrieve(cart.getPiId());
         ShippingDetails shippingDetails = paymentIntent.getShipping();
         if (shippingDetails == null){
             LOGGER.error("User(id={}) trying to build a no-shipping-details(piId={}) order", user.getId(), paymentIntent.getId());
@@ -132,13 +125,8 @@ public class OrderServer {
 
     @Async
     @EventListener
-    public void handlePaymentCancellation(@NonNull OnPaymentCancellationEvent paymentCancellationEvent) {
-        try {
-            this.unCommitCart(paymentCancellationEvent.getUser());
-        }
-        catch (StripeException e) {
-            LOGGER.warn("Stripe - Some exception occurred", e);
-        }
+    public void handlePaymentCancellation(@NonNull OnPaymentCancellationEvent paymentCancellationEvent) throws StripeException {
+        this.unCommitCart(paymentCancellationEvent.getUser());
     }
 
     public Set<Order> getOrdersByUser(User user) {
@@ -184,7 +172,7 @@ public class OrderServer {
 
     @Async
     @EventListener
-    public void handleCommitmentExpiration(@NonNull OnCartCommittedEvent cartCommittedEvent) throws PaymentIntentProcessingTimeout {
+    public void handleCommitmentExpiration(@NonNull OnCartCommittedEvent cartCommittedEvent) throws PaymentIntentProcessingTimeout, StripeException {
         User user = cartCommittedEvent.getUser();
         assert user != null;
         assert user.getCart() != null;
@@ -223,9 +211,6 @@ public class OrderServer {
         catch (InterruptedException e) {
             assert user.getCart().getId() != null;
             LOGGER.error("cart-committed event-handler error (userId={}, cartId={}): ", user.getId(), user.getCart().getId(), e);
-        }
-        catch (StripeException e) {
-            LOGGER.warn("Stripe - Some exception occurred", e);
         }
     }
 

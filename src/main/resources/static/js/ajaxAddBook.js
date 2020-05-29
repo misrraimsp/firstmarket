@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let xmlHttpRequest, i, id;
 
     // initialized variables
-    let baseUrl = hostUrl + "ajaxCart/";
+    let baseUrl = hostUrl + "ajaxCart/addBook/";
     let snackbar = document.getElementById("snackbar");
     let cartIcon = document.getElementById("cartIcon");
     let loginLink = document.getElementById("loginLink");
@@ -30,20 +30,26 @@ document.addEventListener("DOMContentLoaded", function() {
         addBookButtons[i].addEventListener("click", function(e) {
             id = extractNumber(e.currentTarget.getAttribute("id"));
             xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.open("GET", baseUrl + "addBook/" + id, true);
+            xmlHttpRequest.open("GET", baseUrl + id, true);
             xmlHttpRequest.setRequestHeader('isAjaxCartRequested', '1');
             xmlHttpRequest.send();
             xmlHttpRequest.onreadystatechange = function() {
-                if (this.readyState === 4 && this.status === 200) {
-                    cartIcon.setAttribute("data-count", this.responseText);
-                    // snackbar
-                    snackbar.className = "show";
-                    setTimeout(function() {
-                        snackbar.className = snackbar.className.replace("show", "");
-                    }, snackbarTimeout);
-                }
-                if (this.readyState === 4 && this.status === 401) {
-                    loginLink.click();
+                if (this.readyState === 4) {
+                    switch (this.status) {
+                        case 200:
+                            cartIcon.setAttribute("data-count", this.responseText);
+                            // snackbar
+                            snackbar.className = "show";
+                            setTimeout(function() {
+                                snackbar.className = snackbar.className.replace("show", "");
+                            }, snackbarTimeout);
+                            break;
+                        case 401:
+                            loginLink.click();
+                            break;
+                        default:
+                            console.log(this);
+                    }
                 }
             };
         }, false);

@@ -1,7 +1,16 @@
 package misrraimsp.uned.pfg.firstmarket.exception;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.BAD_REQUEST)
 public class BadImageException extends IllegalArgumentException {
-    public BadImageException() {
-        super("Trying to persist an image without id or data");
+
+    public BadImageException(String message) {
+        super(message);
+    }
+
+    public BadImageException(String message, Throwable cause) {
+        super(message, cause);
     }
 }

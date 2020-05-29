@@ -1,8 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
-import misrraimsp.uned.pfg.firstmarket.exception.CategoryNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 public class CategoryController extends BasicController {
@@ -42,27 +39,15 @@ public class CategoryController extends BasicController {
 
     @GetMapping("/admin/loadCategories")
     public String loadCategories(){
-        try {
-            catServer.loadCategories();
-            LOGGER.trace("Categories loaded");
-        }
-        catch (NoRootCategoryException e) {
-            LOGGER.error("Root category not found", e);
-            return null;
-        }
+        catServer.loadCategories();
+        LOGGER.debug("Categories loaded");
         return "redirect:/admin/categories";
     }
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model) {
-        try {
-            populateModel(model, null);
-            model.addAttribute("jsonStringCategories", catServer.getJSONStringCategories());
-        }
-        catch (NoRootCategoryException e) {
-            LOGGER.error("Root category not found", e);
-            return null;
-        }
+        populateModel(model, null);
+        model.addAttribute("jsonStringCategories", catServer.getJSONStringCategories());
         return "categories";
     }
 
@@ -70,27 +55,18 @@ public class CategoryController extends BasicController {
     public String showCategoryForm(@RequestParam(name = "id") Optional<Long> optCategoryId,
                                    Model model) {
 
-        AtomicBoolean categoryNotFound = new AtomicBoolean(false);
         optCategoryId.ifPresentOrElse(
                 categoryId -> {
-                    try {
-                        Category category = catServer.findCategoryById(categoryId);
-                        model.addAttribute("categoryForm", catServer.convertCategoryToCategoryForm(category));
-                        populateModelToCategoryForm(model);
-                        model.addAttribute("descendants", catServer.getDescendants(categoryId));
-                    } catch (CategoryNotFoundException e) {
-                        LOGGER.warn("Trying to edit a non-existent Category", e);
-                        categoryNotFound.set(true);
-                    }
+                    Category category = catServer.findCategoryById(categoryId);
+                    model.addAttribute("categoryForm", catServer.convertCategoryToCategoryForm(category));
+                    populateModelToCategoryForm(model);
+                    model.addAttribute("descendants", catServer.getDescendants(categoryId));
                 },
                 () -> {
                     model.addAttribute("categoryForm", new CategoryForm());
                     populateModelToCategoryForm(model);
                 }
         );
-        if (categoryNotFound.get()) {
-            return "redirect:/admin/categories";
-        }
         populateModel(model, null);
         return "categoryForm";
     }
@@ -105,22 +81,17 @@ public class CategoryController extends BasicController {
             populateModel(model, null);
             populateModelToCategoryForm(model);
             if (isEdition){
-                try {
-                    model.addAttribute("descendants", catServer.getDescendants(categoryForm.getCategoryId()));
-                } catch (CategoryNotFoundException e) {
-                    LOGGER.warn("Trying to edit a non-existent Category", e);
-                    return "redirect:/admin/categories";
-                }
+                model.addAttribute("descendants", catServer.getDescendants(categoryForm.getCategoryId()));
             }
             return "categoryForm";
         }
         Category category = catServer.convertCategoryFormToCategory(categoryForm);
         if (isEdition){
             catServer.edit(category);
-            LOGGER.trace("Category edited (id={})", category.getId());
+            LOGGER.debug("Category edited (id={})", category.getId());
         } else {
             category = catServer.persist(category);
-            LOGGER.trace("Category persisted (id={})", category.getId());
+            LOGGER.debug("Category persisted (id={})", category.getId());
         }
         return "redirect:/admin/loadCategories";
     }
@@ -128,17 +99,11 @@ public class CategoryController extends BasicController {
     @Transactional
     @GetMapping("/admin/deleteCategory/{id}")
     public String deleteCategory(@PathVariable("id") Long id){
-        try {
-            Category deletingCategory = catServer.findCategoryById(id);
-            //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
-            bookServer.updateCategoryIdByCategoryId(id, deletingCategory.getParent().getId());
-            catServer.deleteCategory(deletingCategory);
-            LOGGER.trace("Category deleted (id={})", id);
-        }
-        catch (CategoryNotFoundException e) {
-            LOGGER.warn("Trying to delete a non-existent Category (id={})", id, e);
-            return "redirect:/admin/categories";
-        }
+        Category deletingCategory = catServer.findCategoryById(id);
+        //los libros con la categoría a eliminar pasan a estar vinculados a la categoría del padre
+        bookServer.updateCategoryIdByCategoryId(id, deletingCategory.getParent().getId());
+        catServer.deleteCategory(deletingCategory);
+        LOGGER.debug("Category deleted (id={})", id);
         return "redirect:/admin/loadCategories";
     }
 

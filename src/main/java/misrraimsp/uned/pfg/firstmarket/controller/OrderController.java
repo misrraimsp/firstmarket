@@ -12,7 +12,6 @@ import com.stripe.net.Webhook;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
-import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemsOutOfStockException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.User;
@@ -57,16 +56,9 @@ public class OrderController extends BasicController {
     public String showOrders(Model model,
                              @AuthenticationPrincipal User authUser) {
 
-        try {
-            User user = userServer.findById(authUser.getId());
-            model.addAttribute("orders", orderServer.getOrdersByUser(user));
-            populateModel(model, authUser);
-            return "orders";
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            return "redirect:/home";
-        }
+        model.addAttribute("orders", orderServer.getOrdersByUser(authUser));
+        populateModel(model, authUser);
+        return "orders";
     }
 
     @GetMapping("/user/success")
@@ -79,10 +71,9 @@ public class OrderController extends BasicController {
 
     @GetMapping("/user/checkout")
     public String checkout(Model model,
-                           @AuthenticationPrincipal User authUser) {
+                           @AuthenticationPrincipal User authUser) throws StripeException {
 
         Stripe.apiKey = ssk;
-
         try {
             User user = userServer.findById(authUser.getId());
             if (user.getCart().isCommitted()) {
@@ -103,18 +94,6 @@ public class OrderController extends BasicController {
             populateModel(model, authUser);
             model.addAttribute("itemsOutOfStock", e.getItems());
             return "cart";
-        }
-        catch (StripeException e) {
-            LOGGER.warn("Stripe - Some exception occurred", e);
-            return "redirect:/home";
-        }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: 'authenticated user(id={}) does not exist'", authUser.getId(), e);
-            return "redirect:/home";
-        }
-        catch (BookNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: registered book does not exist. Exception: ", e);
-            return "redirect:/home";
         }
     }
 
@@ -244,9 +223,7 @@ public class OrderController extends BasicController {
         }
         catch (UserNotFoundException e) {
             LOGGER.error("Stripe - No user(id={}) found with PaymentIntent(id={}) info sent to the stripe listener", piUserId, paymentIntent.getId());
-        }
-        catch (BookNotFoundException e) {
-            LOGGER.error("Theoretically unreachable state has been met: registered book does not exist. Exception: ", e);
+            throw e;
         }
         response.setStatus(200);
     }

@@ -1,9 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ImagesWrapper;
-import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
-import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.apache.commons.io.IOUtils;
@@ -28,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @Controller
 public class ImageController extends BasicController  {
@@ -57,35 +53,14 @@ public class ImageController extends BasicController  {
     }
 
     @GetMapping("/image/{id}")
-    public String showImageById(@PathVariable("id") Long id,
-                              HttpServletResponse response) {
+    public void showImageById(@PathVariable("id") Long id,
+                              HttpServletResponse response) throws IOException {
 
-        InputStream inputStream = null;
-        try {
-            Image image = imageServer.findById(id);
-            response.setContentType(image.getMimeType());
-            inputStream = new ByteArrayInputStream(image.getData());
+        Image image = imageServer.findById(id);
+        response.setContentType(image.getMimeType());
+        try (InputStream inputStream = new ByteArrayInputStream(image.getData())) {
             IOUtils.copy(inputStream, response.getOutputStream());
         }
-        catch (ImageNotFoundException e) {
-            LOGGER.warn("Image not found", e);
-            return "redirect:/home";
-        }
-        catch (IOException e) {
-            LOGGER.error("File exception", e);
-            return "redirect:/home";
-        }
-        finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                }
-                catch (IOException e) {
-                    LOGGER.error("InputStream closing exception", e);
-                }
-            }
-        }
-        return null;
     }
 
     @GetMapping("/admin/images")
@@ -111,20 +86,10 @@ public class ImageController extends BasicController  {
             populateModelToImage(model, pageNo, pageSize);
             return "images";
         }
-        try {
-            imagesWrapper.getImages().forEach(image -> {
-                Image persistedImage = imageServer.persist(image);
-                LOGGER.debug("Image persisted (id={})", persistedImage.getId());
-            });
-        }
-        catch (ImageNotFoundException e) {
-            LOGGER.error("Trying to persist an Image-with-id that is not in the database searching by its id", e);
-            return "redirect:/home";
-        }
-        catch (BadImageException e) {
-            LOGGER.error("Trying to persist an image without data or id", e);
-            return "redirect:/home";
-        }
+        imagesWrapper.getImages().forEach(image -> {
+            Image persistedImage = imageServer.persist(image);
+            LOGGER.debug("Image persisted (id={})", persistedImage.getId());
+        });
         return "redirect:/admin/images";
     }
 
@@ -133,20 +98,10 @@ public class ImageController extends BasicController  {
                                                @RequestParam(name = "id") Optional<Long> optImageId,
                                                @RequestParam(name = "pn") Optional<String> optPageNo) {
 
-        AtomicBoolean imageNotFound = new AtomicBoolean(false);
         optImageId.ifPresent(imageId -> {
-            try {
-                imageServer.setDefaultImage(imageId);
-                LOGGER.debug("Default image changed (id={})", imageId);
-            } catch (ImageNotFoundException e){
-                LOGGER.warn("Trying to set a non-existent image as default", e);
-                imageNotFound.set(true);
-            }
+            imageServer.setDefaultImage(imageId);
+            LOGGER.debug("Default image changed (id={})", imageId);
         });
-        if (imageNotFound.get()) {
-            modelAndView.setViewName("redirect:/home");
-            return modelAndView;
-        }
         modelAndView.setViewName("redirect:/admin/images");
         optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
         return modelAndView;
@@ -155,23 +110,13 @@ public class ImageController extends BasicController  {
     @Transactional
     @GetMapping("/admin/deleteImage/{id}")
     public String deleteImage(@PathVariable("id") Long imageId) {
-        try {
-            if (imageServer.isDefaultImage(imageId)) {
-                LOGGER.warn("Trying to delete the default image (id={})", imageId);
-                return "redirect:/home";
-            }
-            bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
-            imageServer.deleteById(imageId);
-            LOGGER.debug("Image deleted (id={})", imageId);
-            return "redirect:/admin/images";
-        }
-        catch (ImageNotFoundException e) {
-            LOGGER.warn("Trying to delete a non-existent image", e);
+        if (imageServer.isDefaultImage(imageId)) {
+            LOGGER.warn("Trying to delete the default image (id={})", imageId);
             return "redirect:/home";
         }
-        catch (NoDefaultImageException e) {
-            LOGGER.error("There is no default image", e);
-            return "redirect:/home";
-        }
+        bookServer.updateImageByImageId(imageId, imageServer.getDefaultImage());
+        imageServer.deleteById(imageId);
+        LOGGER.debug("Image deleted (id={})", imageId);
+        return "redirect:/admin/images";
     }
 }
