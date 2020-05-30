@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.service;
 import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
-import com.stripe.param.PaymentIntentCreateParams;
 import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.PaymentRepository;
@@ -11,8 +10,6 @@ import misrraimsp.uned.pfg.firstmarket.data.ShippingInfoRepository;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
-import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemsOutOfStockException;
 import misrraimsp.uned.pfg.firstmarket.exception.PaymentIntentProcessingTimeout;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.slf4j.Logger;
@@ -24,7 +21,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +41,6 @@ public class OrderServer {
     private PaymentRepository paymentRepository;
     private ShippingInfoRepository shippingInfoRepository;
     private AddressServer addressServer;
-    private BookServer bookServer;
     private CartServer cartServer;
     private ConversionServer conversionServer;
 
@@ -54,7 +49,6 @@ public class OrderServer {
                        PaymentRepository paymentRepository,
                        ShippingInfoRepository shippingInfoRepository,
                        AddressServer addressServer,
-                       BookServer bookServer,
                        CartServer cartServer,
                        ConversionServer conversionServer) {
 
@@ -62,7 +56,6 @@ public class OrderServer {
         this.paymentRepository = paymentRepository;
         this.shippingInfoRepository = shippingInfoRepository;
         this.addressServer = addressServer;
-        this.bookServer = bookServer;
         this.cartServer = cartServer;
         this.conversionServer = conversionServer;
     }
@@ -126,48 +119,11 @@ public class OrderServer {
     @Async
     @EventListener
     public void handlePaymentCancellation(@NonNull OnPaymentCancellationEvent paymentCancellationEvent) throws StripeException {
-        this.unCommitCart(paymentCancellationEvent.getUser());
+        cartServer.unCommitCart(paymentCancellationEvent.getUser().getCart());
     }
 
     public Set<Order> getOrdersByUser(User user) {
         return orderRepository.findByUser(user);
-    }
-
-    @Transactional(rollbackFor = StripeException.class)
-    public void commitCart(@NonNull User user) throws BookNotFoundException, ItemsOutOfStockException, StripeException {
-        assert user != null;
-        Cart cart = user.getCart();
-        assert !cart.isCommitted();
-        bookServer.checkStockFor(cart.getItems());
-        PaymentIntent paymentIntent = PaymentIntent.create(PaymentIntentCreateParams
-                .builder()
-                .setCurrency("eur")
-                .setAmount(cart.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
-                .putMetadata("user-id", Long.toString(user.getId()))
-                .build()
-        );
-        bookServer.removeFromStock(cart.getItems());
-        cart.setPiId(paymentIntent.getId());
-        cart.setPiClientSecret(paymentIntent.getClientSecret());
-        cart.setCommitted(true);
-        cart.setCommittedAt(LocalDateTime.now());
-        cartServer.persist(cart);
-        LOGGER.debug("User(id={}) cart(id={}) successfully committed (pi id={})", user.getId(), cart.getId(), cart.getPiId());
-    }
-
-    @Transactional(rollbackFor = StripeException.class)
-    public void unCommitCart(@NonNull User user) throws BookNotFoundException, StripeException {
-        Cart cart = user.getCart();
-        assert cart.isCommitted();
-        bookServer.restoreStock(cart.getItems());
-        cart.setCommitted(false);
-        cart.setCommittedAt(null);
-        String piId = cart.getPiId();
-        PaymentIntent.retrieve(piId).cancel();
-        cart.setPiId(null);
-        cart.setPiClientSecret(null);
-        cartServer.persist(cart);
-        LOGGER.debug("User(id={}) cart(id={}) successfully un-committed (pi id={})", user.getId(), cart.getId(), piId);
     }
 
     @Async
@@ -203,7 +159,7 @@ public class OrderServer {
                 case "succeeded":
                     break;
                 default:
-                    this.unCommitCart(user);
+                    cartServer.unCommitCart(user.getCart());
                     piStatus = PaymentIntent.retrieve(paymentIntentId).getStatus();
             }
             LOGGER.debug("User(id={}) committed-cart(id={}) expiration handler finished (piId={}, piStatus={})", user.getId(), user.getCart().getId(), paymentIntentId, piStatus);

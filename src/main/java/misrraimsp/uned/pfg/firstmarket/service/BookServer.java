@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
@@ -243,7 +244,7 @@ public class BookServer {
         }
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void removeFromStock(Set<Item> items) throws BookNotFoundException {
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());
@@ -255,7 +256,7 @@ public class BookServer {
         });
     }
 
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void restoreStock(Set<Item> items) throws BookNotFoundException {
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());

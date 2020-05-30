@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import com.stripe.exception.StripeException;
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.Cart;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -21,15 +21,19 @@ import java.util.Set;
 @RestController
 public class CartController extends BasicController {
 
+    private CartServer cartServer;
+
     @Autowired
     public CartController(UserServer userServer,
                           BookServer bookServer,
                           CatServer catServer,
                           ImageServer imageServer,
                           MessageSource messageSource,
-                          OrderServer orderServer) {
+                          OrderServer orderServer,
+                          CartServer cartServer) {
 
         super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
+        this.cartServer = cartServer;
     }
 
     @GetMapping("/ajaxCart/addBook/{id}")
@@ -50,13 +54,9 @@ public class CartController extends BasicController {
         }
         else {
             String userEmail = userPrincipal.getName();
-            User authUser = userServer.getUserByEmail(userEmail);
-            if (authUser.getCart().isCommitted()) {
-                orderServer.unCommitCart(authUser);
-            }
-            userServer.addBookToCart(authUser.getId(), bookId);
-            LOGGER.debug("Book(id={}) added into user(id={}) cart", bookId, authUser.getId());
-            return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
+            Cart cart = userServer.getUserByEmail(userEmail).getCart();
+            cartServer.addBook(cart, bookId);
+            return new ResponseEntity<>(cart.getSize(), HttpStatus.OK);
         }
     }
 
@@ -78,13 +78,9 @@ public class CartController extends BasicController {
         }
         else {
             String userEmail = userPrincipal.getName();
-            User authUser = userServer.getUserByEmail(userEmail);
-            if (authUser.getCart().isCommitted()) {
-                orderServer.unCommitCart(authUser);
-            }
-            userServer.incrementItemFromCart(authUser.getId(), itemId);
-            LOGGER.debug("Item(id={}) incremented inside user(id={}) cart", itemId, authUser.getId());
-            return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
+            Cart cart = userServer.getUserByEmail(userEmail).getCart();
+            cartServer.incrementItem(cart, itemId);
+            return new ResponseEntity<>(cart.getSize(), HttpStatus.OK);
         }
     }
 
@@ -106,13 +102,9 @@ public class CartController extends BasicController {
         }
         else {
             String userEmail = userPrincipal.getName();
-            User authUser = userServer.getUserByEmail(userEmail);
-            if (authUser.getCart().isCommitted()) {
-                orderServer.unCommitCart(authUser);
-            }
-            userServer.decrementItemFromCart(authUser.getId(), itemId);
-            LOGGER.debug("Item(id={}) decremented inside user(id={}) cart", itemId, authUser.getId());
-            return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
+            Cart cart = userServer.getUserByEmail(userEmail).getCart();
+            cartServer.decrementItem(cart, itemId);
+            return new ResponseEntity<>(cart.getSize(), HttpStatus.OK);
         }
     }
 
@@ -139,15 +131,11 @@ public class CartController extends BasicController {
         }
         else {
             String userEmail = userPrincipal.getName();
-            User authUser = userServer.getUserByEmail(userEmail);
-            if (authUser.getCart().isCommitted()) {
-                orderServer.unCommitCart(authUser);
+            Cart cart = userServer.getUserByEmail(userEmail).getCart();
+            for (Long itemId : ids) {
+                cartServer.removeItem(cart, itemId);
             }
-            ids.forEach(id -> {
-                userServer.removeItemFromCart(authUser.getId(), id);
-                LOGGER.debug("Item(id={}) removed from user(id={}) cart", id, authUser.getId());
-            });
-            return new ResponseEntity<>(authUser.getCart().getSize(), HttpStatus.OK);
+            return new ResponseEntity<>(cart.getSize(), HttpStatus.OK);
         }
     }
 }

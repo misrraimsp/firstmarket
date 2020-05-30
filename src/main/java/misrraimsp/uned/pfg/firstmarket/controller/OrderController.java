@@ -39,6 +39,7 @@ public class OrderController extends BasicController {
     String endpointSecret = "anotherSecret_bitch";
 
     private ApplicationEventPublisher applicationEventPublisher;
+    private CartServer cartServer;
 
     public OrderController(UserServer userServer,
                            BookServer bookServer,
@@ -46,10 +47,12 @@ public class OrderController extends BasicController {
                            ImageServer imageServer,
                            MessageSource messageSource,
                            OrderServer orderServer,
-                           ApplicationEventPublisher applicationEventPublisher) {
+                           ApplicationEventPublisher applicationEventPublisher,
+                           CartServer cartServer) {
 
         super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.applicationEventPublisher = applicationEventPublisher;
+        this.cartServer = cartServer;
     }
 
     @GetMapping("/user/orders")
@@ -80,7 +83,7 @@ public class OrderController extends BasicController {
                 LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getPiId());
             }
             else {
-                orderServer.commitCart(user);
+                cartServer.commitCart(user);
                 applicationEventPublisher.publishEvent(new OnCartCommittedEvent(user));
                 LOGGER.debug("cart-committed event published (userId={}, cartId={})", user.getId(), user.getCart().getId());
             }
