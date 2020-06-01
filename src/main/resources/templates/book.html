@@ -83,23 +83,39 @@
                         </div>
                         <!-- action buttons -->
                         <div class="col-sm-4" >
-                            <!-- user-role specific buttons -->
+                            <!-- no-admin specific buttons -->
                             <div sec:authorize="!hasRole('ADMIN')">
                                 <!-- addBook to cart button -->
                                 <button class="btn btn-outline-info btn-lg align-center btn-block" ajax="addBook" th:id="'ab-' + ${book.id}">
                                     Add to Cart<i class="fas fa-cart-plus ml-3"></i>
                                 </button>
                             </div>
-                            <!-- admin-role specific buttons -->
-                            <div sec:authorize="hasRole('ADMIN')">
-                                <!-- editBook button -->
-                                <a class="btn btn-sm btn-outline-secondary btn-block" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
-                                    Edit Book<i class="fas fa-pen ml-3"></i>
+                            <!-- admin specific buttons -->
+                            <div class="d-flex flex-column my-3" sec:authorize="hasRole('ADMIN')">
+                                <!-- set book status -->
+                                <form th:action="@{/admin/setBookStatus}" method="POST">
+                                    <input type="hidden" name="bookId" th:value="${book.id}"/>
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <select class="custom-select custom-select-sm text-secondary border border-secondary" name="bookStatus">
+                                                <option th:each="status : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus).values()}"
+                                                        th:value="${status.ordinal()}"
+                                                        th:text="${status.text}"
+                                                        th:selected="${status.equals(book.status)}">
+                                                </option>
+                                            </select>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-sm btn-outline-secondary" type="submit" data-toggle="tooltip" title="Set Book Status">
+                                                    <small>Set</small>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <!-- edit book -->
+                                <a class="btn btn-outline-secondary btn-sm align-center btn-block" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
+                                    Edit Details<i class="fas fa-pen ml-3"></i>
                                 </a>
-                                <!-- deleteBook button -->
-                                <button class="modalTrigger btn btn-sm btn-outline-secondary btn-block my-3" th:id="'del-' + ${book.id}">
-                                    Delete Book<i class="fas fa-trash-alt ml-3"></i>
-                                </button>
                             </div>
                             <!-- go back button -->
                             <div>
@@ -124,22 +140,13 @@
             </div>
             <!-- snackbar -->
             <div th:replace="fragments/components::snackbar"></div>
-            <!-- modal -->
-            <div th:replace="fragments/components::deletingModal(entity = 'Book')"></div>
             <!-- footer -->
             <div th:replace="fragments/components::fixedFooter"></div>
         </div>
         <i th:replace="fragments/components::host-address"></i>
+        <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- ajax add book to cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
-        <!-- modal functionality -->
-        <i th:replace="fragments/components::modal-action(action = 'deleteBook')"></i>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                document.dispatchEvent(new CustomEvent('custom-htmlReady'));
-            }, false);
-        </script>
-        <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>

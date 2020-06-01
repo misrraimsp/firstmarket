@@ -267,7 +267,7 @@ public class DevH2Config {
             bookForm1.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
             bookForm1.setPrice("19.99");
-            bookForm1.setStock(100);
+            bookForm1.setStock(5);
             bookForm1.setYear(Year.of(2020));
             //System.out.println("formBook1: " + formBook1);
             Book book1 = conversionManager.convertBookFormToBook(bookForm1);
@@ -289,7 +289,7 @@ public class DevH2Config {
             bookForm2.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
             bookForm2.setPrice("59.89");
-            bookForm2.setStock(100);
+            bookForm2.setStock(5);
             bookForm2.setYear(Year.of(1990));
             //System.out.println("formBook2: " + formBook2);
             Book book2 = conversionManager.convertBookFormToBook(bookForm2);
@@ -310,8 +310,8 @@ public class DevH2Config {
             bookForm3.setPages(422);
             bookForm3.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
-            bookForm3.setPrice("0");
-            bookForm3.setStock(100);
+            bookForm3.setPrice("0.5");
+            bookForm3.setStock(5);
             bookForm3.setYear(Year.of(1998));
             //System.out.println("formBook3: " + formBook3);
             Book book3 = conversionManager.convertBookFormToBook(bookForm3);
@@ -331,8 +331,8 @@ public class DevH2Config {
             bookForm4.setPages(111);
             bookForm4.setDescription("Breve comentario sobre los principales " +
                     "temas relacionados con la conectividad de computadores");
-            bookForm4.setPrice("0.01");
-            bookForm4.setStock(100);
+            bookForm4.setPrice("0.51");
+            bookForm4.setStock(5);
             bookForm4.setYear(Year.of(2007));
             //System.out.println("formBook4: " + formBook4);
             Book book4 = conversionManager.convertBookFormToBook(bookForm4);
@@ -353,7 +353,7 @@ public class DevH2Config {
             bookForm5.setPages(128);
             bookForm5.setDescription("");
             bookForm5.setPrice("19.99");
-            bookForm5.setStock(100);
+            bookForm5.setStock(5);
             bookForm5.setYear(Year.of(2014));
             //System.out.println("formBook5: " + formBook5);
             Book book5 = conversionManager.convertBookFormToBook(bookForm5);
@@ -374,7 +374,7 @@ public class DevH2Config {
             bookForm6.setPages(123);
             bookForm6.setDescription("");
             bookForm6.setPrice("55");
-            bookForm6.setStock(100);
+            bookForm6.setStock(0);
             bookForm6.setYear(Year.of(1987));
             //System.out.println("formBook6: " + formBook6);
             Book book6 = conversionManager.convertBookFormToBook(bookForm6);
@@ -395,7 +395,7 @@ public class DevH2Config {
             bookForm7.setPages(599);
             bookForm7.setDescription("");
             bookForm7.setPrice("14.99");
-            bookForm7.setStock(1000);
+            bookForm7.setStock(5);
             bookForm7.setYear(Year.of(2019));
             //System.out.println("formBook7: " + formBook7);
             Book book7 = conversionManager.convertBookFormToBook(bookForm7);
@@ -416,7 +416,7 @@ public class DevH2Config {
             bookForm8.setPages(344);
             bookForm8.setDescription("");
             bookForm8.setPrice("99.99");
-            bookForm8.setStock(100);
+            bookForm8.setStock(0);
             bookForm8.setYear(Year.of(2002));
             //System.out.println("formBook8: " + formBook8);
             Book book8 = conversionManager.convertBookFormToBook(bookForm8);
@@ -438,7 +438,7 @@ public class DevH2Config {
             bookForm9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
                     " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
             bookForm9.setPrice("199.95");
-            bookForm9.setStock(100);
+            bookForm9.setStock(5);
             bookForm9.setYear(Year.of(2020));
             //System.out.println("formBook9: " + formBook9);
             Book book9 = conversionManager.convertBookFormToBook(bookForm9);
@@ -459,7 +459,7 @@ public class DevH2Config {
             bookForm10.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
                     " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
             bookForm10.setPrice("199.95");
-            bookForm10.setStock(100);
+            bookForm10.setStock(5);
             bookForm10.setYear(Year.of(2000));
             //System.out.println("formBook10: " + formBook10);
             Book book10 = conversionManager.convertBookFormToBook(bookForm10);

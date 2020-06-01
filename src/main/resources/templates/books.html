@@ -198,7 +198,7 @@
                                             </div>
                                         </form>
                                         <!-- edit book -->
-                                        <a class="btn btn-outline-secondary btn-sm align-center btn-block" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
+                                        <a class="btn btn-outline-secondary btn-sm align-center btn-block" th:href="@{/admin/bookForm?id={id}&pn={pn}(id=${book.id},pn=${pageOfEntities.number})}">
                                             Edit Details<i class="fas fa-pen ml-3"></i>
                                         </a>
                                     </div>

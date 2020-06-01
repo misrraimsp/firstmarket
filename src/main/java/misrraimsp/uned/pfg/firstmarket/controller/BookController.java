@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,9 +52,9 @@ public class BookController extends BasicController {
         this.conversionManager = conversionManager;
     }
 
-    private void populateModelToBookForm(Model model) {
-        model.addAttribute("indentedCategories", catServer.getIndentedCategories());
-        model.addAttribute("imagesInfo", imageServer.getAllMetaInfo());
+    private void populateModelToBookForm(Map<String, Object> properties) {
+        properties.put("indentedCategories", catServer.getIndentedCategories());
+        properties.put("imagesInfo", imageServer.getAllMetaInfo());
     }
 
     @GetMapping("/book/{id}")
@@ -61,7 +62,7 @@ public class BookController extends BasicController {
                            Model model,
                            @AuthenticationPrincipal User authUser) {
 
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         model.addAttribute("book", bookServer.findById(id));
         return "book";
 
@@ -69,6 +70,7 @@ public class BookController extends BasicController {
 
     @GetMapping("/admin/bookForm")
     public String showBookForm(@RequestParam(name = "id") Optional<Long> optBookId,
+                               @RequestParam(name = "pn") Optional<String> optPageNo,
                                Model model) {
 
         optBookId.ifPresentOrElse(
@@ -79,20 +81,26 @@ public class BookController extends BasicController {
                 },
                 () -> model.addAttribute("bookForm", new BookForm())
         );
-        populateModel(model, null);
-        populateModelToBookForm(model);
+        optPageNo.ifPresent(pageNo -> {
+            model.addAttribute("pn", pageNo);
+            LOGGER.debug("received page number: {}", pageNo);
+        });
+        populateModel(model.asMap(), null);
+        populateModelToBookForm(model.asMap());
         return "bookForm";
     }
 
     @PostMapping("/admin/bookForm")
-    public String processBookForm(@Valid BookForm bookForm,
+    public ModelAndView processBookForm(@Valid BookForm bookForm,
                                   Errors errors,
-                                  Model model) {
+                                  ModelAndView modelAndView,
+                                  @RequestParam(name = "pn") Optional<String> optPageNo) {
 
         if (errors.hasErrors()) {
-            populateModel(model, null);
-            populateModelToBookForm(model);
-            return "bookForm";
+            populateModel(modelAndView.getModel(), null);
+            populateModelToBookForm(modelAndView.getModel());
+            modelAndView.setViewName("bookForm");
+            return modelAndView;
         }
         try {
             Book book = conversionManager.convertBookFormToBook(bookForm);
@@ -105,13 +113,16 @@ public class BookController extends BasicController {
             }
         }
         catch (IsbnAlreadyExistsException e) {
-            LOGGER.debug("trying to save a book with an already used isbn={}", bookForm.getIsbn());
+            LOGGER.debug("Trying to save a book with an already used isbn={}", bookForm.getIsbn());
             errors.rejectValue("isbn", "isbn.notUnique");
-            populateModel(model, null);
-            populateModelToBookForm(model);
-            return "bookForm";
+            populateModel(modelAndView.getModel(), null);
+            populateModelToBookForm(modelAndView.getModel());
+            modelAndView.setViewName("bookForm");
+            return modelAndView;
         }
-        return "redirect:/books";
+        modelAndView.setViewName("redirect:/books");
+        optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        return modelAndView;
     }
 
     @PostMapping("/admin/setBookStatus")
@@ -164,7 +175,7 @@ public class BookController extends BasicController {
         Set<Language> languages = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
 
         // load model
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         model.addAttribute("pageOfEntities", books);
         model.addAttribute("category", category);
         model.addAttribute("categorySequence", catServer.getCategorySequence(category));

@@ -46,7 +46,7 @@ public class CategoryController extends BasicController {
 
     @GetMapping("/admin/categories")
     public String showCategories(Model model) {
-        populateModel(model, null);
+        populateModel(model.asMap(), null);
         model.addAttribute("jsonStringCategories", catServer.getJSONStringCategories());
         return "categories";
     }
@@ -67,7 +67,7 @@ public class CategoryController extends BasicController {
                     populateModelToCategoryForm(model);
                 }
         );
-        populateModel(model, null);
+        populateModel(model.asMap(), null);
         return "categoryForm";
     }
 
@@ -78,7 +78,7 @@ public class CategoryController extends BasicController {
 
         boolean isEdition = categoryForm.getCategoryId() != null;
         if (errors.hasErrors()) {
-            populateModel(model, null);
+            populateModel(model.asMap(), null);
             populateModelToCategoryForm(model);
             if (isEdition){
                 model.addAttribute("descendants", catServer.getDescendants(categoryForm.getCategoryId()));

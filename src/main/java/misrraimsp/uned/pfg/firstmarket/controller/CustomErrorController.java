@@ -38,7 +38,7 @@ public class CustomErrorController extends BasicController implements ErrorContr
                               Model model,
                               @AuthenticationPrincipal User authUser) {
 
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         Object statusObj = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         if (statusObj != null) {
             int statusCode = Integer.parseInt(statusObj.toString());

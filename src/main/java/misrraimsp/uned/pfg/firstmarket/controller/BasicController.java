@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 
+import java.util.Map;
 import java.util.Objects;
 
 
@@ -40,11 +40,11 @@ public abstract class BasicController {
         LOGGER.debug("{} created", this.getClass().getName());
     }
 
-    protected void populateModel(Model model, User authUser) {
+    protected void populateModel(Map<String, Object> properties, User authUser) {
+        properties.put("mainCategories", catServer.getMainCategories());
         if (authUser != null && userServer.hasRole(authUser, "ROLE_USER")) {
-            model.addAttribute("user", userServer.findById(authUser.getId()));
+            properties.put("user", userServer.findById(authUser.getId()));
         }
-        model.addAttribute("mainCategories", catServer.getMainCategories());
     }
 
     protected void handleGlobalErrors(Errors errors) {

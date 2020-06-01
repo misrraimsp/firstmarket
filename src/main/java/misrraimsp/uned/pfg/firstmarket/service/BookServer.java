@@ -213,18 +213,24 @@ public class BookServer {
         return bookRepository.existsById(id);
     }
 
-    public void checkStockFor(Set<Item> items) throws ItemsOutOfStockException {
+    public void checkAvailabilityFor(Set<Item> items) throws ItemsAvailabilityException {
         Set<Item> itemsOutOfStock = new HashSet<>();
+        Set<Item> itemsDisabled = new HashSet<>();
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());
-            int originalStock = storedBook.getStock();
-            int editedStock = originalStock - item.getQuantity();
-            if (editedStock < 0) {
-                itemsOutOfStock.add(item);
+            if (storedBook.getStatus().equals(BookStatus.DISABLED)) {
+                itemsDisabled.add(item);
+            }
+            else {
+                int originalStock = storedBook.getStock();
+                int editedStock = originalStock - item.getQuantity();
+                if (editedStock < 0) {
+                    itemsOutOfStock.add(item);
+                }
             }
         });
-        if (!itemsOutOfStock.isEmpty()) {
-            throw new ItemsOutOfStockException(itemsOutOfStock);
+        if (!itemsOutOfStock.isEmpty() || !itemsDisabled.isEmpty()) {
+            throw new ItemsAvailabilityException(itemsOutOfStock, itemsDisabled);
         }
     }
 
@@ -235,6 +241,9 @@ public class BookServer {
             int originalStock = storedBook.getStock();
             int editedStock = originalStock - item.getQuantity();
             storedBook.setStock(editedStock);
+            if (editedStock == 0) {
+                storedBook.setStatus(BookStatus.OUT_OF_STOCK);
+            }
             bookRepository.save(storedBook);
             LOGGER.debug("Book(id={}) stock decrease from {} to {}", storedBook.getId(), originalStock, editedStock);
         });
@@ -247,6 +256,9 @@ public class BookServer {
             int originalStock = storedBook.getStock();
             int editedStock = originalStock + item.getQuantity();
             storedBook.setStock(editedStock);
+            if (editedStock > 0) {
+                storedBook.setStatus(BookStatus.OK);
+            }
             bookRepository.save(storedBook);
             LOGGER.debug("Book(id={}) stock increase from {} to {}", storedBook.getId(), originalStock, editedStock);
         });

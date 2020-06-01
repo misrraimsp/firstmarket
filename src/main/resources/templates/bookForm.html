@@ -16,6 +16,7 @@
                 <div class="col-sm-2 bg-white"></div>
                 <div class="col-sm-8">
                     <form class="needs-validation" novalidate id="isbnForm" th:action="@{/admin/bookForm}" th:object="${bookForm}" method="POST" enctype="multipart/form-data" action="#">
+                        <input type="hidden" th:if="${pn ne null}" name="pn" th:value="${pn}"/>
                         <input type="hidden" th:field="*{bookId}"/>
                         <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
                         <div class="form-row">

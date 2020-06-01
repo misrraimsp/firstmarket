@@ -12,7 +12,7 @@ import com.stripe.net.Webhook;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemsOutOfStockException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
@@ -60,7 +60,7 @@ public class OrderController extends BasicController {
                              @AuthenticationPrincipal User authUser) {
 
         model.addAttribute("orders", orderServer.getOrdersByUser(authUser));
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "orders";
     }
 
@@ -68,7 +68,7 @@ public class OrderController extends BasicController {
     public String showSuccess(Model model,
                              @AuthenticationPrincipal User authUser) {
 
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "success";
     }
 
@@ -77,27 +77,29 @@ public class OrderController extends BasicController {
                            @AuthenticationPrincipal User authUser) throws StripeException {
 
         Stripe.apiKey = ssk;
-        try {
-            User user = userServer.findById(authUser.getId());
-            if (user.getCart().isCommitted()) {
-                LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getPiId());
-            }
-            else {
+        User user = userServer.findById(authUser.getId());
+        if (user.getCart().isCommitted()) {
+            LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getPiId());
+        }
+        else {
+            try {
                 cartServer.commitCart(user);
                 applicationEventPublisher.publishEvent(new OnCartCommittedEvent(user));
                 LOGGER.debug("cart-committed event published (userId={}, cartId={})", user.getId(), user.getCart().getId());
             }
-            populateModel(model, authUser);
-            return "checkout";
+            catch (ItemsAvailabilityException e) {
+                populateModel(model.asMap(), authUser);
+                model.addAttribute("itemsDisabled", e.getItemsDisabled());
+                model.addAttribute("itemsOutOfStock", e.getItemsOutOfStock());
+                cartServer.pruneCart(user.getCart(), e.getItemsDisabled());
+                e.getItemsOutOfStock().forEach(item ->
+                        LOGGER.debug("Book(id={}) run out of stock (Item: id={}, quantity={})", item.getBook().getId(), item.getId(), item.getQuantity())
+                );
+                return "cart";
+            }
         }
-        catch (ItemsOutOfStockException e) {
-            e.getItems().forEach(item ->
-                    LOGGER.debug("Book(id={}) run out of stock (Item: id={}, quantity={})", item.getBook().getId(), item.getId(), item.getQuantity())
-            );
-            populateModel(model, authUser);
-            model.addAttribute("itemsOutOfStock", e.getItems());
-            return "cart";
-        }
+        populateModel(model.asMap(), authUser);
+        return "checkout";
     }
 
     @PostMapping("/listener")

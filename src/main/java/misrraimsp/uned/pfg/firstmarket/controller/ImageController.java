@@ -68,7 +68,7 @@ public class ImageController extends BasicController  {
                              @RequestParam(defaultValue = "${fm.pagination.default-size.image}") String pageSize,
                              Model model) {
 
-        populateModel(model, null);
+        populateModel(model.asMap(), null);
         populateModelToImage(model, pageNo, pageSize);
         model.addAttribute("imagesWrapper", new ImagesWrapper());
         return "images";
@@ -82,7 +82,7 @@ public class ImageController extends BasicController  {
                                   Model model){
 
         if (errors.hasErrors()) {
-            populateModel(model, null);
+            populateModel(model.asMap(), null);
             populateModelToImage(model, pageNo, pageSize);
             return "images";
         }

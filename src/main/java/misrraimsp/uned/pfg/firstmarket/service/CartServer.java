@@ -7,7 +7,7 @@ import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.data.CartRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemsOutOfStockException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.model.Cart;
 import misrraimsp.uned.pfg.firstmarket.model.Item;
 import misrraimsp.uned.pfg.firstmarket.model.User;
@@ -154,10 +154,10 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = StripeException.class)
-    public Cart commitCart(@NonNull User user) throws BookNotFoundException, ItemsOutOfStockException, StripeException {
+    public Cart commitCart(@NonNull User user) throws BookNotFoundException, ItemsAvailabilityException, StripeException {
         Cart cart = user.getCart();
         if (!cart.isCommitted()) {
-            bookServer.checkStockFor(cart.getItems());
+            bookServer.checkAvailabilityFor(cart.getItems());
             PaymentIntent paymentIntent = PaymentIntent.create(PaymentIntentCreateParams
                     .builder()
                     .setCurrency("eur")
@@ -177,4 +177,15 @@ public class CartServer {
         return cart;
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void pruneCart(Cart cart, Set<Item> itemsDisabled) {
+        if (itemsDisabled.isEmpty()) return;
+        Set<Item> items = new HashSet<>(cart.getItems());
+        itemsDisabled.forEach(item -> {
+            items.remove(item);
+            LOGGER.debug("Item(id={}) pruned from cart(id={}) due to book(id={}) is disabled", item.getId(), cart.getId(), item.getBook().getId());
+        });
+        cart.setItems(items);
+        cartRepository.save(cart);
+    }
 }

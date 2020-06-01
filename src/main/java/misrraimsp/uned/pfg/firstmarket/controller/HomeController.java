@@ -43,7 +43,7 @@ public class HomeController extends BasicController {
                 Integer.parseInt(pageSize),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         model.addAttribute("pageOfEntities", bookServer.findAll(pageable));
         return "home";
     }
@@ -56,7 +56,7 @@ public class HomeController extends BasicController {
             LOGGER.warn("Authenticated user trying to GET /login (id={})", authUser.getId());
             return "redirect:/home";
         }
-        populateModel(model, null);
+        populateModel(model.asMap(), null);
         return "login";
     }
 

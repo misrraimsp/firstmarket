@@ -56,7 +56,7 @@ public class UserController extends BasicController {
                                   @AuthenticationPrincipal User authUser) {
 
         if (authUser == null) {
-            populateModel(model, null);
+            populateModel(model.asMap(), null);
             model.addAttribute("userForm", new UserForm());
             return "newUser";
         }
@@ -127,7 +127,7 @@ public class UserController extends BasicController {
             }
         }
         if (hasError) {
-            populateModel(model, null);
+            populateModel(model.asMap(), null);
             return "newUser";
         }
         // complete process
@@ -152,7 +152,7 @@ public class UserController extends BasicController {
 
     @GetMapping("/user/editEmail")
     public String showEditEmailForm(Model model, @AuthenticationPrincipal User authUser) {
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "editEmail";
     }
 
@@ -186,7 +186,7 @@ public class UserController extends BasicController {
             LOGGER.info("Trying email change with an already used one={} (userId={})", authUser.getEmail(), authUser.getId());
         }
         if (hasError) {
-            populateModel(model, authUser);
+            populateModel(model.asMap(), authUser);
             model.addAttribute("message", errorMessage);
             return "editEmail";
         }
@@ -202,7 +202,7 @@ public class UserController extends BasicController {
                                         @AuthenticationPrincipal User authUser) {
 
         if (authUser == null) {
-            populateModel(model, null);
+            populateModel(model.asMap(), null);
             return "resetPassword";
         }
         LOGGER.warn("authenticated users are not allowed to GET request on reset password process (userId={})", authUser.getId());
@@ -220,7 +220,7 @@ public class UserController extends BasicController {
         }
         if (email == null) {
             model.addAttribute("message", messageSource.getMessage("email.empty", null, null));
-            populateModel(model, null);
+            populateModel(model.asMap(), null);
             LOGGER.debug("email empty on trying to reset password");
             return "resetPassword";
         }
@@ -241,7 +241,7 @@ public class UserController extends BasicController {
     public String showEmailConfirmationRequest(Model model,
                                                @AuthenticationPrincipal User authUser) {
 
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "emailConfirmationRequest";
     }
 
@@ -269,7 +269,7 @@ public class UserController extends BasicController {
             LOGGER.debug("Trying to confirm email with an expired token={}", token);
         }
         if (hasError) {
-            populateModel(model, authUser);
+            populateModel(model.asMap(), authUser);
             model.addAttribute("message", errorMessage);
             return "emailConfirmationError";
         }
@@ -322,7 +322,7 @@ public class UserController extends BasicController {
             return "redirect:/home";
         }
         model.addAttribute("passwordForm", new PasswordForm());
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "editPassword";
     }
 
@@ -345,7 +345,7 @@ public class UserController extends BasicController {
                 LOGGER.debug("password error on trying to change password (userId={})", authUser.getId());
             }
             if (hasError) {
-                populateModel(model, authUser);
+                populateModel(model.asMap(), authUser);
                 return "editPassword";
             }
             // edit password
@@ -363,7 +363,7 @@ public class UserController extends BasicController {
                                   @AuthenticationPrincipal User authUser) {
 
         model.addAttribute("profileForm", userServer.getProfileForm(authUser.getId()));
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "profileForm";
     }
 
@@ -377,7 +377,7 @@ public class UserController extends BasicController {
             if (errors.hasGlobalErrors()) {
                 handleGlobalErrors(errors);
             }
-            populateModel(model, authUser);
+            populateModel(model.asMap(), authUser);
             return "profileForm";
         }
         Profile editedProfile = userServer.convertProfileFormToProfile(profileForm);
@@ -391,7 +391,7 @@ public class UserController extends BasicController {
                            @AuthenticationPrincipal User authUser) {
 
         model.addAttribute("itemsOutOfStock", null);
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         return "cart";
     }
 
@@ -399,7 +399,7 @@ public class UserController extends BasicController {
     public String showDeleteUserForm(Model model,
                                      @AuthenticationPrincipal User authUser) {
 
-        populateModel(model, authUser);
+        populateModel(model.asMap(), authUser);
         model.addAttribute("deletionReasons", DeletionReason.values());
         model.addAttribute("userDeletionForm", new UserDeletionForm());
         return "deleteUser";
@@ -424,7 +424,7 @@ public class UserController extends BasicController {
             LOGGER.debug("password error on trying to delete account (userId={})", authUser.getId());
         }
         if (hasError) {
-            populateModel(model,authUser);
+            populateModel(model.asMap(),authUser);
             model.addAttribute("deletionReasons", DeletionReason.values());
             return "deleteUser";
         }
