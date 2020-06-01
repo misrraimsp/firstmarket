@@ -29,7 +29,7 @@ create table author (id bigint not null, first_name varchar(255), last_name varc
 create table books_authors (book_id bigint not null, author_id bigint not null);
 create table profile (id bigint not null, birth_date date, first_name varchar(255), gender varchar(255), last_name varchar(255), phone varchar(255), primary key (id));
 create table publisher (id bigint not null, name varchar(255), primary key (id));
-create table book (id bigint not null, description varchar(510), isbn varchar(255), language integer, pages integer, price decimal(19,2), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
+create table book (id bigint not null, description varchar(510), isbn varchar(255), language varchar(255), pages integer, price decimal(19,2), status varchar(255), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
 create table cart (id bigint not null, committed_at timestamp, is_committed boolean not null, last_modified timestamp, pi_client_secret varchar(255), pi_id varchar(255), primary key (id));
 create table cart_items (cart_id bigint not null, items_id bigint not null, primary key (cart_id, items_id));
 create table category (id bigint not null, name varchar(255), parent_id bigint, primary key (id));

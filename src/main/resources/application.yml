@@ -6,8 +6,8 @@ server:
 spring:
    profiles:
       active:
-         # dev-postgresql  # comment @Lob on image.data
-         - dev-h2          # un-comment @Lob on image.data
+         - dev-postgresql  # comment @Lob on image.data
+         # dev-h2          # un-comment @Lob on image.data
    jpa:
       show-sql: false
 
@@ -82,7 +82,7 @@ fm:
       default-size:
          image: 5
          book-home: 20
-         book-search: 3
+         book-search: 15
       default-index: 0
    mail:
       smtp:

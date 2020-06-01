@@ -4,7 +4,7 @@ public class QueryHolder {
 
     private static final String categoryStaticPart = "INSERT INTO category (id,name,parent_id) VALUES ";
     private static final String catpathStaticPart = "INSERT INTO catpath (id,size,ancestor_id,descendant_id) VALUES ";
-    private static final String bookStaticPart = "INSERT INTO book (id,description,isbn,language,pages,price,stock,title,year,category_id,image_id,publisher_id) VALUES ";
+    private static final String bookStaticPart = "INSERT INTO book (id,description,isbn,language,pages,price,status,stock,title,year,category_id,image_id,publisher_id) VALUES ";
     private static final String booksAuthorsStaticPart = "INSERT INTO books_authors (book_id,author_id) VALUES ";
 
     private static final String description = "Lorem ipsum dolor sit amet";
@@ -44,6 +44,7 @@ public class QueryHolder {
                               String language,
                               String pages,
                               String price,
+                              String status,
                               String stock,
                               String title,
                               String year,
@@ -52,8 +53,8 @@ public class QueryHolder {
                               String publisher_id) {
 
         sql += "(";
-        sql += id + ",'" + description + "','" + isbn + "'," + language + ",";
-        sql += pages + "," + price + "," + stock + ",'" + title + "',";
+        sql += id + ",'" + description + "','" + isbn + "','" + language + "',";
+        sql += pages + "," + price + ",'" + status + "'," + stock + ",'" + title + "',";
         sql += year + "," + category_id + "," + image_id + "," + publisher_id;
         sql += ")" + ",";
     }

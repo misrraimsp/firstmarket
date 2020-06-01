@@ -1,6 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
 
 
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -32,13 +35,16 @@ public class NumberGenerator extends Random {
 
     private static final int MAX_FRACTION_PRICE = 2;
 
+    private static final int MIN_STATUS = 1;
+    private static final int MAX_STATUS = 10;
+
     private static final int MIN_NUM_STOCK = 0;
     private static final int MAX_NUM_STOCK = 1000000;
 
 
 
     public String getRandomLanguage(){
-        return String.valueOf(getDiscreteRandomNumber(MIN_LANGUAGE, MAX_LANGUAGE));
+        return Language.values()[getDiscreteRandomNumber(MIN_LANGUAGE, MAX_LANGUAGE)].name();
     }
 
     public String getRandomNumPages(){
@@ -46,8 +52,21 @@ public class NumberGenerator extends Random {
     }
 
     public String getRandomPrice(){
-        BigDecimal bd = new BigDecimal(getContinuousRandomNumber(MIN_PRICE, MAX_PRICE)).setScale(MAX_FRACTION_PRICE, RoundingMode.HALF_UP);
+        BigDecimal bd = BigDecimal.valueOf(getContinuousRandomNumber(MIN_PRICE, MAX_PRICE)).setScale(MAX_FRACTION_PRICE, RoundingMode.HALF_UP);
         return bd.toString();
+    }
+
+    public String getRandomBookStatus(){
+        int randomNumber = getDiscreteRandomNumber(MIN_STATUS, MAX_STATUS);
+        switch (randomNumber) {
+            case 1:
+                return BookStatus.DISABLED.name();
+            case 2:
+            case 3:
+                return BookStatus.OUT_OF_STOCK.name();
+            default:
+                return BookStatus.OK.name();
+        }
     }
 
     public String getRandomStock(){

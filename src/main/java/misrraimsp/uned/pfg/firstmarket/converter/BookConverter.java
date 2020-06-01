@@ -80,7 +80,7 @@ public class BookConverter {
         return bookForm;
     }
 
-    private BookStatus convertBookFormStatus(@NonNull BookStatus status, @NonNull int stock) {
+    private BookStatus convertBookFormStatus(@NonNull BookStatus status, int stock) {
         if (status.equals(BookStatus.DISABLED)) {
             return BookStatus.DISABLED;
         }

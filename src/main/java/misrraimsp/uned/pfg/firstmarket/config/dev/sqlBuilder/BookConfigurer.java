@@ -21,13 +21,16 @@ public class BookConfigurer {
         //build insert book query
         queryHolder.openInsertBookQuery();
         for (int i = 1; i <= numBooks; i++){
+            String status = numberGenerator.getRandomBookStatus();
+            String stock = (status.equals("OUT_OF_STOCK")) ? "0" : numberGenerator.getRandomStock();
             queryHolder.addBookValues(
                     String.valueOf(i),
                     isbnHolder.getIsbn(),
                     numberGenerator.getRandomLanguage(),
                     numberGenerator.getRandomNumPages(),
                     numberGenerator.getRandomPrice(),
-                    numberGenerator.getRandomStock(),
+                    status,
+                    stock,
                     "title-" + i,
                     numberGenerator.getRandomYear(),
                     numberGenerator.getRandomCategoryId(),
