@@ -1,16 +1,35 @@
-package misrraimsp.uned.pfg.firstmarket.service;
+package misrraimsp.uned.pfg.firstmarket.converter;
 
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import lombok.NonNull;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
+import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
 import misrraimsp.uned.pfg.firstmarket.model.Address;
+import misrraimsp.uned.pfg.firstmarket.model.Book;
 import misrraimsp.uned.pfg.firstmarket.model.Payment;
 import misrraimsp.uned.pfg.firstmarket.model.ShippingInfo;
-import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 
-@Service
-public class ConversionServer {
+@Component
+public class ConversionManager {
+
+    private BookConverter bookConverter;
+
+    @Autowired
+    public ConversionManager(BookConverter bookConverter) {
+        this.bookConverter = bookConverter;
+    }
+
+    public Book convertBookFormToBook(BookForm bookForm) throws BookFormAuthorsConversionException {
+        return bookConverter.convertBookFormToBook(bookForm);
+    }
+
+    public BookForm convertBookToBookForm(Book book) {
+        return bookConverter.convertBookToBookForm(book);
+    }
 
     public Address convertStripeAddressToAddress(@NonNull com.stripe.model.Address stripeAddress) {
         misrraimsp.uned.pfg.firstmarket.model.Address address = new Address();

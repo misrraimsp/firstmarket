@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import lombok.NonNull;
+import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.PaymentRepository;
 import misrraimsp.uned.pfg.firstmarket.data.ShippingInfoRepository;
@@ -42,7 +43,7 @@ public class OrderServer {
     private ShippingInfoRepository shippingInfoRepository;
     private AddressServer addressServer;
     private CartServer cartServer;
-    private ConversionServer conversionServer;
+    private ConversionManager conversionManager;
 
     @Autowired
     public OrderServer(OrderRepository orderRepository,
@@ -50,14 +51,14 @@ public class OrderServer {
                        ShippingInfoRepository shippingInfoRepository,
                        AddressServer addressServer,
                        CartServer cartServer,
-                       ConversionServer conversionServer) {
+                       ConversionManager conversionManager) {
 
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
         this.shippingInfoRepository = shippingInfoRepository;
         this.addressServer = addressServer;
         this.cartServer = cartServer;
-        this.conversionServer = conversionServer;
+        this.conversionManager = conversionManager;
     }
 
     @Transactional
@@ -86,15 +87,15 @@ public class OrderServer {
             return;
         }
         //build address
-        Address address = addressServer.persist(conversionServer.convertStripeAddressToAddress(stripeAddress));
+        Address address = addressServer.persist(conversionManager.convertStripeAddressToAddress(stripeAddress));
         LOGGER.debug("User(id={}) address(id={}) successfully persisted", user.getId(), address.getId());
         //build shipping info
-        ShippingInfo shippingInfo = conversionServer.convertStripeShippingDetailsToShippingInfo(shippingDetails);
+        ShippingInfo shippingInfo = conversionManager.convertStripeShippingDetailsToShippingInfo(shippingDetails);
         shippingInfo.setAddress(address);
         shippingInfo = shippingInfoRepository.save(shippingInfo);
         LOGGER.debug("User(id={}) shipping-info(id={}) successfully persisted", user.getId(), shippingInfo.getId());
         //build payment
-        Payment payment = paymentRepository.save(conversionServer.convertStripePaymentIntentToPayment(paymentIntent));
+        Payment payment = paymentRepository.save(conversionManager.convertStripePaymentIntentToPayment(paymentIntent));
         LOGGER.debug("User(id={}) payment(id={}) successfully persisted", user.getId(), payment.getId());
         //build order
         Order order = new Order();

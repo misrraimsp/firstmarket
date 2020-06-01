@@ -4,6 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.ProfileRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
@@ -45,7 +46,8 @@ public class DevH2Config {
                                         AuthorServer authorServer,
                                         PublisherServer publisherServer,
                                         OrderRepository orderRepository,
-                                        ProfileRepository profileRepository) {
+                                        ProfileRepository profileRepository,
+                                        ConversionManager conversionManager) {
 
         return args -> {
             LOGGER.warn("CommandLineRunner on dev-h2");
@@ -268,7 +270,7 @@ public class DevH2Config {
             bookForm1.setStock(100);
             bookForm1.setYear(Year.of(2020));
             //System.out.println("formBook1: " + formBook1);
-            Book book1 = bookServer.convertBookFormToBook(bookForm1);
+            Book book1 = conversionManager.convertBookFormToBook(bookForm1);
             book1 = bookServer.persist(book1);
             //System.out.println(book1);
 
@@ -290,7 +292,7 @@ public class DevH2Config {
             bookForm2.setStock(100);
             bookForm2.setYear(Year.of(1990));
             //System.out.println("formBook2: " + formBook2);
-            Book book2 = bookServer.convertBookFormToBook(bookForm2);
+            Book book2 = conversionManager.convertBookFormToBook(bookForm2);
             book2 = bookServer.persist(book2);
             //System.out.println(book2);
 
@@ -312,7 +314,7 @@ public class DevH2Config {
             bookForm3.setStock(100);
             bookForm3.setYear(Year.of(1998));
             //System.out.println("formBook3: " + formBook3);
-            Book book3 = bookServer.convertBookFormToBook(bookForm3);
+            Book book3 = conversionManager.convertBookFormToBook(bookForm3);
             book3 = bookServer.persist(book3);
             //System.out.println(book3);
 
@@ -333,7 +335,7 @@ public class DevH2Config {
             bookForm4.setStock(100);
             bookForm4.setYear(Year.of(2007));
             //System.out.println("formBook4: " + formBook4);
-            Book book4 = bookServer.convertBookFormToBook(bookForm4);
+            Book book4 = conversionManager.convertBookFormToBook(bookForm4);
             book4 = bookServer.persist(book4);
             //System.out.println(book4);
 
@@ -354,7 +356,7 @@ public class DevH2Config {
             bookForm5.setStock(100);
             bookForm5.setYear(Year.of(2014));
             //System.out.println("formBook5: " + formBook5);
-            Book book5 = bookServer.convertBookFormToBook(bookForm5);
+            Book book5 = conversionManager.convertBookFormToBook(bookForm5);
             book5 = bookServer.persist(book5);
             //System.out.println(book5);
 
@@ -375,7 +377,7 @@ public class DevH2Config {
             bookForm6.setStock(100);
             bookForm6.setYear(Year.of(1987));
             //System.out.println("formBook6: " + formBook6);
-            Book book6 = bookServer.convertBookFormToBook(bookForm6);
+            Book book6 = conversionManager.convertBookFormToBook(bookForm6);
             book6 = bookServer.persist(book6);
             //System.out.println(book6);
 
@@ -396,7 +398,7 @@ public class DevH2Config {
             bookForm7.setStock(1000);
             bookForm7.setYear(Year.of(2019));
             //System.out.println("formBook7: " + formBook7);
-            Book book7 = bookServer.convertBookFormToBook(bookForm7);
+            Book book7 = conversionManager.convertBookFormToBook(bookForm7);
             book7 = bookServer.persist(book7);
             //System.out.println(book7);
 
@@ -417,7 +419,7 @@ public class DevH2Config {
             bookForm8.setStock(100);
             bookForm8.setYear(Year.of(2002));
             //System.out.println("formBook8: " + formBook8);
-            Book book8 = bookServer.convertBookFormToBook(bookForm8);
+            Book book8 = conversionManager.convertBookFormToBook(bookForm8);
             book8 = bookServer.persist(book8);
             //System.out.println(book8);
 
@@ -439,7 +441,7 @@ public class DevH2Config {
             bookForm9.setStock(100);
             bookForm9.setYear(Year.of(2020));
             //System.out.println("formBook9: " + formBook9);
-            Book book9 = bookServer.convertBookFormToBook(bookForm9);
+            Book book9 = conversionManager.convertBookFormToBook(bookForm9);
             book9 = bookServer.persist(book9);
             //System.out.println(book9);
 
@@ -460,7 +462,7 @@ public class DevH2Config {
             bookForm10.setStock(100);
             bookForm10.setYear(Year.of(2000));
             //System.out.println("formBook10: " + formBook10);
-            Book book10 = bookServer.convertBookFormToBook(bookForm10);
+            Book book10 = conversionManager.convertBookFormToBook(bookForm10);
             book10 = bookServer.persist(book10);
             //System.out.println(book10);
 

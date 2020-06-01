@@ -1,10 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
-import misrraimsp.uned.pfg.firstmarket.converter.BookConverter;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.*;
 import misrraimsp.uned.pfg.firstmarket.model.*;
@@ -28,20 +27,17 @@ public class BookServer {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private BookRepository bookRepository;
-    private BookConverter bookConverter;
     private ImageServer imageServer;
     private PublisherServer publisherServer;
     private AuthorServer authorServer;
 
     @Autowired
     public BookServer(BookRepository bookRepository,
-                      BookConverter bookConverter,
                       ImageServer imageServer,
                       PublisherServer publisherServer,
                       AuthorServer authorServer) {
 
         this.bookRepository = bookRepository;
-        this.bookConverter = bookConverter;
         this.imageServer = imageServer;
         this.publisherServer = publisherServer;
         this.authorServer = authorServer;
@@ -98,10 +94,6 @@ public class BookServer {
         return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    public void deleteById(Long id) {
-        bookRepository.deleteById(id);
-    }
-
     @Transactional
     public void updateCategoryIdByCategoryId(Long category_id, Long new_category_id) {
         bookRepository.updateCategoryIdByCategoryId(category_id, new_category_id);
@@ -113,14 +105,6 @@ public class BookServer {
                     book.setImage(new_image);
                     bookRepository.save(book);
                 });
-    }
-
-    public Book convertBookFormToBook(BookForm bookForm) throws BookFormAuthorsConversionException {
-        return bookConverter.convertBookFormToBook(bookForm);
-    }
-
-    public BookForm convertBookToBookForm(Book book) {
-        return bookConverter.convertBookToBookForm(book);
     }
 
     public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
@@ -266,5 +250,17 @@ public class BookServer {
             bookRepository.save(storedBook);
             LOGGER.debug("Book(id={}) stock increase from {} to {}", storedBook.getId(), originalStock, editedStock);
         });
+    }
+
+    public void setStatus(Long bookId, BookStatus status) throws BookNotFoundException {
+        Book book = this.findById(bookId);
+        if (status.equals(BookStatus.OUT_OF_STOCK)) {
+            book.setStock(0);
+        }
+        if (status.equals(BookStatus.OK) && book.getStock() == 0) {
+            book.setStock(10);
+        }
+        book.setStatus(status);
+        bookRepository.save(book);
     }
 }

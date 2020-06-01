@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
-import misrraimsp.uned.pfg.firstmarket.converter.*;
+import misrraimsp.uned.pfg.firstmarket.converter.spring.*;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToLanguageConverter());
         registry.addConverter(new StringToDeletionReasonConverter());
         registry.addConverter(new StringToPriceIntervalConverter());
+        registry.addConverter(new StringToBookStatusConverter());
     }
 
     @Bean

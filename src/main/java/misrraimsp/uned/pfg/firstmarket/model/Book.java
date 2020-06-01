@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 
 import javax.persistence.*;
@@ -15,6 +16,9 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Enumerated(value = EnumType.STRING)
+    private BookStatus status;
 
     private String isbn;
 
@@ -40,6 +44,7 @@ public class Book {
 
     private int pages;
 
+    @Enumerated(value = EnumType.STRING)
     private Language language;
 
     private BigDecimal price;

@@ -3,8 +3,10 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
+import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.service.*;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -31,6 +34,7 @@ import java.util.Set;
 public class BookController extends BasicController {
 
     private FrontEndProperties frontEndProperties;
+    private ConversionManager conversionManager;
 
     @Autowired
     public BookController(UserServer userServer,
@@ -39,10 +43,12 @@ public class BookController extends BasicController {
                           ImageServer imageServer,
                           MessageSource messageSource,
                           OrderServer orderServer,
-                          FrontEndProperties frontEndProperties) {
+                          FrontEndProperties frontEndProperties,
+                          ConversionManager conversionManager) {
 
         super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.frontEndProperties = frontEndProperties;
+        this.conversionManager = conversionManager;
     }
 
     private void populateModelToBookForm(Model model) {
@@ -68,7 +74,7 @@ public class BookController extends BasicController {
         optBookId.ifPresentOrElse(
                 bookId -> {
                     Book book = bookServer.findById(bookId);
-                    BookForm bookForm = bookServer.convertBookToBookForm(book);
+                    BookForm bookForm = conversionManager.convertBookToBookForm(book);
                     model.addAttribute("bookForm", bookForm);
                 },
                 () -> model.addAttribute("bookForm", new BookForm())
@@ -89,13 +95,13 @@ public class BookController extends BasicController {
             return "bookForm";
         }
         try {
-            Book book = bookServer.convertBookFormToBook(bookForm);
+            Book book = conversionManager.convertBookFormToBook(bookForm);
             if (book.getId() == null){
                 book = bookServer.persist(book);
-                LOGGER.debug("Book persisted (id={})", book.getId());
+                LOGGER.debug("Book(id={}) persisted", book.getId());
             } else {
                 bookServer.edit(book);
-                LOGGER.debug("Book edited (id={})", book.getId());
+                LOGGER.debug("Book(id={}) edited", book.getId());
             }
         }
         catch (IsbnAlreadyExistsException e) {
@@ -108,16 +114,22 @@ public class BookController extends BasicController {
         return "redirect:/books";
     }
 
-    @GetMapping("/admin/deleteBook/{id}")
-    public String deleteBook(@PathVariable("id") Long id) {
-        if (bookServer.existsBook(id)) {
-            bookServer.deleteById(id);
-            LOGGER.debug("Book deleted (id={})", id);
+    @PostMapping("/admin/setBookStatus")
+    public ModelAndView processSetBookStatus(ModelAndView modelAndView,
+                                             @RequestParam Long bookId,
+                                             @RequestParam BookStatus bookStatus,
+                                             @RequestParam(name = "pn") Optional<String> optPageNo) {
+
+        if (!bookServer.existsBook(bookId)) {
+            LOGGER.warn("Trying to set a non-existent-book(id={}) status as {}", bookId, bookStatus);
         }
         else {
-            LOGGER.warn("Trying to delete a non-existent Book (id={})", id);
+            bookServer.setStatus(bookId, bookStatus);
+            LOGGER.debug("Book(id={}) status set as {}", bookId, bookStatus);
         }
-        return "redirect:/books";
+        modelAndView.setViewName("redirect:/books");
+        optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        return modelAndView;
     }
 
     @GetMapping("/books")

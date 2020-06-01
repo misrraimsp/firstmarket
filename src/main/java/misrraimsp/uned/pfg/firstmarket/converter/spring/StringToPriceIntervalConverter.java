@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.converter;
+package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import org.slf4j.Logger;

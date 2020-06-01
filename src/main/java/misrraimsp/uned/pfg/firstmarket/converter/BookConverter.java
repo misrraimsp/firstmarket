@@ -1,7 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
+import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.slf4j.Logger;
@@ -28,6 +30,7 @@ public class BookConverter {
     public Book convertBookFormToBook(BookForm bookForm) throws BookFormAuthorsConversionException {
         Book book = new Book();
         book.setId(bookForm.getBookId());
+        book.setStatus(this.convertBookFormStatus(bookForm.getStatus(), bookForm.getStock()));
         book.setIsbn(this.convertBookFormIsbn(bookForm.getIsbn()));
         book.setTitle(bookForm.getTitle());
         book.setCategory(this.convertBookFormCategoryId(bookForm.getCategoryId()));
@@ -46,6 +49,7 @@ public class BookConverter {
     public BookForm convertBookToBookForm(Book book) {
         BookForm bookForm = new BookForm();
         bookForm.setBookId(book.getId());
+        bookForm.setStatus(book.getStatus());
         bookForm.setIsbn(book.getIsbn());
         bookForm.setTitle(book.getTitle());
         bookForm.setCategoryId(book.getCategory().getId());
@@ -74,6 +78,15 @@ public class BookConverter {
         bookForm.setStock(book.getStock());
         bookForm.setYear(Year.of(book.getYear()));
         return bookForm;
+    }
+
+    private BookStatus convertBookFormStatus(@NonNull BookStatus status, @NonNull int stock) {
+        if (status.equals(BookStatus.DISABLED)) {
+            return BookStatus.DISABLED;
+        }
+        else {
+            return (stock > 0) ? BookStatus.OK : BookStatus.OUT_OF_STOCK;
+        }
     }
 
     private String convertBookFormIsbn(String isbn) {

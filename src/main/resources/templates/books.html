@@ -165,42 +165,47 @@
                                     <p class="mb-3 text-dark small">
                                         <span class="font-weight-light">ISBN </span><strong th:text="${book.isbn}"></strong>
                                     </p>
-                                    <!-- language
-                                    <div>
-                                        <p class="my-0"><small><span th:text="${book.language}"></span></small></p>
-                                    </div>-->
-                                    <!-- category
-                                    <div>
-                                        <p class="my-0"><small><span th:text="${book.category.name}"></span></small></p>
-                                    </div>-->
                                 </div>
                                 <!-- actions -->
-                                <div class="col-sm-3 bg-white">
-                                    <div class="row d-flex flex-column">
-                                        <!-- user actions -->
-                                        <div class="col-sm-12 my-3" sec:authorize="!hasRole('ADMIN')">
-                                            <button class="btn btn-outline-info btn-sm btn-block align-center" ajax="addBook" th:id="'ab-' + ${book.id}">
-                                                Add to Cart<i class="fas fa-cart-plus ml-3"></i>
-                                            </button>
-                                        </div>
-                                        <!-- admin actions -->
-                                        <div class="col-sm-12 my-3" sec:authorize="hasRole('ADMIN')">
-                                            <div class="d-flex flex-column">
-                                                <a class="btn btn-outline-secondary btn-sm align-center mb-3" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
-                                                    Edit Book<i class="fas fa-pen ml-3"></i>
-                                                </a>
-                                                <button class="modalTrigger btn btn-outline-secondary btn-sm align-center" th:id="'del-' + ${book.id}">
-                                                    Delete Book<i class="fas fa-trash-alt ml-3"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <!-- price -->
-                                        <div class="col-sm-12">
-                                            <p class="text-dark">
-                                                <span class="font-weight-light">EUR </span><strong th:text="${book.price}"></strong>
-                                            </p>
-                                        </div>
+                                <div class="col-sm-3 d-flex flex-column bg-white">
+                                    <!-- No-Admin actions -->
+                                    <div class="my-3" sec:authorize="!hasRole('ADMIN')">
+                                        <button class="btn btn-outline-info btn-sm btn-block align-center" ajax="addBook" th:id="'ab-' + ${book.id}">
+                                            Add to Cart<i class="fas fa-cart-plus ml-3"></i>
+                                        </button>
                                     </div>
+                                    <!-- Admin actions -->
+                                    <div class="d-flex flex-column my-3" sec:authorize="hasRole('ADMIN')">
+                                        <!-- set book status -->
+                                        <form th:action="@{/admin/setBookStatus}" method="POST" action="#">
+                                            <input type="hidden" name="bookId" th:value="${book.id}"/>
+                                            <input type="hidden" name="pn" th:value="${pageOfEntities.number}"/>
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <select class="custom-select custom-select-sm text-secondary border border-secondary" name="bookStatus">
+                                                        <option th:each="status : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus).values()}"
+                                                                th:value="${status.ordinal()}"
+                                                                th:text="${status.text}"
+                                                                th:selected="${status.equals(book.status)}">
+                                                        </option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-sm btn-outline-secondary" type="submit" data-toggle="tooltip" title="Set Book Status">
+                                                            <small>Set</small>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <!-- edit book -->
+                                        <a class="btn btn-outline-secondary btn-sm align-center btn-block" th:href="@{/admin/bookForm?id={id}(id=${book.id})}">
+                                            Edit Details<i class="fas fa-pen ml-3"></i>
+                                        </a>
+                                    </div>
+                                    <!-- price -->
+                                    <p class="text-dark">
+                                        <span class="font-weight-light">EUR </span><strong th:text="${book.price}"></strong>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -224,12 +229,11 @@
             </div>
             <!-- snackbar -->
             <div th:replace="fragments/components::snackbar"></div>
-            <!-- modal -->
-            <div th:replace="fragments/components::deletingModal(entity = 'Book')"></div>
             <!-- footer -->
             <div th:replace="fragments/components::footer"></div>
         </div>
         <i th:replace="fragments/components::host-address"></i>
+        <script th:src="@{/js/enableTooltips.js}"></script>
         <script th:src="@{/js/accordion.js}"></script>
         <script th:src="@{/js/searchCriteria.js}"></script>
         <!-- ajax add book to cart -->
@@ -239,13 +243,5 @@
         <script th:replace="fragments/components::paginationMvcVariables"></script>
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationLegend.js}"></script>
-        <!-- modal functionality -->
-        <i th:replace="fragments/components::modal-action(action = 'deleteBook')"></i>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                document.dispatchEvent(new CustomEvent('custom-htmlReady'));
-            }, false);
-        </script>
-        <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>

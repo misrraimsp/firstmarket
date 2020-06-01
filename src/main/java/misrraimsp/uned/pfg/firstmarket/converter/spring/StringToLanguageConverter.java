@@ -1,6 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.converter;
+package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.exception.NoLanguageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
@@ -14,20 +15,19 @@ public class StringToLanguageConverter implements Converter<String, Language> {
     @Override
     public Language convert(String s) {
         if (Language.values().length == 0) {
-            LOGGER.error("There is no Language defined that can be used");
-            return null;
+            throw new NoLanguageException();
         }
         int maxIndex = Language.values().length - 1;
         int index;
         try {
             index = Integer.parseInt(s);
+            if (index > maxIndex) {
+                LOGGER.error("Language index string out of bound. Defaults to index=0");
+                index = 0;
+            }
         }
         catch (NumberFormatException e) {
-            LOGGER.warn("Language index string can not be converted due to format exception. Defaults to index=0", e);
-            index = 0;
-        }
-        if (index > maxIndex) {
-            LOGGER.warn("Language index string out of bound. Defaults to index=0");
+            LOGGER.error("Language index string can not be converted due to format exception. Defaults to index=0", e);
             index = 0;
         }
         return Language.values()[index];

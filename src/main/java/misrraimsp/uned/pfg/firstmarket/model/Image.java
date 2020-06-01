@@ -2,10 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -21,6 +18,6 @@ public class Image {
 
     private String mimeType;
 
-    //@Lob //dev-h2
+    @Lob //dev-h2
     private byte[] data;
 }

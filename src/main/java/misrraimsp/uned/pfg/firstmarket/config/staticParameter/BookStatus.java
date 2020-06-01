@@ -1,15 +1,14 @@
 package misrraimsp.uned.pfg.firstmarket.config.staticParameter;
 
-public enum Gender {
+public enum BookStatus {
 
-    MALE ("Male"),
-    FEMALE ("Female"),
-    UNDEFINED ("I'd rather not specify");
-
+    OK("Ok"),
+    OUT_OF_STOCK("Sold out"),
+    DISABLED("Disabled");
 
     private final String text;
 
-    Gender(String text) {
+    BookStatus(String text) {
         this.text = text;
     }
 
