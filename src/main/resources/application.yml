@@ -114,7 +114,7 @@ spring:
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
       schema: classpath:sql/schema.sql
-      data: classpath:sql/data.sql
+      data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:
