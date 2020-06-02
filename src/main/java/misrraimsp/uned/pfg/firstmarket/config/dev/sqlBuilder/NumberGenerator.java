@@ -18,12 +18,12 @@ public class NumberGenerator extends Random {
     private static final int MIN_YEAR = 1950;
     private static final int MAX_YEAR = 2020;
 
-    private static final int MIN_PRICE = 0;
-    private static final int MAX_PRICE = 100;
+    private static final double MIN_PRICE = .5;
+    private static final double MAX_PRICE = 100;
 
     private static final int MIN_ID = 1;
     private static final int MAX_CATEGORY_ID = 310;
-    private static final int MAX_IMAGE_ID = 1;
+    private static final int MAX_IMAGE_ID = 17;
     private static final int MAX_PUBLISHER_ID = 128;
     private static final int MAX_AUTHOR_ID = 512;
 
@@ -39,7 +39,7 @@ public class NumberGenerator extends Random {
     private static final int MAX_STATUS = 10;
 
     private static final int MIN_NUM_STOCK = 0;
-    private static final int MAX_NUM_STOCK = 1000000;
+    private static final int MAX_NUM_STOCK = 10;
 
 
 

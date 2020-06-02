@@ -6,7 +6,7 @@ public class Random {
         return (int) (low_limit + Math.round(Math.random() * (up_limit - low_limit)));
     }
 
-    public double getContinuousRandomNumber(int low_limit, int up_limit){
+    public double getContinuousRandomNumber(double low_limit, double up_limit){
         return low_limit + Math.random() * (up_limit - low_limit);
     }
 }
