@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class BookConfigurer {
+public class BookBuilder {
 
     private static final String BuiltBookQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtBookQueries.txt";
-    private static final int numBooks = 1000; //1k
+    private static final int numBooks = 1000; // link with NumberGenerator's MAX_BOOK_ID constant
 
     public static void main(String[] args) throws IOException {
         configure();

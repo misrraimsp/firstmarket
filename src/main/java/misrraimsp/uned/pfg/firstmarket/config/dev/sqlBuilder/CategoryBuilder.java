@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CategoryConfigurer {
+public class CategoryBuilder {
 
     private static final String XMLCategoriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/categories";
     private static final String BuiltCatQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtCatQueries.txt";

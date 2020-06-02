@@ -6,6 +6,18 @@ public class QueryHolder {
     private static final String catpathStaticPart = "INSERT INTO catpath (id,size,ancestor_id,descendant_id) VALUES ";
     private static final String bookStaticPart = "INSERT INTO book (id,description,isbn,language,pages,price,status,stock,title,year,category_id,image_id,publisher_id) VALUES ";
     private static final String booksAuthorsStaticPart = "INSERT INTO books_authors (book_id,author_id) VALUES ";
+    private static final String itemStaticPart = "INSERT INTO item (id,quantity,book_id) VALUES ";
+    private static final String cartItemsStaticPart = "INSERT INTO cart_items (cart_id,items_id) VALUES ";
+
+    //id bigint not null, carrier varchar(255), name varchar(255), phone varchar(255), tracking_number varchar(255), address_id bigint
+    private static final String shippingStaticPart = "INSERT INTO shipping_info (id,carrier,name,phone,tracking_number,address_id) VALUES ";
+    //id bigint not null, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255)
+    private static final String paymentStaticPart = "INSERT INTO payment (id,amount,currency,description,stripe_payment_intent_id) VALUES ";
+    //id bigint not null, created_at timestamp, payment_id bigint, shipping_info_id bigint, user_id bigint
+    private static final String pedidoStaticPart = "INSERT INTO pedido (id,created_at,payment_id,shipping_info_id,user_id) VALUES ";
+    //order_id bigint not null, items_id
+    private static final String pedidoItemsStaticPart = "INSERT INTO pedido_items (order_id,items_id) VALUES ";
+
 
     private static final String description = "Lorem ipsum dolor sit amet";
 
@@ -29,6 +41,30 @@ public class QueryHolder {
 
     public void openInsertBooksAuthorsQuery() {
         sql += booksAuthorsStaticPart;
+    }
+
+    public void openInsertItemQuery() {
+        sql += itemStaticPart;
+    }
+
+    public void openInsertCartItemsQuery() {
+        sql += cartItemsStaticPart;
+    }
+
+    public void openInsertShippingQuery() {
+        sql += shippingStaticPart;
+    }
+
+    public void openInsertPaymentQuery() {
+        sql += paymentStaticPart;
+    }
+
+    public void openInsertPedidoQuery() {
+        sql += pedidoStaticPart;
+    }
+
+    public void openInsertPedidoItemsQuery() {
+        sql += pedidoItemsStaticPart;
     }
 
     public void addCategoryValues(String id, String name, String parent_id) {
@@ -61,6 +97,28 @@ public class QueryHolder {
 
     public void addBooksAuthorsValues(String book_id, String author_id) {
         sql += "(" + book_id + "," + author_id + ")" + ",";
+    }
+
+    public void addItemValues(String id, String quantity, String book_id) {
+        sql += "(" + id + "," + quantity + "," + book_id + ")" + ",";
+    }
+
+    public void addCartItemsValues(String cart_id, String items_id) {
+        sql += "(" + cart_id + "," + items_id + ")" + ",";
+    }
+
+    //id bigint not null, carrier varchar(255), name varchar(255), phone varchar(255), tracking_number varchar(255), address_id bigint
+    public void addShippingValues(String id,
+                              String carrier,
+                              String name,
+                              String phone,
+                              String tracking_number,
+                              String address_id) {
+
+        sql += "(";
+        sql += id + ",'" + carrier + "','" + name + "','" + phone + "','";
+        sql += tracking_number + "'," + address_id;
+        sql += ")" + ",";
     }
 
     public void closeInsertQuery() {

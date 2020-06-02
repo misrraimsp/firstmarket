@@ -22,10 +22,13 @@ public class NumberGenerator extends Random {
     private static final double MAX_PRICE = 100;
 
     private static final int MIN_ID = 1;
+    private static final int MIN_CART_ID = 2; // admin cart useless
+    private static final int MAX_CART_ID = 64;
     private static final int MAX_CATEGORY_ID = 310;
     private static final int MAX_IMAGE_ID = 17;
     private static final int MAX_PUBLISHER_ID = 128;
     private static final int MAX_AUTHOR_ID = 512;
+    private static final int MAX_BOOK_ID = 1000; // link with BookBuilder's numBooks parameter
 
     private static final int MIN_NUM_AUTHORS = 1;
     private static final int MAX_NUM_AUTHORS = 3;
@@ -40,6 +43,9 @@ public class NumberGenerator extends Random {
 
     private static final int MIN_NUM_STOCK = 0;
     private static final int MAX_NUM_STOCK = 10;
+
+    private static final int MIN_QUANTITY = 1;
+    private static final int MAX_QUANTITY = 4;
 
 
 
@@ -95,5 +101,17 @@ public class NumberGenerator extends Random {
 
     public String getRandomAuthorId() {
         return String.valueOf(getDiscreteRandomNumber(MIN_ID, MAX_AUTHOR_ID));
+    }
+
+    public String getRandomQuantity(){
+        return String.valueOf(getDiscreteRandomNumber(MIN_QUANTITY, MAX_QUANTITY));
+    }
+
+    public String getRandomBookId(){
+        return String.valueOf(getDiscreteRandomNumber(MIN_ID, MAX_BOOK_ID));
+    }
+
+    public String getRandomCartId() {
+        return String.valueOf(getDiscreteRandomNumber(MIN_CART_ID, MAX_CART_ID));
     }
 }
