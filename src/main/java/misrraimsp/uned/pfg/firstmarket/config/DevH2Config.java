@@ -2,7 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.DateProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.Collections;
 import java.util.List;
@@ -49,7 +48,7 @@ public class DevH2Config {
                                         OrderRepository orderRepository,
                                         ProfileRepository profileRepository,
                                         ConversionManager conversionManager,
-                                        DateProperties dateProperties) {
+                                        TimeFormatProperties timeFormatProperties) {
 
         return args -> {
             LOGGER.warn("CommandLineRunner on dev-h2");
@@ -522,7 +521,7 @@ public class DevH2Config {
             adminProfile.setFirstName("adminFirstName");
             adminProfile.setLastName("adminLastName");
             adminProfile.setPhone("666 333 666");
-            adminProfile.setBirthDate(LocalDate.ofYearDay(1969, 200).format(dateProperties.getFormatter()));
+            adminProfile.setBirthDate(LocalDate.ofYearDay(1969, 200).format(timeFormatProperties.getDateFormatter()));
             adminProfile.setGender(Gender.UNDEFINED);
             profileRepository.save(adminProfile);
             userServer.setCompletedState(admin.getId(),true);
@@ -536,7 +535,7 @@ public class DevH2Config {
             misrraProfile.setFirstName("Misrraim");
             misrraProfile.setLastName("Suárez");
             misrraProfile.setPhone("111 222 333");
-            misrraProfile.setBirthDate(LocalDate.ofYearDay(2000, 1).format(dateProperties.getFormatter()));
+            misrraProfile.setBirthDate(LocalDate.ofYearDay(2000, 1).format(timeFormatProperties.getDateFormatter()));
             misrraProfile.setGender(Gender.MALE);
             profileRepository.save(misrraProfile);
             userServer.setCompletedState(misrra.getId(),true);
@@ -550,7 +549,7 @@ public class DevH2Config {
             andreaProfile.setFirstName("Andrea");
             andreaProfile.setLastName("Grau");
             andreaProfile.setPhone("123 456 789");
-            andreaProfile.setBirthDate(LocalDate.ofYearDay(1990, 365).format(dateProperties.getFormatter()));
+            andreaProfile.setBirthDate(LocalDate.ofYearDay(1990, 365).format(timeFormatProperties.getDateFormatter()));
             andreaProfile.setGender(Gender.FEMALE);
             profileRepository.save(andreaProfile);
             userServer.setCompletedState(andrea.getId(),true);
@@ -559,7 +558,7 @@ public class DevH2Config {
             Order order1 = new Order();
             order1.setItems(Set.of(item3));
             order1.setUser(andrea);
-            order1.setDate(LocalDateTime.now().format(dateProperties.getFormatter()));
+            order1.setDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
             orderRepository.save(order1);
 
         };

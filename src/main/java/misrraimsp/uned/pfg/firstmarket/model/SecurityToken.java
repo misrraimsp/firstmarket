@@ -4,7 +4,6 @@ import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @Entity
@@ -22,7 +21,7 @@ public class SecurityToken {
     @ManyToOne
     private User user;
 
-    private Date expiryDate;
+    private String expiryDate;
 
     private String editedEmail;
 

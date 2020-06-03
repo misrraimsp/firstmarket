@@ -4,6 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserDeletionForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.*;
@@ -28,13 +29,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.Calendar;
+import java.time.LocalDateTime;
 
 @Controller
 public class UserController extends BasicController {
 
-    private PasswordEncoder passwordEncoder;
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final PasswordEncoder passwordEncoder;
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final TimeFormatProperties timeFormatProperties;
 
     @Autowired
     public UserController(UserServer userServer,
@@ -44,11 +46,13 @@ public class UserController extends BasicController {
                           MessageSource messageSource,
                           OrderServer orderServer,
                           PasswordEncoder passwordEncoder,
-                          ApplicationEventPublisher applicationEventPublisher) {
+                          ApplicationEventPublisher applicationEventPublisher,
+                          TimeFormatProperties timeFormatProperties) {
 
         super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.passwordEncoder = passwordEncoder;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.timeFormatProperties = timeFormatProperties;
     }
 
     @GetMapping("/newUser")
@@ -263,7 +267,8 @@ public class UserController extends BasicController {
             errorMessage = messageSource.getMessage("auth.invalidToken", null, null);
             LOGGER.debug("Trying to confirm email with a non-existent token={}", token);
         }
-        else if ((securityToken.getExpiryDate().getTime() - Calendar.getInstance().getTime().getTime()) <= 0) { // check for expired token
+        else if (LocalDateTime.parse(securityToken.getExpiryDate(),timeFormatProperties.getDateTimeFormatter())
+                .isBefore(LocalDateTime.now())) { // check for expired token
             hasError = true;
             errorMessage = messageSource.getMessage("auth.expiredToken", null, null);
             LOGGER.debug("Trying to confirm email with an expired token={}", token);
