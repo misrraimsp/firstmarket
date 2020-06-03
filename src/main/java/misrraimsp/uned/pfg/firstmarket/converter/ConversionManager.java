@@ -4,11 +4,9 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
+import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
-import misrraimsp.uned.pfg.firstmarket.model.Address;
-import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.Payment;
-import misrraimsp.uned.pfg.firstmarket.model.ShippingInfo;
+import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,11 +14,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class ConversionManager {
 
-    private BookConverter bookConverter;
+    private final BookConverter bookConverter;
+    private final ProfileConverter profileConverter;
 
     @Autowired
-    public ConversionManager(BookConverter bookConverter) {
+    public ConversionManager(BookConverter bookConverter,
+                             ProfileConverter profileConverter) {
+
         this.bookConverter = bookConverter;
+        this.profileConverter = profileConverter;
     }
 
     public Book convertBookFormToBook(BookForm bookForm) throws BookFormAuthorsConversionException {
@@ -29,6 +31,14 @@ public class ConversionManager {
 
     public BookForm convertBookToBookForm(Book book) {
         return bookConverter.convertBookToBookForm(book);
+    }
+
+    public ProfileForm convertProfileToProfileForm(Profile profile) {
+        return profileConverter.convertProfileToProfileForm(profile);
+    }
+
+    public Profile convertProfileFormToProfile(ProfileForm profileForm) {
+        return profileConverter.convertProfileFormToProfile(profileForm);
     }
 
     public Address convertStripeAddressToAddress(@NonNull com.stripe.model.Address stripeAddress) {

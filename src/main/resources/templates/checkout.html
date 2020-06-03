@@ -109,7 +109,7 @@
                         <!-------------------------------------------------------------------------Action buttons-->
                         <div class="d-flex my-2">
                             <!-- Pay button -->
-                            <button class="btn btn-info px-5 mr-auto" type="submit" id="pay" th:attr="data-secret=${user.cart.piClientSecret}" disabled>
+                            <button class="btn btn-info px-5 mr-auto" type="submit" id="pay" th:attr="data-secret=${user.cart.stripeClientSecret}" disabled>
                                 <span class="spinner-border spinner-border-sm" id="spinner" style="visibility: hidden"></span>
                                 <span class="font-weight-bolder">Pay </span>
                                 <span class="font-weight-lighter">€</span><span class="font-weight-bolder" th:text="${user.cart.price}"></span>

@@ -13,6 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @Service
@@ -99,12 +102,11 @@ public class ImageServer {
         }
     }
 
-    //dev-postgresql
-    public void setDefaultData(byte[] bytes) throws NoDefaultImageException {
-        Image defaultImage = this.getDefaultImage();
-        if (defaultImage.getData() == null) {
-            defaultImage.setData(bytes);
-            imageRepository.save(defaultImage);
+    public void setImageData(Long imageId, Path path) throws ImageNotFoundException, IOException {
+        Image image = this.findById(imageId);
+        if (image.getData() == null) {
+            image.setData(Files.readAllBytes(path));
+            imageRepository.save(image);
         }
     }
 }

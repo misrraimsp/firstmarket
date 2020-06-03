@@ -4,7 +4,6 @@ import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @Entity
 @Data
@@ -23,6 +22,6 @@ public class Profile {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private LocalDate birthDate;
+    private String birthDate;
 
 }

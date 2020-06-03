@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,7 +71,6 @@ public class CartServer {
         else {
             itemServer.increment(matchingItemIds.get(0));
         }
-        cart.setLastModified(LocalDateTime.now());
         cartRepository.save(cart);
         LOGGER.debug("Book(id={}) added into cart(id={})", bookId, cart.getId());
     }
@@ -87,7 +85,6 @@ public class CartServer {
         }
         cart = this.unCommitCart(cart);
         itemServer.increment(itemId);
-        cart.setLastModified(LocalDateTime.now());
         cartRepository.save(cart);
         LOGGER.debug("Item(id={}) incremented inside cart(id={})", itemId, cart.getId());
     }
@@ -103,14 +100,12 @@ public class CartServer {
         cart = this.unCommitCart(cart);
         if (itemToDecrement.getQuantity() > 1){
             itemServer.decrement(itemToDecrement.getId());
-            cart.setLastModified(LocalDateTime.now());
             cartRepository.save(cart);
             LOGGER.debug("Item(id={}) decremented inside cart(id={})", itemId, cart.getId());
         }
         else {
             items.remove(itemToDecrement);
             cart.setItems(items);
-            cart.setLastModified(LocalDateTime.now());
             cartRepository.save(cart);
             itemServer.delete(itemToDecrement);
             LOGGER.debug("Last book of item(id={}) removed inside cart(id={}). Item itself also removed", itemId, cart.getId());
@@ -129,7 +124,6 @@ public class CartServer {
         cart = this.unCommitCart(cart);
         items.remove(deletingItem);
         cart.setItems(items);
-        cart.setLastModified(LocalDateTime.now());
         cartRepository.save(cart);
         //delete item
         itemServer.delete(deletingItem);
@@ -141,11 +135,10 @@ public class CartServer {
         if (cart.isCommitted()) {
             bookServer.restoreStock(cart.getItems());
             cart.setCommitted(false);
-            cart.setCommittedAt(null);
-            String piId = cart.getPiId();
+            String piId = cart.getStripePaymentIntentId();
             PaymentIntent.retrieve(piId).cancel();
-            cart.setPiId(null);
-            cart.setPiClientSecret(null);
+            cart.setStripePaymentIntentId(null);
+            cart.setStripeClientSecret(null);
             Cart savedCart = this.persist(cart);
             LOGGER.debug("Cart(id={}) successfully un-committed (pi id={})", cart.getId(), piId);
             return savedCart;
@@ -166,12 +159,11 @@ public class CartServer {
                     .build()
             );
             bookServer.removeFromStock(cart.getItems());
-            cart.setPiId(paymentIntent.getId());
-            cart.setPiClientSecret(paymentIntent.getClientSecret());
+            cart.setStripePaymentIntentId(paymentIntent.getId());
+            cart.setStripeClientSecret(paymentIntent.getClientSecret());
             cart.setCommitted(true);
-            cart.setCommittedAt(LocalDateTime.now());
             Cart savedCart = this.persist(cart);
-            LOGGER.debug("User(id={}) cart(id={}) successfully committed (pi id={})", user.getId(), cart.getId(), cart.getPiId());
+            LOGGER.debug("User(id={}) cart(id={}) successfully committed (pi id={})", user.getId(), cart.getId(), cart.getStripePaymentIntentId());
             return savedCart;
         }
         return cart;

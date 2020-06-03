@@ -7,11 +7,13 @@ spring:
    profiles:
       active:
          - dev-postgresql  # comment @Lob on image.data
-         # dev-h2          # un-comment @Lob on image.data
+         #- dev-h2          # un-comment @Lob on image.data
    jpa:
       show-sql: false
 
 fm:
+   date:
+      format: yyyy-MM-dd
    host-address: ${HOST_ADDRESS:http://localhost:8080/}
    schedule:
       garbage-collection:
@@ -114,7 +116,7 @@ spring:
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
       schema: classpath:sql/schema.sql
-      data: classpath:sql/data.sql
+      data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:

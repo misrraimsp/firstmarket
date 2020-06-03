@@ -30,7 +30,7 @@ create table books_authors (book_id bigint not null, author_id bigint not null);
 create table profile (id bigint not null, birth_date date, first_name varchar(255), gender varchar(255), last_name varchar(255), phone varchar(255), primary key (id));
 create table publisher (id bigint not null, name varchar(255), primary key (id));
 create table book (id bigint not null, description varchar(510), isbn varchar(255), language varchar(255), pages integer, price decimal(19,2), status varchar(255), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
-create table cart (id bigint not null, committed_at timestamp, is_committed boolean not null, last_modified timestamp, pi_client_secret varchar(255), pi_id varchar(255), primary key (id));
+create table cart (id bigint not null, is_committed boolean, stripe_client_secret varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
 create table cart_items (cart_id bigint not null, items_id bigint not null, primary key (cart_id, items_id));
 create table category (id bigint not null, name varchar(255), parent_id bigint, primary key (id));
 create table catpath (id bigint not null, size integer not null, ancestor_id bigint, descendant_id bigint, primary key (id));
@@ -42,7 +42,7 @@ create table user_deletion (id bigint not null, comment varchar(255), date times
 create table security_token (id bigint not null, edited_email varchar(255), expiry_date timestamp, security_event varchar(255), token varchar(255), user_id bigint, primary key (id));
 create table usuarios_roles (user_id bigint not null, role_id bigint not null, primary key (user_id, role_id));
 create table payment (id bigint not null, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
-create table pedido (id bigint not null, created_at timestamp, payment_id bigint, shipping_info_id bigint, user_id bigint, primary key (id));
+create table pedido (id bigint not null, date varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint, primary key (id));
 create table pedido_items (order_id bigint not null, items_id bigint not null, primary key (order_id, items_id));
 create table shipping_info (id bigint not null, carrier varchar(255), name varchar(255), phone varchar(255), tracking_number varchar(255), address_id bigint, primary key (id));
 
