@@ -13,7 +13,7 @@ spring:
 
 fm:
    date:
-      format: yyyy-MM-dd
+      format: dd-MM-yyyy
    host-address: ${HOST_ADDRESS:http://localhost:8080/}
    schedule:
       garbage-collection:
