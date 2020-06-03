@@ -4,7 +4,6 @@ import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 
 import javax.persistence.*;
-import java.util.Date;
 
 @Data
 @Entity
@@ -17,8 +16,9 @@ public class UserDeletion {
     @ManyToOne
     private User user;
 
-    private Date date;
+    private String date;
 
+    @Enumerated(EnumType.STRING)
     private DeletionReason deletionReason;
 
     private String comment;

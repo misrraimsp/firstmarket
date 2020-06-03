@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.DateProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
@@ -31,6 +32,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -48,6 +50,7 @@ public class UserServer implements UserDetailsService {
 
     private final SecurityTokenProperties securityTokenProperties;
     private final SecurityRandomPasswordProperties securityRandomPasswordProperties;
+    private final DateProperties dateProperties;
 
     private final LockManager lockManager;
 
@@ -62,6 +65,7 @@ public class UserServer implements UserDetailsService {
                       CartServer cartServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
+                      DateProperties dateProperties,
                       LockManager lockManager,
                       ConversionManager conversionManager) {
 
@@ -75,6 +79,7 @@ public class UserServer implements UserDetailsService {
 
         this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
+        this.dateProperties = dateProperties;
 
         this.lockManager = lockManager;
 
@@ -227,12 +232,11 @@ public class UserServer implements UserDetailsService {
     }
 
     public UserDeletion createUserDeletion(Long userId, DeletionReason deletionReason, String comment) throws UserNotFoundException {
-        User user = this.findById(userId);
         UserDeletion userDeletion = new UserDeletion();
-        userDeletion.setUser(user);
+        userDeletion.setUser(this.findById(userId));
         userDeletion.setDeletionReason((deletionReason == null) ? DeletionReason.OTHER : deletionReason);
         userDeletion.setComment(comment);
-        userDeletion.setDate(Calendar.getInstance().getTime());
+        userDeletion.setDate(LocalDate.now().format(dateProperties.getFormatter()));
         return userDeletionRepository.save(userDeletion);
     }
 
