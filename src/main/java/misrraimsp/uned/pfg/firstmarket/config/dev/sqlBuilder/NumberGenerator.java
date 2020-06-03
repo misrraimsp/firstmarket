@@ -134,7 +134,7 @@ public class NumberGenerator extends Random {
         return LocalDate
                 .now()
                 .minusDays(getDiscreteRandomNumber(MIN_DAYS_PEDIDO, MAX_DAYS_PEDIDO))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
     }
 
     public String getRandomUserId() {

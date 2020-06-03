@@ -72,7 +72,7 @@ INSERT INTO profile (id,birth_date,first_name,gender,last_name,phone) VALUES
 (1,null,'firstmarket','UNDEFINED','admin','123456789'),
 (2,'22-12-1958','Peter','MALE','Parker','123456789'),
 (3,'29-04-1995','Marco','MALE','Polo','123456789'),
-(4,'1987-10-04','Misrraim','MALE','Suárez Pérez','123456789'),
+(4,'04-10-1987','Misrraim','MALE','Suárez Pérez','123456789'),
 (5,'09-05-1987','Lucinda','FEMALE','Lages','123456789'),
 (6,'12-10-1976','Luis','MALE','Vizcaíno Dávila','123456789'),
 (7,'31-08-1945','Marta','FEMALE','Piñero','123456789'),
