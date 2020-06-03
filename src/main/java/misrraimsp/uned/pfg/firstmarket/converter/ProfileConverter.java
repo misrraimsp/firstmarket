@@ -1,7 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.DateProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,11 +12,11 @@ import java.time.Month;
 @Component
 public class ProfileConverter {
 
-    private final DateProperties dateProperties;
+    private final TimeFormatProperties timeFormatProperties;
 
     @Autowired
-    public ProfileConverter(DateProperties dateProperties) {
-        this.dateProperties = dateProperties;
+    public ProfileConverter(TimeFormatProperties timeFormatProperties) {
+        this.timeFormatProperties = timeFormatProperties;
     }
 
     public ProfileForm convertProfileToProfileForm(Profile profile) {
@@ -26,7 +26,7 @@ public class ProfileConverter {
         profileForm.setLastName(profile.getLastName());
         profileForm.setGender(profile.getGender());
         profileForm.setPhone(profile.getPhone());
-        LocalDate ld = LocalDate.parse(profile.getBirthDate(),dateProperties.getFormatter());
+        LocalDate ld = LocalDate.parse(profile.getBirthDate(), timeFormatProperties.getDateFormatter());
         profileForm.setDay(this.getProfileFormDay(ld));
         profileForm.setMonth(this.getProfileFormMonth(ld));
         profileForm.setYear(this.getProfileFormYear(ld));
@@ -46,7 +46,7 @@ public class ProfileConverter {
                         profileForm.getMonth(),
                         profileForm.getDay()
                 )
-                .format(dateProperties.getFormatter())
+                .format(timeFormatProperties.getDateFormatter())
         );
         return profile;
     }

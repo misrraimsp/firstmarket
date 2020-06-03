@@ -4,6 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
@@ -30,8 +31,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class UserServer implements UserDetailsService {
@@ -48,6 +52,7 @@ public class UserServer implements UserDetailsService {
 
     private final SecurityTokenProperties securityTokenProperties;
     private final SecurityRandomPasswordProperties securityRandomPasswordProperties;
+    private final TimeFormatProperties timeFormatProperties;
 
     private final LockManager lockManager;
 
@@ -62,6 +67,7 @@ public class UserServer implements UserDetailsService {
                       CartServer cartServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
+                      TimeFormatProperties timeFormatProperties,
                       LockManager lockManager,
                       ConversionManager conversionManager) {
 
@@ -75,6 +81,7 @@ public class UserServer implements UserDetailsService {
 
         this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
+        this.timeFormatProperties = timeFormatProperties;
 
         this.lockManager = lockManager;
 
@@ -196,10 +203,11 @@ public class UserServer implements UserDetailsService {
         securityToken.setToken(UUID.randomUUID().toString());
         securityToken.setEditedEmail(editedEmail);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-        calendar.add(Calendar.MINUTE, securityTokenProperties.getExpirationInMinutes());
-        securityToken.setExpiryDate(new Date(calendar.getTime().getTime()));
+        securityToken.setExpiryDate(LocalDateTime
+                .now()
+                .plusMinutes(securityTokenProperties.getExpirationInMinutes())
+                .format(timeFormatProperties.getDateTimeFormatter()))
+        ;
 
         return securityTokenRepository.save(securityToken);
     }
@@ -215,33 +223,37 @@ public class UserServer implements UserDetailsService {
     @Transactional
     @Scheduled(cron = "${fm.schedule.garbage-collection.cron}")
     public void garbageCollection() {
-        Date present = Calendar.getInstance().getTime();
-        Set<SecurityToken> securityTokens = securityTokenRepository.findByExpiryDateBefore(present);
-        securityTokens.forEach(securityToken -> {
-            if (securityToken.getSecurityEvent().equals(SecurityEvent.NEW_USER)){
-                userRepository.deleteById(securityToken.getUser().getId());
-            }
-            securityTokenRepository.deleteById(securityToken.getId());
-        });
-        LOGGER.info("Garbage collection: number of tokens deleted - {}", securityTokens.size());
+        LOGGER.debug("Garbage collection: started");
+        securityTokenRepository.findAll()
+                .stream()
+                .filter(st -> LocalDateTime.now().isAfter(LocalDateTime.parse(st.getExpiryDate(),timeFormatProperties.getDateTimeFormatter())))
+                .forEach(st -> {
+                    if (st.getSecurityEvent().equals(SecurityEvent.NEW_USER)){
+                        Long userId = st.getUser().getId();
+                        userRepository.deleteById(userId);
+                        LOGGER.debug("Garbage collection: not completed user(id={}) removed", userId);
+                    }
+                    securityTokenRepository.deleteById(st.getId());
+                    LOGGER.debug("Garbage collection: token(id={}) of type {} removed", st.getId(), st.getSecurityEvent().name());
+                });
+        LOGGER.debug("Garbage collection: finished");
     }
 
     public UserDeletion createUserDeletion(Long userId, DeletionReason deletionReason, String comment) throws UserNotFoundException {
-        User user = this.findById(userId);
         UserDeletion userDeletion = new UserDeletion();
-        userDeletion.setUser(user);
+        userDeletion.setUser(this.findById(userId));
         userDeletion.setDeletionReason((deletionReason == null) ? DeletionReason.OTHER : deletionReason);
         userDeletion.setComment(comment);
-        userDeletion.setDate(Calendar.getInstance().getTime());
+        userDeletion.setDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
         return userDeletionRepository.save(userDeletion);
     }
 
     public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) throws UserNotFoundException {
-        return securityTokenRepository.findByUserAndSecurityEventAndExpiryDateAfter(
-                this.findById(userId),
-                securityEvent,
-                Calendar.getInstance().getTime()
-        ).size() != 0;
+        return securityTokenRepository
+                .findByUserAndSecurityEvent(this.findById(userId), securityEvent)
+                .stream()
+                .anyMatch(st -> LocalDateTime.now().isBefore(LocalDateTime.parse(st.getExpiryDate(),timeFormatProperties.getDateTimeFormatter())))
+                ;
     }
 
     public ProfileForm getProfileForm(Long userId) throws UserNotFoundException {
