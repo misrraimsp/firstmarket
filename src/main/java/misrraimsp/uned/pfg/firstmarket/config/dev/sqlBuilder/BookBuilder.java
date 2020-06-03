@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 public class BookBuilder {
 
     private static final String BuiltBookQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtBookQueries.txt";
-    private static final int numBooks = 1000; // link with NumberGenerator's MAX_BOOK_ID constant
+    private static final int numOfBooks = 1000; // link with NumberGenerator's MAX_BOOK_ID constant
 
     public static void main(String[] args) throws IOException {
         configure();
@@ -16,11 +16,11 @@ public class BookBuilder {
     private static void configure() throws IOException {
         //initialize
         NumberGenerator numberGenerator = new NumberGenerator();
-        IsbnHolder isbnHolder = new IsbnHolder(numBooks);
+        IsbnHolder isbnHolder = new IsbnHolder(numOfBooks);
         QueryHolder queryHolder = new QueryHolder();
         //build insert book query
         queryHolder.openInsertBookQuery();
-        for (int i = 1; i <= numBooks; i++){
+        for (int i = 1; i <= numOfBooks; i++){
             String status = numberGenerator.getRandomBookStatus();
             String stock = (status.equals("OUT_OF_STOCK")) ? "0" : numberGenerator.getRandomStock();
             queryHolder.addBookValues(
@@ -44,7 +44,7 @@ public class BookBuilder {
         queryHolder.addNewLine();
         //build insert books_authors query
         queryHolder.openInsertBooksAuthorsQuery();
-        for (int i = 1; i <= numBooks; i++){
+        for (int i = 1; i <= numOfBooks; i++){
             for (int j = 1; j <= numberGenerator.getRandomNumOfAuthors(); j++) {
                 queryHolder.addBooksAuthorsValues(
                         String.valueOf(i),

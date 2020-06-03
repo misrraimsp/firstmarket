@@ -79,7 +79,7 @@ public class OrderController extends BasicController {
         Stripe.apiKey = ssk;
         User user = userServer.findById(authUser.getId());
         if (user.getCart().isCommitted()) {
-            LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getPiId());
+            LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getStripePaymentIntentId());
         }
         else {
             try {

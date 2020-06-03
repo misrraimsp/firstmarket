@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 public class ItemCartBuilder {
 
     private static final String BuiltItemCartQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtItemCartQueries.txt";
-    private static final int numItems = 200;
+    private static final int numOfItems = 200; // link with OrderBuilder's firstItemIdAvailable property
 
     public static void main(String[] args) throws IOException {
         build();
@@ -19,7 +19,7 @@ public class ItemCartBuilder {
         QueryHolder queryHolder = new QueryHolder();
         //build insert item query
         queryHolder.openInsertItemQuery();
-        for (int i = 1; i <= numItems; i++){
+        for (int i = 1; i <= numOfItems; i++){
             queryHolder.addItemValues(
                     String.valueOf(i),
                     numberGenerator.getRandomQuantity(),
@@ -32,7 +32,7 @@ public class ItemCartBuilder {
         queryHolder.addNewLine();
         //build insert cart_items query
         queryHolder.openInsertCartItemsQuery();
-        for (int i = 1; i <= numItems; i++){
+        for (int i = 1; i <= numOfItems; i++){
             queryHolder.addCartItemsValues(
                     numberGenerator.getRandomCartId(),
                     String.valueOf(i)

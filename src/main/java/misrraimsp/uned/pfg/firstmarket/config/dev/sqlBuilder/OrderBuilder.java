@@ -7,7 +7,8 @@ import java.nio.file.Paths;
 public class OrderBuilder {
 
     private static final String BuiltOrderQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtOrderQueries.txt";
-    private static final int numOfOrders = 1000;
+    private static final int numOfOrders = 500;
+    private static int nextItemId = 201; // link with ItemCartBuilder's numOfItems property
 
     public static void main(String[] args) throws IOException {
         build();
@@ -16,6 +17,7 @@ public class OrderBuilder {
     private static void build() throws IOException {
         //initialize
         NumberGenerator numberGenerator = new NumberGenerator();
+        QueryHolder globalQueryHolder = new QueryHolder();
         QueryHolder shippingQueryHolder = new QueryHolder();
         QueryHolder paymentQueryHolder = new QueryHolder();
         QueryHolder pedidoQueryHolder = new QueryHolder();
@@ -30,39 +32,66 @@ public class OrderBuilder {
         for (int i = 1; i <= numOfOrders; i++){
             shippingQueryHolder.addShippingValues(
                     String.valueOf(i),
-                    "Arrecife",
-                    "España",
-                    "calle Galicia, 13",
-                    "puerta 2",
-                    "35500",
-                    "Las Palmas"
+                    "carrier",
+                    "name",
+                    "phone",
+                    "tracking_number",
+                    numberGenerator.getRandomAddressId()
             );
-        }
-        queryHolder.closeInsertQuery();
-        //new lines
-        queryHolder.addNewLine();
-        queryHolder.addNewLine();
-        //build insert cart_items query
-        queryHolder.openInsertCartItemsQuery();
-        for (int i = 1; i <= numOfOrders; i++){
-            queryHolder.addCartItemsValues(
-                    numberGenerator.getRandomCartId(),
-                    String.valueOf(i)
+            paymentQueryHolder.addPaymentValues(
+                    String.valueOf(i),
+                    "1", //actual value set on app startup
+                    "eur",
+                    "test payment number " + i,
+                    "stripe_payment_intent_id number " + i
             );
+            pedidoQueryHolder.addPedidoValues(
+                    String.valueOf(i),
+                    numberGenerator.getRandomDate(),
+                    String.valueOf(i),
+                    String.valueOf(i),
+                    numberGenerator.getRandomUserId()
+            );
+            for (int j = 1; j <= Integer.parseInt(numberGenerator.getRandomNumOfItems()); j++) {
+                itemQueryHolder.addItemValues(
+                        String.valueOf(nextItemId),
+                        numberGenerator.getRandomQuantity(),
+                        numberGenerator.getRandomBookId()
+                );
+                pedidoItemsQueryHolder.addPedidoItemsValues(
+                        String.valueOf(i),
+                        String.valueOf(nextItemId)
+                );
+                nextItemId++;
+            }
         }
-        queryHolder.closeInsertQuery();
+        shippingQueryHolder.closeInsertQuery();
+        paymentQueryHolder.closeInsertQuery();
+        pedidoQueryHolder.closeInsertQuery();
+        itemQueryHolder.closeInsertQuery();
+        pedidoItemsQueryHolder.closeInsertQuery();
+        //join queries
+        globalQueryHolder.addSQL(shippingQueryHolder.getSql());
+        globalQueryHolder.addTwoNewLines();
+        globalQueryHolder.addSQL(paymentQueryHolder.getSql());
+        globalQueryHolder.addTwoNewLines();
+        globalQueryHolder.addSQL(pedidoQueryHolder.getSql());
+        globalQueryHolder.addTwoNewLines();
+        globalQueryHolder.addSQL(itemQueryHolder.getSql());
+        globalQueryHolder.addTwoNewLines();
+        globalQueryHolder.addSQL(pedidoItemsQueryHolder.getSql());
+        globalQueryHolder.addNewLine();
         //output
-        outputSQL(queryHolder.getSql(), BuiltOrderQueriesPath);
+        outputSQL(globalQueryHolder.getSql());
     }
 
     /**
      * Este método escribe el input parameter sql en un fichero
      * @param sql
-     * @param fileName
      * @throws IOException
      */
-    private static void outputSQL(String sql, String fileName) throws IOException {
-        Files.write(Paths.get(fileName), sql.getBytes());
+    private static void outputSQL(String sql) throws IOException {
+        Files.write(Paths.get(OrderBuilder.BuiltOrderQueriesPath), sql.getBytes());
         //System.out.println(sql);
     }
 }

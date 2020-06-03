@@ -13,8 +13,8 @@ public class QueryHolder {
     private static final String shippingStaticPart = "INSERT INTO shipping_info (id,carrier,name,phone,tracking_number,address_id) VALUES ";
     //id bigint not null, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255)
     private static final String paymentStaticPart = "INSERT INTO payment (id,amount,currency,description,stripe_payment_intent_id) VALUES ";
-    //id bigint not null, created_at timestamp, payment_id bigint, shipping_info_id bigint, user_id bigint
-    private static final String pedidoStaticPart = "INSERT INTO pedido (id,created_at,payment_id,shipping_info_id,user_id) VALUES ";
+    //id bigint not null, date varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint
+    private static final String pedidoStaticPart = "INSERT INTO pedido (id,date,payment_id,shipping_info_id,user_id) VALUES ";
     //order_id bigint not null, items_id
     private static final String pedidoItemsStaticPart = "INSERT INTO pedido_items (order_id,items_id) VALUES ";
 
@@ -109,15 +109,48 @@ public class QueryHolder {
 
     //id bigint not null, carrier varchar(255), name varchar(255), phone varchar(255), tracking_number varchar(255), address_id bigint
     public void addShippingValues(String id,
-                              String carrier,
-                              String name,
-                              String phone,
-                              String tracking_number,
-                              String address_id) {
+                                  String carrier,
+                                  String name,
+                                  String phone,
+                                  String tracking_number,
+                                  String address_id) {
 
         sql += "(";
         sql += id + ",'" + carrier + "','" + name + "','" + phone + "','";
         sql += tracking_number + "'," + address_id;
+        sql += ")" + ",";
+    }
+
+    //id bigint not null, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255)
+    public void addPaymentValues(String id,
+                                 String amount,
+                                 String currency,
+                                 String description,
+                                 String stripe_payment_intent_id) {
+
+        sql += "(";
+        sql += id + "," + amount + ",'" + currency + "','" + description + "','" + stripe_payment_intent_id + "'";
+        sql += ")" + ",";
+    }
+
+    //id bigint not null, created_at timestamp, payment_id bigint, shipping_info_id bigint, user_id bigint
+    public void addPedidoValues(String id,
+                                String date,
+                                String payment_id,
+                                String shipping_info_id,
+                                String user_id) {
+
+        sql += "(";
+        sql += id + ",'" + date + "'," + payment_id + "," + shipping_info_id + "," + user_id;
+        sql += ")" + ",";
+    }
+
+    //order_id bigint not null, items_id
+    public void addPedidoItemsValues(String order_id,
+                                     String items_id) {
+
+        sql += "(";
+        sql += order_id + "," + items_id;
         sql += ")" + ",";
     }
 
@@ -127,6 +160,15 @@ public class QueryHolder {
 
     public void addNewLine() {
         sql += "\n";
+    }
+
+    public void addTwoNewLines() {
+        this.addNewLine();
+        this.addNewLine();
+    }
+
+    public void addSQL(String sql) {
+        this.sql += sql;
     }
 
     public String getSql(){

@@ -6,6 +6,7 @@ import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPassw
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
+import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
@@ -30,7 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -38,18 +38,20 @@ public class UserServer implements UserDetailsService {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private UserRepository userRepository;
-    private SecurityTokenRepository securityTokenRepository;
-    private UserDeletionRepository userDeletionRepository;
+    private final UserRepository userRepository;
+    private final SecurityTokenRepository securityTokenRepository;
+    private final UserDeletionRepository userDeletionRepository;
 
-    private ProfileServer profileServer;
-    private RoleServer roleServer;
-    private CartServer cartServer;
+    private final ProfileServer profileServer;
+    private final RoleServer roleServer;
+    private final CartServer cartServer;
 
-    private SecurityTokenProperties securityTokenProperties;
-    private SecurityRandomPasswordProperties securityRandomPasswordProperties;
+    private final SecurityTokenProperties securityTokenProperties;
+    private final SecurityRandomPasswordProperties securityRandomPasswordProperties;
 
-    private LockManager lockManager;
+    private final LockManager lockManager;
+
+    private final ConversionManager conversionManager;
 
     @Autowired
     public UserServer(UserRepository userRepository,
@@ -60,7 +62,8 @@ public class UserServer implements UserDetailsService {
                       CartServer cartServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
-                      LockManager lockManager) {
+                      LockManager lockManager,
+                      ConversionManager conversionManager) {
 
         this.userRepository = userRepository;
         this.securityTokenRepository = securityTokenRepository;
@@ -74,6 +77,8 @@ public class UserServer implements UserDetailsService {
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
 
         this.lockManager = lockManager;
+
+        this.conversionManager = conversionManager;
     }
 
     @Override
@@ -104,7 +109,6 @@ public class UserServer implements UserDetailsService {
         }
         if (cart == null){
             cart = new Cart();
-            cart.setLastModified(LocalDateTime.now());
         }
         Profile profile = new Profile();
         profile.setFirstName("");
@@ -241,11 +245,11 @@ public class UserServer implements UserDetailsService {
     }
 
     public ProfileForm getProfileForm(Long userId) throws UserNotFoundException {
-        return profileServer.convertProfileToProfileForm(this.findById(userId).getProfile());
+        return conversionManager.convertProfileToProfileForm(this.findById(userId).getProfile());
     }
 
     public Profile convertProfileFormToProfile(ProfileForm profileForm) {
-        return profileServer.convertProfileFormToProfile(profileForm);
+        return conversionManager.convertProfileFormToProfile(profileForm);
     }
 
     public boolean hasRole(User authUser, String roleName) {

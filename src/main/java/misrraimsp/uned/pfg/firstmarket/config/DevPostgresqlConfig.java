@@ -1,7 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
+import misrraimsp.uned.pfg.firstmarket.model.Payment;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
+import misrraimsp.uned.pfg.firstmarket.service.OrderServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
+import java.math.BigDecimal;
 import java.nio.file.Paths;
 
 @Profile("dev-postgresql") //comment @Lob on image.data
@@ -20,7 +23,8 @@ public class DevPostgresqlConfig {
 
     @Bean
     public CommandLineRunner dataLoader(CatServer catServer,
-                                        ImageServer imageServer) {
+                                        ImageServer imageServer,
+                                        OrderServer orderServer) {
 
         return args -> {
             LOGGER.debug("CommandLineRunner on dev-postgresql: start");
@@ -48,6 +52,19 @@ public class DevPostgresqlConfig {
             //load categories
             catServer.loadCategories();
             LOGGER.debug("CommandLineRunner on dev-postgresql: categories loaded");
+
+            //set payments amount
+            orderServer.findAll().forEach(order -> {
+                Payment payment = order.getPayment();
+                payment.setAmount(order
+                        .getItems()
+                        .stream()
+                        .mapToLong(item -> item.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
+                        .reduce(0, Long::sum)
+                );
+                orderServer.persistPayment(payment);
+            });
+            LOGGER.debug("CommandLineRunner on dev-postgresql: payments amount set");
         };
     }
 }

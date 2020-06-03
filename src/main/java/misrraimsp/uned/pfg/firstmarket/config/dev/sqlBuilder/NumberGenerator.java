@@ -6,6 +6,8 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  * app properties are overwritten in this dev-class
@@ -24,11 +26,14 @@ public class NumberGenerator extends Random {
     private static final int MIN_ID = 1;
     private static final int MIN_CART_ID = 2; // admin cart useless
     private static final int MAX_CART_ID = 64;
+    private static final int MIN_USER_ID = 2; // admin dont order
+    private static final int MAX_USER_ID = 64;
     private static final int MAX_CATEGORY_ID = 310;
     private static final int MAX_IMAGE_ID = 17;
     private static final int MAX_PUBLISHER_ID = 128;
     private static final int MAX_AUTHOR_ID = 512;
     private static final int MAX_BOOK_ID = 1000; // link with BookBuilder's numBooks parameter
+    private static final int MAX_ADDRESS_ID = 6;
 
     private static final int MIN_NUM_AUTHORS = 1;
     private static final int MAX_NUM_AUTHORS = 3;
@@ -46,6 +51,12 @@ public class NumberGenerator extends Random {
 
     private static final int MIN_QUANTITY = 1;
     private static final int MAX_QUANTITY = 4;
+
+    private static final int MIN_ITEMS_PEDIDO = 1;
+    private static final int MAX_ITEMS_PEDIDO = 3;
+
+    private static final int MIN_DAYS_PEDIDO = 0;
+    private static final int MAX_DAYS_PEDIDO = 365;
 
 
 
@@ -114,4 +125,24 @@ public class NumberGenerator extends Random {
     public String getRandomCartId() {
         return String.valueOf(getDiscreteRandomNumber(MIN_CART_ID, MAX_CART_ID));
     }
+
+    public String getRandomAddressId() {
+        return String.valueOf(getDiscreteRandomNumber(MIN_ID, MAX_ADDRESS_ID));
+    }
+
+    public String getRandomDate(){
+        return LocalDate
+                .now()
+                .minusDays(getDiscreteRandomNumber(MIN_DAYS_PEDIDO, MAX_DAYS_PEDIDO))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+    public String getRandomUserId() {
+        return String.valueOf(getDiscreteRandomNumber(MIN_USER_ID, MAX_USER_ID));
+    }
+
+    public String getRandomNumOfItems(){
+        return String.valueOf(getDiscreteRandomNumber(MIN_ITEMS_PEDIDO, MAX_ITEMS_PEDIDO));
+    }
+
 }

@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,7 +18,7 @@ public class Order {
     @ManyToOne
     private User user;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Item> items = new HashSet<>();
 
     @OneToOne
@@ -28,5 +27,5 @@ public class Order {
     @OneToOne
     private Payment payment;
 
-    private LocalDateTime createdAt;
+    private String date;
 }

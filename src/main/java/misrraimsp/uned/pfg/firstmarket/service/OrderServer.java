@@ -4,6 +4,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import lombok.NonNull;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.DateProperties;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.PaymentRepository;
@@ -23,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -33,17 +35,18 @@ public class OrderServer {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Value("${fm.payment.stripe.pi-minutes}")
-    private Long napMinutes = 30L;
+    private final Long napMinutes = 30L;
 
     @Value("${fm.payment.stripe.limit-of-naps}")
-    private int limitOfNaps = 3;
+    private final int limitOfNaps = 3;
 
-    private OrderRepository orderRepository;
-    private PaymentRepository paymentRepository;
-    private ShippingInfoRepository shippingInfoRepository;
-    private AddressServer addressServer;
-    private CartServer cartServer;
-    private ConversionManager conversionManager;
+    private final OrderRepository orderRepository;
+    private final PaymentRepository paymentRepository;
+    private final ShippingInfoRepository shippingInfoRepository;
+    private final AddressServer addressServer;
+    private final CartServer cartServer;
+    private final ConversionManager conversionManager;
+    private final DateProperties dateProperties;
 
     @Autowired
     public OrderServer(OrderRepository orderRepository,
@@ -51,7 +54,8 @@ public class OrderServer {
                        ShippingInfoRepository shippingInfoRepository,
                        AddressServer addressServer,
                        CartServer cartServer,
-                       ConversionManager conversionManager) {
+                       ConversionManager conversionManager,
+                       DateProperties dateProperties) {
 
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
@@ -59,6 +63,7 @@ public class OrderServer {
         this.addressServer = addressServer;
         this.cartServer = cartServer;
         this.conversionManager = conversionManager;
+        this.dateProperties = dateProperties;
     }
 
     @Transactional
@@ -75,7 +80,7 @@ public class OrderServer {
             LOGGER.error("User(id={}) trying to build a no-items-cart(id={}) order", user.getId(), cart.getId());
             return;
         }
-        PaymentIntent paymentIntent = PaymentIntent.retrieve(cart.getPiId());
+        PaymentIntent paymentIntent = PaymentIntent.retrieve(cart.getStripePaymentIntentId());
         ShippingDetails shippingDetails = paymentIntent.getShipping();
         if (shippingDetails == null){
             LOGGER.error("User(id={}) trying to build a no-shipping-details(piId={}) order", user.getId(), paymentIntent.getId());
@@ -103,16 +108,14 @@ public class OrderServer {
         order.setItems(new HashSet<>(cart.getItems()));
         order.setShippingInfo(shippingInfo);
         order.setPayment(payment);
-        order.setCreatedAt(LocalDateTime.now());
+        order.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern(dateProperties.getFormat())));
         Order savedOrder = orderRepository.save(order);
         LOGGER.debug("User(id={}) order(id={}) successfully registered", user.getId(), savedOrder.getId());
         //update cart
         cart.setItems(new HashSet<>());
         cart.setCommitted(false);
-        cart.setCommittedAt(null);
-        cart.setPiId(null);
-        cart.setPiClientSecret(null);
-        cart.setLastModified(LocalDateTime.now());
+        cart.setStripePaymentIntentId(null);
+        cart.setStripeClientSecret(null);
         cartServer.persist(cart);
         LOGGER.debug("User(id={}) cart(id={}) successfully reset", user.getId(), cart.getId());
     }
@@ -133,7 +136,7 @@ public class OrderServer {
         User user = cartCommittedEvent.getUser();
         assert user != null;
         assert user.getCart() != null;
-        String paymentIntentId = user.getCart().getPiId();
+        String paymentIntentId = user.getCart().getStripePaymentIntentId();
         try {
             LOGGER.debug("User(id={}) committed-cart(id={}) time-frame STARTED (piId={})", user.getId(), user.getCart().getId(), paymentIntentId);
             //take a nap
@@ -171,4 +174,11 @@ public class OrderServer {
         }
     }
 
+    public Iterable<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+    public void persistPayment(Payment payment) {
+        paymentRepository.save(payment);
+    }
 }

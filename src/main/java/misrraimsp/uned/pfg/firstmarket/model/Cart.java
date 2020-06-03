@@ -6,7 +6,6 @@ import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -22,15 +21,11 @@ public class Cart {
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Item> items = new HashSet<>();
 
-    private LocalDateTime lastModified;
-
     private boolean isCommitted;
 
-    private LocalDateTime committedAt;
+    private String stripePaymentIntentId;
 
-    private String piId;
-
-    private String piClientSecret;
+    private String stripeClientSecret;
 
     public int getSize(){
         return items.stream().mapToInt(Item::getQuantity).sum();
