@@ -4,20 +4,18 @@ import org.springframework.data.domain.Sort;
 
 public enum BookSortCriteria {
 
+    STATUS_ASC ("Status ascending", "status", Sort.Direction.ASC),
+    STATUS_DESC ("Status descending", "status", Sort.Direction.DESC),
     PRICE_ASC ("Price ascending", "price", Sort.Direction.ASC),
     PRICE_DESC ("Price descending", "price", Sort.Direction.DESC),
     YEAR_ASC ("Year ascending", "year", Sort.Direction.ASC),
     YEAR_DESC ("Year descending", "year", Sort.Direction.DESC),
+    STOCK_ASC ("Stock ascending", "stock", Sort.Direction.ASC),
+    STOCK_DESC ("Stock descending", "stock", Sort.Direction.DESC),
     TITLE_ASC ("Title ascending", "title", Sort.Direction.ASC),
     TITLE_DESC ("Title descending", "title", Sort.Direction.DESC),
-    ISBN_ASC ("ISBN ascending", "isbn", Sort.Direction.ASC),
-    ISBN_DESC ("ISBN descending", "isbn", Sort.Direction.DESC),
-    PAGES_ASC ("Pages ascending", "pages", Sort.Direction.ASC),
-    PAGES_DESC ("Pages descending", "pages", Sort.Direction.DESC),
     LANGUAGE_ASC ("Language ascending", "language", Sort.Direction.ASC),
-    LANGUAGE_DESC ("Language descending", "language", Sort.Direction.DESC),
-    STOCK_ASC ("Stock ascending", "stock", Sort.Direction.ASC),
-    STOCK_DESC ("Stock descending", "stock", Sort.Direction.DESC);
+    LANGUAGE_DESC ("Language descending", "language", Sort.Direction.DESC);
 
     private final String text;
     private final String property;

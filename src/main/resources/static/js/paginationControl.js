@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //refresh on sort criteria change
     if (sortCriteriaSelector){
         sortCriteriaSelector.addEventListener("change", function () {
-            const newUrl = appendURLParam(document.URL.replace(/(&)*(sort=)\d+/g,""), "sort");
+            const newUrl = appendURLParam(document.URL.replace(/(&)*(sort=)\w+/g,""), "sort");
             refreshTrigger.setAttribute("href", newUrl + sortCriteriaSelector.value);
             refreshTrigger.click();
         }, false);
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
     //refresh on page size change
     if (pageSizeSelector){
         pageSizeSelector.addEventListener("change", function () {
-            const newUrl = appendURLParam(document.URL.replace(/(&)*(pageSize=)\d+/g,""), "pageSize");
+            const newUrl = appendURLParam(document.URL.replace(/(&)*(pageSize=)\w+/g,""), "pageSize");
             refreshTrigger.setAttribute("href", newUrl + pageSizeSelector.value);
             refreshTrigger.click();
         }, false);

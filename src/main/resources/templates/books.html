@@ -44,14 +44,25 @@
                         </div>
                         <!-- sort criteria -->
                         <div class="col-sm-4 d-flex align-items-end justify-content-end">
+                            <!-- label -->
                             <p class="my-0 mr-2">
                                 <small class="text-dark font-weight-lighter">Sorted by</small>
                             </p>
-                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
+                            <!-- admin options -->
+                            <select sec:authorize="hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
                                 <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
                                         th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
+                                </option>
+                            </select>
+                            <!-- no-admin options -->
+                            <select sec:authorize="!hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria).values()}"
+                                        th:value="${sc.ordinal()}"
+                                        th:text="${sc.text}"
+                                        th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}"
+                                        th:if="${sc ne T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria).STATUS_ASC && sc ne T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria).STATUS_DESC}">
                                 </option>
                             </select>
                         </div>
@@ -183,39 +194,19 @@
                                     <p th:if="${book.authors.size() eq 0}">
                                         <small class="text-secondary font-weight-light"><i>unknown author</i></small>
                                     </p>
-                                    <!-- publisher -->
+                                    <!-- publisher and year -->
                                     <div>
-                                        <p th:if="${book.publisher ne null}" class="text-dark small">
-                                            <span class="font-weight-light">Published by </span><strong th:text="${book.publisher.name}"></strong>
-                                            <span class="font-weight-light">Publisher Id </span><strong th:text="${book.publisher.id}"></strong>
-                                        </p>
-                                        <p th:unless="${book.publisher ne null}">
-                                            <small class="text-secondary font-weight-light"><i>unknown publisher</i></small>
+                                        <p class="text-dark small">
+                                            <span class="font-weight-light">Published in </span><strong th:text="${(book.year eq null)? 'unknown' : book.year}"></strong><span class="font-weight-light"> by </span><strong th:text="${(book.publisher ne null && !book.publisher.name.isBlank()) ? book.publisher.name : 'unknown'}"></strong>
                                         </p>
                                     </div>
                                     <!-- isbn -->
                                     <p class="mb-3 text-dark small">
                                         <span class="font-weight-light">ISBN </span><strong th:text="${book.isbn}"></strong>
                                     </p>
-                                    <!-- pages -->
-                                    <p class="mb-3 text-dark small">
-                                        <span class="font-weight-light">pages </span><strong th:text="${book.pages}"></strong>
-                                    </p>
-                                    <!-- stock -->
-                                    <p class="mb-3 text-dark small">
-                                        <span class="font-weight-light">stock </span><strong th:text="${book.stock}"></strong>
-                                    </p>
-                                    <!-- year -->
-                                    <p class="mb-3 text-dark small">
-                                        <span class="font-weight-light">year </span><strong th:text="${book.year}"></strong>
-                                    </p>
                                     <!-- language -->
                                     <p class="mb-3 text-dark small">
-                                        <span class="font-weight-light">language </span><strong th:text="${book.language}"></strong>
-                                    </p>
-                                    <!-- status -->
-                                    <p class="mb-3 text-dark small">
-                                        <span class="font-weight-light">status </span><strong th:text="${book.status}"></strong>
+                                        <span class="font-weight-light">Language </span><strong th:text="${book.language}"></strong>
                                     </p>
                                 </div>
                                 <!-- actions -->
@@ -257,6 +248,17 @@
                                     <!-- price -->
                                     <p class="text-dark">
                                         <span class="font-weight-light">EUR </span><strong th:text="${book.price}"></strong>
+                                    </p>
+                                    <!-- stock -->
+                                    <p class="small mt-n3">
+                                        <em class="font-weight-lighter">
+                                            <span th:if="${book.stock gt 0}">
+                                                <strong class="text-dark" th:text="${book.stock}"></strong> units left
+                                            </span>
+                                            <span th:unless="${book.stock gt 0}">
+                                                <strong class="text-info">sold out</strong>
+                                            </span>
+                                        </em>
                                     </p>
                                 </div>
                             </div>

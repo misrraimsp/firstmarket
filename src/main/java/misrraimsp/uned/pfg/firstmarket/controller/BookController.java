@@ -31,8 +31,8 @@ import java.util.Set;
 @Controller
 public class BookController extends BasicController {
 
-    private FrontEndProperties frontEndProperties;
-    private ConversionManager conversionManager;
+    private final FrontEndProperties frontEndProperties;
+    private final ConversionManager conversionManager;
 
     @Autowired
     public BookController(UserServer userServer,
@@ -155,6 +155,9 @@ public class BookController extends BasicController {
             searchCriteria.setQ(null);
             model.addAttribute("message", messageSource.getMessage("validation.regex.text-query", null, null));
         }
+
+        //filter status
+        searchCriteria.setExcludedStatus((userServer.hasRole(authUser, "ROLE_ADMIN")) ? null : BookStatus.DISABLED);
 
         // category
         if (searchCriteria.getCategoryId() == null) { // root category by default

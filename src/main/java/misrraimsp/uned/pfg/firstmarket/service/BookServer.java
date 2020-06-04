@@ -20,16 +20,17 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class BookServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private BookRepository bookRepository;
-    private ImageServer imageServer;
-    private PublisherServer publisherServer;
-    private AuthorServer authorServer;
+    private final BookRepository bookRepository;
+    private final ImageServer imageServer;
+    private final PublisherServer publisherServer;
+    private final AuthorServer authorServer;
 
     @Autowired
     public BookServer(BookRepository bookRepository,
@@ -128,13 +129,23 @@ public class BookServer {
         Set<Long> idsByLanguage = (searchCriteria.getLanguageId() != null) ? bookRepository.findIdByLanguageIds(searchCriteria.getLanguageId()) : null;
         Set<Long> idsByPrice  = (searchCriteria.getPriceId() != null) ? this.getIdsByPriceIntervals(searchCriteria.getPriceId()) : null;
         Set<Long> idsByQ  = (searchCriteria.getQ() != null) ? this.getIdsByQueryText(searchCriteria.getQ()) : null;
+        Set<Long> idsByStatus  = (searchCriteria.getExcludedStatus() == null) ? null : this.getIdsByStatus(searchCriteria.getExcludedStatus());
 
-        Set<Long> resultIds = intersect(idsByCategory, idsByPrice, idsByAuthor, idsByPublisher, idsByLanguage, idsByQ);
-        assert resultIds != null;
+        Set<Long> resultIds = intersect(idsByCategory, idsByPrice, idsByAuthor, idsByPublisher, idsByLanguage, idsByQ, idsByStatus);
         if (resultIds.size() == 0){
             resultIds.add(0L);
         }
         return bookRepository.findByIds(resultIds, pageable);
+    }
+
+    private Set<Long> getIdsByStatus(BookStatus excludedStatus) {
+        return bookRepository
+                .findAll()
+                .stream()
+                .filter(book -> !book.getStatus().equals(excludedStatus))
+                .map(Book::getId)
+                .collect(Collectors.toSet())
+                ;
     }
 
     private Set<Long> getIdsByQueryText(String q) {
@@ -188,7 +199,7 @@ public class BookServer {
      * This method intersect a variable quantity of Long number sets.
      * Also, any set can be of NULL value
      * @param sets
-     * @return intersection set. If no intersection is possible returns NULL
+     * @return intersection set. If no intersection is possible returns empty set
      */
     private Set<Long> intersect(Set<Long> ... sets) {
         int i = 0;
@@ -197,7 +208,7 @@ public class BookServer {
             i++;
         }
         if (i == size){
-            return null;
+            return new HashSet<>();
         }
         Set<Long> result = new HashSet<>(sets[i]);
         for (int j = i + 1; j < size; j++) {

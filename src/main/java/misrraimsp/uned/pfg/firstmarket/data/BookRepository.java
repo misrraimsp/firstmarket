@@ -32,6 +32,9 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     Page<Book> findAll(Pageable pageable);
 
+    @Override
+    Set<Book> findAll();
+
     @Query("SELECT b FROM Book b WHERE b.id IN :ids")
     Page<Book> findByIds(@Param("ids") Set<Long> ids, Pageable pageable);
 

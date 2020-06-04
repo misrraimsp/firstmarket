@@ -83,7 +83,7 @@ fm:
          num-of-languages: 6
    pagination:
       default-sort-index:
-         book: 1
+         book: 2
       default-size-index:
          image: 0
          home: 1
