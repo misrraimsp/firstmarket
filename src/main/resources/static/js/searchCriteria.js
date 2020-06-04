@@ -1,8 +1,3 @@
-/*
-
- */
-
-
 'use strict';
 
 
@@ -53,8 +48,8 @@ document.addEventListener("DOMContentLoaded", function() {
         return -1;
     };
     let removePageNo = function (str) {
-        str = str.replace(/(\?pageNo=)\d+$/g,"");//first and unique
-        str = str.replace(/(\?pageNo=)\d+(&)/g,"?");//first but not unique
+        str = str.replace(/(\?pageNo=)\d+$/g,"");//unique
+        str = str.replace(/(\?pageNo=)\d+(&)/g,"?");//first
         str = str.replace(/(&pageNo=)\d+$/g,"");//last
         str = str.replace(/(&pageNo=)\d+(&)/g, "&");//middle
         return str;

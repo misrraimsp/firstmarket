@@ -20,10 +20,41 @@
                         </a>
                     </div>
                 </div>
-                <!-- pagination legend -->
-                <div class="col-sm-8 d-flex align-items-end justify-content-end">
-                    <div class="text-info">
-                        <p th:replace="fragments/components::paginationLegend"></p>
+                <!-- pagination control -->
+                <div class="col-sm-8 align-self-end">
+                    <div class="row">
+                        <!-- page size -->
+                        <div class="col-sm-4 d-flex align-items-end">
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationPageSize" style="max-width: 33%">
+                                <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
+                                        th:value="${ps.ordinal()}"
+                                        th:text="${ps.size}"
+                                        th:selected="${ps.size eq pageable.pageSize}">
+                                </option>
+                            </select>
+                            <p class="my-0 ml-2">
+                                <small class="text-dark font-weight-lighter">Page size</small>
+                            </p>
+                        </div>
+                        <!-- page legend -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-center">
+                            <div class="text-dark">
+                                <p th:replace="fragments/components::paginationLegend"></p>
+                            </div>
+                        </div>
+                        <!-- sort criteria -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-end">
+                            <p class="my-0 mr-2">
+                                <small class="text-dark font-weight-lighter">Sorted by</small>
+                            </p>
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria).values()}"
+                                        th:value="${sc.ordinal()}"
+                                        th:text="${sc.text}"
+                                        th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
+                                </option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <!-- right margin  -->
@@ -156,6 +187,7 @@
                                     <div>
                                         <p th:if="${book.publisher ne null}" class="text-dark small">
                                             <span class="font-weight-light">Published by </span><strong th:text="${book.publisher.name}"></strong>
+                                            <span class="font-weight-light">Publisher Id </span><strong th:text="${book.publisher.id}"></strong>
                                         </p>
                                         <p th:unless="${book.publisher ne null}">
                                             <small class="text-secondary font-weight-light"><i>unknown publisher</i></small>
@@ -164,6 +196,26 @@
                                     <!-- isbn -->
                                     <p class="mb-3 text-dark small">
                                         <span class="font-weight-light">ISBN </span><strong th:text="${book.isbn}"></strong>
+                                    </p>
+                                    <!-- pages -->
+                                    <p class="mb-3 text-dark small">
+                                        <span class="font-weight-light">pages </span><strong th:text="${book.pages}"></strong>
+                                    </p>
+                                    <!-- stock -->
+                                    <p class="mb-3 text-dark small">
+                                        <span class="font-weight-light">stock </span><strong th:text="${book.stock}"></strong>
+                                    </p>
+                                    <!-- year -->
+                                    <p class="mb-3 text-dark small">
+                                        <span class="font-weight-light">year </span><strong th:text="${book.year}"></strong>
+                                    </p>
+                                    <!-- language -->
+                                    <p class="mb-3 text-dark small">
+                                        <span class="font-weight-light">language </span><strong th:text="${book.language}"></strong>
+                                    </p>
+                                    <!-- status -->
+                                    <p class="mb-3 text-dark small">
+                                        <span class="font-weight-light">status </span><strong th:text="${book.status}"></strong>
                                     </p>
                                 </div>
                                 <!-- actions -->
@@ -240,8 +292,9 @@
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
         <!-- pagination functionality -->
+        <a id="paginationTrigger" style="display: none"></a>
         <script th:replace="fragments/components::paginationMvcVariables"></script>
         <script th:src="@{/js/paginationLinks.js}"></script>
-        <script th:src="@{/js/paginationLegend.js}"></script>
+        <script th:src="@{/js/paginationControl.js}"></script>
     </body>
 </html>

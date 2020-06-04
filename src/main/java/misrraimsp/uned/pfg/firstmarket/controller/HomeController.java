@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,13 +35,13 @@ public class HomeController extends BasicController {
 
     @GetMapping("/home")
     public String showHome(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
-                           @RequestParam(defaultValue = "${fm.pagination.default-size.book-home}") String pageSize,
+                           @RequestParam(defaultValue = "${fm.pagination.default-size-index.home}") PageSize pageSize,
                            Model model,
                            @AuthenticationPrincipal User authUser) {
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
-                Integer.parseInt(pageSize),
+                pageSize.getSize(),
                 Sort.by("price").descending().and(Sort.by("id").ascending()));
 
         populateModel(model.asMap(), authUser);

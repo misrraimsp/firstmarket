@@ -82,10 +82,12 @@ fm:
          num-of-publishers: 5
          num-of-languages: 6
    pagination:
-      default-size:
-         image: 5
-         book-home: 20
-         book-search: 15
+      default-sort-index:
+         book: 1
+      default-size-index:
+         image: 0
+         home: 1
+         search: 2
       default-index: 0
    mail:
       smtp:

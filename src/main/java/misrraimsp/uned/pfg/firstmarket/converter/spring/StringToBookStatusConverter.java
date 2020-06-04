@@ -8,7 +8,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StringToBookStatusConverter  implements Converter<String, BookStatus> {
+public class StringToBookStatusConverter implements Converter<String, BookStatus> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
