@@ -3,9 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.*;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
@@ -15,7 +13,6 @@ import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,8 +31,8 @@ import java.util.Set;
 @Controller
 public class BookController extends BasicController {
 
-    private FrontEndProperties frontEndProperties;
-    private ConversionManager conversionManager;
+    private final FrontEndProperties frontEndProperties;
+    private final ConversionManager conversionManager;
 
     @Autowired
     public BookController(UserServer userServer,
@@ -144,23 +141,23 @@ public class BookController extends BasicController {
     }
 
     @GetMapping("/books")
-    public String showBooks(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
-                            @RequestParam(defaultValue = "${fm.pagination.default-size.book-search}") String pageSize,
+    public String showBooks(@RequestParam(defaultValue = "${fm.pagination.default-index}") int pageNo,
+                            @RequestParam(defaultValue = "${fm.pagination.default-size-index.search}") PageSize pageSize,
+                            @RequestParam(defaultValue = "${fm.pagination.default-sort-index.book}") BookSortCriteria sort,
                             @Valid SearchCriteria searchCriteria,
                             Errors errors,
                             Model model,
                             @AuthenticationPrincipal User authUser){
 
-        // paging
-        Pageable pageable = PageRequest.of(
-                Integer.parseInt(pageNo),
-                Integer.parseInt(pageSize),
-                Sort.by("price").descending().and(Sort.by("id").ascending()));
+        Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
 
         if (errors.hasErrors()) {
             searchCriteria.setQ(null);
             model.addAttribute("message", messageSource.getMessage("validation.regex.text-query", null, null));
         }
+
+        //filter status
+        searchCriteria.setExcludedStatus((userServer.hasRole(authUser, "ROLE_ADMIN")) ? null : BookStatus.DISABLED);
 
         // category
         if (searchCriteria.getCategoryId() == null) { // root category by default
@@ -184,6 +181,8 @@ public class BookController extends BasicController {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
+        model.addAttribute("pageable", pageable);
+        model.addAttribute("sort", sort);
         return "books";
     }
 

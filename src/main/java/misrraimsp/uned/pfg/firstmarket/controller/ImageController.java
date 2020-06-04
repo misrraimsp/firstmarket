@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ImagesWrapper;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.apache.commons.io.IOUtils;
@@ -42,11 +43,11 @@ public class ImageController extends BasicController  {
 
     private void populateModelToImage(Model model,
                                       String pageNo,
-                                      String pageSize) {
+                                      int size) {
 
         Pageable pageable = PageRequest.of(
                 Integer.parseInt(pageNo),
-                Integer.parseInt(pageSize),
+                size,
                 Sort.by("mime_type").descending().and(Sort.by("name").ascending()));
 
         model.addAttribute("pageOfEntities", imageServer.getPageOfMetaInfo(pageable));
@@ -65,11 +66,11 @@ public class ImageController extends BasicController  {
 
     @GetMapping("/admin/images")
     public String showImages(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
-                             @RequestParam(defaultValue = "${fm.pagination.default-size.image}") String pageSize,
+                             @RequestParam(defaultValue = "${fm.pagination.default-size-index.image}") PageSize pageSize,
                              Model model) {
 
         populateModel(model.asMap(), null);
-        populateModelToImage(model, pageNo, pageSize);
+        populateModelToImage(model, pageNo, pageSize.getSize());
         model.addAttribute("imagesWrapper", new ImagesWrapper());
         return "images";
     }
@@ -78,12 +79,12 @@ public class ImageController extends BasicController  {
     public String processNewImage(@Valid ImagesWrapper imagesWrapper,
                                   Errors errors,
                                   @RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
-                                  @RequestParam(defaultValue = "${fm.pagination.default-size.image}") String pageSize,
+                                  @RequestParam(defaultValue = "${fm.pagination.default-size-index.image}") PageSize pageSize,
                                   Model model){
 
         if (errors.hasErrors()) {
             populateModel(model.asMap(), null);
-            populateModelToImage(model, pageNo, pageSize);
+            populateModelToImage(model, pageNo, pageSize.getSize());
             return "images";
         }
         imagesWrapper.getImages().forEach(image -> {

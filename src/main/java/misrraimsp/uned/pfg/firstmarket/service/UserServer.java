@@ -265,11 +265,7 @@ public class UserServer implements UserDetailsService {
     }
 
     public boolean hasRole(User authUser, String roleName) {
-        for (Role role : authUser.getRoles()) {
-            if (role.getName().equalsIgnoreCase(roleName)) {
-                return true;
-            }
-        }
-        return false;
+        if (authUser == null) return false;
+        return authUser.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase(roleName));
     }
 }
