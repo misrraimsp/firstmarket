@@ -1,20 +1,21 @@
 package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria;
-import misrraimsp.uned.pfg.firstmarket.exception.NoSortCriteriaBookException;
+import misrraimsp.uned.pfg.firstmarket.exception.NoSortCriteriaException;
+import misrraimsp.uned.pfg.firstmarket.model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StringToSortCriteriaBookConverter implements Converter<String, BookSortCriteria> {
+public class StringToBookSortCriteriaConverter implements Converter<String, BookSortCriteria> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Override
     public BookSortCriteria convert(String s) {
-        if (BookSortCriteria.values().length == 0) throw new NoSortCriteriaBookException();
+        if (BookSortCriteria.values().length == 0) throw new NoSortCriteriaException(Book.class.getSimpleName());
         try {
             int index = Integer.parseInt(s);
             int maxIndex = BookSortCriteria.values().length - 1;

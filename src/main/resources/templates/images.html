@@ -13,22 +13,56 @@
             <div th:replace="fragments/components::title(text = 'Images')"></div>
             <!-- main content -->
             <div class="row">
-                <div class="col-sm-3 bg-white"></div>
-                <div class="col-sm-6 bg-light">
+                <!-- left margin -->
+                <div class="col-sm-1 bg-white"></div>
+                <!-- content -->
+                <div class="col-sm-10 bg-light">
                     <!-- new image form -->
                     <p class="mt-1 mb-0">Select a new image:</p>
-                    <form class="needs-validation mt-1" novalidate th:action="@{/admin/newImage}" th:object="${imagesWrapper}" method="POST" enctype="multipart/form-data" action="#">
+                    <form class="needs-validation mt-1" novalidate th:action="@{/admin/newImage}" th:object="${imagesWrapper}" method="POST" enctype="multipart/form-data">
                         <div class="form-group mb-3">
                             <input class="form-control" type="file" multiple th:field="*{images}" accept="image/*" required/>
                             <div class="invalid-feedback">Please select an image</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('images')"></div>
-                        <button class="btn btn-info px-5 my-1" type="submit">Save</button>
+                        <button class="btn btn-sm btn-info px-5 my-1" type="submit">Save</button>
                     </form>
-                    <!-- pagination legend -->
-                    <div class="d-flex align-items-end justify-content-end">
-                        <div class="text-info">
-                            <p th:replace="fragments/components::paginationLegend"></p>
+                    <hr/>
+                    <!-- pagination control -->
+                    <div class="row">
+                        <!-- page size -->
+                        <div class="col-sm-4 d-flex align-items-end">
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationPageSize" style="max-width: 33%">
+                                <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
+                                        th:value="${ps.ordinal()}"
+                                        th:text="${ps.size}"
+                                        th:selected="${ps.size eq pageOfEntities.pageable.pageSize}">
+                                </option>
+                            </select>
+                            <p class="my-0 ml-2">
+                                <small class="text-dark font-weight-lighter">Page size</small>
+                            </p>
+                        </div>
+                        <!-- page legend -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-center">
+                            <div class="text-dark">
+                                <p th:replace="fragments/components::paginationLegend"></p>
+                            </div>
+                        </div>
+                        <!-- sort criteria -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-end">
+                            <!-- label -->
+                            <p class="my-0 mr-2">
+                                <small class="text-dark font-weight-lighter">Sorted by</small>
+                            </p>
+                            <!-- options -->
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.ImageSortCriteria).values()}"
+                                        th:value="${sc.ordinal()}"
+                                        th:text="${sc.text}"
+                                        th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
+                                </option>
+                            </select>
                         </div>
                     </div>
                     <hr/>
@@ -41,6 +75,7 @@
                                 <th>Name</th>
                                 <th>is Default</th>
                                 <th>MIME type</th>
+                                <th>Size (bytes)</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -58,14 +93,18 @@
                                 </td>
                                 <!-- image MIME type -->
                                 <td><span th:text="${mi.mimeType}">mimeType</span></td>
+                                <!-- image size -->
+                                <td><span th:text="${mi.size}">size</span></td>
                                 <!-- actions -->
                                 <td>
                                     <div class="d-flex justify-content-around">
                                         <!-- set as default -->
                                         <div class="mr-auto">
                                             <form th:action="@{/admin/setDefaultImage}" method="POST" action="#">
-                                                <input type="hidden" name="id" th:value="${mi.id}"/>
-                                                <input type="hidden" name="pn" th:value="${pageOfEntities.number}"/>
+                                                <input type="hidden" name="imageId" th:value="${mi.id}"/>
+                                                <input type="hidden" name="pageNo" th:value="${pageOfEntities.number}"/>
+                                                <input type="hidden" name="pageSize" th:value="${pageSize.ordinal()}"/>
+                                                <input type="hidden" name="sort" th:value="${sort.ordinal()}"/>
                                                 <button th:if="${mi.default}" disabled class="btn btn-sm btn-outline-secondary">
                                                     <i class='fas fa-check-double'></i>
                                                 </button>
@@ -102,7 +141,8 @@
                         <div class="col-sm-4"></div>
                     </div>
                 </div>
-                <div class="col-sm-3 bg-white"></div>
+                <!-- right margin -->
+                <div class="col-sm-1 bg-white"></div>
             </div>
             <!-- modal -->
             <div th:replace="fragments/components::deletingModal(entity = 'Image')"></div>
@@ -112,6 +152,7 @@
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- pagination functionality -->
+        <a id="paginationTrigger" style="display: none"></a>
         <script th:replace="fragments/components::paginationMvcVariables"></script>
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationControl.js}"></script>

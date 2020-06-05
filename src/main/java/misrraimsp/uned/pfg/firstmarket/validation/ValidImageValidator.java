@@ -17,8 +17,8 @@ public class ValidImageValidator implements ConstraintValidator<ValidImage, Obje
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private ValidationRegexProperties validationRegexProperties;
-    private ValidationNumericProperties validationNumericProperties;
+    private final ValidationRegexProperties validationRegexProperties;
+    private final ValidationNumericProperties validationNumericProperties;
 
     @Autowired
     public ValidImageValidator(ValidationRegexProperties validationRegexProperties,

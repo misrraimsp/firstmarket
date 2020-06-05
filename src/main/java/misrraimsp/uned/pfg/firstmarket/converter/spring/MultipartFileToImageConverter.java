@@ -30,6 +30,7 @@ public class MultipartFileToImageConverter implements Converter<MultipartFile, I
         image.setName(imageName);
         image.setMimeType(multipartFile.getContentType());
         image.setData(data);
+        image.setSize(data.length);
         return image;
     }
 }
