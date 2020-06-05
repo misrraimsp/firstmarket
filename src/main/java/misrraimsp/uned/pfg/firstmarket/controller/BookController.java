@@ -167,7 +167,7 @@ public class BookController extends BasicController {
         Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
         Page<Book> bookPage = bookServer.findSearchResults(searchCriteria, pageable);
         int lastPageNo = bookPage.getTotalPages() - 1;
-        if (lastPageNo < pageNo) {
+        if (lastPageNo > 0 && lastPageNo < pageNo) {
             pageable = PageRequest.of(lastPageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
             bookPage = bookServer.findSearchResults(searchCriteria, pageable);
         }
