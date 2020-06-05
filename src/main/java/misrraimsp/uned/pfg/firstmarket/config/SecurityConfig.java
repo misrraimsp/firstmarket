@@ -52,19 +52,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutSuccessUrl("/home")
 
-                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
-
-                // Make H2-Console non-secured; for debug purposes
                 .and()
                 .csrf()
-                .ignoringAntMatchers("/listener")
-                //.ignoringAntMatchers("api.stripe.com","checkout.stripe.com","js.stripe.com","m.stripe.com","m.stripe.network","q.stripe.com")
-                //.ignoringAntMatchers("/**")
-                //.ignoringAntMatchers("/h2-console/**")
+                .ignoringAntMatchers("/listener") // open for stripe notifications
+                //.ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
+
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                //.and()
+                //.headers()
+                //.frameOptions()
+                //.sameOrigin()
         ;
     }
 
