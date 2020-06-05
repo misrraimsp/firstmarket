@@ -50,7 +50,7 @@ public class ImageController extends BasicController  {
         Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
         Page<Image> imagePage = imageServer.getPageOfMetaInfo(pageable);
         int lastPageNo = imagePage.getTotalPages() - 1;
-        if (lastPageNo < pageNo) {
+        if (lastPageNo > 0 && lastPageNo < pageNo) {
             pageable = PageRequest.of(lastPageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
             imagePage = imageServer.getPageOfMetaInfo(pageable);
         }
