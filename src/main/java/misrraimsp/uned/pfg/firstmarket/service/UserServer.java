@@ -6,6 +6,7 @@ import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPassw
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
@@ -118,7 +119,10 @@ public class UserServer implements UserDetailsService {
             cart = new Cart();
         }
         Profile profile = new Profile();
-        profile.setFirstName("");
+        profile.setLastName("");
+        profile.setPhone("");
+        profile.setGender(Gender.UNDEFINED);
+        profile.setBirthDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
         User user = new User();
         user.setCompleted(false);
         user.setSuspended(false);
@@ -127,7 +131,10 @@ public class UserServer implements UserDetailsService {
         user.setProfile(profileServer.persist(profile));
         user.setRoles(roles);
         user.setCart(cartServer.persist(cart));
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        profile.setFirstName("user" + user.getId());
+        profileServer.persist(profile);
+        return savedUser;
     }
 
     public User findById(Long id) {
