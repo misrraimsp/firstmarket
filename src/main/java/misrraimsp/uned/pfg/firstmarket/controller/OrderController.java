@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @Controller
@@ -105,9 +106,10 @@ public class OrderController extends BasicController {
     @PostMapping("/listener")
     public void processStripeEvent(@RequestBody String payload,
                                    @RequestHeader("Stripe-Signature") String sigHeader,
+                                   HttpServletRequest request,
                                    HttpServletResponse response) {
 
-        LOGGER.debug("enter in listener");
+        LOGGER.debug("enter in listener for {}", request.getRemoteAddr());
         String eventType;
         PaymentIntent paymentIntent;
 
