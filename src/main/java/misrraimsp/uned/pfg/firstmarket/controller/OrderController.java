@@ -29,20 +29,19 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Collections;
 import java.util.Set;
 
 @Controller
 public class OrderController extends BasicController {
 
     @Value("${fm.payment.stripe.key.private}")
-    private final String ssk = "someSecretKey_bitch";
+    private String ssk = "someSecretKey_bitch";
 
     @Value("${fm.payment.stripe.key.webhook}")
     String endpointSecret = "anotherSecret_bitch";
 
     @Value("${fm.payment.stripe.ips}")
-    Set<String> ips = Collections.singleton("127.0.0.1");
+    Set<String> ips;
 
     private final ApplicationEventPublisher applicationEventPublisher;
     private final CartServer cartServer;
