@@ -230,6 +230,10 @@ public class UserController extends BasicController {
         }
         try {
             User user = userServer.getUserByEmail(email);
+            if (user.isSuspended()) {
+                LOGGER.debug("suspended user(id={}) trying to reset password", user.getId());
+                return "redirect:/emailConfirmationRequest";
+            }
             applicationEventPublisher.publishEvent(
                     new OnEmailConfirmationNeededEvent(SecurityEvent.RESET_PASSWORD, user.getId(), null)
             );
