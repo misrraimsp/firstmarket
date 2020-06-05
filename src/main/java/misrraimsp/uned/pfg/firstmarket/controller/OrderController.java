@@ -29,18 +29,23 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Collections;
+import java.util.Set;
 
 @Controller
 public class OrderController extends BasicController {
 
     @Value("${fm.payment.stripe.key.private}")
-    private String ssk = "someSecretKey_bitch";
+    private final String ssk = "someSecretKey_bitch";
 
     @Value("${fm.payment.stripe.key.webhook}")
     String endpointSecret = "anotherSecret_bitch";
 
-    private ApplicationEventPublisher applicationEventPublisher;
-    private CartServer cartServer;
+    @Value("${fm.payment.stripe.ips}")
+    Set<String> ips = Collections.singleton("127.0.0.1");
+
+    private final ApplicationEventPublisher applicationEventPublisher;
+    private final CartServer cartServer;
 
     public OrderController(UserServer userServer,
                            BookServer bookServer,
@@ -109,7 +114,13 @@ public class OrderController extends BasicController {
                                    HttpServletRequest request,
                                    HttpServletResponse response) {
 
-        LOGGER.debug("enter in listener for {}", request.getRemoteAddr());
+        LOGGER.debug("POST at /listener from {}", request.getRemoteAddr());
+        if (ips.stream().noneMatch(ip -> ip.equals(request.getRemoteAddr()))) {
+            LOGGER.warn("Trying to POST at /listener from an unknown ip address {}", request.getRemoteAddr());
+            response.setStatus(403);
+            return;
+        }
+
         String eventType;
         PaymentIntent paymentIntent;
 
