@@ -34,7 +34,7 @@ create table cart (id bigint not null, is_committed boolean, stripe_client_secre
 create table cart_items (cart_id bigint not null, items_id bigint not null, primary key (cart_id, items_id));
 create table category (id bigint not null, name varchar(255), parent_id bigint, primary key (id));
 create table catpath (id bigint not null, size integer not null, ancestor_id bigint, descendant_id bigint, primary key (id));
-create table image (id bigint not null, data bytea, is_default boolean not null, mime_type varchar(255), name varchar(255), primary key (id));
+create table image (id bigint not null, data bytea, size integer, is_default boolean not null, mime_type varchar(255), name varchar(255), primary key (id));
 create table item (id bigint not null, quantity integer not null, book_id bigint, primary key (id));
 create table role (id bigint not null, name varchar(255), primary key (id));
 create table usuario (id bigint not null, email varchar(255), completed boolean not null, suspended boolean not null, password varchar(255), cart_id bigint, profile_id bigint, primary key (id));

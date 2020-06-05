@@ -23,4 +23,11 @@ public class Image {
 
     //@Lob //dev-h2
     private byte[] data;
+
+    private int size;
+
+    public void setData(byte[] bytes) {
+        data = bytes;
+        size = bytes.length;
+    }
 }

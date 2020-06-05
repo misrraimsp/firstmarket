@@ -85,6 +85,7 @@ fm:
    pagination:
       default-sort-index:
          book: 2
+         image: 2
       default-size-index:
          image: 0
          home: 1
