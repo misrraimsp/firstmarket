@@ -8,6 +8,7 @@ import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -47,7 +48,13 @@ public class ImageController extends BasicController  {
                                       ImageSortCriteria sort) {
 
         Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
-        model.addAttribute("pageOfEntities", imageServer.getPageOfMetaInfo(pageable));
+        Page<Image> imagePage = imageServer.getPageOfMetaInfo(pageable);
+        int lastPageNo = imagePage.getTotalPages() - 1;
+        if (lastPageNo < pageNo) {
+            pageable = PageRequest.of(lastPageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+            imagePage = imageServer.getPageOfMetaInfo(pageable);
+        }
+        model.addAttribute("pageOfEntities", imagePage);
         model.addAttribute("sort", sort);
         model.addAttribute("pageSize", pageSize);
     }

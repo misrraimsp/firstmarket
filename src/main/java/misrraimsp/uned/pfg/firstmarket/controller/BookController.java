@@ -149,8 +149,6 @@ public class BookController extends BasicController {
                             Model model,
                             @AuthenticationPrincipal User authUser){
 
-        Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
-
         if (errors.hasErrors()) {
             searchCriteria.setQ(null);
             model.addAttribute("message", messageSource.getMessage("validation.regex.text-query", null, null));
@@ -165,15 +163,22 @@ public class BookController extends BasicController {
         }
         Category category = catServer.findCategoryById(searchCriteria.getCategoryId());
 
-        // search
-        Page<Book> books = bookServer.findSearchResults(searchCriteria, pageable);
+        // search books
+        Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+        Page<Book> bookPage = bookServer.findSearchResults(searchCriteria, pageable);
+        int lastPageNo = bookPage.getTotalPages() - 1;
+        if (lastPageNo < pageNo) {
+            pageable = PageRequest.of(lastPageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+            bookPage = bookServer.findSearchResults(searchCriteria, pageable);
+        }
+        // search filter criteria
         Set<Author> authors = bookServer.findTopAuthorsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
         Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
         Set<Language> languages = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
 
         // load model
         populateModel(model.asMap(), authUser);
-        model.addAttribute("pageOfEntities", books);
+        model.addAttribute("pageOfEntities", bookPage);
         model.addAttribute("category", category);
         model.addAttribute("categorySequence", catServer.getCategorySequence(category));
         model.addAttribute("childrenCategories", catServer.getChildren(category));
