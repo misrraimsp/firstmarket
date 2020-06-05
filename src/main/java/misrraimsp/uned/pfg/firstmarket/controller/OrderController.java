@@ -136,26 +136,6 @@ public class OrderController extends BasicController {
                 response.setStatus(500);
                 return;
             }
-            //PaymentIntent paymentIntent = new Gson().fromJson(payload, PaymentIntent.class);
-            // Deal with each scenario
-            /*
-            switch(payload) {
-                case "succeeded":
-                    // Fulfil the customer's purchase
-                    LOGGER.debug("Stripe (localdev) - Succeeded: payment-intent");
-                    response.setStatus(200);
-                    return;
-                case "payment_failed":
-                    // Notify the customer that payment failed
-                    LOGGER.debug("Stripe (localdev) - Failed: payment-intent");
-                    response.setStatus(200);
-                    return;
-                default:
-                    // Unexpected event type
-                    LOGGER.debug("Stripe (localdev) - Unexpected event type");
-                    response.setStatus(400);
-            }
-             */
         }
         // web deployed
         else {
@@ -201,7 +181,6 @@ public class OrderController extends BasicController {
                 response.setStatus(200);
                 return;
             }
-
             eventType = event.getType();
         }
 
