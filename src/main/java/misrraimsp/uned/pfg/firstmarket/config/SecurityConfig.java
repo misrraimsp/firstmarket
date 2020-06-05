@@ -61,7 +61,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Make H2-Console non-secured; for debug purposes
                 .and()
                 .csrf()
-                .ignoringAntMatchers("api.stripe.com","checkout.stripe.com","js.stripe.com","m.stripe.com","m.stripe.network","q.stripe.com")
+                .ignoringAntMatchers("/listener")
+                //.ignoringAntMatchers("api.stripe.com","checkout.stripe.com","js.stripe.com","m.stripe.com","m.stripe.network","q.stripe.com")
+                //.ignoringAntMatchers("/**")
                 //.ignoringAntMatchers("/h2-console/**")
         ;
     }
