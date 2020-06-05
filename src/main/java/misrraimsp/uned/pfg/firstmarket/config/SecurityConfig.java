@@ -18,8 +18,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserServer userServer;
-    private MessageSource messageSource;
+    private final UserServer userServer;
+    private final MessageSource messageSource;
 
     @Autowired
     public SecurityConfig(UserServer userServer, MessageSource messageSource) {
@@ -61,9 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // Make H2-Console non-secured; for debug purposes
                 .and()
                 .csrf()
-                .disable()
-                //.ignoringAntMatchers("/h2-console/**")
-
+                .ignoringAntMatchers("/h2-console/**")
         ;
     }
 
