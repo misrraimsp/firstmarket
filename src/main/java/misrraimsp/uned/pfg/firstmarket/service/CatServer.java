@@ -22,9 +22,9 @@ import java.util.List;
 @Service
 public class CatServer {
 
-    private CategoryRepository categoryRepository;
-    private CatpathRepository catpathRepository;
-    private CategoryConverter categoryConverter;
+    private final CategoryRepository categoryRepository;
+    private final CatpathRepository catpathRepository;
+    private final CategoryConverter categoryConverter;
 
     private TreeNode<Category> rootCategoryNode; //root node of category tree
     private List<Catpath> directPaths; //set of first-order relations among categories

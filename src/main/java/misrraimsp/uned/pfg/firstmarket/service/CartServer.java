@@ -29,9 +29,9 @@ public class CartServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private CartRepository cartRepository;
-    private ItemServer itemServer;
-    private BookServer bookServer;
+    private final CartRepository cartRepository;
+    private final ItemServer itemServer;
+    private final BookServer bookServer;
 
     @Autowired
     public CartServer(CartRepository cartRepository,
@@ -179,5 +179,9 @@ public class CartServer {
         });
         cart.setItems(items);
         cartRepository.save(cart);
+    }
+
+    public Set<Cart> findAll() {
+        return cartRepository.findAll();
     }
 }

@@ -4,6 +4,7 @@ import misrraimsp.uned.pfg.firstmarket.model.Payment;
 import misrraimsp.uned.pfg.firstmarket.service.CatServer;
 import misrraimsp.uned.pfg.firstmarket.service.ImageServer;
 import misrraimsp.uned.pfg.firstmarket.service.OrderServer;
+import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +25,8 @@ public class DevPostgresqlConfig {
     @Bean
     public CommandLineRunner dataLoader(CatServer catServer,
                                         ImageServer imageServer,
-                                        OrderServer orderServer) {
+                                        OrderServer orderServer,
+                                        UserServer userServer) {
 
         return args -> {
             LOGGER.debug("CommandLineRunner on dev-postgresql: start");
@@ -65,6 +67,10 @@ public class DevPostgresqlConfig {
                 orderServer.persistPayment(payment);
             });
             LOGGER.debug("CommandLineRunner on dev-postgresql: payments amount set");
+
+            //load book usage
+            userServer.loadBookCartRegistry();
+            LOGGER.debug("CommandLineRunner on dev-postgresql: book-cart registry loaded");
         };
     }
 }
