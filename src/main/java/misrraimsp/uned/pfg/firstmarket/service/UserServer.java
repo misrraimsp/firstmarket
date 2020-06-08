@@ -34,7 +34,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServer implements UserDetailsService {
@@ -56,8 +60,6 @@ public class UserServer implements UserDetailsService {
     private final LockManager lockManager;
 
     private final ConversionManager conversionManager;
-
-    private Map<Long,Long> bookCartRegistry = new HashMap<>();
 
     @Autowired
     public UserServer(UserRepository userRepository,
@@ -276,13 +278,13 @@ public class UserServer implements UserDetailsService {
         return authUser.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase(roleName));
     }
 
-    public void loadBookCartRegistry() {
-        cartServer.findAll()
-                .stream()
-                .map(Cart::getItems)
-                .flatMap(Set::stream)
-                .map(Item::getBook)
-                .forEach(book -> bookCartRegistry.merge(book.getId(), 1L, (oldValue, defaultValue) -> ++oldValue));
-        LOGGER.debug("BookCartRegistry loaded: {}", bookCartRegistry);
+    public List<Long> getAllCartBookIds() {
+         return cartServer.findAll()
+                 .stream()
+                 .map(Cart::getItems)
+                 .flatMap(Set::stream)
+                 .map(Item::getBook)
+                 .map(Book::getId)
+                 .collect(Collectors.toList());
     }
 }

@@ -67,6 +67,7 @@ public class CartServer {
             Item newItem = itemServer.create(bookId);
             items.add(newItem);
             cart.setItems(items);
+            bookServer.incrementCartBookRegistry(bookId);
         }
         else {
             itemServer.increment(matchingItemIds.get(0));
@@ -104,6 +105,7 @@ public class CartServer {
             LOGGER.debug("Item(id={}) decremented inside cart(id={})", itemId, cart.getId());
         }
         else {
+            bookServer.decrementCartBookRegistry(itemToDecrement.getBook().getId());
             items.remove(itemToDecrement);
             cart.setItems(items);
             cartRepository.save(cart);
@@ -122,6 +124,7 @@ public class CartServer {
             return;
         }
         cart = this.unCommitCart(cart);
+        bookServer.decrementCartBookRegistry(deletingItem.getBook().getId());
         items.remove(deletingItem);
         cart.setItems(items);
         cartRepository.save(cart);

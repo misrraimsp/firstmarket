@@ -476,7 +476,7 @@ public class DevH2Config {
             itemServer.persist(item1);
 
             Item item2 = new Item();
-            item2.setBook(book4);
+            item2.setBook(book2);
             item2.setQuantity(2);
             itemServer.persist(item2);
 
@@ -486,7 +486,7 @@ public class DevH2Config {
             itemServer.persist(item3);
 
             Item item4 = new Item();
-            item4.setBook(book4);
+            item4.setBook(book2);
             item4.setQuantity(2);
             itemServer.persist(item4);
 
@@ -590,8 +590,8 @@ public class DevH2Config {
             orderRepository.save(order1);
 
             //load book usage
-            userServer.loadBookCartRegistry();
-            LOGGER.debug("CommandLineRunner on dev-h2: book-cart registry loaded");
+            bookServer.incrementCartBookRegistry(userServer.getAllCartBookIds());
+            LOGGER.debug("CommandLineRunner on dev-h2: CartBookRegistry loaded: {}", bookServer.getCartBookRegistry());
 
         };
     }

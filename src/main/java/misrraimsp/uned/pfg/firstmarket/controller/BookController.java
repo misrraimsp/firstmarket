@@ -188,6 +188,7 @@ public class BookController extends BasicController {
         model.addAttribute("languages", languages);
         model.addAttribute("pageable", pageable);
         model.addAttribute("sort", sort);
+        model.addAttribute("cartBookRegistry", bookServer.getCartBookRegistry());
         return "books";
     }
 
