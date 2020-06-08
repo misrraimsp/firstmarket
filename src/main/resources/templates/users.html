@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments/components::head('Users')"></head>
+    <body>
+        <div class="container-fluid">
+            <!-- header -->
+            <header th:replace="fragments/components::header"></header>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
+            <div th:replace="fragments/components::title(text = 'Users')"></div>
+            <!-- main content -->
+            <div class="row bg-white">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8 d-flex flex-column">
+                    <div class="row my-3 bg-light" th:each="user : ${users}" th:unless="${user.isAdmin()}">
+                        <!-- basic info -->
+                        <div class="col-sm-4">
+                            <p class="font-weight-light text-dark mt-3">
+                                <span class="font-weight-lighter">User id: </span><span th:text="${user.id}"></span>
+                            </p>
+                            <p class="font-weight-light text-dark">
+                                <span class="font-weight-lighter">Email: </span><span th:text="${user.email}"></span>
+                            </p>
+                        </div>
+                        <!-- security info -->
+                        <div class="col-sm-4">
+                            <!-- enabled -->
+                            <p class="font-weight-light mt-3">
+                                <span class="text-dark font-weight-lighter">Account enabled: </span>
+                                <strong class="text-success" th:if="${user.enabled}">
+                                    Ok
+                                </strong>
+                                <strong class="text-danger" th:unless="${user.enabled}">
+                                    <small th:if="${!user.completed}">- Waiting for email confirmation </small>
+                                    <small th:if="${user.suspended}">- User has removed the account (account suspended)</small>
+                                </strong>
+                            </p>
+                            <!-- transient unavailable -->
+                            <p class="font-weight-lighter text-danger small" th:each="lm : ${lockedMails}" th:if="${user.email eq lm}">
+                                <span>Temporarily unavailable (high login error rate)</span>
+                            </p>
+                            <!-- locked -->
+                            <p class="font-weight-light mt-3">
+                                <span class="text-dark font-weight-lighter">Account locked: </span>
+                                <strong class="text-dark" th:if="${user.accountNonLocked}">No</strong>
+                                <strong class="text-danger" th:unless="${user.accountNonLocked}">Yes</strong>
+                            </p>
+                        </div>
+                        <!-- action buttons -->
+                        <div class="col-sm-4 d-flex flex-column">
+                            <!-- lock/unlock account -->
+                            <div class="mt-3">
+                                <a th:if="${user.accountNonLocked}" class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/admin/lock?id={id}(id=${user.id})}">
+                                    <i class="fas fa-lock mr-2"></i>Lock User
+                                </a>
+                                <a th:unless="${user.accountNonLocked}" class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/admin/unlock?id={id}(id=${user.id})}">
+                                    <i class="fas fa-lock-open mr-2"></i>Unlock User
+                                </a>
+                            </div>
+                            <!-- show/hide profile -->
+                            <div class="mt-2">
+                                <a class="font-weight-light text-info small" data-toggle="collapse" th:href="'#profile-' + ${user.profile.id}" style="text-decoration: none">Show/hide profile</a>
+                            </div>
+                        </div>
+                        <!-- profile -->
+                        <div class="col-sm-12 collapse" th:id="'profile-' + ${user.profile.id}">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">First Name: </span><strong th:text="${user.profile.firstName}"></strong>
+                                    </p>
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">Last Name: </span><strong th:text="${user.profile.lastName}"></strong>
+                                    </p>
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">Phone: </span><strong th:text="${user.profile.phone}"></strong>
+                                    </p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">Birth Date: </span><strong th:text="${user.profile.birthDate}"></strong>
+                                    </p>
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">Gender: </span><strong th:text="${user.profile.gender.text}"></strong>
+                                    </p>
+                                </div>
+                                <div class="col-sm-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <!-- footer -->
+            <footer th:replace="fragments/components::footer"></footer>
+        </div>
+    </body>
+</html>

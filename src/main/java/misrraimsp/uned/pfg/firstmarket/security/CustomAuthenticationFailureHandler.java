@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public CustomAuthenticationFailureHandler(MessageSource messageSource){
         this.messageSource = messageSource;

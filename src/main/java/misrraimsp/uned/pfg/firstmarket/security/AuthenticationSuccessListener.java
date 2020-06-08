@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthenticationSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {
 
-    private LockManager lockManager;
+    private final LockManager lockManager;
 
     @Autowired
     public AuthenticationSuccessListener(LockManager lockManager) {

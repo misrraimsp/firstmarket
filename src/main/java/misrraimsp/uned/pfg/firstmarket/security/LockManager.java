@@ -7,14 +7,16 @@ import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityLockPropert
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 @Service
 public class LockManager {
 
-    private LoadingCache<String, Integer> loginFailuresCache;
-    private SecurityLockProperties securityLockProperties;
+    private final LoadingCache<String, Integer> loginFailuresCache;
+    private final SecurityLockProperties securityLockProperties;
 
     @Autowired
     public LockManager(SecurityLockProperties securityLockProperties) {
@@ -55,6 +57,14 @@ public class LockManager {
         } catch (ExecutionException e) {
             return false;
         }
+    }
+
+    public Set<String> getLocked() {
+        Set<String> mailsLocked = new HashSet<>();
+        loginFailuresCache.asMap().forEach((key, value) -> {
+            if (value >= securityLockProperties.getNumOfAttempts()) mailsLocked.add(key);
+        });
+        return mailsLocked;
     }
 
     //debug

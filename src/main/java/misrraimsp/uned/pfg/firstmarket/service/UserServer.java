@@ -96,9 +96,11 @@ public class UserServer implements UserDetailsService {
         User user = userRepository.findByEmail(email);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
-        } else if (lockManager.isLocked(email)) {
+        }
+        else if (lockManager.isLocked(email)) {
             throw new LockedException("locked");
-        } else {
+        }
+        else {
             return user;
         }
     }
@@ -286,5 +288,13 @@ public class UserServer implements UserDetailsService {
                  .map(Item::getBook)
                  .map(Book::getId)
                  .collect(Collectors.toList());
+    }
+
+    public Iterable<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public Set<String> getLockedMails() {
+        return lockManager.getLocked();
     }
 }

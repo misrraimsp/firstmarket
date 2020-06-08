@@ -21,6 +21,7 @@ public class User implements UserDetails {
 
     private boolean completed;
     private boolean suspended; // The user has deleted their account
+    //private boolean locked;
 
     private String email;
 
@@ -67,6 +68,10 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return completed && !suspended;
+    }
+
+    public boolean isAdmin() {
+        return roles.stream().map(Role::getName).anyMatch(name -> name.equals("ROLE_ADMIN"));
     }
 
     public String toString() {

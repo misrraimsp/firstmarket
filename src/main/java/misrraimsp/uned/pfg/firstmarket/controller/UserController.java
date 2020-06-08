@@ -452,4 +452,12 @@ public class UserController extends BasicController {
         return "redirect:/home";
     }
 
+    @GetMapping("/admin/users")
+    public String showUsers(Model model) {
+        populateModel(model.asMap(), null);
+        model.addAttribute("users", userServer.findAll());
+        model.addAttribute("lockedMails", userServer.getLockedMails());
+        return "users";
+    }
+
 }

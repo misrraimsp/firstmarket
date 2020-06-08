@@ -17,10 +17,10 @@ import java.util.Calendar;
 @Component
 public class AuthenticationFailureListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
 
-    private LockManager lockManager;
-    private UserServer userServer;
-    private MailServer mailServer;
-    private SecurityLockProperties securityLockProperties;
+    private final LockManager lockManager;
+    private final UserServer userServer;
+    private final MailServer mailServer;
+    private final SecurityLockProperties securityLockProperties;
 
     @Autowired
     public AuthenticationFailureListener(LockManager lockManager,
@@ -40,7 +40,7 @@ public class AuthenticationFailureListener implements ApplicationListener<Authen
         if (userServer.emailExists(email)){
             // cache failure
             lockManager.loginFail(email);
-            // send email if just locked
+            // send email if just locked (it is just locked because the event is BadCredential. On next logins the authentication failure will be Locked)
             if (lockManager.isLocked(email)) {
                 User user = userServer.getUserByEmail(email);
                 // Build the email message
