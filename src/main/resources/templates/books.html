@@ -213,7 +213,7 @@
                                 <div class="col-sm-3 d-flex flex-column bg-white">
                                     <!-- No-Admin actions -->
                                     <div class="my-3" sec:authorize="!hasRole('ADMIN')">
-                                        <button class="btn btn-outline-info btn-sm btn-block align-center" ajax="addBook" th:id="'ab-' + ${book.id}">
+                                        <button class="btn btn-outline-info btn-sm btn-block align-center" ajax="addBook" th:id="'ab-' + ${book.id}" th:attrappend="disabled=${(book.stock eq 0) ? 'disabled' : null}">
                                             Add to Cart<i class="fas fa-cart-plus ml-3"></i>
                                         </button>
                                     </div>
@@ -249,16 +249,17 @@
                                     <p class="text-dark">
                                         <span class="font-weight-light">EUR </span><strong th:text="${book.price}"></strong>
                                     </p>
-                                    <!-- stock -->
-                                    <p class="small mt-n3">
-                                        <em class="font-weight-lighter">
-                                            <span th:if="${book.stock gt 0}">
-                                                <strong class="text-dark" th:text="${book.stock}"></strong> units left
-                                            </span>
-                                            <span th:unless="${book.stock gt 0}">
-                                                <strong class="text-info">sold out</strong>
-                                            </span>
-                                        </em>
+                                    <!-- stock alarms -->
+                                    <p class="small mt-n3 font-weight-lighter">
+                                        <span class="text-danger" th:if="${book.stock eq 0}">
+                                            Sold out
+                                        </span>
+                                        <span class="text-danger" th:if="${book.stock gt 0 && book.stock le cartBookRegistry.getOrDefault(book.id, 0) && book.stock le __${@environment.getProperty('fm.front-end.books.stock-usage-warning-threshold')}__}">
+                                            Only <strong th:text="${book.stock}"></strong> available and it's in <strong th:text="${cartBookRegistry.get(book.id)}"></strong> person's cart
+                                        </span>
+                                        <span class="text-dark" th:if="${book.stock gt 0 && book.stock gt cartBookRegistry.getOrDefault(book.id, 0) && book.stock le __${@environment.getProperty('fm.front-end.books.stock-warning-threshold')}__}">
+                                            <strong th:text="${book.stock}"></strong> Units left
+                                        </span>
                                     </p>
                                 </div>
                             </div>

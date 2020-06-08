@@ -476,7 +476,7 @@ public class DevH2Config {
             itemServer.persist(item1);
 
             Item item2 = new Item();
-            item2.setBook(book4);
+            item2.setBook(book2);
             item2.setQuantity(2);
             itemServer.persist(item2);
 
@@ -484,6 +484,16 @@ public class DevH2Config {
             item3.setBook(book3);
             item3.setQuantity(3);
             itemServer.persist(item3);
+
+            Item item4 = new Item();
+            item4.setBook(book2);
+            item4.setQuantity(2);
+            itemServer.persist(item4);
+
+            Item item5 = new Item();
+            item5.setBook(book3);
+            item5.setQuantity(3);
+            itemServer.persist(item5);
 
             //Carts
 
@@ -497,8 +507,12 @@ public class DevH2Config {
              */
 
             Cart cart3 = new Cart();
-            cart3.setItems(Set.of(item1, item2));
+            cart3.setItems(Set.of(item1, item2, item3));
             cartServer.persist(cart3);
+
+            Cart cart4 = new Cart();
+            cart4.setItems(Set.of(item4, item5));
+            cartServer.persist(cart4);
 
             //Roles
 
@@ -554,12 +568,30 @@ public class DevH2Config {
             profileRepository.save(andreaProfile);
             userServer.setCompletedState(andrea.getId(),true);
 
+            UserForm userForm4 = new UserForm();
+            userForm4.setEmail("eric@fm.com");
+            userForm4.setPassword("eric");
+            userForm4.setMatchingPassword("eric");
+            User eric = userServer.persist(userForm4, passwordEncoder, Collections.singleton(role2), cart4);
+            misrraimsp.uned.pfg.firstmarket.model.Profile ericProfile = eric.getProfile();
+            ericProfile.setFirstName("Eric");
+            ericProfile.setLastName("Forman");
+            ericProfile.setPhone("123 456 789");
+            ericProfile.setBirthDate(LocalDate.ofYearDay(1960, 111).format(timeFormatProperties.getDateFormatter()));
+            ericProfile.setGender(Gender.MALE);
+            profileRepository.save(ericProfile);
+            userServer.setCompletedState(eric.getId(),true);
+
             //Orders
             Order order1 = new Order();
             order1.setItems(Set.of(item3));
             order1.setUser(andrea);
             order1.setDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
             orderRepository.save(order1);
+
+            //load book usage
+            bookServer.incrementCartBookRegistry(userServer.getAllCartBookIds());
+            LOGGER.debug("CommandLineRunner on dev-h2: CartBookRegistry loaded: {}", bookServer.getCartBookRegistry());
 
         };
     }

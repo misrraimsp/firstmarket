@@ -16,8 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -26,6 +25,8 @@ import java.util.stream.Collectors;
 public class BookServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
+    private final Map<Long,Long> cartBookRegistry = new HashMap<>();
 
     private final BookRepository bookRepository;
     private final ImageServer imageServer;
@@ -285,5 +286,23 @@ public class BookServer {
         }
         book.setStatus(status);
         bookRepository.save(book);
+    }
+
+    public void incrementCartBookRegistry(Long cartBookId) {
+        cartBookRegistry.merge(cartBookId, 1L, (oldValue, defaultValue) -> ++oldValue);
+        LOGGER.debug("CartBook(id={}) incremented on CartBookRegistry({})", cartBookId, this.getCartBookRegistry());
+    }
+
+    public void decrementCartBookRegistry(Long cartBookId) {
+        cartBookRegistry.computeIfPresent(cartBookId, (key, value) -> (value > 1L) ? --value : null);
+        LOGGER.debug("CartBook(id={}) decremented on CartBookRegistry({})", cartBookId, this.getCartBookRegistry());
+    }
+
+    public void incrementCartBookRegistry(List<Long> cartBookIds) {
+        cartBookIds.forEach(this::incrementCartBookRegistry);
+    }
+
+    public Map<Long,Long> getCartBookRegistry() {
+        return cartBookRegistry;
     }
 }

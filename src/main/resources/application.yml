@@ -78,6 +78,8 @@ fm:
       books:
          title-max-size: 60
          authors-max: 2
+         stock-usage-warning-threshold: 50
+         stock-warning-threshold: 5
       search-criteria:
          num-of-authors: 4
          num-of-publishers: 5
@@ -120,8 +122,8 @@ spring:
       password: ${JDBC_DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      schema: classpath:sql/schema.sql
-      data: classpath:sql/data*.sql
+      #schema: classpath:sql/schema.sql
+      #data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:

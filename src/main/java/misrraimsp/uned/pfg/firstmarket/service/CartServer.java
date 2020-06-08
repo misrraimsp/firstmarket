@@ -29,9 +29,9 @@ public class CartServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private CartRepository cartRepository;
-    private ItemServer itemServer;
-    private BookServer bookServer;
+    private final CartRepository cartRepository;
+    private final ItemServer itemServer;
+    private final BookServer bookServer;
 
     @Autowired
     public CartServer(CartRepository cartRepository,
@@ -67,6 +67,7 @@ public class CartServer {
             Item newItem = itemServer.create(bookId);
             items.add(newItem);
             cart.setItems(items);
+            bookServer.incrementCartBookRegistry(bookId);
         }
         else {
             itemServer.increment(matchingItemIds.get(0));
@@ -104,6 +105,7 @@ public class CartServer {
             LOGGER.debug("Item(id={}) decremented inside cart(id={})", itemId, cart.getId());
         }
         else {
+            bookServer.decrementCartBookRegistry(itemToDecrement.getBook().getId());
             items.remove(itemToDecrement);
             cart.setItems(items);
             cartRepository.save(cart);
@@ -122,6 +124,7 @@ public class CartServer {
             return;
         }
         cart = this.unCommitCart(cart);
+        bookServer.decrementCartBookRegistry(deletingItem.getBook().getId());
         items.remove(deletingItem);
         cart.setItems(items);
         cartRepository.save(cart);
@@ -179,5 +182,9 @@ public class CartServer {
         });
         cart.setItems(items);
         cartRepository.save(cart);
+    }
+
+    public Set<Cart> findAll() {
+        return cartRepository.findAll();
     }
 }
