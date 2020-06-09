@@ -23,6 +23,8 @@ import org.passay.PasswordGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -98,7 +100,7 @@ public class UserServer implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
         else if (lockManager.isLocked(email)) {
-            throw new LockedException("locked");
+            throw new LockedException("Temporarily locked");
         }
         else {
             return user;
@@ -130,6 +132,9 @@ public class UserServer implements UserDetailsService {
         User user = new User();
         user.setCompleted(false);
         user.setSuspended(false);
+        user.setAccountExpired(false);
+        user.setAccountLocked(false);
+        user.setCredentialsExpired(false);
         user.setEmail(userForm.getEmail());
         user.setPassword(passwordEncoder.encode(userForm.getPassword()));
         user.setProfile(profileServer.persist(profile));
@@ -168,6 +173,12 @@ public class UserServer implements UserDetailsService {
     public User setSuspendedState(Long userId, boolean b) throws UserNotFoundException {
         User user = this.findById(userId);
         user.setSuspended(b);
+        return userRepository.save(user);
+    }
+
+    public User setAccountLockedState(Long userId, boolean b) throws UserNotFoundException {
+        User user = this.findById(userId);
+        user.setAccountLocked(b);
         return userRepository.save(user);
     }
 
@@ -290,8 +301,8 @@ public class UserServer implements UserDetailsService {
                  .collect(Collectors.toList());
     }
 
-    public Iterable<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAllUsers(Pageable pageable) {
+        return userRepository.findByRolesContains(roleServer.findByName("ROLE_USER"), pageable);
     }
 
     public Set<String> getLockedMails() {

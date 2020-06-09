@@ -1,5 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.WebAttributes;
@@ -12,6 +14,8 @@ import java.io.IOException;
 
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private final MessageSource messageSource;
 
     public CustomAuthenticationFailureHandler(MessageSource messageSource){
@@ -19,28 +23,27 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
     }
 
     @Override
-    public void onAuthenticationFailure(HttpServletRequest httpServletRequest,
-                                        HttpServletResponse httpServletResponse,
+    public void onAuthenticationFailure(HttpServletRequest request,
+                                        HttpServletResponse response,
                                         AuthenticationException e) throws IOException, ServletException {
 
         setDefaultFailureUrl("/login?error=true");
-
-        super.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
-
+        super.onAuthenticationFailure(request, response, e);
+        LOGGER.debug("User({}) authentication failure - {}", request.getParameter("username"), e.getMessage());
         String errorMessage;
-        if (e.getMessage().equalsIgnoreCase("User is disabled")) {
-            errorMessage = messageSource.getMessage("auth.disabled", null, null);
+        switch (e.getMessage()) {
+            case "User is disabled":
+                errorMessage = messageSource.getMessage("auth.disabled", null, null);
+                break;
+            case "Temporarily locked":
+                errorMessage = messageSource.getMessage("auth.temporarilyLocked", null, null);
+                break;
+            case "User account is locked":
+                errorMessage = messageSource.getMessage("auth.locked", null, null);
+                break;
+            default:
+                errorMessage = messageSource.getMessage("auth.badCredentials", null, null);
         }
-        else if (e.getMessage().equalsIgnoreCase("User account has expired")) {
-            errorMessage = messageSource.getMessage("auth.expired", null, null);
-        }
-        else if (e.getMessage().equalsIgnoreCase("locked")) {
-            errorMessage = messageSource.getMessage("auth.locked", null, null);
-        }
-        else {
-            errorMessage = messageSource.getMessage("auth.badCredentials", null, null);
-        }
-
-        httpServletRequest.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
+        request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
     }
 }

@@ -21,7 +21,9 @@ public class User implements UserDetails {
 
     private boolean completed;
     private boolean suspended; // The user has deleted their account
-    //private boolean locked;
+    private boolean accountLocked;
+    private boolean accountExpired;
+    private boolean credentialsExpired;
 
     private String email;
 
@@ -55,26 +57,22 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return !accountExpired;
     }
+
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !accountLocked;
     }
+
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return !credentialsExpired;
     }
+
     @Override
     public boolean isEnabled() {
         return completed && !suspended;
     }
 
-    public boolean isAdmin() {
-        return roles.stream().map(Role::getName).anyMatch(name -> name.equals("ROLE_ADMIN"));
-    }
-
-    public String toString() {
-        return "id: " + id + "; email: " + email;
-    }
 }

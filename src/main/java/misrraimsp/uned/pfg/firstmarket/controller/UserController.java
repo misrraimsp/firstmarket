@@ -6,7 +6,9 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.UserDeletionForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -17,6 +19,9 @@ import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -26,10 +31,12 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Controller
 public class UserController extends BasicController {
@@ -453,11 +460,49 @@ public class UserController extends BasicController {
     }
 
     @GetMapping("/admin/users")
-    public String showUsers(Model model) {
+    public String showUsers(@RequestParam(defaultValue = "${fm.pagination.default-index}") int pageNo,
+                            @RequestParam(defaultValue = "${fm.pagination.default-size-index.user}") PageSize pageSize,
+                            @RequestParam(defaultValue = "${fm.pagination.default-sort-index.user}") UserSortCriteria sort,
+                            Model model) {
+
         populateModel(model.asMap(), null);
-        model.addAttribute("users", userServer.findAll());
-        model.addAttribute("lockedMails", userServer.getLockedMails());
+        populateModelToUser(model, pageNo, pageSize, sort);
         return "users";
+    }
+
+    private void populateModelToUser(Model model,
+                                     int pageNo,
+                                     PageSize pageSize,
+                                     UserSortCriteria sort) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+        Page<User> userPage = userServer.findAllUsers(pageable);
+        int lastPageNo = userPage.getTotalPages() - 1;
+        if (lastPageNo > 0 && lastPageNo < pageNo) {
+            pageable = PageRequest.of(lastPageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+            userPage = userServer.findAllUsers(pageable);
+        }
+        model.addAttribute("pageOfEntities", userPage);
+        model.addAttribute("lockedMails", userServer.getLockedMails());
+        model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", pageSize);
+    }
+
+    @PostMapping("/admin/lock")
+    public ModelAndView processSetLock(ModelAndView modelAndView,
+                                       @RequestParam Long userId,
+                                       @RequestParam boolean setLock,
+                                       @RequestParam(name = "pageNo") Optional<String> optPageNo,
+                                       @RequestParam(name = "pageSize") Optional<String> optPageSize,
+                                       @RequestParam(name = "sort") Optional<String> optSort) {
+
+        userServer.setAccountLockedState(userId, setLock);
+        LOGGER.debug("User(id={}) account locked state has been set {}", userId, setLock);
+        modelAndView.setViewName("redirect:/admin/users");
+        optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        optPageSize.ifPresent(pageSize -> modelAndView.addObject("pageSize", pageSize));
+        optSort.ifPresent(sort -> modelAndView.addObject("sort", sort));
+        return modelAndView;
     }
 
 }
