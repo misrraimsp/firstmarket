@@ -32,6 +32,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToBookSortCriteriaConverter());
         registry.addConverter(new StringToPageSizeConverter());
         registry.addConverter(new StringToImageSortCriteriaConverter());
+        registry.addConverter(new StringToUserSortCriteriaConverter());
     }
 
     @Bean

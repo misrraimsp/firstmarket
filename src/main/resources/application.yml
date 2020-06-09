@@ -88,10 +88,12 @@ fm:
       default-sort-index:
          book: 2
          image: 2
+         user: 1
       default-size-index:
          image: 0
          home: 1
          search: 2
+         user: 1
       default-index: 0
    mail:
       smtp:

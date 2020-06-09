@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head th:replace="fragments/components::head('Users')"></head>
+    <body>
+        <div class="container-fluid">
+            <!-- header -->
+            <header th:replace="fragments/components::header"></header>
+            <!-- main categories -->
+            <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
+            <div class="row mt-5 mb-3">
+                <div class="col-sm-1 bg-white"></div>
+                <div class="col-sm-11 bg-white">
+                    <h2 class="text-dark font-weight-light">Users</h2>
+                </div>
+            </div>
+            <!-- main content -->
+            <div class="row bg-white">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- users -->
+                <div class="col-sm-10 d-flex flex-column">
+                    <!-- pagination control -->
+                    <div class="row bg-light mb-3 py-3">
+                        <!-- page size -->
+                        <div class="col-sm-4 d-flex align-items-end">
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationPageSize" style="max-width: 33%">
+                                <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
+                                        th:value="${ps.ordinal()}"
+                                        th:text="${ps.size}"
+                                        th:selected="${ps.size eq pageOfEntities.pageable.pageSize}">
+                                </option>
+                            </select>
+                            <p class="my-0 ml-2">
+                                <small class="text-dark font-weight-lighter">Page size</small>
+                            </p>
+                        </div>
+                        <!-- page legend -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-center">
+                            <div class="text-dark">
+                                <p th:replace="fragments/components::paginationLegend"></p>
+                            </div>
+                        </div>
+                        <!-- sort criteria -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-end">
+                            <!-- label -->
+                            <p class="my-0 mr-2">
+                                <small class="text-dark font-weight-lighter">Sorted by</small>
+                            </p>
+                            <!-- options -->
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria).values()}"
+                                        th:value="${sc.ordinal()}"
+                                        th:text="${sc.text}"
+                                        th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- user -->
+                    <div class="row my-3 bg-light" th:each="user : ${pageOfEntities}">
+                        <!-- basic info -->
+                        <div class="col-sm-5">
+                            <p class="font-weight-light text-dark mt-3">
+                                <span class="font-weight-lighter">User id: </span><span th:text="${user.id}"></span>
+                            </p>
+                            <p class="font-weight-light text-dark">
+                                <span class="font-weight-lighter">Email: </span><span th:text="${user.email}"></span>
+                            </p>
+                            <!-- show/hide more info -->
+                            <div class="mt-n1 mb-2">
+                                <a class="font-weight-light text-info small" data-toggle="collapse" th:href="'#user-' + ${user.id}" style="text-decoration: none">+ info</a>
+                            </div>
+                        </div>
+                        <!-- account info -->
+                        <div class="col-sm-4">
+                            <!-- state -->
+                            <p class="font-weight-light mt-3">
+                                <span class="text-dark font-weight-lighter">
+                                    Account status:
+                                </span>
+                                <strong class="text-success" th:if="${user.enabled && user.accountNonLocked}">
+                                    Ok
+                                    <span class="text-dark small" th:each="lm : ${lockedMails}" th:if="${user.email eq lm}">
+                                    (Temporarily unavailable - high login error rate)
+                                    </span>
+                                </strong>
+                                <strong class="text-dark" th:if="${!user.enabled && user.accountNonLocked}">
+                                    <small th:if="${!user.completed && user.suspended}">User has removed the account (account suspended). Waiting for email confirmation for account restoration</small>
+                                    <small th:if="${!user.completed && !user.suspended}">Waiting for email confirmation</small>
+                                    <small th:if="${user.completed && user.suspended}">User has removed the account (account suspended)</small>
+                                </strong>
+                                <strong class="text-danger" th:if="${user.accountLocked}">
+                                    Locked
+                                </strong>
+                            </p>
+                        </div>
+                        <!-- lock/unlock account -->
+                        <div class="col-sm-3 d-flex flex-column">
+                            <div class="mt-3">
+                                <form th:action="@{/admin/lock}" method="POST">
+                                    <input type="hidden" name="userId" th:value="${user.id}"/>
+                                    <input type="hidden" name="setLock" th:value="${user.accountNonLocked}"/>
+                                    <input type="hidden" name="pageNo" th:value="${pageOfEntities.number}"/>
+                                    <input type="hidden" name="pageSize" th:value="${pageSize.ordinal()}"/>
+                                    <input type="hidden" name="sort" th:value="${sort.ordinal()}"/>
+                                    <button class="btn btn-sm btn-outline-dark btn-block font-weight-light" type="submit">
+                                        <span th:if="${user.accountNonLocked}"><i class="fas fa-lock mr-2"></i>Lock User</span>
+                                        <span th:if="${user.accountLocked}"><i class="fas fa-lock-open mr-2"></i>Unlock User</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <!-- more info -->
+                        <div class="col-sm-12 collapse" th:id="'user-' + ${user.id}">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark mt-1">
+                                        <span class="font-weight-lighter">First Name: </span><strong th:text="${user.profile.firstName}"></strong>
+                                    </p>
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">Last Name: </span><strong th:text="${user.profile.lastName}"></strong>
+                                    </p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark mt-1">
+                                        <span class="font-weight-lighter">Birth Date: </span><strong th:text="${user.profile.birthDate}"></strong>
+                                    </p>
+                                    <p class="font-weight-light text-dark">
+                                        <span class="font-weight-lighter">Gender: </span><strong th:text="${user.profile.gender.text}"></strong>
+                                    </p>
+                                </div>
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark mt-1">
+                                        <span class="font-weight-lighter">Phone: </span><strong th:text="${user.profile.phone}"></strong>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- pagination -->
+            <div class="row mt-4">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">
+                    <!-- pagination links -->
+                    <div th:replace="fragments/components::paginationLinks"></div>
+                    <!-- pagination legend -->
+                    <div class="mt-2 text-center text-info">
+                        <p th:replace="fragments/components::paginationLegend"></p>
+                    </div>
+                </div>
+                <div class="col-sm-4"></div>
+            </div>
+            <!-- footer -->
+            <footer th:replace="fragments/components::footer"></footer>
+        </div>
+        <script th:src="@{/js/usersCollapse.js}"></script>
+        <!-- pagination functionality -->
+        <a id="paginationTrigger" style="display: none"></a>
+        <script th:replace="fragments/components::paginationMvcVariables"></script>
+        <script th:src="@{/js/paginationLinks.js}"></script>
+        <script th:src="@{/js/paginationControl.js}"></script>
+    </body>
+</html>

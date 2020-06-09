@@ -37,7 +37,7 @@ create table catpath (id bigint not null, size integer not null, ancestor_id big
 create table image (id bigint not null, data bytea, size integer, is_default boolean not null, mime_type varchar(255), name varchar(255), primary key (id));
 create table item (id bigint not null, quantity integer not null, book_id bigint, primary key (id));
 create table role (id bigint not null, name varchar(255), primary key (id));
-create table usuario (id bigint not null, email varchar(255), completed boolean not null, suspended boolean not null, password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
+create table usuario (id bigint not null, email varchar(255), completed boolean not null, suspended boolean not null, account_locked boolean not null, account_expired boolean not null, credentials_expired boolean not null, password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
 create table user_deletion (id bigint not null, comment varchar(255), date varchar(255), deletion_reason varchar(255), user_id bigint, primary key (id));
 create table security_token (id bigint not null, edited_email varchar(255), expiry_date varchar(255), security_event varchar(255), token varchar(255), user_id bigint, primary key (id));
 create table usuarios_roles (user_id bigint not null, role_id bigint not null, primary key (user_id, role_id));

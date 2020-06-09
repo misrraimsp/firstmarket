@@ -1,7 +1,3 @@
-/*
-
- */
-
 'use strict';
 
 document.addEventListener("custom-htmlReady", function() {
