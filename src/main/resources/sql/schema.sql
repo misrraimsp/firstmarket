@@ -42,7 +42,7 @@ create table user_deletion (id bigint not null, comment varchar(255), date varch
 create table security_token (id bigint not null, edited_email varchar(255), expiry_date varchar(255), security_event varchar(255), token varchar(255), user_id bigint, primary key (id));
 create table usuarios_roles (user_id bigint not null, role_id bigint not null, primary key (user_id, role_id));
 create table payment (id bigint not null, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
-create table pedido (id bigint not null, date varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint, primary key (id));
+create table pedido (id bigint not null, date varchar(255), status varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint, primary key (id));
 create table pedido_items (order_id bigint not null, items_id bigint not null, primary key (order_id, items_id));
 create table shipping_info (id bigint not null, carrier varchar(255), name varchar(255), phone varchar(255), tracking_number varchar(255), address_id bigint, primary key (id));
 

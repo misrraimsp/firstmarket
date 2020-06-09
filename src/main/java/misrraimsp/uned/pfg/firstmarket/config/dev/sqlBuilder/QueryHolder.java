@@ -13,8 +13,8 @@ public class QueryHolder {
     private static final String shippingStaticPart = "INSERT INTO shipping_info (id,carrier,name,phone,tracking_number,address_id) VALUES ";
     //id bigint not null, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255)
     private static final String paymentStaticPart = "INSERT INTO payment (id,amount,currency,description,stripe_payment_intent_id) VALUES ";
-    //id bigint not null, date varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint
-    private static final String pedidoStaticPart = "INSERT INTO pedido (id,date,payment_id,shipping_info_id,user_id) VALUES ";
+    //id bigint not null, date varchar(255), status varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint
+    private static final String pedidoStaticPart = "INSERT INTO pedido (id,date,status,payment_id,shipping_info_id,user_id) VALUES ";
     //order_id bigint not null, items_id
     private static final String pedidoItemsStaticPart = "INSERT INTO pedido_items (order_id,items_id) VALUES ";
 
@@ -133,15 +133,16 @@ public class QueryHolder {
         sql += ")" + ",";
     }
 
-    //id bigint not null, created_at timestamp, payment_id bigint, shipping_info_id bigint, user_id bigint
+    //id bigint not null, date varchar, status varchar, payment_id bigint, shipping_info_id bigint, user_id bigint
     public void addPedidoValues(String id,
                                 String date,
+                                String status,
                                 String payment_id,
                                 String shipping_info_id,
                                 String user_id) {
 
         sql += "(";
-        sql += id + ",'" + date + "'," + payment_id + "," + shipping_info_id + "," + user_id;
+        sql += id + ",'" + date + "','" + status + "'," + payment_id + "," + shipping_info_id + "," + user_id;
         sql += ")" + ",";
     }
 

@@ -48,6 +48,7 @@ public class OrderBuilder {
             pedidoQueryHolder.addPedidoValues(
                     String.valueOf(i),
                     numberGenerator.getRandomDate(),
+                    numberGenerator.getRandomPedidoStatus(),
                     String.valueOf(i),
                     String.valueOf(i),
                     numberGenerator.getRandomUserId()
