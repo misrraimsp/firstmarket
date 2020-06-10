@@ -5,18 +5,22 @@ document.addEventListener("DOMContentLoaded", function() {
     // function
     let extractNumber = (str) => str.slice(str.indexOf("-") + 1);
 
-    let collapseControls = document.querySelectorAll('a[data-toggle="collapse"]');
-    for (let i = 0; i < collapseControls.length; i++) {
-        collapseControls[i].addEventListener("click", function (e) {
-            const control = e.currentTarget;
-            const orderId = extractNumber(control.getAttribute("href"));
-            document.getElementById("orderHead-" + orderId).classList.toggle("order-selected");
-            const children = control.children;
-            for (let j = 0; j < children.length; j++) {
-                let child = children[j];
-                child.style.display = (child.style.display === "none") ? "inline" : "none";
-            }
-        }, false);
-    }
+    $(".collapse").on('show.bs.collapse', function(e){
+        const orderId = extractNumber(e.target.getAttribute("id"));
+        document.getElementById("orderHead-" + orderId).classList.add("order-selected");
+        document.getElementById("plus-" + orderId).style.display = "none";
+        document.getElementById("minus-" + orderId).style.display = "inline";
+    });
+
+    $(".collapse").on('hide.bs.collapse', function(e){
+        const orderId = extractNumber(e.target.getAttribute("id"));
+        document.getElementById("orderHead-" + orderId).classList.remove("order-selected");
+    });
+
+    $(".collapse").on('hidden.bs.collapse', function(e){
+        const orderId = extractNumber(e.target.getAttribute("id"));
+        document.getElementById("plus-" + orderId).style.display = "inline";
+        document.getElementById("minus-" + orderId).style.display = "none";
+    });
 
 }, false);

@@ -91,11 +91,13 @@ fm:
          book: 2
          image: 2
          user: 1
+         order: 0
       default-size-index:
          image: 0
          home: 1
          search: 2
          user: 1
+         order: 3
       default-index: 0
    mail:
       smtp:
@@ -126,8 +128,8 @@ spring:
       password: ${JDBC_DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      #schema: classpath:sql/schema.sql
-      #data: classpath:sql/data*.sql
+      schema: classpath:sql/schema.sql
+      data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:

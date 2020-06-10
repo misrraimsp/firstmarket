@@ -18,15 +18,14 @@
                     <h2 class="text-dark font-weight-light" sec:authorize="hasRole('ADMIN')">Orders</h2>
                 </div>
             </div>
-            <!-- main content -->
+            <!-- pagination control -->
             <div class="row bg-white">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
-                <!-- orders -->
-                <div class="col-sm-10 d-flex flex-column">
-                    <!-- pagination control
-                    <div class="row bg-light mb-3 py-3">-->
-                        <!-- page size
+                <!-- controls -->
+                <div class="col-sm-10">
+                    <div class="row bg-light mb-3 py-3">
+                        <!-- page size -->
                         <div class="col-sm-4 d-flex align-items-end">
                             <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationPageSize" style="max-width: 33%">
                                 <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
@@ -38,31 +37,50 @@
                             <p class="my-0 ml-2">
                                 <small class="text-dark font-weight-lighter">Page size</small>
                             </p>
-                        </div>-->
-                        <!-- page legend
+                        </div>
+                        <!-- page legend -->
                         <div class="col-sm-4 d-flex align-items-end justify-content-center">
                             <div class="text-dark">
                                 <p th:replace="fragments/components::paginationLegend"></p>
                             </div>
-                        </div>-->
-                        <!-- sort criteria
-                        <div class="col-sm-4 d-flex align-items-end justify-content-end">-->
-                            <!-- label
+                        </div>
+                        <!-- sort criteria -->
+                        <div class="col-sm-4 d-flex align-items-end justify-content-end">
+                            <!-- label -->
                             <p class="my-0 mr-2">
                                 <small class="text-dark font-weight-lighter">Sorted by</small>
-                            </p>-->
-                            <!-- options
-                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
-                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria).values()}"
+                            </p>
+                            <!-- admin options -->
+                            <select sec:authorize="hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
                                         th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
                                 </option>
                             </select>
+                            <!-- no-admin options -->
+                            <select sec:authorize="!hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderSortCriteria).values()}"
+                                        th:value="${sc.ordinal()}"
+                                        th:text="${sc.text}"
+                                        th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}"
+                                        th:if="${sc ne T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderSortCriteria).USER_ASC && sc ne T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderSortCriteria).USER_DESC}">
+                                </option>
+                            </select>
                         </div>
-                    </div>-->
+                    </div>
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- main content -->
+            <div class="row bg-white">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- orders -->
+                <div class="col-sm-10 d-flex flex-column">
                     <!-- order -->
-                    <div class="row bg-light my-3" th:each="order : ${orders}">
+                    <div class="row bg-light my-3" th:each="order : ${pageOfEntities}">
                         <!-- order head -->
                         <div class="col-sm-12" th:id="'orderHead-' + ${order.id}">
                             <div class="row">
@@ -123,8 +141,8 @@
                                 <!-- collapse control -->
                                 <div class="col-sm-12 mb-2">
                                     <a class="font-weight-light text-info small my-0" data-toggle="collapse" th:href="'#orderBody-' + ${order.id}" style="text-decoration: none">
-                                        <span class="plus" style="display: inline"><i class="fas fa-angle-down mr-1"></i> more info</span>
-                                        <span class="minus" style="display: none"><i class="fas fa-angle-up mr-1"></i> less info</span>
+                                        <span th:id="'plus-' + ${order.id}" style="display: inline"><i class="fas fa-angle-down mr-1"></i> more info</span>
+                                        <span th:id="'minus-' + ${order.id}" style="display: none"><i class="fas fa-angle-up mr-1"></i> less info</span>
                                     </a>
                                 </div>
                             </div>
@@ -199,27 +217,27 @@
                 <!-- right margin -->
                 <div class="col-sm-1"></div>
             </div>
-            <!-- pagination
+            <!-- pagination -->
             <div class="row mt-4">
                 <div class="col-sm-4"></div>
-                <div class="col-sm-4">-->
-                    <!-- pagination links
-                    <div th:replace="fragments/components::paginationLinks"></div>-->
-                    <!-- pagination legend
+                <div class="col-sm-4">
+                    <!-- pagination links -->
+                    <div th:replace="fragments/components::paginationLinks"></div>
+                    <!-- pagination legend -->
                     <div class="mt-2 text-center text-info">
                         <p th:replace="fragments/components::paginationLegend"></p>
                     </div>
                 </div>
                 <div class="col-sm-4"></div>
-            </div>-->
+            </div>
             <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
         <script th:src="@{/js/orders.js}"></script>
-        <!-- pagination functionality
+        <!-- pagination functionality -->
         <a id="paginationTrigger" style="display: none"></a>
         <script th:replace="fragments/components::paginationMvcVariables"></script>
         <script th:src="@{/js/paginationLinks.js}"></script>
-        <script th:src="@{/js/paginationControl.js}"></script>-->
+        <script th:src="@{/js/paginationControl.js}"></script>
     </body>
 </html>

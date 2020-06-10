@@ -19,13 +19,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.EventListener;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -125,8 +126,8 @@ public class OrderServer {
         cartServer.unCommitCart(paymentCancellationEvent.getUser().getCart());
     }
 
-    public Set<Order> getOrdersByUser(User user) {
-        return orderRepository.findByUser(user);
+    public Page<Order> getOrdersByUser(User user, Pageable pageable) {
+        return orderRepository.findByUser(user, pageable);
     }
 
     @Async
@@ -175,6 +176,10 @@ public class OrderServer {
 
     public Iterable<Order> findAll() {
         return orderRepository.findAll();
+    }
+
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAll(pageable);
     }
 
     public void persistPayment(Payment payment) {
