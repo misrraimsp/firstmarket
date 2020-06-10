@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Data
 @Entity
@@ -22,4 +24,9 @@ public class Payment {
     private String currency;
 
     private String description;
+
+    public String getFormattedAmount() {
+        BigDecimal bd = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100),2,RoundingMode.HALF_UP);
+        return bd.toString();
+    }
 }

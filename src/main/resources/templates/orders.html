@@ -1,41 +1,225 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
     <head th:replace="fragments/components::head('Orders')"></head>
     <body>
         <div class="container-fluid">
+            <!-- header -->
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <div th:replace="fragments/components::title(text = 'My Orders')"></div>
-            <div class="row">
-                <div class="col-sm-2 bg-white"></div>
-                <div class="col-sm-8 bg-light">
-                    <table class="table" th:each="order : ${orders}">
-                        <thead class="thead-light">
-                        <tr>
-                            <th th:text="${order.id}">id</th>
-                            <th>ISBN</th>
-                            <th>Title</th>
-                            <th>Image</th>
-                            <th>Quantity</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="item : ${order.items}">
-                            <td></td>
-                            <td><span th:text="${item.book.isbn}">isbn</span></td>
-                            <td><span th:text="${item.book.title}">title</span></td>
-                            <td><img th:src="@{/image/{id}(id=${item.book.image.id})}" style="width:64px;height:64px;"></td>
-                            <td><span th:text="${item.quantity}">quantity</span></td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <!-- title -->
+            <div class="row mt-5 mb-3">
+                <div class="col-sm-1 bg-white"></div>
+                <div class="col-sm-11 bg-white">
+                    <h2 class="text-dark font-weight-light" sec:authorize="!hasRole('ADMIN')">My Purchases</h2>
+                    <h2 class="text-dark font-weight-light" sec:authorize="hasRole('ADMIN')">Orders</h2>
                 </div>
-                <div class="col-sm-2 bg-white"></div>
             </div>
+            <!-- main content -->
+            <div class="row bg-white">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- orders -->
+                <div class="col-sm-10 d-flex flex-column">
+                    <!-- pagination control
+                    <div class="row bg-light mb-3 py-3">-->
+                        <!-- page size
+                        <div class="col-sm-4 d-flex align-items-end">
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationPageSize" style="max-width: 33%">
+                                <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
+                                        th:value="${ps.ordinal()}"
+                                        th:text="${ps.size}"
+                                        th:selected="${ps.size eq pageOfEntities.pageable.pageSize}">
+                                </option>
+                            </select>
+                            <p class="my-0 ml-2">
+                                <small class="text-dark font-weight-lighter">Page size</small>
+                            </p>
+                        </div>-->
+                        <!-- page legend
+                        <div class="col-sm-4 d-flex align-items-end justify-content-center">
+                            <div class="text-dark">
+                                <p th:replace="fragments/components::paginationLegend"></p>
+                            </div>
+                        </div>-->
+                        <!-- sort criteria
+                        <div class="col-sm-4 d-flex align-items-end justify-content-end">-->
+                            <!-- label
+                            <p class="my-0 mr-2">
+                                <small class="text-dark font-weight-lighter">Sorted by</small>
+                            </p>-->
+                            <!-- options
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria).values()}"
+                                        th:value="${sc.ordinal()}"
+                                        th:text="${sc.text}"
+                                        th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>-->
+                    <!-- order -->
+                    <div class="row bg-light my-3" th:each="order : ${orders}">
+                        <!-- order head -->
+                        <div class="col-sm-12" th:id="'orderHead-' + ${order.id}">
+                            <div class="row">
+                                <!-- left info -->
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark mt-3">
+                                        <small class="font-weight-lighter">Reference: </small><span th:text="${order.id}"></span>
+                                    </p>
+                                    <p class="font-weight-light text-dark">
+                                        <small class="font-weight-lighter">Date: </small><span th:text="${order.date}"></span>
+                                    </p>
+                                </div>
+                                <!-- middle info -->
+                                <div class="col-sm-4">
+                                    <p class="font-weight-light text-dark mt-3" sec:authorize="hasRole('ADMIN')">
+                                        <small class="font-weight-lighter">User: </small><span th:text="${order.user.email}"></span>
+                                    </p>
+                                    <p class="font-weight-light text-dark" sec:authorize="hasRole('ADMIN')">
+                                        <small class="font-weight-lighter">Total amount: </small>€ <span th:text="${order.payment.getFormattedAmount()}"></span>
+                                    </p>
+                                    <p class="font-weight-light text-dark mt-3" sec:authorize="hasRole('USER')">
+                                        <small class="font-weight-lighter">Status: </small><span th:text="${order.status.text}"></span>
+                                    </p>
+                                </div>
+                                <!-- right info -->
+                                <div class="col-sm-3 d-flex flex-column">
+                                    <p class="font-weight-light text-dark mt-3" sec:authorize="hasRole('ADMIN')">
+                                        <small class="font-weight-lighter">Status: </small><span th:text="${order.status.text}"></span>
+                                    </p>
+                                    <div class="mt-n2" sec:authorize="hasRole('ADMIN')">
+                                        <form th:action="@{/admin/setOrderStatus}" method="POST">
+                                            <input type="hidden" name="orderId" th:value="${order.id}"/>
+                                            <!--<input type="hidden" name="pageNo" th:value="${pageOfEntities.number}"/>
+                                            <input type="hidden" name="pageSize" th:value="${pageSize.ordinal()}"/>
+                                            <input type="hidden" name="sort" th:value="${sort.ordinal()}"/>-->
+                                            <div class="form-group">
+                                                <div class="input-group">
+                                                    <select class="custom-select custom-select-sm text-secondary border border-secondary" name="orderStatus">
+                                                        <option th:each="status : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus).values()}"
+                                                                th:value="${status.ordinal()}"
+                                                                th:text="${status.text}"
+                                                                th:selected="${status.equals(order.status)}">
+                                                        </option>
+                                                    </select>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-sm btn-outline-secondary" type="submit" data-toggle="tooltip" title="Set Order Status">
+                                                            <small>Set</small>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <p class="font-weight-light text-dark mt-3" sec:authorize="hasRole('USER')">
+                                        <small class="font-weight-lighter">Amount: </small>€ <span th:text="${order.payment.getFormattedAmount()}"></span>
+                                    </p>
+                                </div>
+                                <!-- collapse control -->
+                                <div class="col-sm-12 mb-2">
+                                    <a class="font-weight-light text-info small my-0" data-toggle="collapse" th:href="'#orderBody-' + ${order.id}" style="text-decoration: none">
+                                        <span class="plus" style="display: inline"><i class="fas fa-angle-down mr-1"></i> more info</span>
+                                        <span class="minus" style="display: none"><i class="fas fa-angle-up mr-1"></i> less info</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- collapsible info -->
+                        <div class="col-sm-12 collapse" th:id="'orderBody-' + ${order.id}">
+                            <div class="row">
+                                <!-- shipping info -->
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <!-- recipient -->
+                                        <div class="col-sm-2 my-3">
+                                            <p class="font-weight-light text-dark">
+                                                <small class="font-weight-lighter">Deliver to: </small><span th:text="${order.shippingInfo.name}"></span>
+                                            </p>
+                                        </div>
+                                        <!-- address -->
+                                        <div class="col-sm-10 my-3">
+                                            <p class="font-weight-light text-dark">
+                                                <small class="font-weight-lighter">At: </small>
+                                                <span th:text="${order.shippingInfo.address.line1}"></span>
+                                                <span th:if="${order.shippingInfo.address.line2 ne null && !order.shippingInfo.address.line2.isBlank()}">- <span th:text="${order.shippingInfo.address.line2}"></span></span>
+                                                <span> (
+                                                    <span th:text="${order.shippingInfo.address.postalCode}"></span>, <span th:text="${order.shippingInfo.address.city}"></span>.
+                                                    <span th:if="${order.shippingInfo.address.province ne null && !order.shippingInfo.address.province.isBlank()}"><span th:text="${order.shippingInfo.address.province}"></span>. </span>
+                                                    <span th:text="${order.shippingInfo.address.country}"></span>
+                                                    )</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- items info -->
+                                <div class="col-sm-12">
+                                    <!-- item -->
+                                    <div class="row mb-3" th:each="item : ${order.items}">
+                                        <!-- image -->
+                                        <div class="col-sm-2">
+                                            <a th:href="@{/book/{id}(id=${item.book.id})}"><img class="img-fluid" th:src="@{/image/{id}(id=${item.book.image.id})}" alt="book image" style="width:64px;height:64px;"/></a>
+                                        </div>
+                                        <!-- book info -->
+                                        <div class="col-sm-4">
+                                            <!-- book title -->
+                                            <a class="text-info font-weight-light" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
+                                                <p class="my-0" th:unless="${item.book.title.isBlank()}">
+                                                    <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('fm.front-end.orders.title-max-size')}__))}">Book title</span>
+                                                </p>
+                                                <p class="my-0" th:if="${item.book.title.isBlank()}">
+                                                    <small><i>unknown title</i></small>
+                                                </p>
+                                            </a>
+                                            <!-- isbn -->
+                                            <p class="my-1 small text-dark">
+                                                <span class="font-weight-lighter">ISBN </span><span th:text="${item.book.isbn}"></span>
+                                            </p>
+                                        </div>
+                                        <!-- price composition -->
+                                        <div class="col-sm-3">
+                                            <p class="my-0 small text-dark">
+                                                <span th:text="${item.quantity}"></span> x <span class="font-weight-lighter">€</span><span th:text="${item.book.price}"></span>
+                                            </p>
+                                        </div>
+                                        <!-- item price -->
+                                        <div class="col-sm-3">
+                                            <p class="text-dark font-weight-light">€ <span th:text="${item.getPrice()}">19.95</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- pagination
+            <div class="row mt-4">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4">-->
+                    <!-- pagination links
+                    <div th:replace="fragments/components::paginationLinks"></div>-->
+                    <!-- pagination legend
+                    <div class="mt-2 text-center text-info">
+                        <p th:replace="fragments/components::paginationLegend"></p>
+                    </div>
+                </div>
+                <div class="col-sm-4"></div>
+            </div>-->
+            <!-- footer -->
             <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <script th:src="@{/js/orders.js}"></script>
+        <!-- pagination functionality
+        <a id="paginationTrigger" style="display: none"></a>
+        <script th:replace="fragments/components::paginationMvcVariables"></script>
+        <script th:src="@{/js/paginationLinks.js}"></script>
+        <script th:src="@{/js/paginationControl.js}"></script>-->
     </body>
 </html>

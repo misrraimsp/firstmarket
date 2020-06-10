@@ -60,18 +60,31 @@ public class OrderController extends BasicController {
         this.cartServer = cartServer;
     }
 
-    @GetMapping("/user/orders")
+    @GetMapping("/orders")
     public String showOrders(Model model,
                              @AuthenticationPrincipal User authUser) {
 
-        model.addAttribute("orders", orderServer.getOrdersByUser(authUser));
+        if (authUser == null) {
+            LOGGER.warn("Anonymous user trying to access order info");
+            return "redirect:/login";
+        }
         populateModel(model.asMap(), authUser);
+        if (userServer.hasRole(authUser, "ROLE_ADMIN")) {
+            model.addAttribute("orders", orderServer.findAll());
+        }
+        else if (userServer.hasRole(authUser, "ROLE_USER")) {
+            model.addAttribute("orders", orderServer.getOrdersByUser(authUser));
+        }
+        else {
+            LOGGER.error("authenticated user(id={}) without 'admin' or 'user' role trying to access order info", authUser.getId());
+            return "redirect:/home";
+        }
         return "orders";
     }
 
     @GetMapping("/user/success")
     public String showSuccess(Model model,
-                             @AuthenticationPrincipal User authUser) {
+                              @AuthenticationPrincipal User authUser) {
 
         populateModel(model.asMap(), authUser);
         return "success";
