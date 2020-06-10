@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -15,6 +16,11 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String date;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
     @ManyToOne
     private User user;
 
@@ -27,5 +33,4 @@ public class Order {
     @OneToOne
     private Payment payment;
 
-    private String date;
 }

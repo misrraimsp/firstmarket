@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -145,4 +146,16 @@ public class NumberGenerator extends Random {
         return String.valueOf(getDiscreteRandomNumber(MIN_ITEMS_PEDIDO, MAX_ITEMS_PEDIDO));
     }
 
+    public String getRandomPedidoStatus() {
+        int randomNumber = getDiscreteRandomNumber(MIN_STATUS, MAX_STATUS);
+        switch (randomNumber) {
+            case 1:
+                return OrderStatus.PROCESSING.name();
+            case 2:
+            case 3:
+                return OrderStatus.SHIPPING.name();
+            default:
+                return OrderStatus.COMPLETED.name();
+        }
+    }
 }

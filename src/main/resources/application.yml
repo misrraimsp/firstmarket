@@ -80,6 +80,8 @@ fm:
          authors-max: 2
          stock-usage-warning-threshold: 50
          stock-warning-threshold: 5
+      orders:
+         title-max-size: 60
       search-criteria:
          num-of-authors: 4
          num-of-publishers: 5
@@ -89,11 +91,13 @@ fm:
          book: 2
          image: 2
          user: 1
+         order: 0
       default-size-index:
          image: 0
          home: 1
          search: 2
          user: 1
+         order: 3
       default-index: 0
    mail:
       smtp:

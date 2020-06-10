@@ -9,23 +9,26 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderSortCriteria;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.model.Order;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -60,18 +63,43 @@ public class OrderController extends BasicController {
         this.cartServer = cartServer;
     }
 
-    @GetMapping("/user/orders")
-    public String showOrders(Model model,
+    @GetMapping("/orders")
+    public String showOrders(@RequestParam(defaultValue = "${fm.pagination.default-index}") int pageNo,
+                             @RequestParam(defaultValue = "${fm.pagination.default-size-index.order}") PageSize pageSize,
+                             @RequestParam(defaultValue = "${fm.pagination.default-sort-index.order}") OrderSortCriteria sort,
+                             Model model,
                              @AuthenticationPrincipal User authUser) {
 
-        model.addAttribute("orders", orderServer.getOrdersByUser(authUser));
+        if (authUser == null) {
+            LOGGER.warn("Anonymous user trying to access order info");
+            return "redirect:/login";
+        }
         populateModel(model.asMap(), authUser);
+        populateModelToOrder(model, pageNo, pageSize, sort, authUser);
         return "orders";
+    }
+
+    private void populateModelToOrder(Model model,
+                                      int pageNo,
+                                      PageSize pageSize,
+                                      OrderSortCriteria sort,
+                                      User authUser) {
+
+        Pageable pageable = PageRequest.of(pageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+        Page<Order> orderPage = (userServer.hasRole(authUser, "ROLE_ADMIN")) ? orderServer.findAll(pageable) : orderServer.getOrdersByUser(authUser, pageable);
+        int lastPageNo = orderPage.getTotalPages() - 1;
+        if (lastPageNo > 0 && lastPageNo < pageNo) {
+            pageable = PageRequest.of(lastPageNo, pageSize.getSize(), sort.getDirection(), sort.getProperty());
+            orderPage = (userServer.hasRole(authUser, "ROLE_ADMIN")) ? orderServer.findAll(pageable) : orderServer.getOrdersByUser(authUser, pageable);
+        }
+        model.addAttribute("pageOfEntities", orderPage);
+        model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", pageSize);
     }
 
     @GetMapping("/user/success")
     public String showSuccess(Model model,
-                             @AuthenticationPrincipal User authUser) {
+                              @AuthenticationPrincipal User authUser) {
 
         populateModel(model.asMap(), authUser);
         return "success";
