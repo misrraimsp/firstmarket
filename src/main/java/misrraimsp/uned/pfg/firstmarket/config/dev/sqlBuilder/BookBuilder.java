@@ -23,12 +23,13 @@ public class BookBuilder {
         for (int i = 1; i <= numOfBooks; i++){
             String status = numberGenerator.getRandomBookStatus();
             String stock = (status.equals("OUT_OF_STOCK")) ? "0" : numberGenerator.getRandomStock();
+            String dateTime = numberGenerator.getRandomDate();
             queryHolder.addBookValues(
                     String.valueOf(i),
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     isbnHolder.getIsbn(),
                     numberGenerator.getRandomLanguage(),
                     numberGenerator.getRandomNumPages(),

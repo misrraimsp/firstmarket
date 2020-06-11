@@ -20,12 +20,13 @@ public class ItemCartBuilder {
         //build insert item query
         queryHolder.openInsertItemQuery();
         for (int i = 1; i <= numOfItems; i++){
+            String dateTime = numberGenerator.getRandomDate();
             queryHolder.addItemValues(
                     String.valueOf(i),
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     numberGenerator.getRandomQuantity(),
                     numberGenerator.getRandomBookId()
             );

@@ -7,7 +7,7 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -47,7 +47,7 @@ public class NumberGenerator extends Random {
     private static final int MIN_STATUS = 1;
     private static final int MAX_STATUS = 10;
 
-    private static final int MIN_NUM_STOCK = 0;
+    private static final int MIN_NUM_STOCK = 1;
     private static final int MAX_NUM_STOCK = 10;
 
     private static final int MIN_QUANTITY = 1;
@@ -56,8 +56,8 @@ public class NumberGenerator extends Random {
     private static final int MIN_ITEMS_PEDIDO = 1;
     private static final int MAX_ITEMS_PEDIDO = 3;
 
-    private static final int MIN_DAYS_PEDIDO = 0;
-    private static final int MAX_DAYS_PEDIDO = 365;
+    private static final int MIN_PAST_DAYS = 0;
+    private static final int MAX_PAST_DAYS = 1000;
 
 
 
@@ -132,10 +132,10 @@ public class NumberGenerator extends Random {
     }
 
     public String getRandomDate(){
-        return LocalDate
+        return LocalDateTime
                 .now()
-                .minusDays(getDiscreteRandomNumber(MIN_DAYS_PEDIDO, MAX_DAYS_PEDIDO))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                .minusDays(getDiscreteRandomNumber(MIN_PAST_DAYS, MAX_PAST_DAYS))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
     public String getRandomUserId() {

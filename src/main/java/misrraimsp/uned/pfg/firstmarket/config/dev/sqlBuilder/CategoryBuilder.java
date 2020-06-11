@@ -20,6 +20,7 @@ public class CategoryBuilder {
 
     private static final String XMLCategoriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/categories";
     private static final String BuiltCatQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtCatQueries.txt";
+    private static final NumberGenerator numberGenerator = new NumberGenerator();
 
     public static void main(String[] args) throws JDOMException, IOException {
         configure();
@@ -51,6 +52,7 @@ public class CategoryBuilder {
         queryHolder.openInsertCatpathQuery();
         addCatpathValues(rootCategory, queryHolder, idHolder);
         queryHolder.closeInsertQuery();
+        queryHolder.addTwoNewLines();
         //output
         outputXML(document, XMLCategoriesPath);
         outputSQL(queryHolder.getSql(), BuiltCatQueriesPath);
@@ -92,22 +94,23 @@ public class CategoryBuilder {
      */
     private static void addCategoryValues(Element element, QueryHolder queryHolder){
         String id = element.getChild("Id").getText();
+        String dateTime = numberGenerator.getRandomDate();
         if (id.equals("1")){
             queryHolder.addCategoryValues(
                     id,
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     element.getChild("Name").getText(),
                     id); //self-parenthood
         } else {
             queryHolder.addCategoryValues(
                     id,
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     element.getChild("Name").getText(),
                     element.getParentElement().getParentElement().getChild("Id").getText());
         }
@@ -124,12 +127,13 @@ public class CategoryBuilder {
      */
     private static void addCatpathValues(Element element, QueryHolder queryHolder, IdHolder idHolder) {
         String id = element.getChild("Id").getText();
+        String dateTime = numberGenerator.getRandomDate();
         queryHolder.addCatpathValues(
                 String.valueOf(idHolder.getId()),
                 "1",
-                "null",
+                dateTime,
                 "1",
-                "null",
+                dateTime,
                 "0",
                 id,
                 id);
@@ -137,12 +141,13 @@ public class CategoryBuilder {
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
+            dateTime = numberGenerator.getRandomDate();
             queryHolder.addCatpathValues(
                     String.valueOf(idHolder.getId()),
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     String.valueOf(descendantLevel - elementLevel),
                     id,
                     descendant.getChild("Id").getText());

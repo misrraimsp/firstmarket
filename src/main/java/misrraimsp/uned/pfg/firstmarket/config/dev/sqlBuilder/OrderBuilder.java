@@ -30,12 +30,13 @@ public class OrderBuilder {
         itemQueryHolder.openInsertItemQuery();
         pedidoItemsQueryHolder.openInsertPedidoItemsQuery();
         for (int i = 1; i <= numOfOrders; i++){
+            String dateTime = numberGenerator.getRandomDate();
             shippingQueryHolder.addShippingValues(
                     String.valueOf(i),
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     "carrier",
                     "name",
                     "phone",
@@ -45,21 +46,20 @@ public class OrderBuilder {
             paymentQueryHolder.addPaymentValues(
                     String.valueOf(i),
                     "1",
-                    "null",
+                    dateTime,
                     "1",
-                    "null",
+                    dateTime,
                     "1", //actual value set on app startup
                     "eur",
                     "test payment number " + i,
                     "stripe_payment_intent_id number " + i
             );
-            String orderDate = numberGenerator.getRandomDate();
             pedidoQueryHolder.addPedidoValues(
                     String.valueOf(i),
                     String.valueOf(i),
-                    orderDate,
+                    dateTime,
                     String.valueOf(i),
-                    orderDate,
+                    dateTime,
                     numberGenerator.getRandomPedidoStatus(),
                     String.valueOf(i),
                     String.valueOf(i),
@@ -69,9 +69,9 @@ public class OrderBuilder {
                 itemQueryHolder.addItemValues(
                         String.valueOf(nextItemId),
                         "1",
-                        "null",
+                        dateTime,
                         "1",
-                        "null",
+                        dateTime,
                         numberGenerator.getRandomQuantity(),
                         numberGenerator.getRandomBookId()
                 );

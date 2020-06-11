@@ -67,7 +67,7 @@ public class QueryHolder {
                                      String modifierId,
                                      String modificationDate) {
 
-        return "'" + creatorId + "'," + creationDate + ",'" + modifierId + "'," + modificationDate;
+        return "'" + creatorId + "','" + creationDate + "','" + modifierId + "','" + modificationDate + "'";
     }
 
     public void addCategoryValues(String id,
