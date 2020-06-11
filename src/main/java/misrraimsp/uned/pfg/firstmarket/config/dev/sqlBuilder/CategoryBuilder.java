@@ -27,7 +27,7 @@ public class CategoryBuilder {
 
     /**
      * Este método establece el workflow para producir las queries necesarias
-     * que insertan en la base de datos las categorias y los catpath
+     * que insertan en la base de datos las categorias y los catpaths
      * @throws JDOMException
      * @throws IOException
      */
@@ -38,15 +38,14 @@ public class CategoryBuilder {
         IdHolder idHolder = new IdHolder();
         CategoryLevelHolder categoryLevelHolder = new CategoryLevelHolder();
         QueryHolder queryHolder = new QueryHolder();
-        //set categories id ad level
+        //set categories id and level
         completeXML(rootCategory, idHolder, categoryLevelHolder);
         //build insert category query
         queryHolder.openInsertCategoryQuery();
         addCategoryValues(rootCategory, queryHolder);
         queryHolder.closeInsertQuery();
         //new lines and reset
-        queryHolder.addNewLine();
-        queryHolder.addNewLine();
+        queryHolder.addTwoNewLines();
         idHolder.reset();
         //build insert catpath query
         queryHolder.openInsertCatpathQuery();
@@ -94,10 +93,21 @@ public class CategoryBuilder {
     private static void addCategoryValues(Element element, QueryHolder queryHolder){
         String id = element.getChild("Id").getText();
         if (id.equals("1")){
-            queryHolder.addCategoryValues(id, element.getChild("Name").getText(), id); //self-parenthood
+            queryHolder.addCategoryValues(
+                    id,
+                    "1",
+                    "null",
+                    "1",
+                    "null",
+                    element.getChild("Name").getText(),
+                    id); //self-parenthood
         } else {
             queryHolder.addCategoryValues(
                     id,
+                    "1",
+                    "null",
+                    "1",
+                    "null",
                     element.getChild("Name").getText(),
                     element.getParentElement().getParentElement().getChild("Id").getText());
         }
@@ -114,13 +124,25 @@ public class CategoryBuilder {
      */
     private static void addCatpathValues(Element element, QueryHolder queryHolder, IdHolder idHolder) {
         String id = element.getChild("Id").getText();
-        queryHolder.addCatpathValues(String.valueOf(idHolder.getId()),"0",id,id);
+        queryHolder.addCatpathValues(
+                String.valueOf(idHolder.getId()),
+                "1",
+                "null",
+                "1",
+                "null",
+                "0",
+                id,
+                id);
         idHolder.increment();
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
             queryHolder.addCatpathValues(
                     String.valueOf(idHolder.getId()),
+                    "1",
+                    "null",
+                    "1",
+                    "null",
                     String.valueOf(descendantLevel - elementLevel),
                     id,
                     descendant.getChild("Id").getText());

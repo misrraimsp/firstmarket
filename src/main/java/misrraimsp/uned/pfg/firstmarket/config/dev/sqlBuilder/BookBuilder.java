@@ -25,6 +25,10 @@ public class BookBuilder {
             String stock = (status.equals("OUT_OF_STOCK")) ? "0" : numberGenerator.getRandomStock();
             queryHolder.addBookValues(
                     String.valueOf(i),
+                    "1",
+                    "null",
+                    "1",
+                    "null",
                     isbnHolder.getIsbn(),
                     numberGenerator.getRandomLanguage(),
                     numberGenerator.getRandomNumPages(),
@@ -40,8 +44,7 @@ public class BookBuilder {
         }
         queryHolder.closeInsertQuery();
         //new lines
-        queryHolder.addNewLine();
-        queryHolder.addNewLine();
+        queryHolder.addTwoNewLines();
         //build insert books_authors query
         queryHolder.openInsertBooksAuthorsQuery();
         for (int i = 1; i <= numOfBooks; i++){

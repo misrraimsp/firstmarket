@@ -22,14 +22,17 @@ public class ItemCartBuilder {
         for (int i = 1; i <= numOfItems; i++){
             queryHolder.addItemValues(
                     String.valueOf(i),
+                    "1",
+                    "null",
+                    "1",
+                    "null",
                     numberGenerator.getRandomQuantity(),
                     numberGenerator.getRandomBookId()
             );
         }
         queryHolder.closeInsertQuery();
         //new lines
-        queryHolder.addNewLine();
-        queryHolder.addNewLine();
+        queryHolder.addTwoNewLines();
         //build insert cart_items query
         queryHolder.openInsertCartItemsQuery();
         for (int i = 1; i <= numOfItems; i++){

@@ -32,6 +32,10 @@ public class OrderBuilder {
         for (int i = 1; i <= numOfOrders; i++){
             shippingQueryHolder.addShippingValues(
                     String.valueOf(i),
+                    "1",
+                    "null",
+                    "1",
+                    "null",
                     "carrier",
                     "name",
                     "phone",
@@ -40,14 +44,22 @@ public class OrderBuilder {
             );
             paymentQueryHolder.addPaymentValues(
                     String.valueOf(i),
+                    "1",
+                    "null",
+                    "1",
+                    "null",
                     "1", //actual value set on app startup
                     "eur",
                     "test payment number " + i,
                     "stripe_payment_intent_id number " + i
             );
+            String orderDate = numberGenerator.getRandomDate();
             pedidoQueryHolder.addPedidoValues(
                     String.valueOf(i),
-                    numberGenerator.getRandomDate(),
+                    String.valueOf(i),
+                    orderDate,
+                    String.valueOf(i),
+                    orderDate,
                     numberGenerator.getRandomPedidoStatus(),
                     String.valueOf(i),
                     String.valueOf(i),
@@ -56,6 +68,10 @@ public class OrderBuilder {
             for (int j = 1; j <= Integer.parseInt(numberGenerator.getRandomNumOfItems()); j++) {
                 itemQueryHolder.addItemValues(
                         String.valueOf(nextItemId),
+                        "1",
+                        "null",
+                        "1",
+                        "null",
                         numberGenerator.getRandomQuantity(),
                         numberGenerator.getRandomBookId()
                 );

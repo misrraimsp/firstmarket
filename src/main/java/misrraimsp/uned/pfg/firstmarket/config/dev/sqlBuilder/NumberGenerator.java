@@ -32,7 +32,7 @@ public class NumberGenerator extends Random {
     private static final int MAX_CATEGORY_ID = 310;
     private static final int MAX_IMAGE_ID = 17;
     private static final int MAX_PUBLISHER_ID = 128;
-    private static final int MAX_AUTHOR_ID = 512;
+    private static final int MAX_AUTHOR_ID = 128;
     private static final int MAX_BOOK_ID = 1000; // link with BookBuilder's numBooks parameter
     private static final int MAX_ADDRESS_ID = 6;
 
@@ -135,7 +135,7 @@ public class NumberGenerator extends Random {
         return LocalDate
                 .now()
                 .minusDays(getDiscreteRandomNumber(MIN_DAYS_PEDIDO, MAX_DAYS_PEDIDO))
-                .format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
     }
 
     public String getRandomUserId() {

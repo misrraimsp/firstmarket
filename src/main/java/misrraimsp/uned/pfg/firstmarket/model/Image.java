@@ -4,7 +4,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -21,7 +24,7 @@ public class Image extends Auditable {
 
     private String mimeType;
 
-    @Lob //dev-h2
+    //@Lob //dev-h2
     private byte[] data;
 
     private int size;
