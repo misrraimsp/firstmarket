@@ -1,15 +1,15 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Image {
+public class Image extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,7 +21,7 @@ public class Image {
 
     private String mimeType;
 
-    //@Lob //dev-h2
+    @Lob //dev-h2
     private byte[] data;
 
     private int size;

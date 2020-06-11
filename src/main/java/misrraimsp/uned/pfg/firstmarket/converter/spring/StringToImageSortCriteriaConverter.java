@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ImageSortCriteria;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.ImageSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.exception.NoSortCriteriaException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.slf4j.Logger;

@@ -6,6 +6,7 @@ import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Repository
@@ -13,8 +14,7 @@ public interface SecurityTokenRepository extends CrudRepository<SecurityToken, L
 
     SecurityToken findByToken(String token);
 
-    @Override
-    Set<SecurityToken> findAll();
+    Set<SecurityToken> findByCreatedDateBefore(LocalDateTime dateTime);
 
-    Set<SecurityToken> findByUserAndSecurityEvent(User user, SecurityEvent securityEvent);
+    Set<SecurityToken> findByTargetUserAndSecurityEventAndCreatedDateAfter(User targetUser, SecurityEvent securityEvent, LocalDateTime dateTime);
 }

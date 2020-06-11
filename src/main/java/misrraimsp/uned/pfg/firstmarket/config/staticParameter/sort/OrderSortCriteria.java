@@ -1,11 +1,11 @@
-package misrraimsp.uned.pfg.firstmarket.config.staticParameter;
+package misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort;
 
 import org.springframework.data.domain.Sort;
 
 public enum OrderSortCriteria {
 
-    DATE_ASC ("Date ascending", "date",Sort.Direction.ASC),
-    DATE_DESC ("Date descending", "date", Sort.Direction.DESC),
+    CREATED_DATE_ASC("Date ascending", "createdDate", Sort.Direction.ASC),
+    CREATED_DATE_DESC("Date descending", "createdDate", Sort.Direction.DESC),
     STATUS_ASC ("Status ascending", "status", Sort.Direction.ASC),
     STATUS_DESC ("Status descending", "status", Sort.Direction.DESC),
     USER_ASC ("User ascending", "user.email", Sort.Direction.ASC),

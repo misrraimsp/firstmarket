@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookSortCriteria;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.BookSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.exception.NoSortCriteriaException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import org.slf4j.Logger;

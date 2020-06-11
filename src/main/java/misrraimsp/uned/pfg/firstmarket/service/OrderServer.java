@@ -4,7 +4,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import lombok.NonNull;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.PaymentRepository;
@@ -25,7 +25,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
 
@@ -46,7 +45,7 @@ public class OrderServer {
     private final AddressServer addressServer;
     private final CartServer cartServer;
     private final ConversionManager conversionManager;
-    private final TimeFormatProperties timeFormatProperties;
+
 
     @Autowired
     public OrderServer(OrderRepository orderRepository,
@@ -54,8 +53,7 @@ public class OrderServer {
                        ShippingInfoRepository shippingInfoRepository,
                        AddressServer addressServer,
                        CartServer cartServer,
-                       ConversionManager conversionManager,
-                       TimeFormatProperties timeFormatProperties) {
+                       ConversionManager conversionManager) {
 
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
@@ -63,7 +61,6 @@ public class OrderServer {
         this.addressServer = addressServer;
         this.cartServer = cartServer;
         this.conversionManager = conversionManager;
-        this.timeFormatProperties = timeFormatProperties;
     }
 
     @Transactional
@@ -108,7 +105,7 @@ public class OrderServer {
         order.setItems(new HashSet<>(cart.getItems()));
         order.setShippingInfo(shippingInfo);
         order.setPayment(payment);
-        order.setDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
+        order.setStatus(OrderStatus.PROCESSING);
         Order savedOrder = orderRepository.save(order);
         LOGGER.debug("User(id={}) order(id={}) successfully registered", user.getId(), savedOrder.getId());
         //update cart

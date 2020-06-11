@@ -535,7 +535,7 @@ public class DevH2Config {
             adminProfile.setFirstName("adminFirstName");
             adminProfile.setLastName("adminLastName");
             adminProfile.setPhone("666 333 666");
-            adminProfile.setBirthDate(LocalDate.ofYearDay(1969, 200).format(timeFormatProperties.getDateFormatter()));
+            adminProfile.setBirthDate(LocalDate.ofYearDay(1969, 200));
             adminProfile.setGender(Gender.UNDEFINED);
             profileRepository.save(adminProfile);
             userServer.setCompletedState(admin.getId(),true);
@@ -549,7 +549,7 @@ public class DevH2Config {
             misrraProfile.setFirstName("Misrraim");
             misrraProfile.setLastName("Suárez");
             misrraProfile.setPhone("111 222 333");
-            misrraProfile.setBirthDate(LocalDate.ofYearDay(2000, 1).format(timeFormatProperties.getDateFormatter()));
+            misrraProfile.setBirthDate(LocalDate.ofYearDay(2000, 1));
             misrraProfile.setGender(Gender.MALE);
             profileRepository.save(misrraProfile);
             userServer.setCompletedState(misrra.getId(),true);
@@ -563,7 +563,7 @@ public class DevH2Config {
             andreaProfile.setFirstName("Andrea");
             andreaProfile.setLastName("Grau");
             andreaProfile.setPhone("123 456 789");
-            andreaProfile.setBirthDate(LocalDate.ofYearDay(1990, 365).format(timeFormatProperties.getDateFormatter()));
+            andreaProfile.setBirthDate(LocalDate.ofYearDay(1990, 365));
             andreaProfile.setGender(Gender.FEMALE);
             profileRepository.save(andreaProfile);
             userServer.setCompletedState(andrea.getId(),true);
@@ -577,17 +577,15 @@ public class DevH2Config {
             ericProfile.setFirstName("Eric");
             ericProfile.setLastName("Forman");
             ericProfile.setPhone("123 456 789");
-            ericProfile.setBirthDate(LocalDate.ofYearDay(1960, 111).format(timeFormatProperties.getDateFormatter()));
+            ericProfile.setBirthDate(LocalDate.ofYearDay(1960, 111));
             ericProfile.setGender(Gender.MALE);
             profileRepository.save(ericProfile);
             userServer.setCompletedState(eric.getId(),true);
 
             //Orders
-            Order order1 = new Order();
+            /*Order order1 = new Order();
             order1.setItems(Set.of(item3));
-            order1.setUser(andrea);
-            order1.setDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
-            orderRepository.save(order1);
+            orderRepository.save(order1);*/
 
             //load book usage
             bookServer.incrementCartBookRegistry(userServer.getAllCartBookIds());

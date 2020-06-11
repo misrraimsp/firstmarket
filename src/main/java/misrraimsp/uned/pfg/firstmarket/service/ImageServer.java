@@ -23,7 +23,7 @@ public class ImageServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
     @Autowired
     public ImageServer(ImageRepository imageRepository) {

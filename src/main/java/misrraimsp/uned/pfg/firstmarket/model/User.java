@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,8 +14,9 @@ import java.util.Set;
 
 @Entity
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Table(name="Usuario")
-public class User implements UserDetails {
+public class User extends Auditable implements UserDetails {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)

@@ -1,13 +1,16 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
 import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class UserDeletion {
+public class UserDeletion extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -15,8 +18,6 @@ public class UserDeletion {
 
     @ManyToOne
     private User user;
-
-    private String date;
 
     @Enumerated(EnumType.STRING)
     private DeletionReason deletionReason;

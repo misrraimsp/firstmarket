@@ -1,15 +1,19 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
 import javax.persistence.*;
 
 @Data
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 @Entity
-public class Category {
+public class Category extends Auditable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@EqualsAndHashCode.Include
 	private Long id;
 
 	private String name;
@@ -23,7 +27,7 @@ public class Category {
 	 *
 	 * Esto es así para evitar que una categoría con name indentado
 	 * sea diferente a la misma categoría pero sin indentar
-	 */
+
 	@Override
 	public boolean equals(final Object o) {
 		if (o == this) return true;
@@ -53,5 +57,5 @@ public class Category {
 		//final Object $parent = this.getParent();
 		//result = result * PRIME + ($parent == null ? 43 : $parent.hashCode());
 		return result;
-	}
+	}*/
 }

@@ -57,7 +57,7 @@
                             </p>
                             <!-- options -->
                             <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
-                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.ImageSortCriteria).values()}"
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.ImageSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
                                         th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
@@ -76,6 +76,7 @@
                                 <th>is Default</th>
                                 <th>MIME type</th>
                                 <th>Size (bytes)</th>
+                                <th><small>Last modified</small></th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -95,6 +96,8 @@
                                 <td><span th:text="${mi.mimeType}">mimeType</span></td>
                                 <!-- image size -->
                                 <td><span th:text="${mi.size}">size</span></td>
+                                <!-- date -->
+                                <td><small th:text="${mi.formattedLastModifiedDateTime}"></small></td>
                                 <!-- actions -->
                                 <td>
                                     <div class="d-flex justify-content-around">

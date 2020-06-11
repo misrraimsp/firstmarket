@@ -34,7 +34,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -128,7 +127,6 @@ public class UserServer implements UserDetailsService {
         profile.setLastName("");
         profile.setPhone("");
         profile.setGender(Gender.UNDEFINED);
-        profile.setBirthDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
         User user = new User();
         user.setCompleted(false);
         user.setSuspended(false);
@@ -221,16 +219,9 @@ public class UserServer implements UserDetailsService {
     public SecurityToken createSecurityToken(SecurityEvent securityEvent, User user, String editedEmail) {
         SecurityToken securityToken = new SecurityToken();
         securityToken.setSecurityEvent(securityEvent);
-        securityToken.setUser(user);
+        securityToken.setTargetUser(user);
         securityToken.setToken(UUID.randomUUID().toString());
-        securityToken.setEditedEmail(editedEmail);
-
-        securityToken.setExpiryDate(LocalDateTime
-                .now()
-                .plusMinutes(securityTokenProperties.getExpirationInMinutes())
-                .format(timeFormatProperties.getDateTimeFormatter()))
-        ;
-
+        securityToken.setTargetEmail(editedEmail);
         return securityTokenRepository.save(securityToken);
     }
 
@@ -246,12 +237,10 @@ public class UserServer implements UserDetailsService {
     @Scheduled(cron = "${fm.schedule.garbage-collection.cron}")
     public void garbageCollection() {
         LOGGER.debug("Garbage collection: started");
-        securityTokenRepository.findAll()
-                .stream()
-                .filter(st -> LocalDateTime.now().isAfter(LocalDateTime.parse(st.getExpiryDate(),timeFormatProperties.getDateTimeFormatter())))
+        securityTokenRepository.findByCreatedDateBefore(LocalDateTime.now().minusMinutes(securityTokenProperties.getExpirationInMinutes()))
                 .forEach(st -> {
-                    if (st.getSecurityEvent().equals(SecurityEvent.NEW_USER)){
-                        Long userId = st.getUser().getId();
+                    if (st.getSecurityEvent().equals(SecurityEvent.NEW_USER)) {
+                        Long userId = st.getTargetUser().getId();
                         userRepository.deleteById(userId);
                         LOGGER.debug("Garbage collection: not completed user(id={}) removed", userId);
                     }
@@ -266,16 +255,15 @@ public class UserServer implements UserDetailsService {
         userDeletion.setUser(this.findById(userId));
         userDeletion.setDeletionReason((deletionReason == null) ? DeletionReason.OTHER : deletionReason);
         userDeletion.setComment(comment);
-        userDeletion.setDate(LocalDate.now().format(timeFormatProperties.getDateFormatter()));
         return userDeletionRepository.save(userDeletion);
     }
 
     public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) throws UserNotFoundException {
-        return securityTokenRepository
-                .findByUserAndSecurityEvent(this.findById(userId), securityEvent)
-                .stream()
-                .anyMatch(st -> LocalDateTime.now().isBefore(LocalDateTime.parse(st.getExpiryDate(),timeFormatProperties.getDateTimeFormatter())))
-                ;
+        return !securityTokenRepository.findByTargetUserAndSecurityEventAndCreatedDateAfter(
+                this.findById(userId),
+                securityEvent,
+                LocalDateTime.now().minusMinutes(securityTokenProperties.getExpirationInMinutes())
+        ).isEmpty();
     }
 
     public ProfileForm getProfileForm(Long userId) throws UserNotFoundException {

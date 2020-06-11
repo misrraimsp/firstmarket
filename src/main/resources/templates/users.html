@@ -51,7 +51,7 @@
                             </p>
                             <!-- options -->
                             <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
-                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria).values()}"
+                                <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.UserSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
                                         th:selected="${sort ne null && sc.ordinal() eq sort.ordinal()}">
@@ -76,6 +76,10 @@
                         </div>
                         <!-- account info -->
                         <div class="col-sm-4">
+                            <!-- date -->
+                            <p class="font-weight-light text-dark mt-3">
+                                <span class="font-weight-lighter">Registered on: </span><span th:text="${user.formattedCreatedDateTime}"></span>
+                            </p>
                             <!-- state -->
                             <p class="font-weight-light mt-3">
                                 <span class="text-dark font-weight-lighter">

@@ -1,6 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 @Data
 @Entity
-public class Author {
+public class Author extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +20,6 @@ public class Author {
     private String firstName;
 
     private String lastName;
-
 
     // case insensitive
     @Override

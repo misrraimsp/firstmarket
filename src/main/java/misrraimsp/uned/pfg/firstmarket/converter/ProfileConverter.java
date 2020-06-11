@@ -26,10 +26,9 @@ public class ProfileConverter {
         profileForm.setLastName(profile.getLastName());
         profileForm.setGender(profile.getGender());
         profileForm.setPhone(profile.getPhone());
-        LocalDate ld = LocalDate.parse(profile.getBirthDate(), timeFormatProperties.getDateFormatter());
-        profileForm.setDay(this.getProfileFormDay(ld));
-        profileForm.setMonth(this.getProfileFormMonth(ld));
-        profileForm.setYear(this.getProfileFormYear(ld));
+        profileForm.setDay(this.getProfileFormDay(profile.getBirthDate()));
+        profileForm.setMonth(this.getProfileFormMonth(profile.getBirthDate()));
+        profileForm.setYear(this.getProfileFormYear(profile.getBirthDate()));
         return profileForm;
     }
 
@@ -40,14 +39,7 @@ public class ProfileConverter {
         profile.setLastName(profileForm.getLastName());
         profile.setGender(profileForm.getGender());
         profile.setPhone(profileForm.getPhone());
-        profile.setBirthDate(
-                LocalDate.of(
-                        profileForm.getYear(),
-                        profileForm.getMonth(),
-                        profileForm.getDay()
-                )
-                .format(timeFormatProperties.getDateFormatter())
-        );
+        profile.setBirthDate(LocalDate.of(profileForm.getYear(), profileForm.getMonth(), profileForm.getDay()));
         return profile;
     }
 
