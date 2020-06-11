@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.UserSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.exception.NoSortCriteriaException;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.slf4j.Logger;

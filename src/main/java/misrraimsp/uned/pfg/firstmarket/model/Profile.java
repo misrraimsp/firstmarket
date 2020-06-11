@@ -1,13 +1,17 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
-@Entity
 @Data
-public class Profile {
+@EqualsAndHashCode(callSuper = true)
+@Entity
+public class Profile extends Auditable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -22,6 +26,6 @@ public class Profile {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    private String birthDate;
+    private LocalDate birthDate;
 
 }

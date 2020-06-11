@@ -1,6 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,8 +12,9 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Payment {
+public class Payment extends Auditable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
@@ -26,7 +29,6 @@ public class Payment {
     private String description;
 
     public String getFormattedAmount() {
-        BigDecimal bd = BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100),2,RoundingMode.HALF_UP);
-        return bd.toString();
+        return BigDecimal.valueOf(amount).divide(BigDecimal.valueOf(100),2,RoundingMode.HALF_UP).toString();
     }
 }

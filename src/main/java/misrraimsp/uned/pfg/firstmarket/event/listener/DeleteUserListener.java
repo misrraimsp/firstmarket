@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeleteUserListener implements ApplicationListener<OnDeleteUserEvent> {
 
-    private MailServer mailServer;
+    private final MailServer mailServer;
 
     @Autowired
     public DeleteUserListener(MailServer mailServer){

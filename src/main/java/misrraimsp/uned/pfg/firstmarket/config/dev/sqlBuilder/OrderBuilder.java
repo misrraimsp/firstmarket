@@ -30,8 +30,13 @@ public class OrderBuilder {
         itemQueryHolder.openInsertItemQuery();
         pedidoItemsQueryHolder.openInsertPedidoItemsQuery();
         for (int i = 1; i <= numOfOrders; i++){
+            String dateTime = numberGenerator.getRandomDate();
             shippingQueryHolder.addShippingValues(
                     String.valueOf(i),
+                    "1",
+                    dateTime,
+                    "1",
+                    dateTime,
                     "carrier",
                     "name",
                     "phone",
@@ -40,6 +45,10 @@ public class OrderBuilder {
             );
             paymentQueryHolder.addPaymentValues(
                     String.valueOf(i),
+                    "1",
+                    dateTime,
+                    "1",
+                    dateTime,
                     "1", //actual value set on app startup
                     "eur",
                     "test payment number " + i,
@@ -47,7 +56,10 @@ public class OrderBuilder {
             );
             pedidoQueryHolder.addPedidoValues(
                     String.valueOf(i),
-                    numberGenerator.getRandomDate(),
+                    String.valueOf(i),
+                    dateTime,
+                    String.valueOf(i),
+                    dateTime,
                     numberGenerator.getRandomPedidoStatus(),
                     String.valueOf(i),
                     String.valueOf(i),
@@ -56,6 +68,10 @@ public class OrderBuilder {
             for (int j = 1; j <= Integer.parseInt(numberGenerator.getRandomNumOfItems()); j++) {
                 itemQueryHolder.addItemValues(
                         String.valueOf(nextItemId),
+                        "1",
+                        dateTime,
+                        "1",
+                        dateTime,
                         numberGenerator.getRandomQuantity(),
                         numberGenerator.getRandomBookId()
                 );

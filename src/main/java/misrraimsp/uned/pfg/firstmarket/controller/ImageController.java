@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ImagesWrapper;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ImageSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.ImageSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.apache.commons.io.IOUtils;

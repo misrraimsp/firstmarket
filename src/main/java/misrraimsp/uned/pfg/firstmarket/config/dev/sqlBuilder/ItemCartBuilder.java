@@ -20,16 +20,20 @@ public class ItemCartBuilder {
         //build insert item query
         queryHolder.openInsertItemQuery();
         for (int i = 1; i <= numOfItems; i++){
+            String dateTime = numberGenerator.getRandomDate();
             queryHolder.addItemValues(
                     String.valueOf(i),
+                    "1",
+                    dateTime,
+                    "1",
+                    dateTime,
                     numberGenerator.getRandomQuantity(),
                     numberGenerator.getRandomBookId()
             );
         }
         queryHolder.closeInsertQuery();
         //new lines
-        queryHolder.addNewLine();
-        queryHolder.addNewLine();
+        queryHolder.addTwoNewLines();
         //build insert cart_items query
         queryHolder.openInsertCartItemsQuery();
         for (int i = 1; i <= numOfItems; i++){

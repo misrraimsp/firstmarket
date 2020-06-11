@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.staticParameter;
+package misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort;
 
 import org.springframework.data.domain.Sort;
 

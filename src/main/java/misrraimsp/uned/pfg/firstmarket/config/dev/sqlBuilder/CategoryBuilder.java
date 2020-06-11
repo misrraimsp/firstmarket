@@ -20,6 +20,7 @@ public class CategoryBuilder {
 
     private static final String XMLCategoriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/categories";
     private static final String BuiltCatQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtCatQueries.txt";
+    private static final NumberGenerator numberGenerator = new NumberGenerator();
 
     public static void main(String[] args) throws JDOMException, IOException {
         configure();
@@ -27,7 +28,7 @@ public class CategoryBuilder {
 
     /**
      * Este método establece el workflow para producir las queries necesarias
-     * que insertan en la base de datos las categorias y los catpath
+     * que insertan en la base de datos las categorias y los catpaths
      * @throws JDOMException
      * @throws IOException
      */
@@ -38,20 +39,20 @@ public class CategoryBuilder {
         IdHolder idHolder = new IdHolder();
         CategoryLevelHolder categoryLevelHolder = new CategoryLevelHolder();
         QueryHolder queryHolder = new QueryHolder();
-        //set categories id ad level
+        //set categories id and level
         completeXML(rootCategory, idHolder, categoryLevelHolder);
         //build insert category query
         queryHolder.openInsertCategoryQuery();
         addCategoryValues(rootCategory, queryHolder);
         queryHolder.closeInsertQuery();
         //new lines and reset
-        queryHolder.addNewLine();
-        queryHolder.addNewLine();
+        queryHolder.addTwoNewLines();
         idHolder.reset();
         //build insert catpath query
         queryHolder.openInsertCatpathQuery();
         addCatpathValues(rootCategory, queryHolder, idHolder);
         queryHolder.closeInsertQuery();
+        queryHolder.addTwoNewLines();
         //output
         outputXML(document, XMLCategoriesPath);
         outputSQL(queryHolder.getSql(), BuiltCatQueriesPath);
@@ -93,11 +94,23 @@ public class CategoryBuilder {
      */
     private static void addCategoryValues(Element element, QueryHolder queryHolder){
         String id = element.getChild("Id").getText();
+        String dateTime = numberGenerator.getRandomDate();
         if (id.equals("1")){
-            queryHolder.addCategoryValues(id, element.getChild("Name").getText(), id); //self-parenthood
+            queryHolder.addCategoryValues(
+                    id,
+                    "1",
+                    dateTime,
+                    "1",
+                    dateTime,
+                    element.getChild("Name").getText(),
+                    id); //self-parenthood
         } else {
             queryHolder.addCategoryValues(
                     id,
+                    "1",
+                    dateTime,
+                    "1",
+                    dateTime,
                     element.getChild("Name").getText(),
                     element.getParentElement().getParentElement().getChild("Id").getText());
         }
@@ -114,13 +127,27 @@ public class CategoryBuilder {
      */
     private static void addCatpathValues(Element element, QueryHolder queryHolder, IdHolder idHolder) {
         String id = element.getChild("Id").getText();
-        queryHolder.addCatpathValues(String.valueOf(idHolder.getId()),"0",id,id);
+        String dateTime = numberGenerator.getRandomDate();
+        queryHolder.addCatpathValues(
+                String.valueOf(idHolder.getId()),
+                "1",
+                dateTime,
+                "1",
+                dateTime,
+                "0",
+                id,
+                id);
         idHolder.increment();
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
+            dateTime = numberGenerator.getRandomDate();
             queryHolder.addCatpathValues(
                     String.valueOf(idHolder.getId()),
+                    "1",
+                    dateTime,
+                    "1",
+                    dateTime,
                     String.valueOf(descendantLevel - elementLevel),
                     id,
                     descendant.getChild("Id").getText());

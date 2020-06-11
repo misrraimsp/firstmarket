@@ -4,11 +4,11 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.PasswordForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserDeletionForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.UserSortCriteria;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.UserSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.event.*;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
@@ -43,7 +43,7 @@ public class UserController extends BasicController {
 
     private final PasswordEncoder passwordEncoder;
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final TimeFormatProperties timeFormatProperties;
+    private final SecurityTokenProperties securityTokenProperties;
 
     @Autowired
     public UserController(UserServer userServer,
@@ -54,12 +54,12 @@ public class UserController extends BasicController {
                           OrderServer orderServer,
                           PasswordEncoder passwordEncoder,
                           ApplicationEventPublisher applicationEventPublisher,
-                          TimeFormatProperties timeFormatProperties) {
+                          SecurityTokenProperties securityTokenProperties) {
 
         super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.passwordEncoder = passwordEncoder;
         this.applicationEventPublisher = applicationEventPublisher;
-        this.timeFormatProperties = timeFormatProperties;
+        this.securityTokenProperties = securityTokenProperties;
     }
 
     @GetMapping("/newUser")
@@ -278,8 +278,7 @@ public class UserController extends BasicController {
             errorMessage = messageSource.getMessage("auth.invalidToken", null, null);
             LOGGER.debug("Trying to confirm email with a non-existent token={}", token);
         }
-        else if (LocalDateTime.parse(securityToken.getExpiryDate(),timeFormatProperties.getDateTimeFormatter())
-                .isBefore(LocalDateTime.now())) { // check for expired token
+        else if (securityToken.getCreatedDate().plusMinutes(securityTokenProperties.getExpirationInMinutes()).isBefore(LocalDateTime.now())) { // check for expired token
             hasError = true;
             errorMessage = messageSource.getMessage("auth.expiredToken", null, null);
             LOGGER.debug("Trying to confirm email with an expired token={}", token);
@@ -292,36 +291,36 @@ public class UserController extends BasicController {
         // complete confirmation
         switch (securityToken.getSecurityEvent()){
             case NEW_USER:
-                userServer.setCompletedState(securityToken.getUser().getId(),true);
-                LOGGER.trace("User created (id={})", securityToken.getUser().getId());
+                userServer.setCompletedState(securityToken.getTargetUser().getId(),true);
+                LOGGER.debug("User(id={}) creation completed", securityToken.getTargetUser().getId());
                 userServer.deleteSecurityToken(securityToken.getId());
                 applicationEventPublisher.publishEvent(
-                        new OnNewUserEvent(securityToken.getUser().getId())
+                        new OnNewUserEvent(securityToken.getTargetUser().getId())
                 );
                 return "redirect:/login";
             case RESTART_USER:
-                userServer.setSuspendedState(securityToken.getUser().getId(),false);
-                LOGGER.trace("User restored (id={})", securityToken.getUser().getId());
+                userServer.setSuspendedState(securityToken.getTargetUser().getId(),false);
+                LOGGER.debug("User(id={}) restored", securityToken.getTargetUser().getId());
                 userServer.deleteSecurityToken(securityToken.getId());
                 applicationEventPublisher.publishEvent(
-                        new OnRestartUserEvent(securityToken.getUser().getId())
+                        new OnRestartUserEvent(securityToken.getTargetUser().getId())
                 );
                 return "redirect:/login";
             case EMAIL_CHANGE:
-                userServer.editEmail(securityToken.getUser().getId(), securityToken.getEditedEmail());
-                LOGGER.trace("User email changed (id={})", securityToken.getUser().getId());
+                userServer.editEmail(securityToken.getTargetUser().getId(), securityToken.getTargetEmail());
+                LOGGER.debug("User(id={}) email changed", securityToken.getTargetUser().getId());
                 userServer.deleteSecurityToken(securityToken.getId());
                 applicationEventPublisher.publishEvent(
-                        new OnEmailEditionEvent(securityToken.getUser().getId())
+                        new OnEmailEditionEvent(securityToken.getTargetUser().getId())
                 );
                 return "redirect:/home";
             case RESET_PASSWORD:
                 String randomPassword = userServer.getRandomPassword();
                 applicationEventPublisher.publishEvent(
-                        new OnResetPasswordEvent(securityToken.getUser().getId(), randomPassword)
+                        new OnResetPasswordEvent(securityToken.getTargetUser().getId(), randomPassword)
                 );
-                userServer.editPassword(securityToken.getUser().getId(), passwordEncoder, randomPassword);
-                LOGGER.trace("User password reset (id={})", securityToken.getUser().getId());
+                userServer.editPassword(securityToken.getTargetUser().getId(), passwordEncoder, randomPassword);
+                LOGGER.debug("User(id={}) password reset", securityToken.getTargetUser().getId());
                 userServer.deleteSecurityToken(securityToken.getId());
                 return "resetPasswordConfirmation";
             default:
@@ -446,7 +445,7 @@ public class UserController extends BasicController {
         }
         // complete deletion
         userServer.setSuspendedState(authUser.getId(),true);
-        LOGGER.trace("User suspended (id={})", authUser.getId());
+        LOGGER.debug("User(id={}) suspended", authUser.getId());
         UserDeletion userDeletion = userServer.createUserDeletion(
                 authUser.getId(),
                 userDeletionForm.getDeletionReason(),

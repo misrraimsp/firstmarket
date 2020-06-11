@@ -11,7 +11,7 @@ import java.util.Set;
 @Service
 public class PublisherServer {
 
-    private PublisherRepository publisherRepository;
+    private final PublisherRepository publisherRepository;
 
     @Autowired
     public PublisherServer(PublisherRepository publisherRepository) {

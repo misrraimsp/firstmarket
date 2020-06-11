@@ -12,11 +12,11 @@ public interface ImageRepository extends CrudRepository<Image, Long> {
 
     Image findByData(byte[] data);
 
-    @Query(value = "SELECT id,null AS data,size,is_default,mime_type,name FROM image ", nativeQuery = true)
+    @Query(value = "SELECT id,created_by,created_date,last_modified_by,last_modified_date,null AS data,size,is_default,mime_type,name FROM image ", nativeQuery = true)
     List<Image> getAllMetaInfo();
 
     List<Image> findByIsDefaultIsTrue();
 
-    @Query(value = "SELECT id,1 AS data,size,is_default,mime_type,name FROM image ", nativeQuery = true)
+    @Query(value = "SELECT id,created_by,created_date,last_modified_by,last_modified_date,1 AS data,size,is_default,mime_type,name FROM image ", nativeQuery = true)
     Page<Image> getPageOfMetaInfo(Pageable pageable);
 }
