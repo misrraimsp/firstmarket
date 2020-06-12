@@ -15,7 +15,7 @@
                 <!-- admin new book -->
                 <div class="col-sm-3">
                     <div sec:authorize="hasRole('ADMIN')">
-                        <a class="btn btn-outline-secondary align-center btn-lg btn-block" th:href="@{/admin/bookForm}">
+                        <a class="btn btn-outline-secondary align-center btn-lg btn-block" th:href="@{/admin/bookForm?pageNo={pn}&pageSize={ps}&sort={s}(pn=${pageOfEntities.number},ps=${pageSize.ordinal()},s=${sort.ordinal()})}">
                             <i class="fas fa-book-medical fa-lg mr-4"></i>New Book
                         </a>
                     </div>
@@ -243,7 +243,7 @@
                                             </div>
                                         </form>
                                         <!-- edit book -->
-                                        <a class="btn btn-outline-secondary btn-sm align-center btn-block" th:href="@{/admin/bookForm?id={id}&pn={pn}(id=${book.id},pn=${pageOfEntities.number})}">
+                                        <a class="btn btn-outline-secondary btn-sm align-center btn-block" th:href="@{/admin/bookForm?id={id}&pageNo={pn}&pageSize={ps}&sort={s}(id=${book.id},pn=${pageOfEntities.number},ps=${pageSize.ordinal()},s=${sort.ordinal()})}">
                                             Edit Details<i class="fas fa-pen ml-3"></i>
                                         </a>
                                     </div>

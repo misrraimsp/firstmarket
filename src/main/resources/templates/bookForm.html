@@ -15,12 +15,11 @@
             <div class="row">
                 <div class="col-sm-2 bg-white"></div>
                 <div class="col-sm-8">
-                    <form class="needs-validation" novalidate id="isbnForm" th:action="@{/admin/bookForm}" th:object="${bookForm}" method="POST" enctype="multipart/form-data" action="#">
-                        <!--<input type="hidden" th:if="${pn ne null}" name="pn" th:value="${pn}"/>-->
+                    <form class="needs-validation" novalidate id="isbnForm" th:action="@{/admin/bookForm}" th:object="${bookForm}" method="POST" enctype="multipart/form-data">
                         <input type="hidden" th:field="*{bookId}"/>
-                        <input type="hidden" th:if="${pageNo ne null}" name="pageNo" th:value="${pageNo}"/>
-                        <input type="hidden" th:if="${pageSize ne null}" name="pageSize" th:value="${pageSize}"/>
-                        <input type="hidden" th:if="${sort ne null}" name="sort" th:value="${sort}"/>
+                        <input type="hidden" name="pageNo" th:value="${pageNo}"/>
+                        <input type="hidden" name="pageSize" th:value="${pageSize}"/>
+                        <input type="hidden" name="sort" th:value="${sort}"/>
                         <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
                         <div class="form-row">
                             <div class="col-sm-6 bg-light">
