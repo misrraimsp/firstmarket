@@ -26,7 +26,7 @@ fm:
             public: ${STRIPE_PUBLIC_KEY}
             private: ${STRIPE_SECRET_KEY}
             webhook: ${STRIPE_WEBHOOK_SECRET}
-         pi-minutes: 1
+         pi-minutes: 15
          limit-of-naps: 2
          ips: 3.18.12.63,3.130.192.231,13.235.14.237,13.235.122.149,35.154.171.200,52.15.183.38,54.187.174.169,54.187.205.235,54.187.216.72,54.241.31.99,54.241.31.102,54.241.34.107
    validation:
@@ -50,10 +50,10 @@ fm:
          phone: ^(\+)?(\([0-9]{0,4}\))?(([0-9\s.\-]){9,15})?$ # poor but enough approximation
    security:
       lock:
-         num-of-attempts: 2
+         num-of-attempts: 3
          locking-minutes: 10
       token:
-         expiration-in-minutes: 2
+         expiration-in-minutes: 15
       random-password:
          num-of-lower-case: 2
          num-of-upper-case: 2
@@ -83,19 +83,19 @@ fm:
       orders:
          title-max-size: 60
       search-criteria:
-         num-of-authors: 4
-         num-of-publishers: 5
-         num-of-languages: 6
+         num-of-authors: 7
+         num-of-publishers: 7
+         num-of-languages: 7
    pagination:
       default-sort-index:
-         book: 2
+         book: 5
          image: 2
-         user: 1
-         order: 0
+         user: 6
+         order: 1
       default-size-index:
          image: 0
          home: 1
-         search: 2
+         search: 0
          user: 1
          order: 3
       default-index: 0
