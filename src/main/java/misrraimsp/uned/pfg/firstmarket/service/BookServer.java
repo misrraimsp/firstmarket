@@ -276,16 +276,17 @@ public class BookServer {
         });
     }
 
-    public void setStatus(Long bookId, BookStatus status) throws BookNotFoundException {
+    public void setStatus(Long bookId, BookStatus bookStatus) throws BookNotFoundException {
         Book book = this.findById(bookId);
-        if (status.equals(BookStatus.OUT_OF_STOCK)) {
+        if (bookStatus.equals(BookStatus.OUT_OF_STOCK)) {
             book.setStock(0);
         }
-        if (status.equals(BookStatus.OK) && book.getStock() == 0) {
+        if (bookStatus.equals(BookStatus.OK) && book.getStock() == 0) {
             book.setStock(10);
         }
-        book.setStatus(status);
+        book.setStatus(bookStatus);
         bookRepository.save(book);
+        LOGGER.debug("Book(id={}) status set as {}", bookId, bookStatus);
     }
 
     public void incrementCartBookRegistry(Long cartBookId) {

@@ -53,9 +53,12 @@ public class BookController extends BasicController {
         this.conversionManager = conversionManager;
     }
 
-    private void populateModelToBookForm(Map<String, Object> properties) {
+    private void populateModelToBookForm(Map<String, Object> properties, Optional<String> optPageNo, Optional<String> optPageSize, Optional<String> optSort) {
         properties.put("indentedCategories", catServer.getIndentedCategories());
         properties.put("imagesInfo", imageServer.getAllMetaInfo());
+        optPageNo.ifPresent(pageNo -> properties.put("pageNo", pageNo));
+        optPageSize.ifPresent(pageSize -> properties.put("pageSize", pageSize));
+        optSort.ifPresent(sort -> properties.put("sort", sort));
     }
 
     @GetMapping("/book/{id}")
@@ -71,7 +74,9 @@ public class BookController extends BasicController {
 
     @GetMapping("/admin/bookForm")
     public String showBookForm(@RequestParam(name = "id") Optional<Long> optBookId,
-                               @RequestParam(name = "pn") Optional<String> optPageNo,
+                               @RequestParam(name = "pageNo") Optional<String> optPageNo,
+                               @RequestParam(name = "pageSize") Optional<String> optPageSize,
+                               @RequestParam(name = "sort") Optional<String> optSort,
                                Model model) {
 
         optBookId.ifPresentOrElse(
@@ -82,24 +87,22 @@ public class BookController extends BasicController {
                 },
                 () -> model.addAttribute("bookForm", new BookForm())
         );
-        optPageNo.ifPresent(pageNo -> {
-            model.addAttribute("pn", pageNo);
-            LOGGER.debug("received page number: {}", pageNo);
-        });
         populateModel(model.asMap(), null);
-        populateModelToBookForm(model.asMap());
+        populateModelToBookForm(model.asMap(),optPageNo,optPageSize,optSort);
         return "bookForm";
     }
 
     @PostMapping("/admin/bookForm")
     public ModelAndView processBookForm(@Valid BookForm bookForm,
-                                  Errors errors,
-                                  ModelAndView modelAndView,
-                                  @RequestParam(name = "pn") Optional<String> optPageNo) {
+                                        Errors errors,
+                                        ModelAndView modelAndView,
+                                        @RequestParam(name = "pageNo") Optional<String> optPageNo,
+                                        @RequestParam(name = "pageSize") Optional<String> optPageSize,
+                                        @RequestParam(name = "sort") Optional<String> optSort) {
 
         if (errors.hasErrors()) {
             populateModel(modelAndView.getModel(), null);
-            populateModelToBookForm(modelAndView.getModel());
+            populateModelToBookForm(modelAndView.getModel(),optPageNo,optPageSize,optSort);
             modelAndView.setViewName("bookForm");
             return modelAndView;
         }
@@ -117,12 +120,14 @@ public class BookController extends BasicController {
             LOGGER.debug("Trying to save a book with an already used isbn={}", bookForm.getIsbn());
             errors.rejectValue("isbn", "isbn.notUnique");
             populateModel(modelAndView.getModel(), null);
-            populateModelToBookForm(modelAndView.getModel());
+            populateModelToBookForm(modelAndView.getModel(),optPageNo,optPageSize,optSort);
             modelAndView.setViewName("bookForm");
             return modelAndView;
         }
         modelAndView.setViewName("redirect:/books");
         optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        optPageSize.ifPresent(pageSize -> modelAndView.addObject("pageSize", pageSize));
+        optSort.ifPresent(sort -> modelAndView.addObject("sort", sort));
         return modelAndView;
     }
 
@@ -130,17 +135,15 @@ public class BookController extends BasicController {
     public ModelAndView processSetBookStatus(ModelAndView modelAndView,
                                              @RequestParam Long bookId,
                                              @RequestParam BookStatus bookStatus,
-                                             @RequestParam(name = "pn") Optional<String> optPageNo) {
+                                             @RequestParam(name = "pageNo") Optional<String> optPageNo,
+                                             @RequestParam(name = "pageSize") Optional<String> optPageSize,
+                                             @RequestParam(name = "sort") Optional<String> optSort) {
 
-        if (!bookServer.existsBook(bookId)) {
-            LOGGER.warn("Trying to set a non-existent-book(id={}) status as {}", bookId, bookStatus);
-        }
-        else {
-            bookServer.setStatus(bookId, bookStatus);
-            LOGGER.debug("Book(id={}) status set as {}", bookId, bookStatus);
-        }
+        bookServer.setStatus(bookId, bookStatus);
         modelAndView.setViewName("redirect:/books");
         optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        optPageSize.ifPresent(pageSize -> modelAndView.addObject("pageSize", pageSize));
+        optSort.ifPresent(sort -> modelAndView.addObject("sort", sort));
         return modelAndView;
     }
 
@@ -190,8 +193,8 @@ public class BookController extends BasicController {
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
         model.addAttribute("languages", languages);
-        model.addAttribute("pageable", pageable);
         model.addAttribute("sort", sort);
+        model.addAttribute("pageSize", pageSize);
         model.addAttribute("cartBookRegistry", bookServer.getCartBookRegistry());
         return "books";
     }
