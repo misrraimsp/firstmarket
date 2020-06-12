@@ -29,7 +29,7 @@
                                 <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
                                         th:value="${ps.ordinal()}"
                                         th:text="${ps.size}"
-                                        th:selected="${ps.size eq pageable.pageSize}">
+                                        th:selected="${ps.size eq pageOfEntities.pageable.pageSize}">
                                 </option>
                             </select>
                             <p class="my-0 ml-2">
@@ -222,7 +222,9 @@
                                         <!-- set book status -->
                                         <form th:action="@{/admin/setBookStatus}" method="POST" action="#">
                                             <input type="hidden" name="bookId" th:value="${book.id}"/>
-                                            <input type="hidden" name="pn" th:value="${pageOfEntities.number}"/>
+                                            <input type="hidden" name="pageNo" th:value="${pageOfEntities.number}"/>
+                                            <input type="hidden" name="pageSize" th:value="${pageSize.ordinal()}"/>
+                                            <input type="hidden" name="sort" th:value="${sort.ordinal()}"/>
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <select class="custom-select custom-select-sm text-secondary border border-secondary" name="bookStatus">
