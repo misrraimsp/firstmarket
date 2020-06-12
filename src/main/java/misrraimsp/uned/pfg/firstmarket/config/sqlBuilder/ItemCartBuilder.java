@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,20 +15,20 @@ public class ItemCartBuilder {
 
     private static void build() throws IOException {
         //initialize
-        NumberGenerator numberGenerator = new NumberGenerator();
+        ValueGenerator valueGenerator = new ValueGenerator();
         QueryHolder queryHolder = new QueryHolder();
         //build insert item query
         queryHolder.openInsertItemQuery();
         for (int i = 1; i <= numOfItems; i++){
-            String dateTime = numberGenerator.getRandomDate();
+            String dateTime = valueGenerator.getRandomDateTime();
             queryHolder.addItemValues(
                     String.valueOf(i),
                     "1",
                     dateTime,
                     "1",
                     dateTime,
-                    numberGenerator.getRandomQuantity(),
-                    numberGenerator.getRandomBookId()
+                    valueGenerator.getRandomQuantity(),
+                    valueGenerator.getRandomBookId()
             );
         }
         queryHolder.closeInsertQuery();
@@ -38,7 +38,7 @@ public class ItemCartBuilder {
         queryHolder.openInsertCartItemsQuery();
         for (int i = 1; i <= numOfItems; i++){
             queryHolder.addCartItemsValues(
-                    numberGenerator.getRandomCartId(),
+                    valueGenerator.getRandomCartId(),
                     String.valueOf(i)
             );
         }

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -16,7 +16,7 @@ public class OrderBuilder {
 
     private static void build() throws IOException {
         //initialize
-        NumberGenerator numberGenerator = new NumberGenerator();
+        ValueGenerator valueGenerator = new ValueGenerator();
         QueryHolder globalQueryHolder = new QueryHolder();
         QueryHolder shippingQueryHolder = new QueryHolder();
         QueryHolder paymentQueryHolder = new QueryHolder();
@@ -30,7 +30,7 @@ public class OrderBuilder {
         itemQueryHolder.openInsertItemQuery();
         pedidoItemsQueryHolder.openInsertPedidoItemsQuery();
         for (int i = 1; i <= numOfOrders; i++){
-            String dateTime = numberGenerator.getRandomDate();
+            String dateTime = valueGenerator.getRandomDateTime();
             shippingQueryHolder.addShippingValues(
                     String.valueOf(i),
                     "1",
@@ -41,7 +41,7 @@ public class OrderBuilder {
                     "name",
                     "phone",
                     "tracking_number",
-                    numberGenerator.getRandomAddressId()
+                    valueGenerator.getRandomAddressId()
             );
             paymentQueryHolder.addPaymentValues(
                     String.valueOf(i),
@@ -60,20 +60,20 @@ public class OrderBuilder {
                     dateTime,
                     String.valueOf(i),
                     dateTime,
-                    numberGenerator.getRandomPedidoStatus(),
+                    valueGenerator.getRandomPedidoStatus(),
                     String.valueOf(i),
                     String.valueOf(i),
-                    numberGenerator.getRandomUserId()
+                    valueGenerator.getRandomUserId()
             );
-            for (int j = 1; j <= Integer.parseInt(numberGenerator.getRandomNumOfItems()); j++) {
+            for (int j = 1; j <= Integer.parseInt(valueGenerator.getRandomNumOfItems()); j++) {
                 itemQueryHolder.addItemValues(
                         String.valueOf(nextItemId),
                         "1",
                         dateTime,
                         "1",
                         dateTime,
-                        numberGenerator.getRandomQuantity(),
-                        numberGenerator.getRandomBookId()
+                        valueGenerator.getRandomQuantity(),
+                        valueGenerator.getRandomBookId()
                 );
                 pedidoItemsQueryHolder.addPedidoItemsValues(
                         String.valueOf(i),

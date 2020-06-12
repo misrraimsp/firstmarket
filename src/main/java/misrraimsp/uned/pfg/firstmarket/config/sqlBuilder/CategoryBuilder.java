@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 import org.jdom2.Content;
 import org.jdom2.Document;
@@ -20,7 +20,7 @@ public class CategoryBuilder {
 
     private static final String XMLCategoriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/categories";
     private static final String BuiltCatQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtCatQueries.txt";
-    private static final NumberGenerator numberGenerator = new NumberGenerator();
+    private static final ValueGenerator VALUE_GENERATOR = new ValueGenerator();
 
     public static void main(String[] args) throws JDOMException, IOException {
         configure();
@@ -94,7 +94,7 @@ public class CategoryBuilder {
      */
     private static void addCategoryValues(Element element, QueryHolder queryHolder){
         String id = element.getChild("Id").getText();
-        String dateTime = numberGenerator.getRandomDate();
+        String dateTime = VALUE_GENERATOR.getRandomDateTime();
         if (id.equals("1")){
             queryHolder.addCategoryValues(
                     id,
@@ -127,7 +127,7 @@ public class CategoryBuilder {
      */
     private static void addCatpathValues(Element element, QueryHolder queryHolder, IdHolder idHolder) {
         String id = element.getChild("Id").getText();
-        String dateTime = numberGenerator.getRandomDate();
+        String dateTime = VALUE_GENERATOR.getRandomDateTime();
         queryHolder.addCatpathValues(
                 String.valueOf(idHolder.getId()),
                 "1",
@@ -141,7 +141,7 @@ public class CategoryBuilder {
         for (Element descendant : getDescendants(element)){
             int descendantLevel = Integer.parseInt(descendant.getAttribute("level").getValue());
             int elementLevel = Integer.parseInt(element.getAttribute("level").getValue());
-            dateTime = numberGenerator.getRandomDate();
+            dateTime = VALUE_GENERATOR.getRandomDateTime();
             queryHolder.addCatpathValues(
                     String.valueOf(idHolder.getId()),
                     "1",

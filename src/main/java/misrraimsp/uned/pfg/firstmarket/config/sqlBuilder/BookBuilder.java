@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,15 +15,15 @@ public class BookBuilder {
 
     private static void configure() throws IOException {
         //initialize
-        NumberGenerator numberGenerator = new NumberGenerator();
+        ValueGenerator valueGenerator = new ValueGenerator();
         IsbnHolder isbnHolder = new IsbnHolder(numOfBooks);
         QueryHolder queryHolder = new QueryHolder();
         //build insert book query
         queryHolder.openInsertBookQuery();
         for (int i = 1; i <= numOfBooks; i++){
-            String status = numberGenerator.getRandomBookStatus();
-            String stock = (status.equals("OUT_OF_STOCK")) ? "0" : numberGenerator.getRandomStock();
-            String dateTime = numberGenerator.getRandomDate();
+            String status = valueGenerator.getRandomBookStatus();
+            String stock = (status.equals("OUT_OF_STOCK")) ? "0" : valueGenerator.getRandomStock();
+            String dateTime = valueGenerator.getRandomDateTime();
             queryHolder.addBookValues(
                     String.valueOf(i),
                     "1",
@@ -31,16 +31,16 @@ public class BookBuilder {
                     "1",
                     dateTime,
                     isbnHolder.getIsbn(),
-                    numberGenerator.getRandomLanguage(),
-                    numberGenerator.getRandomNumPages(),
-                    numberGenerator.getRandomPrice(),
+                    valueGenerator.getRandomLanguage(),
+                    valueGenerator.getRandomNumPages(),
+                    valueGenerator.getRandomPrice(),
                     status,
                     stock,
                     "title-" + i,
-                    numberGenerator.getRandomYear(),
-                    numberGenerator.getRandomCategoryId(),
-                    numberGenerator.getRandomImageId(),
-                    numberGenerator.getRandomPublisherId()
+                    valueGenerator.getRandomYear(),
+                    valueGenerator.getRandomCategoryId(),
+                    valueGenerator.getRandomImageId(),
+                    valueGenerator.getRandomPublisherId()
             );
         }
         queryHolder.closeInsertQuery();
@@ -49,10 +49,10 @@ public class BookBuilder {
         //build insert books_authors query
         queryHolder.openInsertBooksAuthorsQuery();
         for (int i = 1; i <= numOfBooks; i++){
-            for (int j = 1; j <= numberGenerator.getRandomNumOfAuthors(); j++) {
+            for (int j = 1; j <= valueGenerator.getRandomNumOfAuthors(); j++) {
                 queryHolder.addBooksAuthorsValues(
                         String.valueOf(i),
-                        numberGenerator.getRandomAuthorId()
+                        valueGenerator.getRandomAuthorId()
                 );
             }
         }

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev;
+package misrraimsp.uned.pfg.firstmarket.config.misc;
 
 import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
 

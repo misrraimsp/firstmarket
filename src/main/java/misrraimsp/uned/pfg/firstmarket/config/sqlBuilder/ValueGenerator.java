@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 /**
  * app properties are overwritten in this dev-class
  */
-public class NumberGenerator extends Random {
+public class ValueGenerator extends Random {
 
     private static final int MIN_LANGUAGE = 0;
     private static final int MAX_LANGUAGE = 27;
@@ -56,8 +56,8 @@ public class NumberGenerator extends Random {
     private static final int MIN_ITEMS_PEDIDO = 1;
     private static final int MAX_ITEMS_PEDIDO = 3;
 
-    private static final int MIN_PAST_DAYS = 0;
-    private static final int MAX_PAST_DAYS = 1000;
+    private static final int MIN_PAST_TIME_UNITS = 0;
+    private static final int MAX_PAST_TIME_UNITS = 10000;
 
 
 
@@ -131,10 +131,11 @@ public class NumberGenerator extends Random {
         return String.valueOf(getDiscreteRandomNumber(MIN_ID, MAX_ADDRESS_ID));
     }
 
-    public String getRandomDate(){
+    public String getRandomDateTime(){
         return LocalDateTime
                 .now()
-                .minusDays(getDiscreteRandomNumber(MIN_PAST_DAYS, MAX_PAST_DAYS))
+                .minusDays(getDiscreteRandomNumber(MIN_PAST_TIME_UNITS, MAX_PAST_TIME_UNITS))
+                .minusSeconds(getDiscreteRandomNumber(MIN_PAST_TIME_UNITS, MAX_PAST_TIME_UNITS))
                 .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
     }
 
