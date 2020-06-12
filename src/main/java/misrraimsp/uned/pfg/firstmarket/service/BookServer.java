@@ -290,12 +290,14 @@ public class BookServer {
 
     public void incrementCartBookRegistry(Long cartBookId) {
         cartBookRegistry.merge(cartBookId, 1L, (oldValue, defaultValue) -> ++oldValue);
-        LOGGER.debug("CartBook(id={}) incremented on CartBookRegistry({})", cartBookId, this.getCartBookRegistry());
+        LOGGER.debug("CartBook(id={}) incremented on CartBookRegistry", cartBookId);
+        LOGGER.trace("CartBookRegistry: {}", this.getCartBookRegistry());
     }
 
     public void decrementCartBookRegistry(Long cartBookId) {
         cartBookRegistry.computeIfPresent(cartBookId, (key, value) -> (value > 1L) ? --value : null);
-        LOGGER.debug("CartBook(id={}) decremented on CartBookRegistry({})", cartBookId, this.getCartBookRegistry());
+        LOGGER.debug("CartBook(id={}) decremented on CartBookRegistry", cartBookId);
+        LOGGER.trace("CartBookRegistry: {}", this.getCartBookRegistry());
     }
 
     public void incrementCartBookRegistry(List<Long> cartBookIds) {
