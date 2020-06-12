@@ -1,7 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
-import misrraimsp.uned.pfg.firstmarket.exception.NoBookStatusException;
+import misrraimsp.uned.pfg.firstmarket.exception.NoEntityStatusException;
+import misrraimsp.uned.pfg.firstmarket.model.Book;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;
@@ -15,7 +16,7 @@ public class StringToBookStatusConverter implements Converter<String, BookStatus
     @Override
     public BookStatus convert(String s) {
         if (BookStatus.values().length == 0) {
-            throw new NoBookStatusException();
+            throw new NoEntityStatusException(Book.class.getSimpleName());
         }
         int maxIndex = BookStatus.values().length - 1;
         int index;

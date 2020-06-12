@@ -9,6 +9,7 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.OrderSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
@@ -29,9 +30,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Optional;
 import java.util.Set;
 
 @Controller
@@ -95,6 +98,22 @@ public class OrderController extends BasicController {
         model.addAttribute("pageOfEntities", orderPage);
         model.addAttribute("sort", sort);
         model.addAttribute("pageSize", pageSize);
+    }
+
+    @PostMapping("/admin/setOrderStatus")
+    public ModelAndView processSetOrderStatus(ModelAndView modelAndView,
+                                              @RequestParam Long orderId,
+                                              @RequestParam OrderStatus orderStatus,
+                                              @RequestParam(name = "pageNo") Optional<String> optPageNo,
+                                              @RequestParam(name = "pageSize") Optional<String> optPageSize,
+                                              @RequestParam(name = "sort") Optional<String> optSort) {
+
+        orderServer.setStatus(orderId, orderStatus);
+        modelAndView.setViewName("redirect:/orders");
+        optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
+        optPageSize.ifPresent(pageSize -> modelAndView.addObject("pageSize", pageSize));
+        optSort.ifPresent(sort -> modelAndView.addObject("sort", sort));
+        return modelAndView;
     }
 
     @GetMapping("/user/success")
