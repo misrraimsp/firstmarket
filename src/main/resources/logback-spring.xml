@@ -40,7 +40,7 @@
         </appender>
         -->
 
-    <logger name="misrraimsp.uned.pfg.firstmarket" level="TRACE" additivity="false">
+    <logger name="misrraimsp.uned.pfg.firstmarket" level="DEBUG" additivity="false">
         <appender-ref ref="Async-Appender"/>
         <appender-ref ref="Console-Appender"/>
     </logger>

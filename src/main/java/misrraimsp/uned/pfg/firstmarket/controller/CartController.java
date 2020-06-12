@@ -133,7 +133,7 @@ public class CartController extends BasicController {
             String userEmail = userPrincipal.getName();
             Cart cart = userServer.getUserByEmail(userEmail).getCart();
             for (Long itemId : ids) {
-                cartServer.removeItem(cart, itemId);
+                cartServer.removeItem(cart, itemId, true);
             }
             return new ResponseEntity<>(cart.getSize(), HttpStatus.OK);
         }

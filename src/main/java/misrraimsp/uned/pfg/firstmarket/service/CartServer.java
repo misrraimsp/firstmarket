@@ -114,8 +114,8 @@ public class CartServer {
         }
     }
 
-    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
-    public void removeItem(Cart cart, Long itemId) throws ItemNotFoundException, StripeException {
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = StripeException.class)
+    public void removeItem(Cart cart, Long itemId, boolean doUnCommit) throws ItemNotFoundException, StripeException {
         //update cart
         Item deletingItem = itemServer.findById(itemId);
         Set<Item> items = new HashSet<>(cart.getItems());
@@ -123,7 +123,7 @@ public class CartServer {
             LOGGER.warn("Trying to remove an item(id={}) that is not present in the cart(id{})", itemId, cart.getId());
             return;
         }
-        cart = this.unCommitCart(cart);
+        if (doUnCommit) cart = this.unCommitCart(cart);
         bookServer.decrementCartBookRegistry(deletingItem.getBook().getId());
         items.remove(deletingItem);
         cart.setItems(items);
@@ -172,16 +172,27 @@ public class CartServer {
         return cart;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void pruneCart(Cart cart, Set<Item> itemsDisabled) {
-        if (itemsDisabled.isEmpty()) return;
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
+    public void pruneCart(Cart cart, Set<Item> itemsDisabled) throws StripeException {
+        LOGGER.debug("Cart(id={}) pruning started due to {} book/s disability", cart.getId(), itemsDisabled.size());
+        for (Item item : itemsDisabled) {
+            this.removeItem(cart, item.getId(), false);
+        }
+        LOGGER.debug("Cart(id={}) pruning ended", cart.getId());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = StripeException.class)
+    public void resetCart(Cart cart) throws StripeException {
+        LOGGER.debug("Cart(id={}) reset started", cart.getId());
         Set<Item> items = new HashSet<>(cart.getItems());
-        itemsDisabled.forEach(item -> {
-            items.remove(item);
-            LOGGER.debug("Item(id={}) pruned from cart(id={}) due to book(id={}) is disabled", item.getId(), cart.getId(), item.getBook().getId());
-        });
-        cart.setItems(items);
-        cartRepository.save(cart);
+        for (Item item : items) {
+            this.removeItem(cart, item.getId(), false);
+        }
+        cart.setCommitted(false);
+        cart.setStripePaymentIntentId(null);
+        cart.setStripeClientSecret(null);
+        this.persist(cart);
+        LOGGER.debug("Cart(id={}) reset ended", cart.getId());
     }
 
     public Set<Cart> findAll() {
