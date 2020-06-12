@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 public class CategoryLevelHolder {
 

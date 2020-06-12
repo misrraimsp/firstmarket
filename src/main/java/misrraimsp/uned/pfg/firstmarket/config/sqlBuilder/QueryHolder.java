@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.dev.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 public class QueryHolder {
 
@@ -67,7 +67,7 @@ public class QueryHolder {
                                      String modifierId,
                                      String modificationDate) {
 
-        return "'" + creatorId + "','" + creationDate + "','" + modifierId + "','" + modificationDate + "'";
+        return "'" + creatorId + "',timestamp '" + creationDate + "','" + modifierId + "',timestamp '" + modificationDate + "'";
     }
 
     public void addCategoryValues(String id,
