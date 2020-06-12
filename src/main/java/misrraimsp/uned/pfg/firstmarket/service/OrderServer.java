@@ -23,9 +23,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -44,6 +45,7 @@ public class OrderServer {
     private final ShippingInfoRepository shippingInfoRepository;
     private final AddressServer addressServer;
     private final CartServer cartServer;
+    private final ItemServer itemServer;
     private final ConversionManager conversionManager;
 
 
@@ -53,6 +55,7 @@ public class OrderServer {
                        ShippingInfoRepository shippingInfoRepository,
                        AddressServer addressServer,
                        CartServer cartServer,
+                       ItemServer itemServer,
                        ConversionManager conversionManager) {
 
         this.orderRepository = orderRepository;
@@ -60,12 +63,21 @@ public class OrderServer {
         this.shippingInfoRepository = shippingInfoRepository;
         this.addressServer = addressServer;
         this.cartServer = cartServer;
+        this.itemServer = itemServer;
         this.conversionManager = conversionManager;
     }
 
-    @Transactional
+    public Order persist(Order order) {
+        return orderRepository.save(order);
+    }
+
+    public void persistPayment(Payment payment) {
+        paymentRepository.save(payment);
+    }
+
     @Async
     @EventListener
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
     public void handlePaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) throws StripeException {
         User user = paymentSuccessEvent.getUser();
         Cart cart = user.getCart();
@@ -100,21 +112,24 @@ public class OrderServer {
         Payment payment = paymentRepository.save(conversionManager.convertStripePaymentIntentToPayment(paymentIntent));
         LOGGER.debug("User(id={}) payment(id={}) successfully persisted", user.getId(), payment.getId());
         //build order
+        Order order = this.createOrder(user, cart.getItems(), shippingInfo, payment);
+        LOGGER.debug("User(id={}) order(id={}) successfully registered", user.getId(), order.getId());
+        //update cart
+        cartServer.resetCart(cart);
+        LOGGER.debug("User(id={}) cart(id={}) successfully reset", user.getId(), cart.getId());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public Order createOrder(User user, Set<Item> items, ShippingInfo shippingInfo, Payment payment) {
         Order order = new Order();
         order.setUser(user);
-        order.setItems(new HashSet<>(cart.getItems()));
+        order.setItems(itemServer.copy(items));
         order.setShippingInfo(shippingInfo);
         order.setPayment(payment);
         order.setStatus(OrderStatus.PROCESSING);
-        Order savedOrder = orderRepository.save(order);
-        LOGGER.debug("User(id={}) order(id={}) successfully registered", user.getId(), savedOrder.getId());
-        //update cart
-        cart.setItems(new HashSet<>());
-        cart.setCommitted(false);
-        cart.setStripePaymentIntentId(null);
-        cart.setStripeClientSecret(null);
-        cartServer.persist(cart);
-        LOGGER.debug("User(id={}) cart(id={}) successfully reset", user.getId(), cart.getId());
+        order = this.persist(order);
+        LOGGER.debug("Order({}) created", order.getId());
+        return order;
     }
 
     @Async
@@ -177,9 +192,5 @@ public class OrderServer {
 
     public Page<Order> findAll(Pageable pageable) {
         return orderRepository.findAll(pageable);
-    }
-
-    public void persistPayment(Payment payment) {
-        paymentRepository.save(payment);
     }
 }
