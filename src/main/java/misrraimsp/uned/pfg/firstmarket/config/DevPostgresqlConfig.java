@@ -68,7 +68,8 @@ public class DevPostgresqlConfig {
 
             //load book usage
             bookServer.incrementCartBookRegistry(userServer.getAllCartBookIds());
-            LOGGER.debug("CommandLineRunner on dev-postgresql: CartBookRegistry loaded: {}", bookServer.getCartBookRegistry());
+            LOGGER.debug("CommandLineRunner on dev-postgresql: CartBookRegistry loaded");
+            LOGGER.trace("CartBookRegistry: {}", bookServer.getCartBookRegistry());
         };
     }
 }

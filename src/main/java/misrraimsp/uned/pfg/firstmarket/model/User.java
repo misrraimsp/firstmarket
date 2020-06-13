@@ -2,7 +2,6 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,11 +15,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Table(name="Usuario")
-public class User extends Auditable implements UserDetails {
-
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+public class User extends BasicEntity implements UserDetails {
 
     private boolean completed;
     private boolean suspended; // The user has deleted their account

@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
-import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,11 +12,7 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name="Pedido")
-public class Order extends Auditable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+public class Order extends BasicEntity {
 
     @Enumerated(EnumType.STRING)
     private OrderStatus status;

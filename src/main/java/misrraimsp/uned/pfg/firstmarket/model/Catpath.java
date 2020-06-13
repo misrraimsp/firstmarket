@@ -2,18 +2,14 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Catpath extends Auditable {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class Catpath extends BasicEntity {
 
 	@ManyToOne
 	private Category ancestor;
