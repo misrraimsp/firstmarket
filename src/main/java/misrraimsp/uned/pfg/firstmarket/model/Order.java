@@ -21,7 +21,7 @@ public class Order extends BasicEntity {
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private Set<Item> items = new HashSet<>();
+    private Set<Sale> sales = new HashSet<>();
 
     @OneToOne
     private ShippingInfo shippingInfo;

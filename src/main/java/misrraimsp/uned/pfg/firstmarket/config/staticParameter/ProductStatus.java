@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config.staticParameter;
 
-public enum BookStatus {
+public enum ProductStatus {
 
     OK("Ok"),
     OUT_OF_STOCK("Sold out"),
@@ -8,7 +8,7 @@ public enum BookStatus {
 
     private final String text;
 
-    BookStatus(String text) {
+    ProductStatus(String text) {
         this.text = text;
     }
 

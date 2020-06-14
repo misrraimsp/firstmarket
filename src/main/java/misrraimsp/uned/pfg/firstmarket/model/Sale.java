@@ -10,15 +10,15 @@ import java.math.BigDecimal;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Item extends BasicEntity {
+public class Sale extends PriceEntity {
 
     @ManyToOne
     private Book book;
 
     private int quantity;
 
-    public BigDecimal getPrice() {
-        return book.getPrice().multiply(new BigDecimal(quantity));
+    public BigDecimal getCompoundPrice() {
+        return price.multiply(new BigDecimal(quantity));
     }
 
 }

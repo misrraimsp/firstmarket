@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.*;
 import misrraimsp.uned.pfg.firstmarket.model.*;
@@ -139,7 +139,7 @@ public class BookServer {
         return bookRepository.findByIds(resultIds, pageable);
     }
 
-    private Set<Long> getIdsByStatus(BookStatus excludedStatus) {
+    private Set<Long> getIdsByStatus(ProductStatus excludedStatus) {
         return bookRepository
                 .findAll()
                 .stream()
@@ -230,7 +230,7 @@ public class BookServer {
         Set<Item> itemsDisabled = new HashSet<>();
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());
-            if (storedBook.getStatus().equals(BookStatus.DISABLED)) {
+            if (storedBook.getStatus().equals(ProductStatus.DISABLED)) {
                 itemsDisabled.add(item);
             }
             else {
@@ -254,7 +254,7 @@ public class BookServer {
             int editedStock = originalStock - item.getQuantity();
             storedBook.setStock(editedStock);
             if (editedStock == 0) {
-                storedBook.setStatus(BookStatus.OUT_OF_STOCK);
+                storedBook.setStatus(ProductStatus.OUT_OF_STOCK);
             }
             bookRepository.save(storedBook);
             LOGGER.debug("Book(id={}) stock decrease from {} to {}", storedBook.getId(), originalStock, editedStock);
@@ -269,24 +269,24 @@ public class BookServer {
             int editedStock = originalStock + item.getQuantity();
             storedBook.setStock(editedStock);
             if (editedStock > 0) {
-                storedBook.setStatus(BookStatus.OK);
+                storedBook.setStatus(ProductStatus.OK);
             }
             bookRepository.save(storedBook);
             LOGGER.debug("Book(id={}) stock increase from {} to {}", storedBook.getId(), originalStock, editedStock);
         });
     }
 
-    public void setStatus(Long bookId, BookStatus bookStatus) throws BookNotFoundException {
+    public void setStatus(Long bookId, ProductStatus productStatus) throws BookNotFoundException {
         Book book = this.findById(bookId);
-        if (bookStatus.equals(BookStatus.OUT_OF_STOCK)) {
+        if (productStatus.equals(ProductStatus.OUT_OF_STOCK)) {
             book.setStock(0);
         }
-        if (bookStatus.equals(BookStatus.OK) && book.getStock() == 0) {
+        if (productStatus.equals(ProductStatus.OK) && book.getStock() == 0) {
             book.setStock(10);
         }
-        book.setStatus(bookStatus);
+        book.setStatus(productStatus);
         bookRepository.save(book);
-        LOGGER.debug("Book(id={}) status set as {}", bookId, bookStatus);
+        LOGGER.debug("Book(id={}) status set as {}", bookId, productStatus);
     }
 
     public void incrementCartBookRegistry(Long cartBookId) {

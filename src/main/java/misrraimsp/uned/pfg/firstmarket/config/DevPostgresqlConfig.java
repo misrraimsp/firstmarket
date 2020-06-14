@@ -57,9 +57,9 @@ public class DevPostgresqlConfig {
             orderServer.findAll().forEach(order -> {
                 Payment payment = order.getPayment();
                 payment.setAmount(order
-                        .getItems()
+                        .getSales()
                         .stream()
-                        .mapToLong(item -> item.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
+                        .mapToLong(sale -> sale.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
                         .reduce(0, Long::sum)
                 );
                 orderServer.persistPayment(payment);

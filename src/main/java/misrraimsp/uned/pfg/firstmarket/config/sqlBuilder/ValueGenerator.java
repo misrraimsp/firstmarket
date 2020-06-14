@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -78,12 +78,12 @@ public class ValueGenerator extends Random {
         int randomNumber = getDiscreteRandomNumber(MIN_STATUS, MAX_STATUS);
         switch (randomNumber) {
             case 1:
-                return BookStatus.DISABLED.name();
+                return ProductStatus.DISABLED.name();
             case 2:
             case 3:
-                return BookStatus.OUT_OF_STOCK.name();
+                return ProductStatus.OUT_OF_STOCK.name();
             default:
-                return BookStatus.OK.name();
+                return ProductStatus.OK.name();
         }
     }
 

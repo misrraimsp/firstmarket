@@ -3,10 +3,10 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.BookSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
@@ -134,12 +134,12 @@ public class BookController extends BasicController {
     @PostMapping("/admin/setBookStatus")
     public ModelAndView processSetBookStatus(ModelAndView modelAndView,
                                              @RequestParam Long bookId,
-                                             @RequestParam BookStatus bookStatus,
+                                             @RequestParam ProductStatus productStatus,
                                              @RequestParam(name = "pageNo") Optional<String> optPageNo,
                                              @RequestParam(name = "pageSize") Optional<String> optPageSize,
                                              @RequestParam(name = "sort") Optional<String> optSort) {
 
-        bookServer.setStatus(bookId, bookStatus);
+        bookServer.setStatus(bookId, productStatus);
         modelAndView.setViewName("redirect:/books");
         optPageNo.ifPresent(pageNo -> modelAndView.addObject("pageNo", pageNo));
         optPageSize.ifPresent(pageSize -> modelAndView.addObject("pageSize", pageSize));
@@ -162,7 +162,7 @@ public class BookController extends BasicController {
         }
 
         //filter status
-        searchCriteria.setExcludedStatus((userServer.hasRole(authUser, "ROLE_ADMIN")) ? null : BookStatus.DISABLED);
+        searchCriteria.setExcludedStatus((userServer.hasRole(authUser, "ROLE_ADMIN")) ? null : ProductStatus.DISABLED);
 
         // category
         if (searchCriteria.getCategoryId() == null) { // root category by default

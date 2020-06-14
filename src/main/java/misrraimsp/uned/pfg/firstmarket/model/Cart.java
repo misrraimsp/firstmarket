@@ -20,11 +20,17 @@ public class Cart extends BasicEntity {
     @LazyCollection(LazyCollectionOption.FALSE)
     private Set<Item> items = new HashSet<>();
 
-    private boolean isCommitted;
+    @OneToMany
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Set<Sale> sales = new HashSet<>();
 
     private String stripePaymentIntentId;
 
     private String stripeClientSecret;
+
+    public boolean isCommitted() {
+        return !sales.isEmpty();
+    }
 
     public int getSize(){
         return items.stream().mapToInt(Item::getQuantity).sum();

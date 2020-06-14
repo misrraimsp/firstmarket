@@ -3,7 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.converter;
 import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.slf4j.Logger;
@@ -80,12 +80,12 @@ public class BookConverter {
         return bookForm;
     }
 
-    private BookStatus convertBookFormStatus(@NonNull BookStatus status, int stock) {
-        if (status.equals(BookStatus.DISABLED)) {
-            return BookStatus.DISABLED;
+    private ProductStatus convertBookFormStatus(@NonNull ProductStatus status, int stock) {
+        if (status.equals(ProductStatus.DISABLED)) {
+            return ProductStatus.DISABLED;
         }
         else {
-            return (stock > 0) ? BookStatus.OK : BookStatus.OUT_OF_STOCK;
+            return (stock > 0) ? ProductStatus.OK : ProductStatus.OUT_OF_STOCK;
         }
     }
 

@@ -228,7 +228,7 @@
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <select class="custom-select custom-select-sm text-secondary border border-secondary" name="bookStatus">
-                                                        <option th:each="status : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus).values()}"
+                                                        <option th:each="status : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus).values()}"
                                                                 th:value="${status.ordinal()}"
                                                                 th:text="${status.text}"
                                                                 th:selected="${status.equals(book.status)}">
