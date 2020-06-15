@@ -2,21 +2,17 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class Item extends Auditable {
+public class Item extends BasicEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    @OneToOne
+    @ManyToOne
     private Book book;
 
     private int quantity;
@@ -24,4 +20,5 @@ public class Item extends Auditable {
     public BigDecimal getPrice() {
         return book.getPrice().multiply(new BigDecimal(quantity));
     }
+
 }

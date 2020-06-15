@@ -5,20 +5,20 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import java.math.BigDecimal;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-public class ShippingInfo extends BasicEntity {
+public class Sale extends PriceEntity {
 
     @ManyToOne
-    private Address address;
+    private Book book;
 
-    private String carrier;
+    private int quantity;
 
-    private String name;
+    public BigDecimal getCompoundPrice() {
+        return price.multiply(new BigDecimal(quantity));
+    }
 
-    private String phone;
-
-    private String trackingNumber;
 }

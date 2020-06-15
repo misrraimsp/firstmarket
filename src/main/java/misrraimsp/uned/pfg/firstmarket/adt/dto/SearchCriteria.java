@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 import java.util.Set;
@@ -20,6 +20,6 @@ public class SearchCriteria {
     @ValidPattern(pattern = "textQuery", message = "{validation.regex.text-query}")
     private String q;
 
-    private BookStatus excludedStatus;
+    private ProductStatus excludedStatus;
 
 }

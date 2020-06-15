@@ -113,7 +113,7 @@ public class OrderServer {
         Payment payment = paymentRepository.save(conversionManager.convertStripePaymentIntentToPayment(paymentIntent));
         LOGGER.debug("User(id={}) payment(id={}) successfully persisted", user.getId(), payment.getId());
         //build order
-        Order order = this.createOrder(user, cart.getItems(), shippingInfo, payment);
+        Order order = this.createOrder(user, cart.getSales(), shippingInfo, payment);
         LOGGER.debug("User(id={}) order(id={}) successfully registered", user.getId(), order.getId());
         //update cart
         cartServer.resetCart(cart);
@@ -121,10 +121,10 @@ public class OrderServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public Order createOrder(User user, Set<Item> items, ShippingInfo shippingInfo, Payment payment) {
+    public Order createOrder(User user, Set<Sale> sales, ShippingInfo shippingInfo, Payment payment) {
         Order order = new Order();
         order.setUser(user);
-        order.setItems(itemServer.copy(items));
+        order.setSales(sales);
         order.setShippingInfo(shippingInfo);
         order.setPayment(payment);
         order.setStatus(OrderStatus.PROCESSING);

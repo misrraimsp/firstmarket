@@ -32,8 +32,8 @@ public class ItemServer {
         return itemRepository.save(item);
     }
 
-    public Item findById(Long id) {
-        return itemRepository.findById(id).orElseThrow(() -> new ItemNotFoundException(id));
+    public Item findById(Long itemId) {
+        return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException(itemId));
     }
 
     public Item create(Long bookId) throws BookNotFoundException {

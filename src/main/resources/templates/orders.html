@@ -177,36 +177,36 @@
                                 <!-- items info -->
                                 <div class="col-sm-12">
                                     <!-- item -->
-                                    <div class="row mb-3" th:each="item : ${order.items}">
+                                    <div class="row mb-3" th:each="sale : ${order.sales}">
                                         <!-- image -->
                                         <div class="col-sm-2">
-                                            <a th:href="@{/book/{id}(id=${item.book.id})}"><img class="img-fluid" th:src="@{/image/{id}(id=${item.book.image.id})}" alt="book image" style="width:64px;height:64px;"/></a>
+                                            <a th:href="@{/book/{id}(id=${sale.book.id})}"><img class="img-fluid" th:src="@{/image/{id}(id=${sale.book.image.id})}" alt="book image" style="width:64px;height:64px;"/></a>
                                         </div>
                                         <!-- book info -->
                                         <div class="col-sm-4">
                                             <!-- book title -->
-                                            <a class="text-info font-weight-light" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
-                                                <p class="my-0" th:unless="${item.book.title.isBlank()}">
-                                                    <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('fm.front-end.orders.title-max-size')}__))}">Book title</span>
+                                            <a class="text-info font-weight-light" th:href="@{/book/{id}(id=${sale.book.id})}" style="text-decoration: none">
+                                                <p class="my-0" th:unless="${sale.book.title.isBlank()}">
+                                                    <span th:text="${sale.book.title.substring(0, T(java.lang.Math).min(sale.book.title.length(), __${@environment.getProperty('fm.front-end.orders.title-max-size')}__))}">Book title</span>
                                                 </p>
-                                                <p class="my-0" th:if="${item.book.title.isBlank()}">
+                                                <p class="my-0" th:if="${sale.book.title.isBlank()}">
                                                     <small><i>unknown title</i></small>
                                                 </p>
                                             </a>
                                             <!-- isbn -->
                                             <p class="my-1 small text-dark">
-                                                <span class="font-weight-lighter">ISBN </span><span th:text="${item.book.isbn}"></span>
+                                                <span class="font-weight-lighter">ISBN </span><span th:text="${sale.book.isbn}"></span>
                                             </p>
                                         </div>
                                         <!-- price composition -->
                                         <div class="col-sm-3">
                                             <p class="my-0 small text-dark">
-                                                <span th:text="${item.quantity}"></span> x <span class="font-weight-lighter">€</span><span th:text="${item.book.price}"></span>
+                                                <span th:text="${sale.quantity}"></span> x <span class="font-weight-lighter">€</span><span th:text="${sale.price}"></span>
                                             </p>
                                         </div>
                                         <!-- item price -->
                                         <div class="col-sm-3">
-                                            <p class="text-dark font-weight-light">€ <span th:text="${item.getPrice()}">19.95</span></p>
+                                            <p class="text-dark font-weight-light">€ <span th:text="${sale.compoundPrice}">19.95</span></p>
                                         </div>
                                     </div>
                                 </div>

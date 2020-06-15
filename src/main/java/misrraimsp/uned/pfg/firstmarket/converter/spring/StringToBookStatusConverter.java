@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.converter.spring;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.exception.NoEntityStatusException;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
 import org.slf4j.Logger;
@@ -9,16 +9,16 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StringToBookStatusConverter implements Converter<String, BookStatus> {
+public class StringToBookStatusConverter implements Converter<String, ProductStatus> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Override
-    public BookStatus convert(String s) {
-        if (BookStatus.values().length == 0) {
+    public ProductStatus convert(String s) {
+        if (ProductStatus.values().length == 0) {
             throw new NoEntityStatusException(Book.class.getSimpleName());
         }
-        int maxIndex = BookStatus.values().length - 1;
+        int maxIndex = ProductStatus.values().length - 1;
         int index;
         try {
             index = Integer.parseInt(s);
@@ -31,6 +31,6 @@ public class StringToBookStatusConverter implements Converter<String, BookStatus
             LOGGER.error("BookStatus index string can not be converted due to format exception. Defaults to index=0", e);
             index = 0;
         }
-        return BookStatus.values()[index];
+        return ProductStatus.values()[index];
     }
 }

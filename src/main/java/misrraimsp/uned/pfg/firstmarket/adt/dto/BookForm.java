@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.adt.dto;
 
 import lombok.Data;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.BookStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
+import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidImage;
 import misrraimsp.uned.pfg.firstmarket.validation.ValidIsbn;
@@ -24,12 +24,12 @@ public class BookForm {
         pages = 1;
         year = Year.now();
         language = Language.Spanish;
-        status = BookStatus.OUT_OF_STOCK;
+        status = ProductStatus.OUT_OF_STOCK;
     }
 
     private Long bookId;
 
-    private BookStatus status;
+    private ProductStatus status;
 
     @ValidIsbn
     private String isbn;

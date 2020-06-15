@@ -10,6 +10,7 @@ import misrraimsp.uned.pfg.firstmarket.exception.ItemNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.model.Cart;
 import misrraimsp.uned.pfg.firstmarket.model.Item;
+import misrraimsp.uned.pfg.firstmarket.model.Sale;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,15 +33,18 @@ public class CartServer {
     private final CartRepository cartRepository;
     private final ItemServer itemServer;
     private final BookServer bookServer;
+    private final SaleServer saleServer;
 
     @Autowired
     public CartServer(CartRepository cartRepository,
                       ItemServer itemServer,
-                      BookServer bookServer) {
+                      BookServer bookServer,
+                      SaleServer saleServer) {
 
         this.cartRepository = cartRepository;
         this.itemServer = itemServer;
         this.bookServer = bookServer;
+        this.saleServer = saleServer;
     }
 
     public Cart persist(Cart cart) {
@@ -137,14 +141,16 @@ public class CartServer {
     public Cart unCommitCart(@NonNull Cart cart) throws BookNotFoundException, StripeException {
         if (cart.isCommitted()) {
             bookServer.restoreStock(cart.getItems());
-            cart.setCommitted(false);
+            Set<Sale> sales = new HashSet<>(cart.getSales());
+            cart.setSales(new HashSet<>());
             String piId = cart.getStripePaymentIntentId();
             PaymentIntent.retrieve(piId).cancel();
             cart.setStripePaymentIntentId(null);
             cart.setStripeClientSecret(null);
-            Cart savedCart = this.persist(cart);
+            cart = this.persist(cart);
+            saleServer.deleteAll(sales);
             LOGGER.debug("Cart(id={}) successfully un-committed (pi id={})", cart.getId(), piId);
-            return savedCart;
+            return cart;
         }
         return cart;
     }
@@ -164,10 +170,10 @@ public class CartServer {
             bookServer.removeFromStock(cart.getItems());
             cart.setStripePaymentIntentId(paymentIntent.getId());
             cart.setStripeClientSecret(paymentIntent.getClientSecret());
-            cart.setCommitted(true);
-            Cart savedCart = this.persist(cart);
+            cart.setSales(saleServer.createAll(cart.getItems()));
+            cart = this.persist(cart);
             LOGGER.debug("User(id={}) cart(id={}) successfully committed (pi id={})", user.getId(), cart.getId(), cart.getStripePaymentIntentId());
-            return savedCart;
+            return cart;
         }
         return cart;
     }
@@ -188,7 +194,7 @@ public class CartServer {
         for (Item item : items) {
             this.removeItem(cart, item.getId(), false);
         }
-        cart.setCommitted(false);
+        cart.setSales(new HashSet<>());
         cart.setStripePaymentIntentId(null);
         cart.setStripeClientSecret(null);
         this.persist(cart);

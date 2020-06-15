@@ -2,60 +2,20 @@ package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import misrraimsp.uned.pfg.firstmarket.data.Auditable;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
+/* La igualdad entre Category's se define únicamente a través de la igualdad de sus Id's.
+   Esto evita que una categoría con name indentado sea diferente a la misma categoría pero sin indentar */
 @Data
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @Entity
-public class Category extends Auditable {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@EqualsAndHashCode.Include
-	private Long id;
+public class Category extends BasicEntity {
 
 	private String name;
 
 	@ManyToOne
 	private Category parent;
 
-	/**
-	 * La igualdad entre categorias se define únicamente a través
-	 * de la iguladad de sus Id's
-	 *
-	 * Esto es así para evitar que una categoría con name indentado
-	 * sea diferente a la misma categoría pero sin indentar
-
-	@Override
-	public boolean equals(final Object o) {
-		if (o == this) return true;
-		if (!(o instanceof Category)) return false;
-		final Category other = (Category) o;
-		//if (!other.canEqual((Object) this)) return false;
-		final Object this$id = this.getId();
-		final Object other$id = other.getId();
-		if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
-		//final Object this$name = this.getName();
-		//final Object other$name = other.getName();
-		//if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-		//final Object this$parent = this.getParent();
-		//final Object other$parent = other.getParent();
-		//if (this$parent == null ? other$parent != null : !this$parent.equals(other$parent)) return false;
-		return true;
-	}
-
-	@Override
-	public int hashCode() {
-		final int PRIME = 59;
-		int result = 1;
-		final Object $id = this.getId();
-		result = result * PRIME + ($id == null ? 43 : $id.hashCode());
-		final Object $name = this.getName();
-		result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-		//final Object $parent = this.getParent();
-		//result = result * PRIME + ($parent == null ? 43 : $parent.hashCode());
-		return result;
-	}*/
 }

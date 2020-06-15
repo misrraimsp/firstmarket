@@ -57,9 +57,9 @@ public class DevPostgresqlConfig {
             orderServer.findAll().forEach(order -> {
                 Payment payment = order.getPayment();
                 payment.setAmount(order
-                        .getItems()
+                        .getSales()
                         .stream()
-                        .mapToLong(item -> item.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
+                        .mapToLong(sale -> sale.getCompoundPrice().multiply(BigDecimal.valueOf(100)).longValue())
                         .reduce(0, Long::sum)
                 );
                 orderServer.persistPayment(payment);
@@ -68,7 +68,8 @@ public class DevPostgresqlConfig {
 
             //load book usage
             bookServer.incrementCartBookRegistry(userServer.getAllCartBookIds());
-            LOGGER.debug("CommandLineRunner on dev-postgresql: CartBookRegistry loaded: {}", bookServer.getCartBookRegistry());
+            LOGGER.debug("CommandLineRunner on dev-postgresql: CartBookRegistry loaded");
+            LOGGER.trace("CartBookRegistry: {}", bookServer.getCartBookRegistry());
         };
     }
 }

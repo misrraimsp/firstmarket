@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class ItemCartBuilder {
+public class ItemBuilder {
 
-    private static final String BuiltItemCartQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtItemCartQueries.txt";
-    private static final int numOfItems = 200; // link with OrderBuilder's firstItemIdAvailable property
+    private static final String BuiltItemCartQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtItemQueries.txt";
+    private static final int numOfItems = 200;
 
     public static void main(String[] args) throws IOException {
         build();
