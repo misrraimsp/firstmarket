@@ -2,7 +2,6 @@
 drop table if exists user_deletion;
 drop table if exists security_token;
 drop table if exists pedido_sales;
-drop table if exists pedido_items; /*once*/
 drop table if exists pedido;
 drop table if exists payment;
 drop table if exists shipping_info;

@@ -9,7 +9,7 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class StringToBookStatusConverter implements Converter<String, ProductStatus> {
+public class StringToProductStatusConverter implements Converter<String, ProductStatus> {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 

@@ -53,6 +53,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/home")
 
                 .and()
+                .requiresChannel()
+                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
+                .requiresSecure()
+
+                .and()
                 .csrf()
                 .ignoringAntMatchers("/listener") // open for stripe notifications
                 //.ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes

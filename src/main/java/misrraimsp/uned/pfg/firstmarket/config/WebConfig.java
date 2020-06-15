@@ -28,7 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addConverter(new StringToLanguageConverter());
         registry.addConverter(new StringToDeletionReasonConverter());
         registry.addConverter(new StringToPriceIntervalConverter());
-        registry.addConverter(new StringToBookStatusConverter());
+        registry.addConverter(new StringToProductStatusConverter());
         registry.addConverter(new StringToBookSortCriteriaConverter());
         registry.addConverter(new StringToPageSizeConverter());
         registry.addConverter(new StringToImageSortCriteriaConverter());
