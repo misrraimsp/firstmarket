@@ -1,9 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.converter;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.model.Profile;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -11,13 +9,6 @@ import java.time.Month;
 
 @Component
 public class ProfileConverter {
-
-    private final TimeFormatProperties timeFormatProperties;
-
-    @Autowired
-    public ProfileConverter(TimeFormatProperties timeFormatProperties) {
-        this.timeFormatProperties = timeFormatProperties;
-    }
 
     public ProfileForm convertProfileToProfileForm(Profile profile) {
         ProfileForm profileForm = new ProfileForm();
