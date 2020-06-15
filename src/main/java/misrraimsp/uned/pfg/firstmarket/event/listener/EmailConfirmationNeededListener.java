@@ -1,38 +1,40 @@
 package misrraimsp.uned.pfg.firstmarket.event.listener;
 
-import lombok.SneakyThrows;
-import misrraimsp.uned.pfg.firstmarket.adt.MailMessage;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
+import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
 import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.MailServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class EmailConfirmationNeededListener implements ApplicationListener<OnEmailConfirmationNeededEvent> {
 
-    private UserServer userServer;
-    private MailServer mailServer;
-    private MessageSource messageSource;
+    private final UserServer userServer;
+    private final MailClient mailClient;
+    private final MailProperties mailProperties;
 
     @Value("${fm.host-address}")
     private String hostAddress;
 
     @Autowired
-    public EmailConfirmationNeededListener(UserServer userServer, MailServer mailServer, MessageSource messageSource){
+    public EmailConfirmationNeededListener(UserServer userServer,
+                                           MailClient mailClient,
+                                           MailProperties mailProperties){
+
         this.userServer = userServer;
-        this.mailServer = mailServer;
-        this.messageSource = messageSource;
+        this.mailClient = mailClient;
+        this.mailProperties = mailProperties;
     }
 
-    @SneakyThrows
-    @Override
     public void onApplicationEvent(OnEmailConfirmationNeededEvent onEmailConfirmationNeededEvent) {
         // create a security token
         SecurityEvent securityEvent = onEmailConfirmationNeededEvent.getSecurityEvent();
@@ -40,22 +42,13 @@ public class EmailConfirmationNeededListener implements ApplicationListener<OnEm
         String editedEmail = onEmailConfirmationNeededEvent.getEditedEmail();
         SecurityToken securityToken = userServer.createSecurityToken(securityEvent, user, editedEmail);
 
-        // Build the email message
-        MailMessage mailMessage = new MailMessage();
-        mailMessage.setSubject("FirstMarket Confirm Email");
-        String text = "";
-        text += messageSource.getMessage("email.confirm", null, null);
-        text += "<a href='" + hostAddress + "emailConfirmation?token=" + securityToken.getToken() + "'>Confirm Email</a>";
-        mailMessage.setText(text);
-        if (securityEvent.equals(SecurityEvent.EMAIL_CHANGE)) { // change email process
-            mailMessage.setTo(editedEmail);
-        }
-        else { // new user registration or forgot password
-            mailMessage.setTo(user.getEmail());
-        }
-
-        // send email
-        mailServer.send(mailMessage);
+        // Build and send email message
+        String recipient = (securityEvent.equals(SecurityEvent.EMAIL_CHANGE)) ? editedEmail : user.getEmail();
+        Map<String,Object> properties = new HashMap<>();
+        properties.put("user", user);
+        properties.put("contactAddress",mailProperties.getUsername());
+        properties.put("linkAddress", hostAddress + "emailConfirmation?token=" + securityToken.getToken());
+        mailClient.prepareAndSend("mail/confirmEmail",properties,recipient,"Confirm Email");
     }
 
 }

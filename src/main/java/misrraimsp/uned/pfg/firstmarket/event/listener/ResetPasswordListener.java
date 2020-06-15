@@ -1,41 +1,40 @@
 package misrraimsp.uned.pfg.firstmarket.event.listener;
 
-import lombok.SneakyThrows;
-import misrraimsp.uned.pfg.firstmarket.adt.MailMessage;
 import misrraimsp.uned.pfg.firstmarket.event.OnResetPasswordEvent;
+import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
 import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.MailServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class ResetPasswordListener implements ApplicationListener<OnResetPasswordEvent> {
 
-    private MailServer mailServer;
-    private UserServer userServer;
+    private final MailClient mailClient;
+    private final UserServer userServer;
+    private final MailProperties mailProperties;
 
     @Autowired
-    public ResetPasswordListener(MailServer mailServer, UserServer userServer){
-        this.mailServer = mailServer;
+    public ResetPasswordListener(MailClient mailClient,
+                                 UserServer userServer,
+                                 MailProperties mailProperties){
+
+        this.mailClient = mailClient;
         this.userServer = userServer;
+        this.mailProperties = mailProperties;
     }
 
-    @SneakyThrows
-    @Override
     public void onApplicationEvent(OnResetPasswordEvent onResetPasswordEvent) {
         User user = userServer.findById(onResetPasswordEvent.getUserId());
-        String randomPassword = onResetPasswordEvent.getRandomPassword();
-        // Build the email message
-        MailMessage mailMessage = new MailMessage();
-        mailMessage.setSubject("Reset Password");
-        String text = "<h1>Hi " + user.getProfile().getFirstName() + "!</h1>";
-        text += "<p>This is your reset password: <strong>" + randomPassword + "</strong></p>";
-        text += "<p>Please, don't forget to change it.</p>";
-        mailMessage.setText(text);
-        mailMessage.setTo(user.getEmail());
-        // send email
-        mailServer.send(mailMessage);
+        Map<String,Object> properties = new HashMap<>();
+        properties.put("user", user);
+        properties.put("contactAddress", mailProperties.getUsername());
+        properties.put("pw", onResetPasswordEvent.getRandomPassword());
+        mailClient.prepareAndSend("mail/pwReset",properties,user.getEmail(),"Reset Password");
     }
 }

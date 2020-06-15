@@ -15,7 +15,7 @@ public class AuthorServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
     @Autowired
     public AuthorServer(AuthorRepository authorRepository) {
