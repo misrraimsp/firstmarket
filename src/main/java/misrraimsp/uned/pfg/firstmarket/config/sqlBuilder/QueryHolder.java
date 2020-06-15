@@ -11,7 +11,8 @@ public class QueryHolder {
     private static final String shippingStaticPart = "INSERT INTO shipping_info (id,created_by,created_date,last_modified_by,last_modified_date,carrier,name,phone,tracking_number,address_id) VALUES ";
     private static final String paymentStaticPart = "INSERT INTO payment (id,created_by,created_date,last_modified_by,last_modified_date,amount,currency,description,stripe_payment_intent_id) VALUES ";
     private static final String pedidoStaticPart = "INSERT INTO pedido (id,created_by,created_date,last_modified_by,last_modified_date,status,payment_id,shipping_info_id,user_id) VALUES ";
-    private static final String pedidoItemsStaticPart = "INSERT INTO pedido_items (order_id,items_id) VALUES ";
+    private static final String saleStaticPart = "INSERT INTO sale (id,created_by,created_date,last_modified_by,last_modified_date,price,quantity,book_id) VALUES ";
+    private static final String pedidoSalesStaticPart = "INSERT INTO pedido_sales (order_id,sales_id) VALUES ";
 
 
     private static final String description = "Lorem ipsum dolor sit amet";
@@ -58,8 +59,12 @@ public class QueryHolder {
         sql += pedidoStaticPart;
     }
 
-    public void openInsertPedidoItemsQuery() {
-        sql += pedidoItemsStaticPart;
+    public void openInsertSaleQuery() {
+        sql += saleStaticPart;
+    }
+
+    public void openInsertPedidoSalesQuery() {
+        sql += pedidoSalesStaticPart;
     }
 
     private String buildAuditoryPart(String creatorId,
@@ -196,12 +201,26 @@ public class QueryHolder {
         sql += ")" + ",";
     }
 
-    //order_id bigint not null, items_id
-    public void addPedidoItemsValues(String order_id,
-                                     String items_id) {
+    //(id,created_by,created_date,last_modified_by,last_modified_date,price,quantity,book_id)
+    public void addSaleValues(String id,
+                              String creatorId,
+                              String creationDate,
+                              String modifierId,
+                              String modificationDate,
+                              String price,
+                              String quantity,
+                              String book_id) {
+
+        sql += "(" + id + ",";
+        sql += buildAuditoryPart(creatorId,creationDate,modifierId,modificationDate);
+        sql += "," + price + "," + quantity + "," + book_id + ")" + ",";
+    }
+
+    public void addPedidoSalesValues(String order_id,
+                                     String sales_id) {
 
         sql += "(";
-        sql += order_id + "," + items_id;
+        sql += order_id + "," + sales_id;
         sql += ")" + ",";
     }
 

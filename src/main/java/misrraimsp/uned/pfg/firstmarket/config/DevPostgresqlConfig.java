@@ -59,7 +59,7 @@ public class DevPostgresqlConfig {
                 payment.setAmount(order
                         .getSales()
                         .stream()
-                        .mapToLong(sale -> sale.getPrice().multiply(BigDecimal.valueOf(100)).longValue())
+                        .mapToLong(sale -> sale.getCompoundPrice().multiply(BigDecimal.valueOf(100)).longValue())
                         .reduce(0, Long::sum)
                 );
                 orderServer.persistPayment(payment);

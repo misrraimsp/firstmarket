@@ -53,8 +53,8 @@ public class ValueGenerator extends Random {
     private static final int MIN_QUANTITY = 1;
     private static final int MAX_QUANTITY = 4;
 
-    private static final int MIN_ITEMS_PEDIDO = 1;
-    private static final int MAX_ITEMS_PEDIDO = 3;
+    private static final int MIN_SALES_PEDIDO = 1;
+    private static final int MAX_SALES_PEDIDO = 3;
 
     private static final int MIN_PAST_TIME_UNITS = 0;
     private static final int MAX_PAST_TIME_UNITS = 10000;
@@ -143,8 +143,8 @@ public class ValueGenerator extends Random {
         return String.valueOf(getDiscreteRandomNumber(MIN_USER_ID, MAX_USER_ID));
     }
 
-    public String getRandomNumOfItems(){
-        return String.valueOf(getDiscreteRandomNumber(MIN_ITEMS_PEDIDO, MAX_ITEMS_PEDIDO));
+    public String getRandomNumOfSales(){
+        return String.valueOf(getDiscreteRandomNumber(MIN_SALES_PEDIDO, MAX_SALES_PEDIDO));
     }
 
     public String getRandomPedidoStatus() {

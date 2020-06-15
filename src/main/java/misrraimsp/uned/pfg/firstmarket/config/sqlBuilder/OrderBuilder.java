@@ -8,7 +8,7 @@ public class OrderBuilder {
 
     private static final String BuiltOrderQueriesPath = "/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/docs/builtOrderQueries.txt";
     private static final int numOfOrders = 500;
-    private static int nextItemId = 201; // link with ItemCartBuilder's numOfItems property
+    private static int nextSaleId = 1;
 
     public static void main(String[] args) throws IOException {
         build();
@@ -21,14 +21,14 @@ public class OrderBuilder {
         QueryHolder shippingQueryHolder = new QueryHolder();
         QueryHolder paymentQueryHolder = new QueryHolder();
         QueryHolder pedidoQueryHolder = new QueryHolder();
-        QueryHolder itemQueryHolder = new QueryHolder();
-        QueryHolder pedidoItemsQueryHolder = new QueryHolder();
+        QueryHolder saleQueryHolder = new QueryHolder();
+        QueryHolder pedidoSalesQueryHolder = new QueryHolder();
         //build order queries
         shippingQueryHolder.openInsertShippingQuery();
         paymentQueryHolder.openInsertPaymentQuery();
         pedidoQueryHolder.openInsertPedidoQuery();
-        itemQueryHolder.openInsertItemQuery();
-        pedidoItemsQueryHolder.openInsertPedidoItemsQuery();
+        saleQueryHolder.openInsertSaleQuery();
+        pedidoSalesQueryHolder.openInsertPedidoSalesQuery();
         for (int i = 1; i <= numOfOrders; i++){
             String dateTime = valueGenerator.getRandomDateTime();
             shippingQueryHolder.addShippingValues(
@@ -65,28 +65,29 @@ public class OrderBuilder {
                     String.valueOf(i),
                     valueGenerator.getRandomUserId()
             );
-            for (int j = 1; j <= Integer.parseInt(valueGenerator.getRandomNumOfItems()); j++) {
-                itemQueryHolder.addItemValues(
-                        String.valueOf(nextItemId),
+            for (int j = 1; j <= Integer.parseInt(valueGenerator.getRandomNumOfSales()); j++) {
+                saleQueryHolder.addSaleValues(
+                        String.valueOf(nextSaleId),
                         "1",
                         dateTime,
                         "1",
                         dateTime,
+                        valueGenerator.getRandomPrice(),
                         valueGenerator.getRandomQuantity(),
                         valueGenerator.getRandomBookId()
                 );
-                pedidoItemsQueryHolder.addPedidoItemsValues(
+                pedidoSalesQueryHolder.addPedidoSalesValues(
                         String.valueOf(i),
-                        String.valueOf(nextItemId)
+                        String.valueOf(nextSaleId)
                 );
-                nextItemId++;
+                nextSaleId++;
             }
         }
         shippingQueryHolder.closeInsertQuery();
         paymentQueryHolder.closeInsertQuery();
         pedidoQueryHolder.closeInsertQuery();
-        itemQueryHolder.closeInsertQuery();
-        pedidoItemsQueryHolder.closeInsertQuery();
+        saleQueryHolder.closeInsertQuery();
+        pedidoSalesQueryHolder.closeInsertQuery();
         //join queries
         globalQueryHolder.addSQL(shippingQueryHolder.getSql());
         globalQueryHolder.addTwoNewLines();
@@ -94,9 +95,9 @@ public class OrderBuilder {
         globalQueryHolder.addTwoNewLines();
         globalQueryHolder.addSQL(pedidoQueryHolder.getSql());
         globalQueryHolder.addTwoNewLines();
-        globalQueryHolder.addSQL(itemQueryHolder.getSql());
+        globalQueryHolder.addSQL(saleQueryHolder.getSql());
         globalQueryHolder.addTwoNewLines();
-        globalQueryHolder.addSQL(pedidoItemsQueryHolder.getSql());
+        globalQueryHolder.addSQL(pedidoSalesQueryHolder.getSql());
         globalQueryHolder.addNewLine();
         //output
         outputSQL(globalQueryHolder.getSql());

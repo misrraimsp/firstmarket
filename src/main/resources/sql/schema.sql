@@ -1,7 +1,8 @@
 
 drop table if exists user_deletion;
 drop table if exists security_token;
-drop table if exists pedido_items;
+drop table if exists pedido_sales;
+drop table if exists pedido_items; /*once*/
 drop table if exists pedido;
 drop table if exists payment;
 drop table if exists shipping_info;
@@ -10,8 +11,10 @@ drop table if exists usuarios_roles;
 drop table if exists usuario;
 drop table if exists role;
 drop table if exists profile;
+drop table if exists cart_sales;
 drop table if exists cart_items;
 drop table if exists cart;
+drop table if exists sale;
 drop table if exists item;
 drop table if exists books_authors;
 drop table if exists book;
@@ -30,12 +33,14 @@ create table books_authors (book_id bigint not null, author_id bigint not null);
 create table profile (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, birth_date date, first_name varchar(255), gender varchar(255), last_name varchar(255), phone varchar(255), primary key (id));
 create table publisher (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, name varchar(255), primary key (id));
 create table book (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, description varchar(510), isbn varchar(255), language varchar(255), pages integer, price decimal(19,2), status varchar(255), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
-create table cart (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, is_committed boolean, stripe_client_secret varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
+create table cart (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, stripe_client_secret varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
 create table cart_items (cart_id bigint not null, items_id bigint not null, primary key (cart_id, items_id));
+create table cart_sales (cart_id bigint not null, sales_id bigint not null, primary key (cart_id, sales_id));
 create table category (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, name varchar(255), parent_id bigint, primary key (id));
 create table catpath (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, size integer not null, ancestor_id bigint, descendant_id bigint, primary key (id));
 create table image (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, data bytea, size integer, is_default boolean not null, mime_type varchar(255), name varchar(255), primary key (id));
 create table item (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, quantity integer not null, book_id bigint, primary key (id));
+create table sale (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, price decimal(19,2), quantity integer not null, book_id bigint, primary key (id));
 create table role (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, name varchar(255), primary key (id));
 create table usuario (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, email varchar(255), completed boolean not null, suspended boolean not null, account_locked boolean not null, account_expired boolean not null, credentials_expired boolean not null, password varchar(255), cart_id bigint, profile_id bigint, primary key (id));
 create table user_deletion (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, comment varchar(255), deletion_reason varchar(255), user_id bigint, primary key (id));
@@ -43,11 +48,12 @@ create table security_token (id bigint not null, created_by varchar(255), create
 create table usuarios_roles (user_id bigint not null, role_id bigint not null, primary key (user_id, role_id));
 create table payment (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, amount bigint, currency varchar(255), description varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
 create table pedido (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, status varchar(255), payment_id bigint, shipping_info_id bigint, user_id bigint, primary key (id));
-create table pedido_items (order_id bigint not null, items_id bigint not null, primary key (order_id, items_id));
+create table pedido_sales (order_id bigint not null, sales_id bigint not null, primary key (order_id, sales_id));
 create table shipping_info (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, carrier varchar(255), name varchar(255), phone varchar(255), tracking_number varchar(255), address_id bigint, primary key (id));
 
 alter table cart_items add constraint uk_itemIdOnCartItems unique (items_id);
-alter table pedido_items add constraint uk_itemIdOnPedidoItems unique (items_id);
+alter table cart_sales add constraint uk_saleIdOnCartSales unique (sales_id);
+alter table pedido_sales add constraint uk_saleIdOnPedidoSales unique (sales_id);
 
 alter table book add constraint fk_categoryIdOnBook foreign key (category_id) references category(id);
 alter table book add constraint fk_imageIdOnBook foreign key (image_id) references image(id);
@@ -56,6 +62,8 @@ alter table books_authors add constraint fk_authorIdOnBooksAuthors foreign key (
 alter table books_authors add constraint fk_bookIdOnBooksAuthors foreign key (book_id) references book(id);
 alter table cart_items add constraint fk_itemIdOnCartItems foreign key (items_id) references item(id);
 alter table cart_items add constraint fk_cartIdOnCartItems foreign key (cart_id) references cart(id);
+alter table cart_sales add constraint fk_saleIdOnCartSales foreign key (sales_id) references sale(id);
+alter table cart_sales add constraint fk_cartIdOnCartSales foreign key (cart_id) references cart(id);
 alter table category add constraint fk_parentIdOnCategory foreign key (parent_id) references category(id);
 alter table catpath add constraint fk_ancestorIdOnCatpath foreign key (ancestor_id) references category(id);
 alter table catpath add constraint fk_descendantIdOnCatpath foreign key (descendant_id) references category(id);
@@ -63,8 +71,9 @@ alter table item add constraint fk_bookIdOnItem foreign key (book_id) references
 alter table pedido add constraint fk_paymentIdOnPedido foreign key (payment_id) references payment(id);
 alter table pedido add constraint fk_shippingInfoIdOnPedido foreign key (shipping_info_id) references shipping_info(id);
 alter table pedido add constraint fk_userIdOnPedido foreign key (user_id) references usuario(id);
-alter table pedido_items add constraint fk_itemsIdOnPedidoItems foreign key (items_id) references item(id);
-alter table pedido_items add constraint fk_orderIdOnPedidoItems foreign key (order_id) references pedido(id);
+alter table pedido_sales add constraint fk_salesIdOnPedidoSales foreign key (sales_id) references sale(id);
+alter table pedido_sales add constraint fk_orderIdOnPedidoSales foreign key (order_id) references pedido(id);
+alter table sale add constraint fk_bookIdOnSale foreign key (book_id) references book(id);
 alter table shipping_info add constraint fk_addressIdOnShippingInfo foreign key (address_id) references address(id);
 alter table usuario add constraint fk_cartIdOnUsuario foreign key (cart_id) references cart(id);
 alter table usuario add constraint fk_profileIdOnUsuario foreign key (profile_id) references profile(id);
