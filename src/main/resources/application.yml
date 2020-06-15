@@ -10,11 +10,22 @@ spring:
          #- dev-h2          # un-comment @Lob on image.data
    jpa:
       show-sql: false
+   mail:
+      host: smtp.gmail.com
+      port: 587
+      username: ${MAIL_ADDRESS:afirstmarket@gmail.com}
+      password: ${MAIL_PW}
+      properties:
+         mail:
+            smtp:
+               auth: true
+               starttls:
+                  enable: true
+               connectiontimeout: 5000
+               timeout: 3000
+               writetimeout: 5000
 
 fm:
-   time-format:
-      date: dd-MM-yyyy
-      date-time: dd-MM-yyyy HH:mm:ss
    host-address: ${HOST_ADDRESS:http://localhost:8080/}
    schedule:
       garbage-collection:
@@ -99,16 +110,6 @@ fm:
          user: 1
          order: 3
       default-index: 0
-   mail:
-      smtp:
-         auth: true
-         starttls:
-            enable: true
-         host: smtp.gmail.com
-         port: 587
-      address: ${MAIL_ADDRESS:afirstmarket@gmail.com}
-      pw: ${MAIL_PW}
-      content-type: text/html
 
 ---
 

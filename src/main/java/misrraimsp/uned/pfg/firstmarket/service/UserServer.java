@@ -4,7 +4,6 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
@@ -56,7 +55,6 @@ public class UserServer implements UserDetailsService {
 
     private final SecurityTokenProperties securityTokenProperties;
     private final SecurityRandomPasswordProperties securityRandomPasswordProperties;
-    private final TimeFormatProperties timeFormatProperties;
 
     private final LockManager lockManager;
 
@@ -71,7 +69,6 @@ public class UserServer implements UserDetailsService {
                       CartServer cartServer,
                       SecurityTokenProperties securityTokenProperties,
                       SecurityRandomPasswordProperties securityRandomPasswordProperties,
-                      TimeFormatProperties timeFormatProperties,
                       LockManager lockManager,
                       ConversionManager conversionManager) {
 
@@ -85,7 +82,6 @@ public class UserServer implements UserDetailsService {
 
         this.securityTokenProperties = securityTokenProperties;
         this.securityRandomPasswordProperties = securityRandomPasswordProperties;
-        this.timeFormatProperties = timeFormatProperties;
 
         this.lockManager = lockManager;
 

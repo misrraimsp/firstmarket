@@ -1,62 +1,59 @@
 package misrraimsp.uned.pfg.firstmarket.security;
 
-import lombok.SneakyThrows;
-import misrraimsp.uned.pfg.firstmarket.adt.MailMessage;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityLockProperties;
+import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
 import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.MailServer;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationFailureBadCredentialsEvent;
 import org.springframework.stereotype.Component;
 
-import java.sql.Timestamp;
-import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class AuthenticationFailureListener implements ApplicationListener<AuthenticationFailureBadCredentialsEvent> {
 
+    private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+
     private final LockManager lockManager;
     private final UserServer userServer;
-    private final MailServer mailServer;
+    private final MailClient mailClient;
     private final SecurityLockProperties securityLockProperties;
+    private final MailProperties mailProperties;
 
     @Autowired
     public AuthenticationFailureListener(LockManager lockManager,
                                          UserServer userServer,
-                                         MailServer mailServer,
-                                         SecurityLockProperties securityLockProperties) {
+                                         MailClient mailClient,
+                                         SecurityLockProperties securityLockProperties,
+                                         MailProperties mailProperties) {
 
         this.lockManager = lockManager;
         this.userServer = userServer;
-        this.mailServer = mailServer;
+        this.mailClient = mailClient;
         this.securityLockProperties = securityLockProperties;
+        this.mailProperties = mailProperties;
     }
 
-    @SneakyThrows
     public void onApplicationEvent(AuthenticationFailureBadCredentialsEvent event) {
         String email = (String) event.getAuthentication().getPrincipal();
+        LOGGER.debug("Authentication failure (email account: {})", email);
         if (userServer.emailExists(email)){
             // cache failure
             lockManager.loginFail(email);
-            // send email if just locked (it is just locked because the event is BadCredential. On next logins the authentication failure will be Locked)
-            if (lockManager.isLocked(email)) {
+            if (lockManager.isLocked(email)) { // send email if just locked (it is just locked because the event is BadCredential. During the following logins the authentication failure will be Locked)
+                LOGGER.debug("Account locked (email: {})", email);
                 User user = userServer.getUserByEmail(email);
-                // Build the email message
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(new Timestamp(calendar.getTime().getTime()));
-                calendar.add(Calendar.MINUTE, securityLockProperties.getLockingMinutes());
-                MailMessage mailMessage = new MailMessage();
-                mailMessage.setSubject("Account Locked");
-                String text = "<h1>Dear " + user.getProfile().getFirstName() + ",</h1>";
-                text += "<p>Due to several login failures, your FirstMarket account has been locked for security reasons</p>";
-                text += "<p>The account will remain locked until:</p>";
-                text += "<p><strong>" + calendar.getTime().toString() + "</strong></p>";
-                mailMessage.setText(text);
-                mailMessage.setTo(email);
-                // send email
-                mailServer.send(mailMessage);
+                Map<String,Object> properties = new HashMap<>();
+                properties.put("user", user);
+                properties.put("contactAddress",mailProperties.getUsername());
+                properties.put("lockTime", securityLockProperties.getLockingMinutes());
+                mailClient.prepareAndSend("mail/accountLocked",properties,user.getEmail(),"Account Locked");
             }
         }
     }
