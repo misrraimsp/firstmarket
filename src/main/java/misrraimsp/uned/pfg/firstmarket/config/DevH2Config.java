@@ -2,7 +2,6 @@ package misrraimsp.uned.pfg.firstmarket.config;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
-import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.TimeFormatProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
@@ -47,8 +46,7 @@ public class DevH2Config {
                                         PublisherServer publisherServer,
                                         OrderRepository orderRepository,
                                         ProfileRepository profileRepository,
-                                        ConversionManager conversionManager,
-                                        TimeFormatProperties timeFormatProperties) {
+                                        ConversionManager conversionManager) {
 
         return args -> {
             LOGGER.warn("CommandLineRunner on dev-h2");
