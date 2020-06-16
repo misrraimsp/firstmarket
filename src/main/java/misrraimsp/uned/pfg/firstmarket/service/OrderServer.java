@@ -4,12 +4,14 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.ShippingDetails;
 import lombok.NonNull;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.PaymentProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
 import misrraimsp.uned.pfg.firstmarket.data.PaymentRepository;
 import misrraimsp.uned.pfg.firstmarket.data.ShippingInfoRepository;
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
+import misrraimsp.uned.pfg.firstmarket.event.OnOrderCreatedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
 import misrraimsp.uned.pfg.firstmarket.exception.OrderNotFoundException;
@@ -18,7 +20,7 @@ import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,20 +37,14 @@ public class OrderServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    @Value("${fm.payment.stripe.pi-minutes}")
-    private final Long napMinutes = 30L;
-
-    @Value("${fm.payment.stripe.limit-of-naps}")
-    private final int limitOfNaps = 3;
-
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
     private final ShippingInfoRepository shippingInfoRepository;
     private final AddressServer addressServer;
     private final CartServer cartServer;
-    private final ItemServer itemServer;
     private final ConversionManager conversionManager;
-
+    private final PaymentProperties paymentProperties;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
     public OrderServer(OrderRepository orderRepository,
@@ -56,16 +52,18 @@ public class OrderServer {
                        ShippingInfoRepository shippingInfoRepository,
                        AddressServer addressServer,
                        CartServer cartServer,
-                       ItemServer itemServer,
-                       ConversionManager conversionManager) {
+                       ConversionManager conversionManager,
+                       PaymentProperties paymentProperties,
+                       ApplicationEventPublisher applicationEventPublisher) {
 
         this.orderRepository = orderRepository;
         this.paymentRepository = paymentRepository;
         this.shippingInfoRepository = shippingInfoRepository;
         this.addressServer = addressServer;
         this.cartServer = cartServer;
-        this.itemServer = itemServer;
         this.conversionManager = conversionManager;
+        this.paymentProperties = paymentProperties;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     public Order persist(Order order) {
@@ -79,7 +77,7 @@ public class OrderServer {
     @Async
     @EventListener
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
-    public void handlePaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) throws StripeException {
+    public void onPaymentSuccess(@NonNull OnPaymentSuccessEvent paymentSuccessEvent) throws StripeException {
         User user = paymentSuccessEvent.getUser();
         Cart cart = user.getCart();
         if (!cart.isCommitted()){
@@ -130,12 +128,13 @@ public class OrderServer {
         order.setStatus(OrderStatus.PROCESSING);
         order = this.persist(order);
         LOGGER.debug("Order({}) created", order.getId());
+        applicationEventPublisher.publishEvent(new OnOrderCreatedEvent(order));
         return order;
     }
 
     @Async
     @EventListener
-    public void handlePaymentCancellation(@NonNull OnPaymentCancellationEvent paymentCancellationEvent) throws StripeException {
+    public void onPaymentCancellation(@NonNull OnPaymentCancellationEvent paymentCancellationEvent) throws StripeException {
         cartServer.unCommitCart(paymentCancellationEvent.getUser().getCart());
     }
 
@@ -145,7 +144,7 @@ public class OrderServer {
 
     @Async
     @EventListener
-    public void handleCommitmentExpiration(@NonNull OnCartCommittedEvent cartCommittedEvent) throws PaymentIntentProcessingTimeout, StripeException {
+    public void onCartCommitted(@NonNull OnCartCommittedEvent cartCommittedEvent) throws PaymentIntentProcessingTimeout, StripeException {
         User user = cartCommittedEvent.getUser();
         assert user != null;
         assert user.getCart() != null;
@@ -153,15 +152,15 @@ public class OrderServer {
         try {
             LOGGER.debug("User(id={}) committed-cart(id={}) time-frame STARTED (piId={})", user.getId(), user.getCart().getId(), paymentIntentId);
             //take a nap
-            TimeUnit.MINUTES.sleep(napMinutes);
+            TimeUnit.MINUTES.sleep(paymentProperties.getPiMinutes());
             //wakeup
             LOGGER.debug("User(id={}) committed-cart(id={}) time-frame ENDED (piId={})", user.getId(), user.getCart().getId(), paymentIntentId);
             int numOfNaps = 1;
             String piStatus = PaymentIntent.retrieve(paymentIntentId).getStatus();
-            while (piStatus.equals("processing") && numOfNaps < limitOfNaps) {
+            while (piStatus.equals("processing") && numOfNaps < paymentProperties.getLimitOfNaps()) {
                 LOGGER.debug("User(id={}) committed-cart(id={}) EXTENDED({} time/s) time-frame due to 'processing' piStatus STARTED (piId={})", user.getId(), user.getCart().getId(), numOfNaps, paymentIntentId);
                 //take another nap
-                TimeUnit.MINUTES.sleep(napMinutes);
+                TimeUnit.MINUTES.sleep(paymentProperties.getPiMinutes());
                 //wakeup
                 LOGGER.debug("User(id={}) committed-cart(id={}) EXTENDED({} time/s) time-frame due to 'processing' piStatus ENDED (piId={})", user.getId(), user.getCart().getId(), numOfNaps, paymentIntentId);
                 numOfNaps++;

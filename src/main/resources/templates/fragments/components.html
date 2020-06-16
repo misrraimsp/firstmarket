@@ -155,10 +155,10 @@
         <a th:fragment="cancelButtonToHome" class="btn btn-secondary px-5 my-3 text-white" th:href="@{/home}">Cancel</a>
 
         <!-- host address -->
-        <i th:fragment="host-address" id="host" th:attr="host-address=${@environment.getProperty('fm.host-address')}"></i>
+        <i th:fragment="host-address" id="host" th:attr="host-address=${@environment.getProperty('fm.host.address')}"></i>
 
         <!-- contactUs -->
-        <span th:fragment="contactUs">If you need help, please contact us at <span class="text-info" th:text="${@environment.getProperty('fm.mail.address')}">email</span></span>
+        <span th:fragment="contactUs">If you need help, please contact us at <span class="text-info" th:text="${@environment.getProperty('spring.mail.username')}">email</span></span>
 
         <div th:fragment="addButton(action)">
             <a class="btn btn-outline-info btn-sm my-2 px-5 float-right" th:href="@{/admin/{param}(param=${action})}">Add</a>

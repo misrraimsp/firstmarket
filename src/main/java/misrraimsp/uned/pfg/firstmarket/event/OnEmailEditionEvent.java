@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnEmailEditionEvent extends ApplicationEvent {
 
-    private Long userId;
+    private final Long userId;
 
     public OnEmailEditionEvent(Long userId) {
         super(userId);

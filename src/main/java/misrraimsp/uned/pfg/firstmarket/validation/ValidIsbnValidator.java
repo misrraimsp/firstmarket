@@ -17,7 +17,7 @@ public class ValidIsbnValidator implements ConstraintValidator<ValidIsbn, String
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private ValidationRegexProperties validationRegexProperties;
+    private final ValidationRegexProperties validationRegexProperties;
 
     @Autowired
     public ValidIsbnValidator(ValidationRegexProperties validationRegexProperties){

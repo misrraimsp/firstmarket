@@ -8,6 +8,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -31,7 +32,9 @@ public class MailClient {
         this.mailProperties = mailProperties;
     }
 
+    @Async
     public void prepareAndSend(String template, Map<String,Object> properties, String recipient, String subject) {
+        LOGGER.debug("MailClient prepareAndSend started");
         MimeMessagePreparator mimeMessagePreparator = prepare(template,properties,recipient,subject);
         try {
             javaMailSender.send(mimeMessagePreparator);
@@ -40,6 +43,7 @@ public class MailClient {
             LOGGER.warn("Error while trying to send email (to:{}, template:{}). Retry again", recipient, template, e);
             this.retryPrepareAndSend(template,properties,recipient,subject);
         }
+        LOGGER.debug("MailClient prepareAndSend ended");
     }
 
     private void retryPrepareAndSend(String template, Map<String,Object> properties, String recipient, String subject) {

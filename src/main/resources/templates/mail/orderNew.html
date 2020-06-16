@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      lang="en">
+    <head></head>
+    <body>
+        <h2>Thank you!</h2>
+        <hr/>
+        <p>Dear <span th:text="${user.profile.firstName ne null && !user.profile.firstName.isBlank()} ? ${user.profile.firstName} : 'user'">user</span>,</p>
+        <p>Your new order has been placed successfully!</p>
+        <p>This is the order reference so that you can keep track of it on <a th:href="${linkAddress}">your FirstMarket account</a>: <strong th:text="${order.id}"></strong></p>
+        <small>If you need help, please contact us at <em th:text="${contactAddress}">email</em></small>
+    </body>
+</html>

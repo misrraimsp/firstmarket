@@ -26,7 +26,8 @@ spring:
                writetimeout: 5000
 
 fm:
-   host-address: ${HOST_ADDRESS:http://localhost:8080/}
+   host:
+      address: ${HOST_ADDRESS:http://localhost:8080/}
    schedule:
       garbage-collection:
          cron: 0 */5 * ? * *

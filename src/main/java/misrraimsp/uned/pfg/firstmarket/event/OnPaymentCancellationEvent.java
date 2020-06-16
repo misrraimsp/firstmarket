@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnPaymentCancellationEvent extends ApplicationEvent {
 
-    private User user;
+    private final User user;
 
     public OnPaymentCancellationEvent(User user) {
         super(user);

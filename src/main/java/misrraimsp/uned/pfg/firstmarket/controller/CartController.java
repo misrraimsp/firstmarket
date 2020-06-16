@@ -21,7 +21,7 @@ import java.util.Set;
 @RestController
 public class CartController extends BasicController {
 
-    private CartServer cartServer;
+    private final CartServer cartServer;
 
     @Autowired
     public CartController(UserServer userServer,

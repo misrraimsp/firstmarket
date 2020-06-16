@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnCartCommittedEvent extends ApplicationEvent {
 
-    private User user;
+    private final User user;
 
     public OnCartCommittedEvent(User user) {
         super(user);
