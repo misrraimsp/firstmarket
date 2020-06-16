@@ -3,7 +3,6 @@ package misrraimsp.uned.pfg.firstmarket.controller;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.FrontEndProperties;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
@@ -11,6 +10,7 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.BookSortCrite
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.projection.LanguageView;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -28,9 +28,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 public class BookController extends BasicController {
@@ -179,9 +179,9 @@ public class BookController extends BasicController {
             bookPage = bookServer.findSearchResults(searchCriteria, pageable);
         }
         // search filter criteria
-        Set<Author> authors = bookServer.findTopAuthorsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
-        Set<Publisher> publishers = bookServer.findTopPublishersByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
-        Set<Language> languages = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
+        List<Author> authors = bookServer.findTopAuthorsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
+        List<Publisher> publishers = bookServer.findTopPublishersByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
+        List<LanguageView> languageViews = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
 
         // load model
         populateModel(model.asMap(), authUser);
@@ -192,7 +192,7 @@ public class BookController extends BasicController {
         model.addAttribute("prices", PriceInterval.values());
         model.addAttribute("authors", authors);
         model.addAttribute("publishers", publishers);
-        model.addAttribute("languages", languages);
+        model.addAttribute("languageViews", languageViews);
         model.addAttribute("sort", sort);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("cartBookRegistry", bookServer.getCartBookRegistry());

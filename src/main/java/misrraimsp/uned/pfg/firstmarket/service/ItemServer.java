@@ -1,8 +1,7 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.ItemRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.model.Item;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,10 +32,11 @@ public class ItemServer {
     }
 
     public Item findById(Long itemId) {
-        return itemRepository.findById(itemId).orElseThrow(() -> new ItemNotFoundException(itemId));
+        return itemRepository.findById(itemId).orElseThrow(() ->
+                new EntityNotFoundByIdException(itemId, Item.class.getSimpleName()));
     }
 
-    public Item create(Long bookId) throws BookNotFoundException {
+    public Item create(Long bookId) throws EntityNotFoundByIdException {
         Item item = new Item();
         item.setBook(bookServer.findById(bookId));
         item.setQuantity(1);
@@ -60,14 +60,14 @@ public class ItemServer {
         return newItems;
     }
 
-    public void increment(Long id) throws ItemNotFoundException {
+    public void increment(Long id) throws EntityNotFoundByIdException {
         Item item = this.findById(id);
         item.setQuantity(1 + item.getQuantity());
         itemRepository.save(item);
         LOGGER.debug("Item(id={}) incremented (new quantity = {})", item.getId(), item.getQuantity());
     }
 
-    public void decrement(Long id) throws ItemNotFoundException {
+    public void decrement(Long id) throws EntityNotFoundByIdException {
         Item item = this.findById(id);
         item.setQuantity(item.getQuantity() - 1);
         itemRepository.save(item);

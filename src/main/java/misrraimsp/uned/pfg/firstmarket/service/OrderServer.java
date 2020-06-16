@@ -14,7 +14,7 @@ import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnOrderCreatedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
-import misrraimsp.uned.pfg.firstmarket.exception.OrderNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.exception.PaymentIntentProcessingTimeout;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import org.slf4j.Logger;
@@ -201,7 +201,8 @@ public class OrderServer {
         LOGGER.debug("Order(id={}) status set to {}", order.getId(), orderStatus.name());
     }
 
-    private Order findById(Long orderId) throws OrderNotFoundException {
-        return orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException(orderId));
+    private Order findById(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() ->
+                new EntityNotFoundByIdException(orderId,Order.class.getSimpleName()));
     }
 }

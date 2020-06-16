@@ -107,7 +107,7 @@
                     <button class="accordion" id="categoryAcc">Category</button>
                     <div class="panel mb-1">
                         <div class="my-3" th:each="cat : ${childrenCategories}">
-                            <a class="categoryLink text-secondary" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                            <a class="categoryLink text-secondary font-weight-light" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name.substring(0, T(java.lang.Math).min(cat.name.length(), __${@environment.getProperty('fm.front-end.books.filter-max-size')}__))}">Category Name</a>
                         </div>
                     </div>
                     <!-- price criteria -->
@@ -117,7 +117,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="price : ${prices}">
                                 <input class="priceCheckBox" type="checkbox" th:id="'pr-' + ${price.ordinal()}"/>
                                 <div class="state p-info-o">
-                                    <label class="text-secondary" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText()}">€ interval</label>
+                                    <label class="text-secondary font-weight-light" th:for="'pr-' + ${price.ordinal()}" th:text="${price.getText().substring(0, T(java.lang.Math).min(price.getText().length(), __${@environment.getProperty('fm.front-end.books.filter-max-size')}__))}">€ interval</label>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="author : ${authors}">
                                 <input class="authorCheckBox" type="checkbox" th:id="'au-' + ${author.id}"/>
                                 <div class="state p-info-o">
-                                    <label class="text-secondary" th:for="'au-' + ${author.id}" th:text="${author.lastName} + ', ' + ${author.firstName}">Author</label>
+                                    <label class="text-secondary font-weight-light" th:for="'au-' + ${author.id}" th:text="${author.lastName.substring(0, T(java.lang.Math).min(author.lastName.length(), __${@environment.getProperty('fm.front-end.books.author-component-max-size')}__))} + ', ' + ${author.firstName.substring(0, T(java.lang.Math).min(author.firstName.length(), __${@environment.getProperty('fm.front-end.books.author-component-max-size')}__))} + ' (' + ${author.numOfBooks} + ')'">Author</label>
                                 </div>
                             </div>
                         </div>
@@ -141,7 +141,7 @@
                             <div class="pretty p-default p-round p-thick mb-3" th:each="publisher : ${publishers}">
                                 <input class="publisherCheckBox" type="checkbox" th:id="'pu-' + ${publisher.id}"/>
                                 <div class="state p-info-o">
-                                    <label class="text-secondary" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name}">Publisher</label>
+                                    <label class="text-secondary font-weight-light" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name.substring(0, T(java.lang.Math).min(publisher.name.length(), __${@environment.getProperty('fm.front-end.books.filter-max-size')}__))} + ' (' + ${publisher.numOfBooks} + ')'">Publisher</label>
                                 </div>
                             </div>
                         </div>
@@ -150,10 +150,10 @@
                     <button class="accordion" id="languageAcc">Language</button>
                     <div class="panel">
                         <div class="d-flex flex-column pt-3">
-                            <div class="pretty p-default p-round p-thick mb-3" th:each="language : ${languages}">
-                                <input class="languageCheckBox" type="checkbox" th:id="'la-' + ${language.ordinal()}"/>
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="lv : ${languageViews}">
+                                <input class="languageCheckBox" type="checkbox" th:id="'la-' + ${lv.language.ordinal()}"/>
                                 <div class="state p-info-o">
-                                    <label class="text-secondary" th:for="'la-' + ${language.ordinal()}" th:text="${language.name()}">Language</label>
+                                    <label class="text-secondary font-weight-light" th:for="'la-' + ${lv.language.ordinal()}" th:text="${lv.language.name().substring(0, T(java.lang.Math).min(lv.language.name().length(), __${@environment.getProperty('fm.front-end.books.filter-max-size')}__))} + ' (' + ${lv.count} + ')'">Language</label>
                                 </div>
                             </div>
                         </div>

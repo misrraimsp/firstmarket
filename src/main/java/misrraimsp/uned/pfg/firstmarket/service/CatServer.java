@@ -5,7 +5,7 @@ import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
 import misrraimsp.uned.pfg.firstmarket.converter.CategoryConverter;
 import misrraimsp.uned.pfg.firstmarket.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.data.CatpathRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.CategoryNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.model.Category;
 import misrraimsp.uned.pfg.firstmarket.model.Catpath;
@@ -97,7 +97,7 @@ public class CatServer {
         return sequence;
     }
 
-    public List<Category> getDescendants(Long categoryId) throws CategoryNotFoundException{
+    public List<Category> getDescendants(Long categoryId) {
         List<Category> list = new ArrayList<>();
         TreeNode<Category> subtreeRoot = null;
         for (TreeNode<Category> node : rootCategoryNode) {
@@ -107,7 +107,7 @@ public class CatServer {
             }
         }
         if (subtreeRoot == null) {
-            throw new CategoryNotFoundException(categoryId);
+            throw new EntityNotFoundByIdException(categoryId,Category.class.getSimpleName());
         }
         for (TreeNode<Category> node : subtreeRoot) {
             list.add(node.getData());
@@ -183,8 +183,9 @@ public class CatServer {
         categoryRepository.delete(deletingCategory);
     }
 
-    public Category findCategoryById(Long id) {
-        return categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+    public Category findCategoryById(Long categoryId) {
+        return categoryRepository.findById(categoryId).orElseThrow(() ->
+                new EntityNotFoundByIdException(categoryId,Category.class.getSimpleName()));
     }
 
     private void populate(TreeNode<Category> node) {

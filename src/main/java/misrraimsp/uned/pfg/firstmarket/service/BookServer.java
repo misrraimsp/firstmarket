@@ -1,12 +1,15 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.*;
+import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
+import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.projection.LanguageView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +51,7 @@ public class BookServer {
     @Transactional
     public Book persist(Book book) throws
             IsbnAlreadyExistsException,
-            ImageNotFoundException,
+            EntityNotFoundByIdException,
             BadImageException {
 
         //check for isbn uniqueness
@@ -66,8 +69,7 @@ public class BookServer {
     @Transactional
     public Book edit(Book book) throws
             IsbnAlreadyExistsException,
-            BookNotFoundException,
-            ImageNotFoundException,
+            EntityNotFoundByIdException,
             BadImageException {
 
         //check for isbn uniqueness (allowing self-uniqueness)
@@ -92,8 +94,10 @@ public class BookServer {
         return bookRepository.findAll(pageable);
     }
 
-    public Book findById(Long id) {
-        return bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    public Book findById(Long bookId) {
+        return bookRepository.findById(bookId).orElseThrow(() ->
+                new EntityNotFoundByIdException(bookId, Book.class.getSimpleName())
+        );
     }
 
     @Transactional
@@ -109,17 +113,17 @@ public class BookServer {
                 });
     }
 
-    public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
+    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
         return authorServer.findTopAuthorsByCategoryId(categoryId, numTopAuthors);
     }
 
-    public Set<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
+    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
         return publisherServer.findTopPublishersByCategoryId(categoryId, numTopPublishers);
     }
 
-    public Set<Language> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
+    public List<LanguageView> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
         Set<Long> bookIds = bookRepository.findIdByAncestorCategoryId(categoryId);
-        return (bookIds.isEmpty()) ? new HashSet<>() : bookRepository.findTopLanguagesByBookIds(bookIds, numTopLanguages);
+        return (bookIds.isEmpty()) ? new ArrayList<>() : bookRepository.findTopLanguageViewsByBookIds(bookIds, numTopLanguages);
     }
 
     public Page<Book> findSearchResults(SearchCriteria searchCriteria, Pageable pageable) {
@@ -247,7 +251,7 @@ public class BookServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void removeFromStock(Set<Item> items) throws BookNotFoundException {
+    public void removeFromStock(Set<Item> items) throws EntityNotFoundByIdException {
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());
             int originalStock = storedBook.getStock();
@@ -262,7 +266,7 @@ public class BookServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void restoreStock(Set<Item> items) throws BookNotFoundException {
+    public void restoreStock(Set<Item> items) throws EntityNotFoundByIdException {
         items.forEach(item -> {
             Book storedBook = this.findById(item.getBook().getId());
             int originalStock = storedBook.getStock();
@@ -276,7 +280,7 @@ public class BookServer {
         });
     }
 
-    public void setStatus(Long bookId, ProductStatus productStatus) throws BookNotFoundException {
+    public void setStatus(Long bookId, ProductStatus productStatus) throws EntityNotFoundByIdException {
         Book book = this.findById(bookId);
         if (productStatus.equals(ProductStatus.OUT_OF_STOCK)) {
             book.setStock(0);

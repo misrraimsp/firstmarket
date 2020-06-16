@@ -28,7 +28,7 @@ create sequence hibernate_sequence start with 5001 increment by 1;
 
 create table address (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, city varchar(255), country varchar(255), line1 varchar(255), line2 varchar(255), postal_code varchar(255), province varchar(255), primary key (id));
 create table author (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, first_name varchar(255), last_name varchar(255), primary key (id));
-create table books_authors (book_id bigint not null, author_id bigint not null);
+create table books_authors (book_id bigint not null, author_id bigint not null, primary key (book_id, author_id));
 create table profile (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, birth_date date, first_name varchar(255), gender varchar(255), last_name varchar(255), phone varchar(255), primary key (id));
 create table publisher (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, name varchar(255), primary key (id));
 create table book (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, description varchar(510), isbn varchar(255), language varchar(255), pages integer, price decimal(19,2), status varchar(255), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));

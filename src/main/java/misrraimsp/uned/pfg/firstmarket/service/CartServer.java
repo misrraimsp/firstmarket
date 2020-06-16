@@ -5,8 +5,7 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.param.PaymentIntentCreateParams;
 import lombok.NonNull;
 import misrraimsp.uned.pfg.firstmarket.data.CartRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.BookNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.model.Cart;
 import misrraimsp.uned.pfg.firstmarket.model.Item;
@@ -52,7 +51,7 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
-    public void addBook(Cart cart, Long bookId) throws BookNotFoundException, ItemNotFoundException, StripeException {
+    public void addBook(Cart cart, Long bookId) throws EntityNotFoundByIdException, StripeException {
         Set<Item> items = new HashSet<>(cart.getItems());
         List<Long> matchingItemIds =
                 items
@@ -81,7 +80,7 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
-    public void incrementItem(Cart cart, Long itemId) throws ItemNotFoundException, StripeException {
+    public void incrementItem(Cart cart, Long itemId) throws EntityNotFoundByIdException, StripeException {
         Item itemToIncrement = itemServer.findById(itemId);
         Set<Item> items = new HashSet<>(cart.getItems());
         if (!items.contains(itemToIncrement)) {
@@ -95,7 +94,7 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = StripeException.class)
-    public void decrementItem(Cart cart, Long itemId) throws ItemNotFoundException, StripeException {
+    public void decrementItem(Cart cart, Long itemId) throws EntityNotFoundByIdException, StripeException {
         Item itemToDecrement = itemServer.findById(itemId);
         Set<Item> items = new HashSet<>(cart.getItems());
         if (!items.contains(itemToDecrement)) {
@@ -119,7 +118,7 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = StripeException.class)
-    public void removeItem(Cart cart, Long itemId, boolean doUnCommit) throws ItemNotFoundException, StripeException {
+    public void removeItem(Cart cart, Long itemId, boolean doUnCommit) throws EntityNotFoundByIdException, StripeException {
         //update cart
         Item deletingItem = itemServer.findById(itemId);
         Set<Item> items = new HashSet<>(cart.getItems());
@@ -138,7 +137,7 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = StripeException.class)
-    public Cart unCommitCart(@NonNull Cart cart) throws BookNotFoundException, StripeException {
+    public Cart unCommitCart(@NonNull Cart cart) throws EntityNotFoundByIdException, StripeException {
         if (cart.isCommitted()) {
             bookServer.restoreStock(cart.getItems());
             Set<Sale> sales = new HashSet<>(cart.getSales());
@@ -156,7 +155,7 @@ public class CartServer {
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = StripeException.class)
-    public Cart commitCart(@NonNull User user) throws BookNotFoundException, ItemsAvailabilityException, StripeException {
+    public Cart commitCart(@NonNull User user) throws EntityNotFoundByIdException, ItemsAvailabilityException, StripeException {
         Cart cart = user.getCart();
         if (!cart.isCommitted()) {
             bookServer.checkAvailabilityFor(cart.getItems());

@@ -16,8 +16,8 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.OrderSortCrit
 import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
-import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Order;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
@@ -257,8 +257,10 @@ public class OrderController extends BasicController {
                     LOGGER.error("Stripe - UNEXPECTED event (type={}) received related with user(id={}) PaymentIntent(id={})", eventType, user.getId(), paymentIntent.getId());
             }
         }
-        catch (UserNotFoundException e) {
-            LOGGER.error("Stripe - No user(id={}) found with PaymentIntent(id={}) info sent to the stripe listener", piUserId, paymentIntent.getId());
+        catch (EntityNotFoundByIdException e) {
+            if (e.getClassName().equals(User.class.getSimpleName())) {
+                LOGGER.error("Stripe - No user(id={}) found with PaymentIntent(id={}) info sent to the stripe listener", piUserId, paymentIntent.getId());
+            }
             throw e;
         }
         response.setStatus(200);

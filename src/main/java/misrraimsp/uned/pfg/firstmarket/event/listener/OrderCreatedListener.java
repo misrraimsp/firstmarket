@@ -37,6 +37,6 @@ public class OrderCreatedListener implements ApplicationListener<OnOrderCreatedE
         properties.put("user", order.getUser());
         properties.put("contactAddress",mailProperties.getUsername());
         properties.put("linkAddress", hostProperties.getAddress() + "orders");
-        mailClient.prepareAndSend("mail/orderNew",properties,order.getUser().getEmail(),"FirstMarket New Order");
+        mailClient.prepareAndSend("mail/orderNew",properties,order.getUser().getEmail(),"New Purchase - FirstMarket");
     }
 }

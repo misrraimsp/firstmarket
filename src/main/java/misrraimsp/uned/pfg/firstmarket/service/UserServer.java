@@ -12,7 +12,7 @@ import misrraimsp.uned.pfg.firstmarket.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.data.UserRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.model.*;
 import misrraimsp.uned.pfg.firstmarket.security.LockManager;
 import org.passay.CharacterData;
@@ -136,8 +136,9 @@ public class UserServer implements UserDetailsService {
         return savedUser;
     }
 
-    public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public User findById(Long userId) {
+        return userRepository.findById(userId).orElseThrow(() ->
+                new EntityNotFoundByIdException(userId,User.class.getSimpleName()));
     }
 
     public void editProfile(Profile editedProfile) {
@@ -148,37 +149,37 @@ public class UserServer implements UserDetailsService {
         return userRepository.findByEmail(email) != null;
     }
 
-    public User editEmail(Long userId, String editedEmail)  throws UserNotFoundException {
+    public User editEmail(Long userId, String editedEmail)  throws EntityNotFoundByIdException {
         User user = this.findById(userId);
         user.setEmail(editedEmail);
         return userRepository.save(user);
     }
 
-    public User setCompletedState(Long userId, boolean b) throws UserNotFoundException {
+    public User setCompletedState(Long userId, boolean b) throws EntityNotFoundByIdException {
         User user = this.findById(userId);
         user.setCompleted(b);
         return userRepository.save(user);
     }
 
-    public User setSuspendedState(Long userId, boolean b) throws UserNotFoundException {
+    public User setSuspendedState(Long userId, boolean b) throws EntityNotFoundByIdException {
         User user = this.findById(userId);
         user.setSuspended(b);
         return userRepository.save(user);
     }
 
-    public User setAccountLockedState(Long userId, boolean b) throws UserNotFoundException {
+    public User setAccountLockedState(Long userId, boolean b) throws EntityNotFoundByIdException {
         User user = this.findById(userId);
         user.setAccountLocked(b);
         return userRepository.save(user);
     }
 
-    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password)  throws UserNotFoundException {
+    public User editPassword(Long userId, PasswordEncoder passwordEncoder, String password)  throws EntityNotFoundByIdException {
         User user = this.findById(userId);
         user.setPassword(passwordEncoder.encode(password));
         return userRepository.save(user);
     }
 
-    public boolean checkPassword(Long userId, PasswordEncoder passwordEncoder, String candidatePassword)  throws UserNotFoundException {
+    public boolean checkPassword(Long userId, PasswordEncoder passwordEncoder, String candidatePassword)  throws EntityNotFoundByIdException {
         User user = this.findById(userId);
         return this.checkPassword(passwordEncoder, candidatePassword, user.getPassword());
     }
@@ -242,7 +243,7 @@ public class UserServer implements UserDetailsService {
         LOGGER.debug("Garbage collection: finished");
     }
 
-    public UserDeletion createUserDeletion(Long userId, DeletionReason deletionReason, String comment) throws UserNotFoundException {
+    public UserDeletion createUserDeletion(Long userId, DeletionReason deletionReason, String comment) throws EntityNotFoundByIdException {
         UserDeletion userDeletion = new UserDeletion();
         userDeletion.setUser(this.findById(userId));
         userDeletion.setDeletionReason((deletionReason == null) ? DeletionReason.OTHER : deletionReason);
@@ -250,7 +251,7 @@ public class UserServer implements UserDetailsService {
         return userDeletionRepository.save(userDeletion);
     }
 
-    public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) throws UserNotFoundException {
+    public boolean isEmailConfirmationAlreadyNeededFor(Long userId, SecurityEvent securityEvent) throws EntityNotFoundByIdException {
         return !securityTokenRepository.findByTargetUserAndSecurityEventAndCreatedDateAfter(
                 this.findById(userId),
                 securityEvent,
@@ -258,7 +259,7 @@ public class UserServer implements UserDetailsService {
         ).isEmpty();
     }
 
-    public ProfileForm getProfileForm(Long userId) throws UserNotFoundException {
+    public ProfileForm getProfileForm(Long userId) throws EntityNotFoundByIdException {
         return conversionManager.convertProfileToProfileForm(this.findById(userId).getProfile());
     }
 

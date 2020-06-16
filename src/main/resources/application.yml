@@ -95,21 +95,21 @@ fm:
       orders:
          title-max-size: 60
       search-criteria:
-         num-of-authors: 7
-         num-of-publishers: 7
-         num-of-languages: 7
+         num-of-authors: 8
+         num-of-publishers: 8
+         num-of-languages: 8
    pagination:
       default-sort-index:
          book: 5
          image: 2
-         user: 6
+         user: 1
          order: 1
       default-size-index:
          image: 0
          home: 1
          search: 0
          user: 1
-         order: 3
+         order: 1
       default-index: 0
 
 ---

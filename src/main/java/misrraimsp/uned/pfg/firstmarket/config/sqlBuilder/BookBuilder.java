@@ -3,6 +3,8 @@ package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashSet;
+import java.util.Set;
 
 public class BookBuilder {
 
@@ -17,14 +19,18 @@ public class BookBuilder {
         //initialize
         ValueGenerator valueGenerator = new ValueGenerator();
         IsbnHolder isbnHolder = new IsbnHolder(numOfBooks);
-        QueryHolder queryHolder = new QueryHolder();
-        //build insert book query
-        queryHolder.openInsertBookQuery();
-        for (int i = 1; i <= numOfBooks; i++){
+        QueryHolder globalQueryHolder = new QueryHolder();
+        QueryHolder bookQueryHolder = new QueryHolder();
+        QueryHolder bookAuthorsQueryHolder = new QueryHolder();
+        Set<String> authorIds = new HashSet<>();
+        bookQueryHolder.openInsertBookQuery();
+        bookAuthorsQueryHolder.openInsertBooksAuthorsQuery();
+        for (int i = 1; i <= numOfBooks; i++) {
+            //build insert book queries
             String status = valueGenerator.getRandomBookStatus();
             String stock = (status.equals("OUT_OF_STOCK")) ? "0" : valueGenerator.getRandomStock();
             String dateTime = valueGenerator.getRandomDateTime();
-            queryHolder.addBookValues(
+            bookQueryHolder.addBookValues(
                     String.valueOf(i),
                     "1",
                     dateTime,
@@ -42,33 +48,31 @@ public class BookBuilder {
                     valueGenerator.getRandomImageId(),
                     valueGenerator.getRandomPublisherId()
             );
-        }
-        queryHolder.closeInsertQuery();
-        //new lines
-        queryHolder.addTwoNewLines();
-        //build insert books_authors query
-        queryHolder.openInsertBooksAuthorsQuery();
-        for (int i = 1; i <= numOfBooks; i++){
-            for (int j = 1; j <= valueGenerator.getRandomNumOfAuthors(); j++) {
-                queryHolder.addBooksAuthorsValues(
-                        String.valueOf(i),
-                        valueGenerator.getRandomAuthorId()
-                );
+            //build insert book_authors queries
+            authorIds.clear();
+            while (authorIds.size() < valueGenerator.getRandomNumOfAuthors()) {
+                authorIds.add(valueGenerator.getRandomAuthorId());
             }
+            int finalI = i;
+            authorIds.forEach(authorId -> bookAuthorsQueryHolder.addBooksAuthorsValues(
+                    String.valueOf(finalI),
+                    authorId)
+            );
         }
-        queryHolder.closeInsertQuery();
+        bookQueryHolder.closeInsertQuery();
+        bookAuthorsQueryHolder.closeInsertQuery();
+        //join queries
+        globalQueryHolder.addSQL(bookQueryHolder.getSql());
+        globalQueryHolder.addTwoNewLines();
+        globalQueryHolder.addSQL(bookAuthorsQueryHolder.getSql());
+        globalQueryHolder.addNewLine();
         //output
-        outputSQL(queryHolder.getSql(), BuiltBookQueriesPath);
+        outputSQL(globalQueryHolder.getSql());
+
     }
 
-    /**
-     * Este método escribe el input parameter sql en un fichero
-     * @param sql
-     * @param fileName
-     * @throws IOException
-     */
-    private static void outputSQL(String sql, String fileName) throws IOException {
-        Files.write(Paths.get(fileName), sql.getBytes());
+    private static void outputSQL(String sql) throws IOException {
+        Files.write(Paths.get(BookBuilder.BuiltBookQueriesPath), sql.getBytes());
         //System.out.println(sql);
     }
 

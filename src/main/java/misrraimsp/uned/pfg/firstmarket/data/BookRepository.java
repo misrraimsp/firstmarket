@@ -2,6 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.data;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.model.projection.LanguageView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
@@ -10,6 +11,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Set;
 
 public interface BookRepository extends CrudRepository<Book, Long> {
@@ -24,11 +26,9 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     @Query(
             nativeQuery = true,
-            value = "SELECT aux.language FROM (" +
-                        "SELECT language, COUNT(*) FROM book b WHERE b.id IN :bookIds GROUP BY language ORDER BY 2 DESC LIMIT :numTopLanguages" +
-                    ") AS aux"
+            value = "SELECT language, COUNT(*) AS count FROM book b WHERE b.id IN :bookIds GROUP BY language ORDER BY 2 DESC LIMIT :numTopLanguages"
     )
-    Set<Language> findTopLanguagesByBookIds(@Param("bookIds") Set<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
+    List<LanguageView> findTopLanguageViewsByBookIds(@Param("bookIds") Set<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
 
     Page<Book> findAll(Pageable pageable);
 
