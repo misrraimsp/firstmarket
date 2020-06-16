@@ -4,8 +4,8 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnResetPasswordEvent extends ApplicationEvent {
 
-    private Long userId;
-    private String randomPassword;
+    private final Long userId;
+    private final String randomPassword;
 
     public OnResetPasswordEvent(Long userId, String randomPassword) {
         super(userId);

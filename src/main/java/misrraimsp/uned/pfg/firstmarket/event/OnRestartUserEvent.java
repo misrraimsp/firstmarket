@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnRestartUserEvent extends ApplicationEvent {
 
-    private Long userId;
+    private final Long userId;
 
     public OnRestartUserEvent(Long userId) {
         super(userId);

@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnPaymentSuccessEvent extends ApplicationEvent {
 
-    private User user;
+    private final User user;
 
     public OnPaymentSuccessEvent(User user) {
         super(user);

@@ -6,9 +6,9 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnEmailConfirmationNeededEvent extends ApplicationEvent {
 
-    private SecurityEvent securityEvent;
-    private Long userId;
-    private String editedEmail;
+    private final SecurityEvent securityEvent;
+    private final Long userId;
+    private final String editedEmail;
 
     public OnEmailConfirmationNeededEvent(SecurityEvent securityEvent, Long userId, String editedEmail) {
         super(userId);

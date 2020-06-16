@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnNewUserEvent extends ApplicationEvent {
 
-    private Long userId;
+    private final Long userId;
 
     public OnNewUserEvent(Long userId) {
         super(userId);

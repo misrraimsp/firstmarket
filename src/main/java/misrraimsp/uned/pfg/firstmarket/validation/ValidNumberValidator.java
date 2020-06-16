@@ -13,7 +13,7 @@ public class ValidNumberValidator implements ConstraintValidator<ValidNumber, In
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private ValidationNumericProperties validationNumericProperties;
+    private final ValidationNumericProperties validationNumericProperties;
     private String fieldName;
 
     @Autowired

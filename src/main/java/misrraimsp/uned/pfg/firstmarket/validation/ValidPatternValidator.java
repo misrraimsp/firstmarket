@@ -16,7 +16,7 @@ public class ValidPatternValidator implements ConstraintValidator<ValidPattern, 
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private ValidationRegexProperties validationRegexProperties;
+    private final ValidationRegexProperties validationRegexProperties;
     private String fieldName;
 
     @Autowired

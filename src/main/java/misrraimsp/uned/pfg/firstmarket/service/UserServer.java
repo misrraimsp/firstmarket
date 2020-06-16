@@ -48,16 +48,12 @@ public class UserServer implements UserDetailsService {
     private final UserRepository userRepository;
     private final SecurityTokenRepository securityTokenRepository;
     private final UserDeletionRepository userDeletionRepository;
-
     private final ProfileServer profileServer;
     private final RoleServer roleServer;
     private final CartServer cartServer;
-
     private final SecurityTokenProperties securityTokenProperties;
     private final SecurityRandomPasswordProperties securityRandomPasswordProperties;
-
     private final LockManager lockManager;
-
     private final ConversionManager conversionManager;
 
     @Autowired

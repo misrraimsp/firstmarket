@@ -1,5 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.event.listener;
 
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.HostProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
 import misrraimsp.uned.pfg.firstmarket.event.OnEmailConfirmationNeededEvent;
 import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
@@ -7,7 +8,6 @@ import misrraimsp.uned.pfg.firstmarket.model.SecurityToken;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.UserServer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
@@ -21,18 +21,18 @@ public class EmailConfirmationNeededListener implements ApplicationListener<OnEm
     private final UserServer userServer;
     private final MailClient mailClient;
     private final MailProperties mailProperties;
-
-    @Value("${fm.host-address}")
-    private String hostAddress;
+    private final HostProperties hostProperties;
 
     @Autowired
     public EmailConfirmationNeededListener(UserServer userServer,
                                            MailClient mailClient,
-                                           MailProperties mailProperties){
+                                           MailProperties mailProperties,
+                                           HostProperties hostProperties){
 
         this.userServer = userServer;
         this.mailClient = mailClient;
         this.mailProperties = mailProperties;
+        this.hostProperties = hostProperties;
     }
 
     public void onApplicationEvent(OnEmailConfirmationNeededEvent onEmailConfirmationNeededEvent) {
@@ -47,7 +47,7 @@ public class EmailConfirmationNeededListener implements ApplicationListener<OnEm
         Map<String,Object> properties = new HashMap<>();
         properties.put("user", user);
         properties.put("contactAddress",mailProperties.getUsername());
-        properties.put("linkAddress", hostAddress + "emailConfirmation?token=" + securityToken.getToken());
+        properties.put("linkAddress", hostProperties.getAddress() + "emailConfirmation?token=" + securityToken.getToken());
         mailClient.prepareAndSend("mail/confirmEmail",properties,recipient,"Confirm Email");
     }
 

@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationEvent;
 
 public class OnDeleteUserEvent extends ApplicationEvent {
 
-    private UserDeletion userDeletion;
+    private final UserDeletion userDeletion;
 
     public OnDeleteUserEvent(UserDeletion userDeletion) {
         super(userDeletion);

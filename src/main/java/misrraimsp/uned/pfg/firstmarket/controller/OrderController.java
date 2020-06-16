@@ -9,6 +9,7 @@ import com.stripe.model.EventDataObjectDeserializer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.StripeObject;
 import com.stripe.net.Webhook;
+import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.PaymentProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.OrderSortCriteria;
@@ -20,7 +21,6 @@ import misrraimsp.uned.pfg.firstmarket.exception.UserNotFoundException;
 import misrraimsp.uned.pfg.firstmarket.model.Order;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
@@ -35,22 +35,13 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 public class OrderController extends BasicController {
 
-    @Value("${fm.payment.stripe.key.private}")
-    private String ssk = "someSecretKey_bitch";
-
-    @Value("${fm.payment.stripe.key.webhook}")
-    String endpointSecret = "anotherSecret_bitch";
-
-    @Value("${fm.payment.stripe.ips}")
-    Set<String> ips;
-
     private final ApplicationEventPublisher applicationEventPublisher;
     private final CartServer cartServer;
+    private final PaymentProperties paymentProperties;
 
     public OrderController(UserServer userServer,
                            BookServer bookServer,
@@ -59,11 +50,13 @@ public class OrderController extends BasicController {
                            MessageSource messageSource,
                            OrderServer orderServer,
                            ApplicationEventPublisher applicationEventPublisher,
-                           CartServer cartServer) {
+                           CartServer cartServer,
+                           PaymentProperties paymentProperties) {
 
         super(userServer, bookServer, catServer, imageServer, messageSource, orderServer);
         this.applicationEventPublisher = applicationEventPublisher;
         this.cartServer = cartServer;
+        this.paymentProperties = paymentProperties;
     }
 
     @GetMapping("/orders")
@@ -128,7 +121,7 @@ public class OrderController extends BasicController {
     public String checkout(Model model,
                            @AuthenticationPrincipal User authUser) throws StripeException {
 
-        Stripe.apiKey = ssk;
+        Stripe.apiKey = paymentProperties.getKey().get("private");
         User user = userServer.findById(authUser.getId());
         if (user.getCart().isCommitted()) {
             LOGGER.debug("User(id={}) cart(id={}) is already committed (pi id={})", user.getId(), user.getCart().getId(), user.getCart().getStripePaymentIntentId());
@@ -161,7 +154,7 @@ public class OrderController extends BasicController {
                                    HttpServletResponse response) {
 
         LOGGER.debug("POST at /listener from {}", request.getRemoteAddr());
-        if (ips.stream().noneMatch(ip -> ip.equals(request.getRemoteAddr()))) {
+        if (paymentProperties.getIps().stream().noneMatch(ip -> ip.equals(request.getRemoteAddr()))) {
             LOGGER.warn("Trying to POST at /listener from an unknown ip address {}", request.getRemoteAddr());
             response.setStatus(403);
             return;
@@ -188,7 +181,7 @@ public class OrderController extends BasicController {
             // Getting the event
             Event event;
             try {
-                event = Webhook.constructEvent(payload, sigHeader, endpointSecret);
+                event = Webhook.constructEvent(payload, sigHeader, paymentProperties.getKey().get("webhook"));
             }
             catch (JsonSyntaxException e) {
                 // Invalid payload
