@@ -92,6 +92,8 @@ fm:
          authors-max: 2
          stock-usage-warning-threshold: 50
          stock-warning-threshold: 5
+         filter-max-size: 25
+         author-component-max-size: 12
       orders:
          title-max-size: 60
       search-criteria:
