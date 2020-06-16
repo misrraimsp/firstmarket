@@ -3,6 +3,7 @@ package misrraimsp.uned.pfg.firstmarket.model;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import java.util.Objects;
 
 @Data
@@ -12,6 +13,9 @@ public class Author extends BasicEntity {
     private String firstName;
 
     private String lastName;
+
+    @Transient
+    private int numOfBooks;
 
     // case insensitive
     @Override

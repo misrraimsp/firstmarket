@@ -32,6 +32,9 @@ public class Book extends Product {
 
     private int pages;
 
+    @Transient
+    private int count;
+
 
     public String getAuthorsString(){
         String str = "";

@@ -2,7 +2,7 @@ package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.ImageRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
-import misrraimsp.uned.pfg.firstmarket.exception.ImageNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.model.Image;
 import org.slf4j.Logger;
@@ -38,13 +38,15 @@ public class ImageServer {
      * @param image
      * @return image or repositoryImage
      */
-    public Image persist(Image image) throws ImageNotFoundException, BadImageException {
+    public Image persist(Image image) throws EntityNotFoundByIdException, BadImageException {
         if (image.getId() != null){ // image is already persisted
             try {
                 return this.findById(image.getId());
             }
-            catch (ImageNotFoundException e) {
-                LOGGER.error("Trying to persist an image-with-id that is not in the database searching by its id");
+            catch (EntityNotFoundByIdException e) {
+                if (e.getClassName().equals(Image.class.getSimpleName())) {
+                    LOGGER.error("Trying to persist an image-with-id that is not in the database searching by its id");
+                }
                 throw e;
             }
         }
@@ -57,8 +59,9 @@ public class ImageServer {
         }
     }
 
-    public Image findById(Long id) {
-        return imageRepository.findById(id).orElseThrow(() -> new ImageNotFoundException(id));
+    public Image findById(Long imageId) {
+        return imageRepository.findById(imageId).orElseThrow(() ->
+                new EntityNotFoundByIdException(imageId,Image.class.getSimpleName()));
     }
 
     public List<Image> getAllMetaInfo() {
@@ -77,7 +80,7 @@ public class ImageServer {
         return images.get(0);
     }
 
-    public boolean isDefaultImage(Long imageId) throws ImageNotFoundException {
+    public boolean isDefaultImage(Long imageId) throws EntityNotFoundByIdException {
         return this.findById(imageId).isDefault();
     }
 
@@ -86,7 +89,7 @@ public class ImageServer {
     }
 
     @Transactional
-    public void setDefaultImage(Long imageId) throws ImageNotFoundException {
+    public void setDefaultImage(Long imageId) throws EntityNotFoundByIdException {
         Image newDefaultImage = this.findById(imageId);
         Image oldDefaultImage = null;
         try {
@@ -102,7 +105,7 @@ public class ImageServer {
         }
     }
 
-    public void setImageData(Long imageId, Path path) throws ImageNotFoundException, IOException {
+    public void setImageData(Long imageId, Path path) throws EntityNotFoundByIdException, IOException {
         Image image = this.findById(imageId);
         if (image.getData() == null) {
             image.setData(Files.readAllBytes(path));

@@ -1,13 +1,16 @@
 package misrraimsp.uned.pfg.firstmarket.service;
 
 import misrraimsp.uned.pfg.firstmarket.data.AuthorRepository;
+import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.model.Author;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -20,6 +23,12 @@ public class AuthorServer {
     @Autowired
     public AuthorServer(AuthorRepository authorRepository) {
         this.authorRepository = authorRepository;
+    }
+
+    public Author findById(Long authorId) throws EntityNotFoundByIdException {
+        return authorRepository.findById(authorId).orElseThrow(() ->
+                new EntityNotFoundByIdException(authorId,Author.class.getSimpleName())
+        );
     }
 
     public Author persist(Author author) {
@@ -55,9 +64,14 @@ public class AuthorServer {
         return savedAuthors;
     }
 
-    public Set<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
-        Set<Long> authorIds = authorRepository.findTopIdsByCategoryId(categoryId, numTopAuthors);
-        return (authorIds.isEmpty()) ? new HashSet<>() : authorRepository.findAuthorsByIds(authorIds);
+    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
+        List<Author> authors = new ArrayList<>();
+        authorRepository.findTopAuthorViewsByCategoryId(categoryId,numTopAuthors).forEach(authorView -> {
+            Author author = this.findById(authorView.getId());
+            author.setNumOfBooks(authorView.getNumOfBooks());
+            authors.add(author);
+        });
+        return authors;
     }
 
 }

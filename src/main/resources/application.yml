@@ -92,12 +92,14 @@ fm:
          authors-max: 2
          stock-usage-warning-threshold: 50
          stock-warning-threshold: 5
+         filter-max-size: 25
+         author-component-max-size: 12
       orders:
          title-max-size: 60
       search-criteria:
-         num-of-authors: 5
-         num-of-publishers: 5
-         num-of-languages: 5
+         num-of-authors: 8
+         num-of-publishers: 8
+         num-of-languages: 8
    pagination:
       default-sort-index:
          book: 5
