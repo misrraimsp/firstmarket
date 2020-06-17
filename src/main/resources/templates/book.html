@@ -5,7 +5,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Book Details')"></head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
@@ -140,9 +141,9 @@
             </div>
             <!-- snackbar -->
             <div th:replace="fragments/components::snackbar"></div>
-            <!-- footer -->
-            <div th:replace="fragments/components::fixedFooter"></div>
         </div>
+        <!-- footer -->
+        <div th:replace="fragments/components::footer"></div>
         <i th:replace="fragments/components::host-address"></i>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- ajax add book to cart -->

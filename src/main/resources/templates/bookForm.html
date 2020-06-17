@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Book Form')"></head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
@@ -176,9 +177,9 @@
                 </div>
                 <div class="col-sm-2 bg-white"></div>
             </div>
-            <!-- footer -->
-            <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <!-- footer -->
+        <footer th:replace="fragments/components::footer"></footer>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/isbnChecksum.js}"></script>
         <script th:src="@{/js/binaryInputSwitch.js}"></script>

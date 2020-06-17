@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Edit Profile')"></head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
@@ -120,10 +121,6 @@
                             <div class="my-3">
                                 <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/editPassword}">Change Password</a>
                             </div>
-                            <!-- edit address button -->
-                            <div class="my-3">
-                                <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/editAddress}">My Addresses</a>
-                            </div>
                             <hr class="my-3">
                             <!-- delete account button -->
                             <div class="my-3">
@@ -134,8 +131,10 @@
                 </div>
                 <div class="col-sm-2 bg-white"></div>
             </div>
-            <footer th:replace="fragments/components::footer"></footer>
         </div>
+        </div>
+        <!-- footer -->
+        <footer th:replace="fragments/components::footer"></footer>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
     </body>
 </html>

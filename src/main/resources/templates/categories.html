@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Categories')"></head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <!-- header -->
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
@@ -30,13 +31,13 @@
             </div>
             <!-- modal -->
             <div th:replace="fragments/components::deletingModal(entity = 'Category')"></div>
-            <!-- footer -->
-            <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <!-- footer -->
+        <footer th:replace="fragments/components::footer"></footer>
         <i th:replace="fragments/components::host-address"></i>
         <!-- tooltips -->
         <script th:src="@{/js/enableTooltips.js}"></script>
-        <!-- categories dynamically generation -->
+        <!-- categories dynamically generated -->
         <script th:utext="'let jsonStringCategories = \'' + ${jsonStringCategories} + '\';'"></script>
         <script th:src="@{/js/categoriesBuilder.js}"></script>
         <script th:src="@{/js/categoriesStyler.js}"></script>

@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Category Form')"></head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <!-- header -->
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
@@ -44,9 +45,9 @@
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
-            <!-- footer -->
-            <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <!-- footer -->
+        <footer th:replace="fragments/components::footer"></footer>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
     </body>
 </html>
