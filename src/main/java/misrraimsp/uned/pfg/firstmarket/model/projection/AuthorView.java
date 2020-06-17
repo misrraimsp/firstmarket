@@ -4,4 +4,6 @@ public interface AuthorView {
 
     int getNumOfBooks();
     Long getId();
+    String getFirstName();
+    String getLastName();
 }

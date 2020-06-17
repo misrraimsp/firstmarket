@@ -126,10 +126,10 @@
                     <button class="accordion" id="authorAcc">Author</button>
                     <div class="panel mb-1">
                         <div class="d-flex flex-column pt-3">
-                            <div class="pretty p-default p-round p-thick mb-3" th:each="author : ${authors}">
-                                <input class="authorCheckBox" type="checkbox" th:id="'au-' + ${author.id}"/>
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="av : ${authorViews}">
+                                <input class="authorCheckBox" type="checkbox" th:id="'au-' + ${av.id}"/>
                                 <div class="state p-info-o">
-                                    <label class="text-secondary font-weight-light" th:for="'au-' + ${author.id}" th:text="${author.lastName.substring(0, T(java.lang.Math).min(author.lastName.length(), __${@environment.getProperty('fm.front-end.books.author-component-max-size')}__))} + ', ' + ${author.firstName.substring(0, T(java.lang.Math).min(author.firstName.length(), __${@environment.getProperty('fm.front-end.books.author-component-max-size')}__))} + ' (' + ${author.numOfBooks} + ')'">Author</label>
+                                    <label class="text-secondary font-weight-light" th:for="'au-' + ${av.id}" th:text="${av.lastName.substring(0, T(java.lang.Math).min(av.lastName.length(), __${@environment.getProperty('fm.front-end.books.author-component-max-size')}__))} + ', ' + ${av.firstName.substring(0, T(java.lang.Math).min(av.firstName.length(), __${@environment.getProperty('fm.front-end.books.author-component-max-size')}__))} + ' (' + ${av.numOfBooks} + ')'">Author</label>
                                 </div>
                             </div>
                         </div>
@@ -138,10 +138,10 @@
                     <button class="accordion" id="publisherAcc">Publisher</button>
                     <div class="panel mb-1">
                         <div class="d-flex flex-column pt-3">
-                            <div class="pretty p-default p-round p-thick mb-3" th:each="publisher : ${publishers}">
-                                <input class="publisherCheckBox" type="checkbox" th:id="'pu-' + ${publisher.id}"/>
+                            <div class="pretty p-default p-round p-thick mb-3" th:each="pv : ${publisherViews}">
+                                <input class="publisherCheckBox" type="checkbox" th:id="'pu-' + ${pv.id}"/>
                                 <div class="state p-info-o">
-                                    <label class="text-secondary font-weight-light" th:for="'pu-' + ${publisher.id}" th:text="${publisher.name.substring(0, T(java.lang.Math).min(publisher.name.length(), __${@environment.getProperty('fm.front-end.books.filter-max-size')}__))} + ' (' + ${publisher.numOfBooks} + ')'">Publisher</label>
+                                    <label class="text-secondary font-weight-light" th:for="'pu-' + ${pv.id}" th:text="${pv.name.substring(0, T(java.lang.Math).min(pv.name.length(), __${@environment.getProperty('fm.front-end.books.filter-max-size')}__))} + ' (' + ${pv.numOfBooks} + ')'">Publisher</label>
                                 </div>
                             </div>
                         </div>

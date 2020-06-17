@@ -8,8 +8,12 @@ import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
 import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
 import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
-import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.model.Image;
+import misrraimsp.uned.pfg.firstmarket.model.Item;
+import misrraimsp.uned.pfg.firstmarket.model.projection.AuthorView;
 import misrraimsp.uned.pfg.firstmarket.model.projection.LanguageView;
+import misrraimsp.uned.pfg.firstmarket.model.projection.PublisherView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,12 +117,12 @@ public class BookServer {
                 });
     }
 
-    public List<Author> findTopAuthorsByCategoryId(Long categoryId, int numTopAuthors) {
-        return authorServer.findTopAuthorsByCategoryId(categoryId, numTopAuthors);
+    public List<AuthorView> findTopAuthorViewsByCategoryId(Long categoryId, int numTopAuthors) {
+        return authorServer.findTopAuthorViewsByCategoryId(categoryId, numTopAuthors);
     }
 
-    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
-        return publisherServer.findTopPublishersByCategoryId(categoryId, numTopPublishers);
+    public List<PublisherView> findTopPublisherViewsByCategoryId(Long categoryId, int numTopPublishers) {
+        return publisherServer.findTopPublisherViewsByCategoryId(categoryId, numTopPublishers);
     }
 
     public List<LanguageView> findTopLanguagesByCategoryId(Long categoryId, int numTopLanguages) {
