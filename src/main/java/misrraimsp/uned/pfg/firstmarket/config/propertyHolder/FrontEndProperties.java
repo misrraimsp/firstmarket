@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Data
-@ConfigurationProperties(prefix = "fm.front-end.search-criteria")
+@ConfigurationProperties(prefix = "fm.front-end.books.filter")
 public class FrontEndProperties {
 
     private int numOfAuthors = 1;

@@ -72,6 +72,8 @@ fm:
          num-of-digit: 2
          size: 10
    front-end:
+      common-components:
+         num-of-main-categories: 5
       home:
          jum:
             title:
@@ -92,14 +94,14 @@ fm:
          authors-max: 2
          stock-usage-warning-threshold: 50
          stock-warning-threshold: 5
-         filter-max-size: 25
-         author-component-max-size: 12
+         filter:
+            general-max-size: 25
+            author-part-max-size: 12
+            num-of-authors: 8
+            num-of-publishers: 8
+            num-of-languages: 8
       orders:
          title-max-size: 60
-      search-criteria:
-         num-of-authors: 8
-         num-of-publishers: 8
-         num-of-languages: 8
    pagination:
       default-sort-index:
          book: 5
