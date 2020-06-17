@@ -24,7 +24,7 @@
             <div class="col-sm-12">
                 <header>
                     <!-- NavBar -->
-                    <nav class="navbar navbar-expand-sm bg-secondary"><!--navbar-dark-->
+                    <nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
                         <!-- Brand -->
                         <a class="navbar-brand" th:href="@{/home}">
                             <img class="rounded-circle" th:src="@{/images/logo.png}" style="width:32px;height:32px;">
@@ -34,7 +34,7 @@
                             <span class="navbar-toggler-icon"></span>
                         </button>
                         <!-- Navbar links -->
-                        <div class="collapse navbar-collapse" id="#collapsibleNavbar">
+                        <div class="collapse navbar-collapse" id="collapsibleNavbar">
                             <ul class="navbar-nav mr-auto">
                                 <!--public links-->
                                 <li class="nav-item">
@@ -115,7 +115,7 @@
         <div class="row" th:fragment="mainCatsNavBar">
             <div class="col-sm-12">
                 <!-- NavBar -->
-                <nav class="navbar navbar-expand-sm p-0 m-0" style="background-color:#e9ecef">
+                <nav class="navbar navbar-expand-sm p-0 m-0 navbar-dark" style="background-color:#e9ecef">
                     <!-- Toggler/collapsibe Button -->
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainCatsNavBar">
                         <span class="navbar-toggler-icon"></span>
@@ -124,7 +124,13 @@
                     <div class="collapse navbar-collapse" id="mainCatsNavBar">
                         <ul class="navbar-nav">
                             <li class="nav-item" th:each="cat,stats : ${mainCategories}">
-                                <a th:if="${stats.index < __${@environment.getProperty('fm.front-end.common-components.num-of-main-categories')}__}" class="categoryLink btn btn-outline-info btn-sm border-0 rounded-0" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                                <a th:if="${stats.index lt __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__}" class="categoryLink btn btn-outline-info btn-sm border-0 rounded-0 py-2" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                            </li>
+                            <li th:if="${mainCategories.size() gt __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__}" class="nav-item dropdown">
+                                <a class="py-2 dropdown-toggle btn btn-sm btn-outline-info border-0 rounded-0" href="#" data-toggle="dropdown">More Categories</a>
+                                <div class="dropdown-menu">
+                                    <a th:if="${stats.index ge __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__ && stats.index lt __${@environment.getProperty('fm.front-end.common-components.num-of-main-categories')}__}" class="dropdown-item categoryLink btn-sm" th:each="cat,stats : ${mainCategories}" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                                </div>
                             </li>
                         </ul>
                     </div>
