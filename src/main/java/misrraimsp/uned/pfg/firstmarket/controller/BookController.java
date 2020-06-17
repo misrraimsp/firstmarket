@@ -9,8 +9,12 @@ import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.BookSortCriteria;
 import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
-import misrraimsp.uned.pfg.firstmarket.model.*;
+import misrraimsp.uned.pfg.firstmarket.model.Book;
+import misrraimsp.uned.pfg.firstmarket.model.Category;
+import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.model.projection.AuthorView;
 import misrraimsp.uned.pfg.firstmarket.model.projection.LanguageView;
+import misrraimsp.uned.pfg.firstmarket.model.projection.PublisherView;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -179,8 +183,8 @@ public class BookController extends BasicController {
             bookPage = bookServer.findSearchResults(searchCriteria, pageable);
         }
         // search filter criteria
-        List<Author> authors = bookServer.findTopAuthorsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
-        List<Publisher> publishers = bookServer.findTopPublishersByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
+        List<AuthorView> authorViews = bookServer.findTopAuthorViewsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfAuthors());
+        List<PublisherView> publisherViews = bookServer.findTopPublisherViewsByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfPublishers());
         List<LanguageView> languageViews = bookServer.findTopLanguagesByCategoryId(searchCriteria.getCategoryId(), frontEndProperties.getNumOfLanguages());
 
         // load model
@@ -190,8 +194,8 @@ public class BookController extends BasicController {
         model.addAttribute("categorySequence", catServer.getCategorySequence(category));
         model.addAttribute("childrenCategories", catServer.getChildren(category));
         model.addAttribute("prices", PriceInterval.values());
-        model.addAttribute("authors", authors);
-        model.addAttribute("publishers", publishers);
+        model.addAttribute("authorViews", authorViews);
+        model.addAttribute("publisherViews", publisherViews);
         model.addAttribute("languageViews", languageViews);
         model.addAttribute("sort", sort);
         model.addAttribute("pageSize", pageSize);

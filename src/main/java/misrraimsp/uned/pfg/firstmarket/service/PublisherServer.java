@@ -3,10 +3,10 @@ package misrraimsp.uned.pfg.firstmarket.service;
 import misrraimsp.uned.pfg.firstmarket.data.PublisherRepository;
 import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.model.Publisher;
+import misrraimsp.uned.pfg.firstmarket.model.projection.PublisherView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -36,13 +36,8 @@ public class PublisherServer {
         return publisherRepository.findByName(publisherName);
     }
 
-    public List<Publisher> findTopPublishersByCategoryId(Long categoryId, int numTopPublishers) {
-        List<Publisher> publishers = new ArrayList<>();
-        publisherRepository.findTopPublisherViewsByCategoryId(categoryId,numTopPublishers).forEach(publisherView -> {
-            Publisher publisher = this.findById(publisherView.getId());
-            publisher.setNumOfBooks(publisherView.getNumOfBooks());
-            publishers.add(publisher);
-        });
-        return publishers;
+    public List<PublisherView> findTopPublisherViewsByCategoryId(Long categoryId, int numTopPublishers) {
+        return publisherRepository.findTopPublisherViewsByCategoryId(categoryId,numTopPublishers);
     }
+
 }

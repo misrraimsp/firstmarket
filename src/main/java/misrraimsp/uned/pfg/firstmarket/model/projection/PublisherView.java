@@ -4,4 +4,5 @@ public interface PublisherView {
 
     int getNumOfBooks();
     Long getId();
+    String getName();
 }
