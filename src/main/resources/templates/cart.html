@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Cart')"></head>
     <body>
-        <div class="container-fluid bg-light">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content bg-light">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
@@ -176,9 +177,9 @@
                 <!-- right margin -->
                 <div class="col-sm-1"></div>
             </div>
-            <!-- footer -->
-            <div th:replace="fragments/components::footer"></div>
         </div>
+        <!-- footer -->
+        <div th:replace="fragments/components::footer"></div>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- ajax cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>

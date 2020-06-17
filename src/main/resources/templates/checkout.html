@@ -6,6 +6,7 @@
         <meta charset="UTF-8">
         <title>Checkout</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link type="text/css" rel="stylesheet" th:href="@{/css/fmstyle.css}" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -13,10 +14,10 @@
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
         <script src="https://js.stripe.com/v3/"></script>
-        <link type="text/css" rel="stylesheet" th:href="@{/css/fmstyle.css}" />
     </head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <!-- header -->
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
@@ -174,9 +175,9 @@
                 <!-- right margin -->
                 <div class="col-sm-1"></div>
             </div>
-            <!-- footer -->
-            <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <!-- footer -->
+        <footer th:replace="fragments/components::footer"></footer>
         <!-- checkout -->
         <i th:replace="fragments/components::host-address"></i>
         <i id="pk" th:attr="pk=${@environment.getProperty('fm.payment.stripe.key.public')}"></i>

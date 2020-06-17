@@ -1,6 +1,20 @@
 
-/******************************* accordion */
+/******************************* footer */
+html, body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+.fm-content {
+    flex: 1 0 auto;
+}
+.footer {
+    flex-shrink: 0;
+}
 
+/******************************* accordion */
 .accordion {
     background-color: #e9ecef; /* BS4 jumbotron */
     color: #6c757d; /* BS4 secondary */
@@ -97,18 +111,6 @@
     color: #17a2b8; /* bs4 info */
     background: #6c757d; /* BS4 secondary */
 }
-
-
-/******************************* fixed-footer */
-
-.fixed-footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-}
-
-/********************************/
 
 /******************************* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {

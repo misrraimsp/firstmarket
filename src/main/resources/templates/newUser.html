@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('New User')"></head>
     <body>
-        <div class="container-fluid">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content">
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
@@ -41,8 +42,9 @@
                 </div>
                 <div class="col-sm-3 bg-white"></div>
             </div>
-            <footer th:replace="fragments/components::footer"></footer>
         </div>
+        <!-- footer -->
+        <footer th:replace="fragments/components::footer"></footer>
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/matchingPasswords.js}"></script>
     </body>

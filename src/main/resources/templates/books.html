@@ -5,7 +5,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Books')"></head>
     <body>
-        <div class="container-fluid bg-light">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content bg-light">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
@@ -286,9 +287,9 @@
             </div>
             <!-- snackbar -->
             <div th:replace="fragments/components::snackbar"></div>
-            <!-- footer -->
-            <div th:replace="fragments/components::footer"></div>
         </div>
+        <!-- footer -->
+        <div th:replace="fragments/components::footer"></div>
         <i th:replace="fragments/components::host-address"></i>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <script th:src="@{/js/accordion.js}"></script>

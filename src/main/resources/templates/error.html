@@ -4,7 +4,8 @@
       lang="en">
     <head th:replace="fragments/components::head('Not Found')"></head>
     <body>
-        <div class="container-fluid bg-light">
+        <!-- fm-content -->
+        <div class="container-fluid fm-content bg-light">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
@@ -24,8 +25,8 @@
                 </div>
                 <div class="col-sm-1"></div>
             </div>
-            <!-- footer -->
-            <div th:replace="fragments/components::fixedFooter"></div>
         </div>
+        <!-- footer -->
+        <div th:replace="fragments/components::footer"></div>
     </body>
 </html>
