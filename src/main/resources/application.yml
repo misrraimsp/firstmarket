@@ -73,7 +73,8 @@ fm:
          size: 10
    front-end:
       common-components:
-         num-of-main-categories: 5
+         num-of-main-categories: 10
+         num-of-direct-main-categories: 3
       home:
          jum:
             title:
