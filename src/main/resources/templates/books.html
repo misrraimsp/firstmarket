@@ -22,7 +22,7 @@
                     </div>
                 </div>
                 <!-- pagination control -->
-                <div class="col-sm-8 align-self-end">
+                <div th:unless="${pageOfEntities.getTotalElements() eq 0}" class="col-sm-8 align-self-end">
                     <div class="row">
                         <!-- page size -->
                         <div class="col-sm-4 d-flex align-items-end">
@@ -164,6 +164,9 @@
                 <div class="col-sm-8">
                     <!-- books -->
                     <div class="row d-flex flex-column">
+                        <div class="col-sm-12 my-5" th:if="${pageOfEntities.getTotalElements() eq 0}">
+                            <p class="text-info font-weight-light text-center mt-3">No results found</p>
+                        </div>
                         <div class="col-sm-12" th:each="book : ${pageOfEntities}">
                             <div class="row my-3">
                                 <!-- image -->
@@ -269,7 +272,7 @@
                         </div>
                     </div>
                     <!-- pagination -->
-                    <div class="row mt-4">
+                    <div th:unless="${pageOfEntities.getTotalElements() eq 0}" class="row mt-3 mb-5">
                         <div class="col-sm-4"></div>
                         <div class="col-sm-4">
                             <!-- pagination links -->
