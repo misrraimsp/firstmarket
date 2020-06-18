@@ -7,14 +7,30 @@
     <head th:fragment="head(title)">
         <meta charset="UTF-8">
         <title th:text="${title}"></title>
-        <link type="text/css" rel="stylesheet" th:href="@{/css/fmstyle.css}" />
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+        <!--<link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Gotu&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Arapey&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Gentium+Basic&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Suranna&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Gabriela&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=PT+Sans&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Lora:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=EB+Garamond&display=swap" rel="stylesheet">-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap">
+        <link rel="stylesheet" th:href="@{/css/fmstyle.css}" type="text/css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
+        <script src="https://js.stripe.com/v3/"></script>
     </head>
 
     <body>
@@ -27,7 +43,7 @@
                     <nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
                         <!-- Brand -->
                         <a class="navbar-brand" th:href="@{/home}">
-                            <img class="rounded-circle" th:src="@{/images/logo.png}" style="width:32px;height:32px;">
+                            <img th:src="@{/images/logo.jpg}" style="width:32px;height:32px;">
                         </a>
                         <!-- Toggler/collapsibe Button -->
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -36,9 +52,12 @@
                         <!-- Navbar links -->
                         <div class="collapse navbar-collapse" id="collapsibleNavbar">
                             <ul class="navbar-nav mr-auto">
-                                <!--public links-->
+                                <!--public links
                                 <li class="nav-item">
                                     <a class="nav-link text-white font-italic" th:href="@{/home}">FirstMarket</a>
+                                </li>-->
+                                <li class="nav-item">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/books}">All Books</a>
                                 </li>
                                 <!--user links-->
                                 <li class="nav-item" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
@@ -54,9 +73,6 @@
                                     </div>
                                 </li>
                                 <!--admin links-->
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                                    <a class="nav-link text-white font-weight-bold" th:href="@{/books}">Books</a>
-                                </li>
                                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                                     <a class="nav-link text-white font-weight-bold" th:href="@{/admin/categories}">Categories</a>
                                 </li>
@@ -124,12 +140,12 @@
                     <div class="collapse navbar-collapse" id="mainCatsNavBar">
                         <ul class="navbar-nav">
                             <li class="nav-item" th:each="cat,stats : ${mainCategories}">
-                                <a th:if="${stats.index lt __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__}" class="categoryLink btn btn-outline-info btn-sm border-0 rounded-0 py-2" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                                <a th:if="${stats.index lt __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__}" class="categoryLink btn btn-outline-info border-0 rounded-0 py-2" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
                             </li>
                             <li th:if="${mainCategories.size() gt __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__}" class="nav-item dropdown">
-                                <a class="py-2 dropdown-toggle btn btn-sm btn-outline-info border-0 rounded-0" href="#" data-toggle="dropdown">More Categories</a>
+                                <a class="py-2 dropdown-toggle btn btn-outline-info border-0 rounded-0" href="#" data-toggle="dropdown">More Categories</a>
                                 <div class="dropdown-menu">
-                                    <a th:if="${stats.index ge __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__ && stats.index lt __${@environment.getProperty('fm.front-end.common-components.num-of-main-categories')}__}" class="dropdown-item categoryLink btn-sm" th:each="cat,stats : ${mainCategories}" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
+                                    <a th:if="${stats.index ge __${@environment.getProperty('fm.front-end.common-components.num-of-direct-main-categories')}__ && stats.index lt __${@environment.getProperty('fm.front-end.common-components.num-of-main-categories')}__}" class="dropdown-item categoryLink" th:each="cat,stats : ${mainCategories}" th:href="@{/books?categoryId={categoryId}(categoryId=${cat.id})}" th:text="${cat.name}">Category Name</a>
                                 </div>
                             </li>
                         </ul>
@@ -146,7 +162,7 @@
         </div>
 
         <!-- snackbar -->
-        <div th:fragment="snackbar" id="snackbar">Book successfully added to user cart</div>
+        <div th:fragment="snackbar" id="snackbar" th:text="${@environment.getProperty('fm.front-end.common-components.snackbar')}">snackbar</div>
 
         <!-- Save button -->
         <button th:fragment="saveButton" class="btn btn-info px-5 my-3" type="submit">Save</button>

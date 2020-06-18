@@ -26,7 +26,20 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     };
 
+    let typeWriter_v2 = function() {
+        if (i < mainTitleText.length) {
+            i++;
+            setTimeout(typeWriter_v2, mainTitleSpeed);
+        }
+        else if (i < mainTitleText.length + secondaryTitle.length) {
+            secondaryTitleElem.innerHTML += secondaryTitle.charAt(i - mainTitleText.length);
+            i++;
+            setTimeout(typeWriter_v2, secondaryTitleSpeed);
+        }
+    };
+
     i = 0;
-    typeWriter();
+    mainTitleElem.innerHTML += mainTitleText;
+    typeWriter_v2();
 
 }, false);

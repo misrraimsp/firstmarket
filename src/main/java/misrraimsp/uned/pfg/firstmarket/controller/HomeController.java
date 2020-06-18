@@ -1,18 +1,13 @@
 package misrraimsp.uned.pfg.firstmarket.controller;
 
-import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.model.User;
 import misrraimsp.uned.pfg.firstmarket.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class HomeController extends BasicController {
@@ -34,18 +29,12 @@ public class HomeController extends BasicController {
     }
 
     @GetMapping("/home")
-    public String showHome(@RequestParam(defaultValue = "${fm.pagination.default-index}") String pageNo,
-                           @RequestParam(defaultValue = "${fm.pagination.default-size-index.home}") PageSize pageSize,
-                           Model model,
+    public String showHome(Model model,
                            @AuthenticationPrincipal User authUser) {
 
-        Pageable pageable = PageRequest.of(
-                Integer.parseInt(pageNo),
-                pageSize.getSize(),
-                Sort.by("price").descending().and(Sort.by("id").ascending()));
-
         populateModel(model.asMap(), authUser);
-        model.addAttribute("pageOfEntities", bookServer.findAll(pageable));
+        model.addAttribute("trendingBooks", bookServer.findTopTrendingBooks());
+        model.addAttribute("newBooks", bookServer.findTopNewBooks());
         return "home";
     }
 

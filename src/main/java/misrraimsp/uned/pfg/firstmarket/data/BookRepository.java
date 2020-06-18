@@ -30,10 +30,20 @@ public interface BookRepository extends CrudRepository<Book, Long> {
     )
     List<LanguageView> findTopLanguageViewsByBookIds(@Param("bookIds") Set<Long> bookIds, @Param("numTopLanguages") int numTopLanguages);
 
-    Page<Book> findAll(Pageable pageable);
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM book LIMIT :numOfBooks"
+    )
+    List<Book> findRandom(int numOfBooks);
 
     @Override
     Set<Book> findAll();
+
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM book ORDER BY created_date DESC LIMIT :maxNumOfNewBooks"
+    )
+    Set<Book> findTopNewBooks(int maxNumOfNewBooks);
 
     @Query("SELECT b FROM Book b WHERE b.id IN :ids")
     Page<Book> findByIds(@Param("ids") Set<Long> ids, Pageable pageable);

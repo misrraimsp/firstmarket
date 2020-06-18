@@ -85,7 +85,7 @@
                         <tbody>
                             <tr th:each="mi : ${pageOfEntities}">
                                 <!-- image visualization -->
-                                <td><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></td>
+                                <td><a th:href="@{/image/{id}(id=${mi.id})}"><img th:src="@{/image/{id}(id=${mi.id})}" style="width:64px;height:64px;"></a></td>
                                 <!-- image name -->
                                 <td><span th:text="${mi.name}">name</span></td>
                                 <!-- is default -->

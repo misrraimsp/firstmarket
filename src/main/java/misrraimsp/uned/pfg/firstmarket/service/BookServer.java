@@ -17,6 +17,7 @@ import misrraimsp.uned.pfg.firstmarket.model.projection.PublisherView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,18 @@ public class BookServer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
-    private final Map<Long,Long> cartBookRegistry = new HashMap<>();
+    private final Map<Long,Integer> cartBookRegistry = new HashMap<>();
 
     private final BookRepository bookRepository;
     private final ImageServer imageServer;
     private final PublisherServer publisherServer;
     private final AuthorServer authorServer;
+
+    @Value("${fm.front-end.home.trending-books-max}")
+    private int maxNumOfTrendingBooks;
+
+    @Value("${fm.front-end.home.new-books-max}")
+    private int maxNumOfNewBooks;
 
     @Autowired
     public BookServer(BookRepository bookRepository,
@@ -94,14 +101,32 @@ public class BookServer {
         return bookRepository.findByIsbn(isbn) != null;
     }
 
-    public Page<Book> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable);
-    }
-
     public Book findById(Long bookId) {
         return bookRepository.findById(bookId).orElseThrow(() ->
                 new EntityNotFoundByIdException(bookId, Book.class.getSimpleName())
         );
+    }
+
+    public List<Book> findTopTrendingBooks() {
+        if (cartBookRegistry.size() < 0.5 * maxNumOfTrendingBooks) {
+            LOGGER.warn("Not enough cart-books to show as trending books. Showing random books");
+            return this.getRandomBooks(maxNumOfTrendingBooks);
+        }
+        List<Long> trendingIds = cartBookRegistry.entrySet().stream().sorted(Map.Entry.comparingByValue()).map(Map.Entry::getKey).collect(Collectors.toList());
+        if (trendingIds.size() >= maxNumOfTrendingBooks) {
+            trendingIds = trendingIds.subList(trendingIds.size() - maxNumOfTrendingBooks, trendingIds.size());
+        }
+        List<Book> trendingBooks = new ArrayList<>();
+        trendingIds.forEach(id -> trendingBooks.add(0,this.findById(id)));
+        return trendingBooks;
+    }
+
+    public Set<Book> findTopNewBooks() {
+        return bookRepository.findTopNewBooks(maxNumOfNewBooks);
+    }
+
+    private List<Book> getRandomBooks(int numOfBooks) {
+        return bookRepository.findRandom(numOfBooks);
     }
 
     @Transactional
@@ -298,7 +323,7 @@ public class BookServer {
     }
 
     public void incrementCartBookRegistry(Long cartBookId) {
-        cartBookRegistry.merge(cartBookId, 1L, (oldValue, defaultValue) -> ++oldValue);
+        cartBookRegistry.merge(cartBookId, 1, (oldValue, defaultValue) -> ++oldValue);
         LOGGER.debug("CartBook(id={}) incremented on CartBookRegistry", cartBookId);
         LOGGER.trace("CartBookRegistry: {}", this.getCartBookRegistry());
     }
@@ -313,7 +338,7 @@ public class BookServer {
         cartBookIds.forEach(this::incrementCartBookRegistry);
     }
 
-    public Map<Long,Long> getCartBookRegistry() {
+    public Map<Long,Integer> getCartBookRegistry() {
         return cartBookRegistry;
     }
 }
