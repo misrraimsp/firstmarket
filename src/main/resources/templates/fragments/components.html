@@ -131,7 +131,7 @@
         <div class="row" th:fragment="mainCatsNavBar">
             <div class="col-sm-12">
                 <!-- NavBar -->
-                <nav class="navbar navbar-expand-sm p-0 m-0 navbar-dark" style="background-color:#e9ecef">
+                <nav class="navbar navbar-expand-sm p-0 m-0 navbar-dark"><!-- style="background-color:#e9ecef" -->
                     <!-- Toggler/collapsibe Button -->
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainCatsNavBar">
                         <span class="navbar-toggler-icon"></span>
@@ -156,7 +156,7 @@
 
         <!-- Title -->
         <div class="row" th:fragment="title(text)">
-            <div class="col-sm-12 bg-white">
+            <div class="col-sm-12">
                 <h2 class="text-center text-dark my-4" th:text="${text}"></h2>
             </div>
         </div>
@@ -267,7 +267,7 @@
         </script>
 
         <!-- footer -->
-        <footer class="footer bg-light text-center py-2" th:fragment="footer">
+        <footer class="footer bg-white text-center py-2" th:fragment="footer">
             <span class="info-copyrigth"><a class="text-info" href="https://github.com/misrraimsp/firstmarket" style="text-decoration: none">FirstMarket Project</a> © 2020</span>
         </footer>
 

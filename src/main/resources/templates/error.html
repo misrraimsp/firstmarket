@@ -13,11 +13,11 @@
             <!-- title -->
             <div th:replace="fragments/components::title(text = ${errorTitle})"></div>
             <!-- Content -->
-            <div class="row bg-white">
+            <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
                     <hr class="mb-4 mt-0"/>
-                    <div class="bg-light">
+                    <div>
                         <h4 class="px-2" th:text="${errorMessage}"></h4>
                         <br/>
                         <p class="px-2"><span th:replace="fragments/components::contactUs"></span></p>

@@ -14,8 +14,8 @@
             <div th:replace="fragments/components::title(text = 'Categories')"></div>
             <!-- main content -->
             <div class="row">
-                <div class="col-sm-2 bg-white"></div>
-                <div class="col-sm-8 bg-white" id="root-hook">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8" id="root-hook">
                     <!-- new category -->
                     <div class="my-2">
                         <a class="btn btn-outline-secondary align-center px-4" th:href="@{/admin/categoryForm}">
@@ -27,7 +27,7 @@
                     js dynamic generated content here
                     -->
                 </div>
-                <div class="col-sm-2 bg-white"></div>
+                <div class="col-sm-2"></div>
             </div>
             <!-- modal -->
             <div th:replace="fragments/components::deletingModal(entity = 'Category')"></div>
