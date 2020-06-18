@@ -15,7 +15,7 @@ public class QueryHolder {
     private static final String pedidoSalesStaticPart = "INSERT INTO pedido_sales (order_id,sales_id) VALUES ";
 
 
-    private static final String description = "Lorem ipsum dolor sit amet";
+    private static final String description = "";
 
     private String sql;
 

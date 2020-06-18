@@ -11,7 +11,6 @@ import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
 
 import javax.validation.constraints.PastOrPresent;
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,10 +44,10 @@ public class BookForm {
     private Long storedImageId;
 
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private List<String> authorsFirstName = new ArrayList<>();
+    private List<String> authorsFirstName;
 
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
-    private List<String> authorsLastName = new ArrayList<>();
+    private List<String> authorsLastName;
 
     @ValidPattern(pattern = "textBasic", message = "{validation.regex.text-basic}")
     private String publisherName;

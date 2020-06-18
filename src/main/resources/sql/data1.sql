@@ -12,14 +12,14 @@ INSERT INTO image (id,created_by,created_date,last_modified_by,last_modified_dat
 (7,'1',null,'1',null,null,0,false,'image/png','7.png'),
 (8,'1',null,'1',null,null,0,false,'image/png','8.png'),
 (9,'1',null,'1',null,null,0,false,'image/png','9.png'),
-(10,'1',null,'1',null,null,0,false,'image/png','10.png'),
-(11,'1',null,'1',null,null,0,false,'image/jpg','amarillo.jpg'),
-(12,'1',null,'1',null,null,0,false,'image/jpg','azul.jpg'),
-(13,'1',null,'1',null,null,0,false,'image/jpg','marron.jpg'),
-(14,'1',null,'1',null,null,0,false,'image/jpg','negro.jpg'),
-(15,'1',null,'1',null,null,0,false,'image/jpg','reinaRoja.jpg'),
-(16,'1',null,'1',null,null,0,false,'image/jpg','rojo.jpg'),
-(17,'1',null,'1',null,null,0,true,'image/png','logo.png');
+(10,'1',null,'1',null,null,0,false,'image/jpg','negro.jpg'),
+(11,'1',null,'1',null,null,0,false,'image/jpg','reinaRoja.jpg'),
+(12,'1',null,'1',null,null,0,false,'image/jpeg','compilers.jpeg'),
+(13,'1',null,'1',null,null,0,false,'image/jpg','computer_networking.jpg'),
+(14,'1',null,'1',null,null,0,false,'image/jpg','momo.jpg'),
+(15,'1',null,'1',null,null,0,false,'image/jpg','unendliche.jpg'),
+(16,'1',null,'1',null,null,0,false,'image/jpg','ninguno.jpg'),
+(17,'1',null,'1',null,null,0,true,'image/jpg','logo.jpg');
 
 INSERT INTO publisher (id,created_by,created_date,last_modified_by,last_modified_date,name) VALUES
 (1,'1',null,'1',null,'Anaya'),

@@ -2,7 +2,6 @@
 drop table if exists user_deletion;
 drop table if exists security_token;
 drop table if exists pedido_sales;
-drop table if exists pedido_items; /*once*/
 drop table if exists pedido;
 drop table if exists payment;
 drop table if exists shipping_info;
@@ -32,7 +31,7 @@ create table author (id bigint not null, created_by varchar(255), created_date t
 create table books_authors (book_id bigint not null, author_id bigint not null, primary key (book_id, author_id));
 create table profile (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, birth_date date, first_name varchar(255), gender varchar(255), last_name varchar(255), phone varchar(255), primary key (id));
 create table publisher (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, name varchar(255), primary key (id));
-create table book (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, description varchar(510), isbn varchar(255), language varchar(255), pages integer, price decimal(19,2), status varchar(255), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
+create table book (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, description varchar(4096), isbn varchar(255), language varchar(255), pages integer, price decimal(19,2), status varchar(255), stock integer, title varchar(255), year integer, category_id bigint, image_id bigint, publisher_id bigint, primary key (id));
 create table cart (id bigint not null, created_by varchar(255), created_date timestamp, last_modified_by varchar(255), last_modified_date timestamp, stripe_client_secret varchar(255), stripe_payment_intent_id varchar(255), primary key (id));
 create table cart_items (cart_id bigint not null, items_id bigint not null, primary key (cart_id, items_id));
 create table cart_sales (cart_id bigint not null, sales_id bigint not null, primary key (cart_id, sales_id));

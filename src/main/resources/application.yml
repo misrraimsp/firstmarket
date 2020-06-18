@@ -50,9 +50,9 @@ fm:
       regex:
          email: ^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$
          password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$ # The password must be at least 8 characters, with at least one lowercase, one uppercase and one number
-         text-basic: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,150}$
-         text-long: ^[\s\w\-.,:;"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,1000}$
-         text-query: ^[\s\w\-.,:"?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,100}$
+         text-basic: ^[\s\w\-.,:"'?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,150}$
+         text-long: ^[\s\w\-.,:;"'?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,1000}$
+         text-query: ^[\s\w\-.,:"'?¿¡!()äëïöüñáéíóúÄËÏÖÜÑÁÉÍÓÚ]{0,100}$
          isbn-code: ^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[\- ]){3})[\- 0-9X]{13}$|97[89][0-9]{10}$|(?=(?:[0-9]+[\- ]){4})[\- 0-9]{17}$)(?:97[89][\- ]?)?[0-9]{1,5}[\- ]?[0-9]+[\- ]?[0-9]+[\- ]?[0-9X]$
          isbn-filter: '[\- ]|^ISBN(?:-1[03])?:?'
          image-mime-type: ^image\/.*$
@@ -73,18 +73,21 @@ fm:
          size: 10
    front-end:
       common-components:
+         snackbar: Book added to your cart
          num-of-main-categories: 10
          num-of-direct-main-categories: 3
       home:
          jum:
             title:
-               text: FirstMarket
-               speed: 50
+               text: 'FirstMarket'
+               speed: 300
             subtitle:
-               text: ', where books belong'
-               speed: 50
-         title-max-size: 20
+               text: '- where books belong'
+               speed: 30
+         title-max-size: 30
          authors-max: 2
+         trending-books-max: 15
+         new-books-max: 15
       checkout:
          title-max-size: 20
       cart:
@@ -135,8 +138,8 @@ spring:
       password: ${JDBC_DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      schema: classpath:sql/schema.sql
-      data: classpath:sql/data*.sql
+      #schema: classpath:sql/schema.sql
+      #data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:

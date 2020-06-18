@@ -4,9 +4,9 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       lang="en">
     <head th:replace="fragments/components::head('FirstMarket')"></head>
-    <body>
+    <body class="bg-white">
         <!-- fm-content -->
-        <div class="container-fluid fm-content bg-light">
+        <div class="container-fluid fm-content">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
@@ -34,7 +34,7 @@
                             <div class="col-sm-4">
                                 <form class="needs-validation" novalidate th:action="@{/books}" method="GET">
                                     <div class="input-group mt-5">
-                                        <input class="form-control form-control-sm" type="text" name="q" placeholder="title, ISBN, author, publisher..." required />
+                                        <input class="form-control form-control-sm" type="text" name="q" placeholder="Find by ISBN, Title, Author or Publisher" required />
                                         <div class="input-group-append">
                                             <button class="btn btn-info btn-sm" type="submit">
                                                 <i class="fas fa-search"></i>
@@ -51,91 +51,141 @@
             </div>
             <!-- main content -->
             <div class="row mt-4">
-                <div class="col-sm-1"></div>
-                <div class="col-sm-10">
-                    <!-- books -->
-                    <div class="row d-flex align-content-stretch justify-content-between flex-wrap">
-                        <div class="card col-xs-12 col-sm-4 col-lg-2 m-2 p-0" th:each="book : ${pageOfEntities}">
-                            <!-- card image -->
-                            <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-image card-img-top img-responsive" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
-                            <!-- card body -->
-                            <div class="card-body">
-                                <!-- title -->
-                                <div class="card-title text-responsive">
-                                    <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
-                                        <p th:unless="${book.title.isBlank()}">
-                                            <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.home.title-max-size')}__))}"></strong>
-                                        </p>
-                                        <p th:if="${book.title.isBlank()}">
-                                            <small><i>unknown title</i></small>
-                                        </p>
-                                    </a>
-                                </div>
-                                <!-- authors -->
-                                <div class="card-text text-responsive">
-                                    <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
-                                        <p th:if="${stats.index < __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark small my-1">
-                                            <span th:replace="fragments/components::author"></span>
-                                        </p>
-                                        <p th:if="${stats.last && stats.size > __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark font-weight-light mb-0 mt-n1 small">
-                                            <small><span th:text="${stats.size - __${@environment.getProperty('fm.front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
-                                        </p>
+                <!--<div class="col-sm-1"></div>-->
+                <div class="col-sm-12">
+                    <div class="row">
+                        <!-- trending books title -->
+                        <div class="col-sm-12 my-3">
+                            <h2 class="text-info text-center">Trending Books</h2>
+                        </div>
+                        <!-- trending books -->
+                        <div class="col-sm-12 my-3">
+                            <div class="card-columns">
+                                <div class="card" th:each="book : ${trendingBooks}">
+                                    <!-- card image -->
+                                    <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-img-top" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <!-- title -->
+                                        <div class="card-title">
+                                            <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
+                                                <p th:unless="${book.title.isBlank()}">
+                                                    <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.home.title-max-size')}__))}"></strong>
+                                                </p>
+                                                <p th:if="${book.title.isBlank()}">
+                                                    <small><i>unknown title</i></small>
+                                                </p>
+                                            </a>
+                                        </div>
+                                        <!-- authors -->
+                                        <div class="card-text">
+                                            <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
+                                                <p th:if="${stats.index < __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark small my-1">
+                                                    <span th:replace="fragments/components::author"></span>
+                                                </p>
+                                                <p th:if="${stats.last && stats.size > __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark font-weight-light mb-0 mt-n1 small">
+                                                    <small><span th:text="${stats.size - __${@environment.getProperty('fm.front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
+                                                </p>
+                                            </div>
+                                            <p th:if="${book.authors.size() eq 0}">
+                                                <small class="text-secondary font-weight-light"><i>unknown author</i></small>
+                                            </p>
+                                        </div>
                                     </div>
-                                    <p th:if="${book.authors.size() eq 0}">
-                                        <small class="text-secondary font-weight-light"><i>unknown author</i></small>
-                                    </p>
+                                    <!-- card footer -->
+                                    <div class="card-footer d-flex align-items-baseline">
+                                        <div class="card-text mr-auto text-dark">
+                                            <strong>€ <span th:text="${book.price}">price</span></strong>
+                                        </div>
+                                        <div sec:authorize="!hasRole('ADMIN')">
+                                            <button class="btn btn-outline-info btn-sm" ajax="addBook" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                                                <i class="fas fa-cart-plus mx-1 fa-lg"></i>
+                                            </button>
+                                        </div>
+                                        <div sec:authorize="hasRole('ADMIN')">
+                                            <a class="btn btn-outline-info btn-sm" th:href="@{/admin/bookForm?id={id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                                                <i class="fas fa-pen mx-1 fa-lg"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                            <!-- card footer -->
-                            <div class="card-footer d-flex align-items-baseline">
-                                <div class="card-text mr-auto text-dark text-responsive">
-                                    <strong>
-                                        <span th:text="${book.price}">price</span>€
-                                    </strong>
-                                </div>
-                                <div sec:authorize="!hasRole('ADMIN')">
-                                    <button class="btn btn-outline-info btn-sm" ajax="addBook" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
-                                        <i class="fas fa-cart-plus mx-1 fa-lg"></i>
-                                    </button>
-                                </div>
-                                <div sec:authorize="hasRole('ADMIN')">
-                                    <a class="btn btn-outline-info btn-sm" th:href="@{/admin/bookForm?id={id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
-                                        <i class="fas fa-pen mx-1 fa-lg"></i>
-                                    </a>
+                        </div>
+                        <!-- new books title -->
+                        <div class="col-sm-12 my-3">
+                            <hr class="mt-0 mb-4"/>
+                            <h2 class="text-info text-center my-2">New Books</h2>
+                        </div>
+                        <!-- new books -->
+                        <div class="col-sm-12 my-3">
+                            <div class="card-columns">
+                                <div class="card" th:each="book : ${newBooks}">
+                                    <!-- card image -->
+                                    <a th:href="@{/book/{id}(id=${book.id})}"><img class="card-img-top" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
+                                    <!-- card body -->
+                                    <div class="card-body">
+                                        <!-- title -->
+                                        <div class="card-title">
+                                            <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
+                                                <p th:unless="${book.title.isBlank()}">
+                                                    <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.home.title-max-size')}__))}"></strong>
+                                                </p>
+                                                <p th:if="${book.title.isBlank()}">
+                                                    <small><i>unknown title</i></small>
+                                                </p>
+                                            </a>
+                                        </div>
+                                        <!-- authors -->
+                                        <div class="card-text">
+                                            <div th:unless="${book.authors.size() eq 0}" th:each="author,stats : ${book.authors}">
+                                                <p th:if="${stats.index < __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark small my-1">
+                                                    <span th:replace="fragments/components::author"></span>
+                                                </p>
+                                                <p th:if="${stats.last && stats.size > __${@environment.getProperty('fm.front-end.home.authors-max')}__}" class="text-dark font-weight-light mb-0 mt-n1 small">
+                                                    <small><span th:text="${stats.size - __${@environment.getProperty('fm.front-end.home.authors-max')}__}">restOfAuthors</span> more author/s</small>
+                                                </p>
+                                            </div>
+                                            <p th:if="${book.authors.size() eq 0}">
+                                                <small class="text-secondary font-weight-light"><i>unknown author</i></small>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- card footer -->
+                                    <div class="card-footer d-flex align-items-baseline">
+                                        <div class="card-text mr-auto text-dark">
+                                            <strong>
+                                                <span th:text="${book.price}">price</span>€
+                                            </strong>
+                                        </div>
+                                        <div sec:authorize="!hasRole('ADMIN')">
+                                            <button class="btn btn-outline-info btn-sm" ajax="addBook" th:id="'ab-' + ${book.id}" data-toggle="tooltip" title="Add to Cart">
+                                                <i class="fas fa-cart-plus mx-1 fa-lg"></i>
+                                            </button>
+                                        </div>
+                                        <div sec:authorize="hasRole('ADMIN')">
+                                            <a class="btn btn-outline-info btn-sm" th:href="@{/admin/bookForm?id={id}(id=${book.id})}" data-toggle="tooltip" title="Edit Book">
+                                                <i class="fas fa-pen mx-1 fa-lg"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-1"></div>
-            </div>
-            <!-- snackbar -->
-            <div th:replace="fragments/components::snackbar"></div>
-            <!-- pagination -->
-            <div class="row mt-4">
-                <div class="col-sm-4"></div>
-                <div class="col-sm-4">
-                    <!-- pagination links -->
-                    <div th:replace="fragments/components::paginationLinks"></div>
-                    <!-- pagination legend -->
-                    <div class="mt-2 text-center text-info">
-                        <p th:replace="fragments/components::paginationLegend"></p>
-                    </div>
-                </div>
-                <div class="col-sm-4"></div>
+                <!--<div class="col-sm-1"></div>-->
             </div>
         </div>
         <!-- footer -->
-        <div th:replace="fragments/components::footer"></div>
+        <hr/>
+        <footer th:replace="fragments/components::footer"></footer>
+        <!-- snackbar -->
+        <div th:replace="fragments/components::snackbar"></div>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <script th:src="@{/js/typeWriter.js}"></script>
         <!-- ajax add book to cart -->
         <i th:replace="fragments/components::host-address"></i>
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
-        <!-- pagination -->
-        <script th:replace="fragments/components::paginationMvcVariables"></script>
-        <script th:src="@{/js/paginationLinks.js}"></script>
-        <script th:src="@{/js/paginationControl.js}"></script>
     </body>
 </html>

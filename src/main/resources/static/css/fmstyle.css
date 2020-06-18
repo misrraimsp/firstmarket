@@ -1,17 +1,80 @@
 
-/******************************* footer */
+/******************************* footer (and font and pulse) */
 html, body {
     height: 100%;
 }
 body {
     display: flex;
     flex-direction: column;
+    /*
+    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Arapey', serif;
+    font-family: 'Gentium Basic', serif;
+    font-family: 'Gabriela', serif;
+    font-family: 'Cormorant', serif;
+    font-family: 'Suranna', serif;
+    font-family: 'Lora', serif;
+    font-family: 'EB Garamond', serif;
+    font-family: 'Nanum Myeongjo', serif;
+
+    font-family: 'El Messiri', sans-serif;
+    font-family: 'Quicksand', sans-serif;
+    font-family: 'Gotu', sans-serif;
+    font-family: 'PT Sans', sans-serif;
+
+    font-family: 'Inconsolata', monospace;
+    */
+    font-family: 'Noto Serif JP', serif;
+    animation: pulse 20s infinite; /*pulse*/
 }
 .fm-content {
     flex: 1 0 auto;
 }
 .footer {
     flex-shrink: 0;
+}
+
+/******************************* pulse */
+@keyframes pulse {
+    0%, 100% {
+        background-color: lightblue;
+    }
+    50% {
+        background-color: lightgray;
+    }
+}
+
+/******************************* card responsiveness */
+@media (min-width: 34em) {
+    .card-columns {
+        -webkit-column-count: 2;
+        -moz-column-count: 2;
+        column-count: 2;
+    }
+}
+
+@media (min-width: 48em) {
+    .card-columns {
+        -webkit-column-count: 3;
+        -moz-column-count: 3;
+        column-count: 3;
+    }
+}
+
+@media (min-width: 62em) {
+    .card-columns {
+        -webkit-column-count: 4;
+        -moz-column-count: 4;
+        column-count: 4;
+    }
+}
+
+@media (min-width: 75em) {
+    .card-columns {
+        -webkit-column-count: 5;
+        -moz-column-count: 5;
+        column-count: 5;
+    }
 }
 
 /******************************* accordion */
@@ -53,21 +116,6 @@ body {
 }
 
 /********************************/
-
-.text-responsive {
-    /*font-size: calc(75% + 1vw + 1vh);*/
-    font-size: calc(75% + .25vw + 0vh);
-}
-
-.card-image {
-    width: calc(75% + .25vw + 0vh);
-    height: 150px;
-}
-
-.book-detail-image {
-    width: auto;
-    height: auto;
-}
 
 .fa-stack[data-count]::after{
     position:absolute;
