@@ -10,6 +10,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -53,20 +54,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/home")
 
                 .and()
-                .requiresChannel()
-                .requestMatchers(r -> r.getHeader("X-Forwarded-Proto") != null)
-                .requiresSecure()
-
-                .and()
                 .csrf()
                 .ignoringAntMatchers("/listener") // open for stripe notifications
-                //.ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
+                .ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
 
                 // Allow pages to be loaded in frames from the same origin; needed for H2-Console
-                //.and()
-                //.headers()
-                //.frameOptions()
-                //.sameOrigin()
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
         ;
     }
 

@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         // Control
         divControl = document.createElement("div");
-        divControl.setAttribute("class", "d-flex flex-row-reverse mt-1 bg-light");
+        divControl.setAttribute("class", "d-flex flex-row-reverse mt-1");
 
         // Category name
         divCatName = document.createElement("div");

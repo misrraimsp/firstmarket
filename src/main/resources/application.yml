@@ -82,7 +82,7 @@ fm:
                text: 'FirstMarket'
                speed: 300
             subtitle:
-               text: '- where books belong'
+               text: 'w h e r e . b o o k s . b e l o n g'
                speed: 30
          title-max-size: 30
          authors-max: 2
