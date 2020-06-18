@@ -25,7 +25,7 @@ body {
     font-family: 'Inconsolata', monospace;
     */
     font-family: 'Noto Serif JP', serif;
-    animation: pulse 20s infinite; /*pulse*/
+    /*animation: pulse 20s infinite; pulse*/
 }
 .fm-content {
     flex: 1 0 auto;
@@ -34,7 +34,7 @@ body {
     flex-shrink: 0;
 }
 
-/******************************* pulse */
+/******************************* pulse
 @keyframes pulse {
     0%, 100% {
         background-color: lightblue;
@@ -42,6 +42,11 @@ body {
     50% {
         background-color: lightgray;
     }
+}*/
+
+/******************************* gradient*/
+.container-fluid {
+    background: linear-gradient(#e9ecef, white);
 }
 
 /******************************* card responsiveness */

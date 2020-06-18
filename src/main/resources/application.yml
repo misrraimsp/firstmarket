@@ -75,7 +75,7 @@ fm:
       common-components:
          snackbar: Book added to your cart
          num-of-main-categories: 10
-         num-of-direct-main-categories: 3
+         num-of-direct-main-categories: 6
       home:
          jum:
             title:

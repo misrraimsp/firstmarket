@@ -11,21 +11,21 @@
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
             <div class="row">
-                <div class="col-sm-2 bg-white"></div>
-                <div class="col-sm-10 bg-white">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-10">
                     <h2 class="text-dark my-5 font-weight-light">Edit Profile</h2>
                 </div>
             </div>
             <!-- main content -->
             <div class="row">
-                <div class="col-sm-2 bg-white"></div>
+                <div class="col-sm-2"></div>
                 <!-- profile form -->
-                <div class="col-sm-6 bg-light">
+                <div class="col-sm-6">
                     <form class="needs-validation" novalidate th:action="@{/user/profileForm}" th:object="${profileForm}" method="POST" action="#">
                         <input type="hidden" th:field="*{profileId}"/>
                         <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
                         <div class="form-row">
-                            <div class="col-sm-6 bg-light">
+                            <div class="col-sm-6">
                                 <!-- full name
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
@@ -53,7 +53,7 @@
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('phone')"></div>
                             </div>
-                            <div class="col-sm-6 bg-light">
+                            <div class="col-sm-6">
                                 <!-------------------------------------------------------------------------lastname-->
                                 <div class="form-group">
                                     <label class="mt-1" for="lastName">Last Name:</label>
@@ -72,7 +72,7 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-sm-12 bg-light">
+                            <div class="col-sm-12">
                                 <!------------------------------------------------------------------------- birthdate -->
                                 <label>Date of Birth :</label>
                                 <div class="input-group mb-3">
@@ -100,7 +100,7 @@
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('year')"></div>
                             </div>
-                            <div class="col-sm-12 bg-light">
+                            <div class="col-sm-12">
                                 <!-- save or cancel -->
                                 <button th:replace="fragments/components::saveButton"></button>
                                 <a th:replace="fragments/components::cancelButtonToHome"></a>
@@ -109,7 +109,7 @@
                     </form>
                 </div>
                 <!-- action buttons -->
-                <div class="col-sm-3 bg-light">
+                <div class="col-sm-3">
                     <div class="row">
                         <div class="col-sm-1"></div>
                         <div class="col-sm-10 py-4">
