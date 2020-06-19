@@ -80,7 +80,7 @@ fm:
          jum:
             title:
                text: 'FirstMarket'
-               speed: 300
+               speed: 1
             subtitle:
                text: 'w h e r e . b o o k s . b e l o n g'
                speed: 30
@@ -138,8 +138,8 @@ spring:
       password: ${JDBC_DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      schema: classpath:sql/schema.sql
-      data: classpath:sql/data*.sql
+      #schema: classpath:sql/schema.sql
+      #data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:

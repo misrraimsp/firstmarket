@@ -52,10 +52,7 @@
                         <!-- Navbar links -->
                         <div class="collapse navbar-collapse" id="collapsibleNavbar">
                             <ul class="navbar-nav mr-auto">
-                                <!--public links
-                                <li class="nav-item">
-                                    <a class="nav-link text-white font-italic" th:href="@{/home}">FirstMarket</a>
-                                </li>-->
+                                <!--public links-->
                                 <li class="nav-item">
                                     <a class="nav-link text-white font-weight-bold" th:href="@{/books}">Our Books</a>
                                 </li>
@@ -63,32 +60,28 @@
                                 <li class="nav-item" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
                                     <a class="nav-link text-white font-weight-bold" th:href="@{/orders}">My Purchases</a>
                                 </li>
-                                <li class="nav-item dropdown" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
-                                    <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" data-toggle="dropdown">My Account</a><!--id="navbardrop"-->
-                                    <div class="dropdown-menu">
-                                        <a class="dropdown-item" th:href="@{/user/profileForm}">Edit Profile</a>
-                                        <a class="dropdown-item" th:href="@{/user/editEmail}">Edit Email</a>
-                                        <a class="dropdown-item" th:href="@{/editPassword}">Edit Password</a>
-                                        <a class="dropdown-item" th:href="@{/user/deleteUser}">Delete Account</a>
-                                    </div>
+                                <li class="nav-item" sec:authorize="isAuthenticated() && !hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/user/profileForm}">My Profile</a>
                                 </li>
                                 <!--admin links-->
                                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/categories}">Categories</a>
-                                </li>
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/images}">Images</a>
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/orders}">Orders</a>
                                 </li>
                                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                                     <a class="nav-link text-white font-weight-bold" th:href="@{/admin/users}">Users</a>
                                 </li>
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                                    <a class="nav-link text-white font-weight-bold" th:href="@{/orders}">Orders</a>
+                                <!--<li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/categories}">Categories</a>
                                 </li>
+                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/images}">Images</a>
+                                </li>-->
                                 <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                                     <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" data-toggle="dropdown">Settings</a><!--id="navbardrop"-->
                                     <div class="dropdown-menu">
-                                        <a class="dropdown-item" th:href="@{/editPassword}">Edit Password</a>
+                                        <a class="dropdown-item" th:href="@{/admin/categories}">Edit Categories</a>
+                                        <a class="dropdown-item" th:href="@{/admin/images}">Edit Images</a>
+                                        <a class="dropdown-item" th:href="@{/editPassword}">Change Password</a>
                                     </div>
                                 </li>
                             </ul>
@@ -161,20 +154,28 @@
             </div>
         </div>
 
+        <!-- Title 1 11 -->
+        <div class="row mt-5 mb-3" th:fragment="title_1_11(text)">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-11">
+                <h2 class="text-dark font-weight-light" th:text="${text}">Title</h2>
+            </div>
+        </div>
+
         <!-- snackbar -->
         <div th:fragment="snackbar" id="snackbar" th:text="${@environment.getProperty('fm.front-end.common-components.snackbar')}">snackbar</div>
 
         <!-- Save button -->
-        <button th:fragment="saveButton" class="btn btn-info px-5 my-3" type="submit">Save</button>
+        <button th:fragment="saveButton" class="btn btn-outline-info px-5 my-3" type="submit">Save</button>
 
         <!-- Delete account button -->
         <button th:fragment="deleteAccountButton" class="btn btn-danger px-5 my-3" type="submit">Delete Account</button>
 
         <!-- Cancel button (toBack) -->
-        <a th:fragment="cancelButtonToBack" class="btn btn-secondary px-5 my-3 text-white" onclick="window.history.back();">Cancel</a>
+        <a th:fragment="cancelButtonToBack" class="btn btn-outline-secondary px-5 my-3" onclick="window.history.back();">Cancel</a>
 
         <!-- Cancel button (toHome) -->
-        <a th:fragment="cancelButtonToHome" class="btn btn-secondary px-5 my-3 text-white" th:href="@{/home}">Cancel</a>
+        <a th:fragment="cancelButtonToHome" class="btn btn-outline-secondary px-5 my-3" th:href="@{/home}">Cancel</a>
 
         <!-- host address -->
         <i th:fragment="host-address" id="host" th:attr="host-address=${@environment.getProperty('fm.host.address')}"></i>
@@ -257,6 +258,25 @@
             </small>
         </p>
 
+        <!-- pagination page size options -->
+        <select th:fragment="paginationPageSizeOptions" class="custom-select custom-select-sm text-secondary" id="paginationPageSize" style="max-width: 33%">
+            <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
+                    th:value="${ps.ordinal()}"
+                    th:text="${ps.size}"
+                    th:selected="${ps.size eq pageOfEntities.pageable.pageSize}">
+            </option>
+        </select>
+
+        <!-- pagination page size label -->
+        <p th:fragment="paginationPageSizeLabel" class="my-0 ml-2">
+            <small class="text-dark font-weight-lighter">Page size</small>
+        </p>
+
+        <!-- pagination sort label -->
+        <p th:fragment="paginationSortLabel" class="my-0 mr-2">
+            <small class="text-dark font-weight-lighter">Sort by</small>
+        </p>
+
         <!-- pagination MVC variables -->
         <script th:fragment="paginationMvcVariables">
             let totalElements = [[${pageOfEntities.totalElements}]];
@@ -267,7 +287,8 @@
         </script>
 
         <!-- footer -->
-        <footer class="footer bg-white text-center py-2" th:fragment="footer">
+        <footer class="footer bg-white text-center pb-3" th:fragment="footer">
+            <hr/>
             <span class="info-copyrigth"><a class="text-info" href="https://github.com/misrraimsp/firstmarket" style="text-decoration: none">FirstMarket Project</a> © 2020</span>
         </footer>
 

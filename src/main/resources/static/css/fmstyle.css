@@ -44,9 +44,10 @@ body {
     }
 }*/
 
-/******************************* gradient*/
+/******************************* gradient */
 .container-fluid {
     background: linear-gradient(#e9ecef, white);
+    /*background: #e9ecef;*/
 }
 
 /******************************* card responsiveness */
@@ -84,7 +85,7 @@ body {
 
 /******************************* accordion */
 .accordion {
-    background-color: #e9ecef; /* BS4 jumbotron */
+    background-color: #f8f9fa; /* BS4 light */
     color: #6c757d; /* BS4 secondary */
     cursor: pointer;
     padding: 18px;
@@ -257,10 +258,7 @@ body {
 }
 /********************************/
 
-/********************************* order head styles */
-.order-selected {
-    background-color: #e9ecef; /* BS4 jumbotron */
-    /* BS4 --light: #f8f9fa; */
+.left-bordered {
+    border-left: 6px solid #17a2b8;
 }
-/********************************/
 

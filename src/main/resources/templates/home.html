@@ -11,49 +11,46 @@
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <!-- jumbotron -->
-            <div class="row">
+            <!-- main home panel -->
+            <div class="row my-5 py-5">
                 <div class="col-sm-12">
-                    <div class="jumbotron jumbotron-fluid mb-0">
-                        <!-- main message -->
-                        <h1 class="text-center">
-                            <span class="text-dark" id="mainTitle" th:attrappend="tw-text=${(@environment.getProperty('fm.front-end.home.jum.title.text') ne null) ? @environment.getProperty('fm.front-end.home.jum.title.text') : ' '}, tw-speed=${(@environment.getProperty('fm.front-end.home.jum.title.speed') ne null) ? @environment.getProperty('fm.front-end.home.jum.title.speed') : 0}"></span>
-                        </h1>
-                        <h3 class="text-center font-weight-lighter">
-                            <em class="text-secondary font-weight-lighter small" id="secondaryTitle" th:attrappend="tw-text=${(@environment.getProperty('fm.front-end.home.jum.subtitle.text') ne null) ? @environment.getProperty('fm.front-end.home.jum.subtitle.text') : ' '}, tw-speed=${(@environment.getProperty('fm.front-end.home.jum.subtitle.speed') ne null) ? @environment.getProperty('fm.front-end.home.jum.subtitle.speed') : 0}"></em>
-                        </h3>
-                        <!-- admin message -->
-                        <div class="text-center" sec:authorize="hasRole('ADMIN')">
-                            <h6><code class="text-info font-italic">
-                                <strong>< ADMIN - a great power comes with a great responsibility ></strong>
-                            </code></h6>
-                        </div>
-                        <!-- search query -->
-                        <div class="row mt-n2">
-                            <!-- left margin  -->
-                            <div class="col-sm-3"></div>
-                            <!-- query -->
-                            <div class="col-sm-6">
-                                <form class="needs-validation" novalidate th:action="@{/books}" method="GET">
-                                    <div class="input-group mt-5">
-                                        <input class="form-control form-control-lg" type="text" name="q" placeholder="Find by ISBN, Title, Author or Publisher" required />
-                                        <div class="input-group-append">
-                                            <button class="btn btn-info btn-lg" type="submit">
-                                                <i class="fas fa-search"></i>
-                                            </button>
-                                        </div>
+                    <!-- title -->
+                    <h1 class="text-center">
+                        <span class="text-dark" id="mainTitle" th:attrappend="tw-text=${(@environment.getProperty('fm.front-end.home.jum.title.text') ne null) ? @environment.getProperty('fm.front-end.home.jum.title.text') : ' '}, tw-speed=${(@environment.getProperty('fm.front-end.home.jum.title.speed') ne null) ? @environment.getProperty('fm.front-end.home.jum.title.speed') : 0}"></span>
+                    </h1>
+                    <h3 class="text-center font-weight-lighter">
+                        <em class="text-secondary font-weight-lighter small" id="secondaryTitle" th:attrappend="tw-text=${(@environment.getProperty('fm.front-end.home.jum.subtitle.text') ne null) ? @environment.getProperty('fm.front-end.home.jum.subtitle.text') : ' '}, tw-speed=${(@environment.getProperty('fm.front-end.home.jum.subtitle.speed') ne null) ? @environment.getProperty('fm.front-end.home.jum.subtitle.speed') : 0}"></em>
+                    </h3>
+                    <!-- search query -->
+                    <div class="row mt-n2">
+                        <!-- left margin  -->
+                        <div class="col-sm-3"></div>
+                        <!-- query -->
+                        <div class="col-sm-6">
+                            <form class="needs-validation" novalidate th:action="@{/books}" method="GET">
+                                <div class="input-group mt-5">
+                                    <input class="form-control form-control-lg" type="text" name="q" placeholder="Search by ISBN, Title, Author or Publisher" required />
+                                    <div class="input-group-append">
+                                        <button class="btn btn-info btn-lg" type="submit">
+                                            <i class="fas fa-search"></i>
+                                        </button>
                                     </div>
-                                </form>
-                            </div>
-                            <!-- right margin  -->
-                            <div class="col-sm-3"></div>
+                                </div>
+                            </form>
                         </div>
+                        <!-- right margin  -->
+                        <div class="col-sm-3"></div>
+                    </div>
+                    <!-- admin message -->
+                    <div class="text-center mt-2" sec:authorize="hasRole('ADMIN')">
+                        <h6><code class="text-info font-weight-lighter">
+                            <small>< a great power comes with a great responsibility /></small>
+                        </code></h6>
                     </div>
                 </div>
             </div>
-            <!-- main content -->
+            <!-- books -->
             <div class="row">
-                <!--<div class="col-sm-1"></div>-->
                 <div class="col-sm-12">
                     <div class="row">
                         <!-- trending books title -->
@@ -176,7 +173,6 @@
                         </div>
                     </div>
                 </div>
-                <!--<div class="col-sm-1"></div>-->
             </div>
         </div>
         <!-- footer -->

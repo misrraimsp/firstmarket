@@ -4,15 +4,15 @@ import org.springframework.data.domain.Sort;
 
 public enum ImageSortCriteria {
 
-    SIZE_ASC ("Size asc", "size", Sort.Direction.ASC),
-    SIZE_DESC ("Size desc", "size", Sort.Direction.DESC),
+    SIZE_ASC ("Size increasing", "size", Sort.Direction.ASC),
+    SIZE_DESC ("Size decreasing", "size", Sort.Direction.DESC),
     DEFAULT ("Default image", "is_default", Sort.Direction.DESC),
-    NAME_ASC ("Name asc", "name", Sort.Direction.ASC),
-    NAME_DESC ("Name desc", "name", Sort.Direction.DESC),
-    MIME_ASC ("MIME Type asc", "mime_type", Sort.Direction.ASC),
-    MIME_DESC ("MIME Type desc", "mime_type", Sort.Direction.DESC),
-    MODIFIED_DATE_ASC("Last modified asc", "last_modified_date", Sort.Direction.ASC),
-    MODIFIED_DATE_DESC("Last modified desc", "last_modified_date", Sort.Direction.DESC);
+    NAME_ASC ("Name a-z", "name", Sort.Direction.ASC),
+    NAME_DESC ("Name z-a", "name", Sort.Direction.DESC),
+    MIME_ASC ("MIME Type a-z", "mime_type", Sort.Direction.ASC),
+    MIME_DESC ("MIME Type z-a", "mime_type", Sort.Direction.DESC),
+    MODIFIED_DATE_ASC("Less recent modified", "last_modified_date", Sort.Direction.ASC),
+    MODIFIED_DATE_DESC("Most recent modified", "last_modified_date", Sort.Direction.DESC);
 
     /*
     CREATED_DATE_ASC("Uploading date asc", "created_date", Sort.Direction.ASC),

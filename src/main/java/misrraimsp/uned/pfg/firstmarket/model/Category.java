@@ -18,4 +18,8 @@ public class Category extends BasicEntity {
 	@ManyToOne
 	private Category parent;
 
+	public boolean isRoot() {
+		return id.equals(parent.id);
+	}
+
 }

@@ -47,7 +47,7 @@
                         <div class="col-sm-4 d-flex align-items-end justify-content-end">
                             <!-- label -->
                             <p class="my-0 mr-2">
-                                <small class="text-dark font-weight-lighter">Sorted by</small>
+                                <small class="text-dark font-weight-lighter">Sort by</small>
                             </p>
                             <!-- admin options -->
                             <select sec:authorize="hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
@@ -97,11 +97,11 @@
                     </div>
                     <!-- category breadcrumb -->
                     <div class="mt-3 mb-1">
-                        <ol class="breadcrumb my-0 p-1">
+                        <ol class="breadcrumb my-0 p-1 bg-light">
                             <li class="breadcrumb-item" th:each="c : ${categorySequence}">
-                                <a class="categoryLink text-info" th:href="@{/books?categoryId={categoryId}(categoryId=${c.id})}"><small class="font-weight-lighter" th:text="${c.name}">Category Name</small></a>
+                                <a class="categoryLink text-info" th:href="@{/books?categoryId={categoryId}(categoryId=${c.id})}"><small class="font-weight-lighter" th:text="${c.isRoot()} ? 'All categories' : ${c.name}">Category Name</small></a>
                             </li>
-                            <li class="breadcrumb-item active font-weight-lighter"><small class="font-weight-lighter" th:text="${category.name}">Category Name</small></li>
+                            <li class="breadcrumb-item active font-weight-lighter"><small class="font-weight-lighter" th:text="${category.isRoot()} ? 'All categories' : ${category.name}">Category Name</small></li>
                         </ol>
                     </div>
                     <!-- category criteria -->

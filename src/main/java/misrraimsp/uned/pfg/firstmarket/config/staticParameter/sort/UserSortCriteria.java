@@ -4,16 +4,16 @@ import org.springframework.data.domain.Sort;
 
 public enum UserSortCriteria {
 
-    LOCKED_ASC ("Locked account ascending", "accountLocked", Sort.Direction.ASC),
-    LOCKED_DESC ("Locked account descending", "accountLocked", Sort.Direction.DESC),
-    SUSPENDED_ASC ("Deleted account ascending", "suspended", Sort.Direction.ASC),
-    SUSPENDED_DESC ("Deleted account descending", "suspended", Sort.Direction.DESC),
+    LOCKED_ASC ("Locked account up", "accountLocked", Sort.Direction.ASC),
+    LOCKED_DESC ("Locked account down", "accountLocked", Sort.Direction.DESC),
+    SUSPENDED_ASC ("Deleted account up", "suspended", Sort.Direction.ASC),
+    SUSPENDED_DESC ("Deleted account down", "suspended", Sort.Direction.DESC),
     //COMPLETED_ASC ("Email confirmation ascending", "completed", Sort.Direction.ASC),
     //COMPLETED_DESC ("Email confirmation descending", "completed", Sort.Direction.DESC),
-    EMAIL_ASC ("Email ascending", "email", Sort.Direction.ASC),
-    EMAIL_DESC ("Email descending", "email", Sort.Direction.DESC),
-    CREATED_DATE_ASC("Registration date ascending", "createdDate", Sort.Direction.ASC),
-    CREATED_DATE_DESC("Registration date descending", "createdDate", Sort.Direction.DESC);
+    EMAIL_ASC ("Email a-z", "email", Sort.Direction.ASC),
+    EMAIL_DESC ("Email z-a", "email", Sort.Direction.DESC),
+    CREATED_DATE_ASC("Less recent", "createdDate", Sort.Direction.ASC),
+    CREATED_DATE_DESC("Most recent", "createdDate", Sort.Direction.DESC);
 
     private final String text;
     private final String property;
