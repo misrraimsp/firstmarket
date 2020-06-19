@@ -34,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -114,7 +115,13 @@ public class OrderController extends BasicController {
                               @AuthenticationPrincipal User authUser) {
 
         populateModel(model.asMap(), authUser);
-        return "success";
+        populateModelToInfo(
+                model.asMap(),
+                "Success",
+                messageSource.getMessage("success.title",null, null),
+                List.of(messageSource.getMessage("success.message",null, null)),
+                true);
+        return "info";
     }
 
     @GetMapping("/user/checkout")
@@ -144,7 +151,7 @@ public class OrderController extends BasicController {
             }
         }
         populateModel(model.asMap(), authUser);
-        return "checkout";
+        return "checkoutForm";
     }
 
     @PostMapping("/listener")

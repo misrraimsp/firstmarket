@@ -36,6 +36,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -69,7 +70,7 @@ public class UserController extends BasicController {
         if (authUser == null) {
             populateModel(model.asMap(), null);
             model.addAttribute("userForm", new UserForm());
-            return "newUser";
+            return "newUserForm";
         }
         LOGGER.warn("authenticated users are not allowed to GET request on new user process (userId={})", authUser.getId());
         return "redirect:/home";
@@ -139,7 +140,7 @@ public class UserController extends BasicController {
         }
         if (hasError) {
             populateModel(model.asMap(), null);
-            return "newUser";
+            return "newUserForm";
         }
         // complete process
         SecurityEvent securityEvent;
@@ -164,7 +165,7 @@ public class UserController extends BasicController {
     @GetMapping("/user/editEmail")
     public String showEditEmailForm(Model model, @AuthenticationPrincipal User authUser) {
         populateModel(model.asMap(), authUser);
-        return "editEmail";
+        return "editEmailForm";
     }
 
     @PostMapping("/user/editEmail")
@@ -199,7 +200,7 @@ public class UserController extends BasicController {
         if (hasError) {
             populateModel(model.asMap(), authUser);
             model.addAttribute("message", errorMessage);
-            return "editEmail";
+            return "editEmailForm";
         }
         // trigger email confirmation
         applicationEventPublisher.publishEvent(
@@ -214,7 +215,7 @@ public class UserController extends BasicController {
 
         if (authUser == null) {
             populateModel(model.asMap(), null);
-            return "resetPassword";
+            return "resetPasswordForm";
         }
         LOGGER.warn("authenticated users are not allowed to GET request on reset password process (userId={})", authUser.getId());
         return "redirect:/home";
@@ -233,7 +234,7 @@ public class UserController extends BasicController {
             model.addAttribute("message", messageSource.getMessage("email.empty", null, null));
             populateModel(model.asMap(), null);
             LOGGER.debug("email empty on trying to reset password");
-            return "resetPassword";
+            return "resetPasswordForm";
         }
         try {
             User user = userServer.getUserByEmail(email);
@@ -257,7 +258,16 @@ public class UserController extends BasicController {
                                                @AuthenticationPrincipal User authUser) {
 
         populateModel(model.asMap(), authUser);
-        return "emailConfirmationRequest";
+        populateModelToInfo(
+                model.asMap(),
+                "Email Confirmation",
+                messageSource.getMessage("confirmEmail.title",null, null),
+                List.of(
+                        messageSource.getMessage("confirmEmail.message.1",null, null),
+                        messageSource.getMessage("confirmEmail.message.2",null, null)
+                ),
+                true);
+        return "info";
     }
 
     @GetMapping("/emailConfirmation")
@@ -285,8 +295,13 @@ public class UserController extends BasicController {
         }
         if (hasError) {
             populateModel(model.asMap(), authUser);
-            model.addAttribute("message", errorMessage);
-            return "emailConfirmationError";
+            populateModelToInfo(
+                    model.asMap(),
+                    "Email Confirmation Error",
+                    messageSource.getMessage("confirmEmail.error.title",null, null),
+                    List.of(errorMessage),
+                    true);
+            return "info";
         }
         // complete confirmation
         switch (securityToken.getSecurityEvent()){
@@ -322,7 +337,14 @@ public class UserController extends BasicController {
                 userServer.editPassword(securityToken.getTargetUser().getId(), passwordEncoder, randomPassword);
                 LOGGER.debug("User(id={}) password reset", securityToken.getTargetUser().getId());
                 userServer.deleteSecurityToken(securityToken.getId());
-                return "resetPasswordConfirmation";
+                populateModel(model.asMap(),authUser);
+                populateModelToInfo(
+                        model.asMap(),
+                        "Password Reset",
+                        messageSource.getMessage("password.reset.title",null, null),
+                        List.of(messageSource.getMessage("password.reset.message",null, null)),
+                        true);
+                return "info";
             default:
                 return "redirect:/home";
         }
@@ -338,7 +360,7 @@ public class UserController extends BasicController {
         }
         model.addAttribute("passwordForm", new PasswordForm());
         populateModel(model.asMap(), authUser);
-        return "editPassword";
+        return "editPasswordForm";
     }
 
     @PostMapping("/editPassword")
@@ -361,7 +383,7 @@ public class UserController extends BasicController {
             }
             if (hasError) {
                 populateModel(model.asMap(), authUser);
-                return "editPassword";
+                return "editPasswordForm";
             }
             // edit password
             userServer.editPassword(authUser.getId(), passwordEncoder, passwordForm.getPassword());
@@ -417,7 +439,7 @@ public class UserController extends BasicController {
         populateModel(model.asMap(), authUser);
         model.addAttribute("deletionReasons", DeletionReason.values());
         model.addAttribute("userDeletionForm", new UserDeletionForm());
-        return "deleteUser";
+        return "deleteUserForm";
     }
 
     @PostMapping("/user/deleteUser")
@@ -441,7 +463,7 @@ public class UserController extends BasicController {
         if (hasError) {
             populateModel(model.asMap(),authUser);
             model.addAttribute("deletionReasons", DeletionReason.values());
-            return "deleteUser";
+            return "deleteUserForm";
         }
         // complete deletion
         userServer.setSuspendedState(authUser.getId(),true);
