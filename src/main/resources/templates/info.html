@@ -2,25 +2,27 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/components::head('Not Found')"></head>
+    <head th:replace="fragments/components::head(title = ${headTitle})"></head>
     <body>
         <!-- fm-content -->
-        <div class="container-fluid fm-content bg-light">
+        <div class="container-fluid fm-content">
             <!-- header -->
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title(text = ${errorTitle})"></div>
+            <div th:replace="fragments/components::title_1_11(text = ${infoTitle})"></div>
             <!-- Content -->
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
                     <hr class="mb-4 mt-0"/>
-                    <div>
-                        <h4 class="px-2" th:text="${errorMessage}"></h4>
+                    <div th:each="message : ${infoMessages}">
+                        <h5 th:text="${message}"></h5>
                         <br/>
-                        <p class="px-2"><span th:replace="fragments/components::contactUs"></span></p>
+                    </div>
+                    <div th:if="${showContactUs}">
+                        <p class="small"><span th:replace="fragments/components::contactUs"></span></p>
                     </div>
                 </div>
                 <div class="col-sm-1"></div>

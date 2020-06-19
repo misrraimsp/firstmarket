@@ -47,7 +47,7 @@ public class HomeController extends BasicController {
             return "redirect:/home";
         }
         populateModel(model.asMap(), null);
-        return "login";
+        return "loginForm";
     }
 
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.Errors;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -45,6 +46,18 @@ public abstract class BasicController {
         if (authUser != null && userServer.hasRole(authUser, "ROLE_USER")) {
             properties.put("user", userServer.findById(authUser.getId()));
         }
+    }
+
+    protected void populateModelToInfo(Map<String, Object> properties,
+                                       String headTitle,
+                                       String infoTitle,
+                                       List<String> infoMessages,
+                                       boolean showContactUs) {
+
+        properties.put("headTitle", headTitle);
+        properties.put("infoTitle", infoTitle);
+        properties.put("infoMessages", infoMessages);
+        properties.put("showContactUs", showContactUs);
     }
 
     protected void handleGlobalErrors(Errors errors) {
