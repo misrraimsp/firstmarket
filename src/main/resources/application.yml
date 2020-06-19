@@ -30,7 +30,7 @@ fm:
       address: ${HOST_ADDRESS:http://localhost:8080/}
    schedule:
       garbage-collection:
-         cron: 0 */5 * ? * *
+         cron: 0 */45 * ? * *
          #fixed-rate-string: PT60S
    payment:
       stripe:
@@ -38,9 +38,9 @@ fm:
             public: ${STRIPE_PUBLIC_KEY}
             private: ${STRIPE_SECRET_KEY}
             webhook: ${STRIPE_WEBHOOK_SECRET}
-         pi-minutes: 3
-         limit-of-naps: 2
-         ips: 0:0:0:0:0:0:0:1,127.0.0.1,3.18.12.63,3.130.192.231,13.235.14.237,13.235.122.149,35.154.171.200,52.15.183.38,54.187.174.169,54.187.205.235,54.187.216.72,54.241.31.99,54.241.31.102,54.241.34.107
+         pi-minutes: 15
+         limit-of-naps: 3
+         ips: 3.18.12.63,3.130.192.231,13.235.14.237,13.235.122.149,35.154.171.200,52.15.183.38,54.187.174.169,54.187.205.235,54.187.216.72,54.241.31.99,54.241.31.102,54.241.34.107
    validation:
       numeric:
          profile-min-year: 1900
@@ -62,10 +62,10 @@ fm:
          phone: ^(\+)?(\([0-9]{0,4}\))?(([0-9\s.\-]){9,15})?$ # poor but enough approximation
    security:
       lock:
-         num-of-attempts: 2
-         locking-minutes: 10
+         num-of-attempts: 5
+         locking-minutes: 60
       token:
-         expiration-in-minutes: 2
+         expiration-in-minutes: 60
       random-password:
          num-of-lower-case: 2
          num-of-upper-case: 2
@@ -75,7 +75,7 @@ fm:
       common-components:
          snackbar: Book added to your cart
          num-of-main-categories: 10
-         num-of-direct-main-categories: 6
+         num-of-direct-main-categories: 3
       home:
          jum:
             title:
@@ -97,7 +97,7 @@ fm:
          title-max-size: 60
          authors-max: 2
          stock-usage-warning-threshold: 50
-         stock-warning-threshold: 5
+         stock-warning-threshold: 7
          filter:
             general-max-size: 25
             author-part-max-size: 12
@@ -114,10 +114,9 @@ fm:
          order: 1
       default-size-index:
          image: 0
-         home: 1
          search: 0
-         user: 1
-         order: 1
+         user: 2
+         order: 2
       default-index: 0
 
 ---
