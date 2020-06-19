@@ -11,38 +11,18 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title(text = 'Images')"></div>
-            <!-- main content -->
+            <div th:replace="fragments/components::title_1_11(text = 'Images')"></div>
+            <!-- pagination control -->
             <div class="row">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
-                <!-- content -->
+                <!-- controls -->
                 <div class="col-sm-10">
-                    <!-- new image form -->
-                    <p class="mt-1 mb-0">Select a new image:</p>
-                    <form class="needs-validation mt-1" novalidate th:action="@{/admin/newImage}" th:object="${imagesWrapper}" method="POST" enctype="multipart/form-data">
-                        <div class="form-group mb-3">
-                            <input class="form-control" type="file" multiple th:field="*{images}" accept="image/*" required/>
-                            <div class="invalid-feedback">Please select an image</div>
-                        </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('images')"></div>
-                        <button class="btn btn-sm btn-info px-5 my-1" type="submit">Save</button>
-                    </form>
-                    <hr/>
-                    <!-- pagination control -->
-                    <div class="row">
+                    <div class="row mb-3 py-3">
                         <!-- page size -->
                         <div class="col-sm-4 d-flex align-items-end">
-                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationPageSize" style="max-width: 33%">
-                                <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
-                                        th:value="${ps.ordinal()}"
-                                        th:text="${ps.size}"
-                                        th:selected="${ps.size eq pageOfEntities.pageable.pageSize}">
-                                </option>
-                            </select>
-                            <p class="my-0 ml-2">
-                                <small class="text-dark font-weight-lighter">Page size</small>
-                            </p>
+                            <select th:replace="fragments/components::paginationPageSizeOptions"></select>
+                            <p th:replace="fragments/components::paginationPageSizeLabel"></p>
                         </div>
                         <!-- page legend -->
                         <div class="col-sm-4 d-flex align-items-end justify-content-center">
@@ -53,11 +33,9 @@
                         <!-- sort criteria -->
                         <div class="col-sm-4 d-flex align-items-end justify-content-end">
                             <!-- label -->
-                            <p class="my-0 mr-2">
-                                <small class="text-dark font-weight-lighter">Sorted by</small>
-                            </p>
+                            <p th:replace="fragments/components::paginationSortLabel"></p>
                             <!-- options -->
-                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 80%">
+                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
                                 <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.ImageSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
@@ -66,8 +44,27 @@
                             </select>
                         </div>
                     </div>
-                    <hr/>
-                    <!-- images -->
+                </div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
+            </div>
+            <!-- main content -->
+            <div class="row">
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
+                <!-- content -->
+                <div class="col-sm-10">
+                    <hr class="mt-0 mb-2"/>
+                    <!-- upload image -->
+                    <form class="needs-validation form-inline mb-2" novalidate th:action="@{/admin/newImage}" th:object="${imagesWrapper}" method="POST" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input class="form-control form-control-sm bg-light px-5 " type="file" multiple th:field="*{images}" accept="image/*" required  /><!-- style="max-width: 50%"-->
+                            <div class="invalid-feedback">Please select an image</div>
+                        </div>
+                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('images')"></div>
+                        <button class="btn btn-sm btn-outline-info ml-auto px-5" type="submit">Upload</button>
+                    </form>
+                    <!-- images table -->
                     <table class="table">
                         <!-- table head -->
                         <thead class="thead-light">
