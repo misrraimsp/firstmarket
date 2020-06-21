@@ -1,12 +1,14 @@
 package misrraimsp.uned.pfg.firstmarket.model;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
 import java.util.Objects;
 
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
 public class Author extends BasicEntity {
 

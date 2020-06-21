@@ -28,6 +28,7 @@ public class DevPostgresqlConfig {
             "remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, " +
             "and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.";
 
+    private static final String imgAddress = "src/main/resources/static/images/";
 
     @Bean
     public CommandLineRunner dataLoader(CatServer catServer,
@@ -44,43 +45,70 @@ public class DevPostgresqlConfig {
             if (imageServer.getDefaultImage().getSize() == 0) {
             //if (true) {
                 //set image data
-                imageServer.setImageData(imageServer.getDefaultImage().getId(), Paths.get("src/main/resources/static/images/logo.jpg"));
-                imageServer.setImageData(1L, Paths.get("src/main/resources/static/images/1.png"));
-                imageServer.setImageData(2L, Paths.get("src/main/resources/static/images/2.png"));
-                imageServer.setImageData(3L, Paths.get("src/main/resources/static/images/3.png"));
-                imageServer.setImageData(4L, Paths.get("src/main/resources/static/images/4.png"));
-                imageServer.setImageData(5L, Paths.get("src/main/resources/static/images/5.png"));
-                imageServer.setImageData(6L, Paths.get("src/main/resources/static/images/6.png"));
-                imageServer.setImageData(7L, Paths.get("src/main/resources/static/images/7.png"));
-                imageServer.setImageData(8L, Paths.get("src/main/resources/static/images/8.png"));
-                imageServer.setImageData(9L, Paths.get("src/main/resources/static/images/9.png"));
-                imageServer.setImageData(10L, Paths.get("src/main/resources/static/images/negro.jpg"));
-                imageServer.setImageData(11L, Paths.get("src/main/resources/static/images/reinaRoja.jpg"));
-                imageServer.setImageData(12L, Paths.get("src/main/resources/static/images/compilers.jpeg"));
-                imageServer.setImageData(13L, Paths.get("src/main/resources/static/images/computer_networking.jpg"));
-                imageServer.setImageData(14L, Paths.get("src/main/resources/static/images/momo.jpg"));
-                imageServer.setImageData(15L, Paths.get("src/main/resources/static/images/unendliche.jpg"));
-                imageServer.setImageData(16L, Paths.get("src/main/resources/static/images/ninguno.jpg"));
+                imageServer.setImageData(imageServer.getDefaultImage().getId(), Paths.get(imgAddress + "logo.jpg"));
+                imageServer.setImageData(1L, Paths.get(imgAddress + "aformuladeus.jpg"));
+                imageServer.setImageData(2L, Paths.get(imgAddress + "alicewonder.png"));
+                imageServer.setImageData(3L, Paths.get(imgAddress + "alquimista.jpg"));
+                imageServer.setImageData(4L, Paths.get(imgAddress + "automata.jpg"));
+                imageServer.setImageData(5L, Paths.get(imgAddress + "calculo.jpg"));
+                imageServer.setImageData(6L, Paths.get(imgAddress + "cenicienta.jpg"));
+                imageServer.setImageData(7L, Paths.get(imgAddress + "centrotierra.jpg"));
+                imageServer.setImageData(8L, Paths.get(imgAddress + "chocolate.jpg"));
+                imageServer.setImageData(9L, Paths.get(imgAddress + "crime.jpg"));
+                imageServer.setImageData(10L, Paths.get(imgAddress + "crime2.jpg"));
+                imageServer.setImageData(11L, Paths.get(imgAddress + "reinaroja.jpg"));
+                imageServer.setImageData(12L, Paths.get(imgAddress + "compilers.jpeg"));
+                imageServer.setImageData(13L, Paths.get(imgAddress + "cnetworking.jpg"));
+                imageServer.setImageData(14L, Paths.get(imgAddress + "momo.jpg"));
+                imageServer.setImageData(15L, Paths.get(imgAddress + "unendliche.jpg"));
+                imageServer.setImageData(16L, Paths.get(imgAddress + "ninguno.jpg"));
+                imageServer.setImageData(17L, Paths.get(imgAddress + "drspock.png"));
+                imageServer.setImageData(18L, Paths.get(imgAddress + "fluidos.jpeg"));
+                imageServer.setImageData(19L, Paths.get(imgAddress + "haskell.png"));
+                imageServer.setImageData(20L, Paths.get(imgAddress + "istanbul.jpg"));
+                imageServer.setImageData(21L, Paths.get(imgAddress + "java.jpg"));
+                imageServer.setImageData(22L, Paths.get(imgAddress + "ppan.jpg"));
+                imageServer.setImageData(23L, Paths.get(imgAddress + "propaganda.jpg"));
+                imageServer.setImageData(24L, Paths.get(imgAddress + "raices.jpg"));
+                imageServer.setImageData(25L, Paths.get(imgAddress + "revoluciones.jpg"));
+                imageServer.setImageData(26L, Paths.get(imgAddress + "selva.jpg"));
+                imageServer.setImageData(27L, Paths.get(imgAddress + "sombraviento.jpg"));
+                imageServer.setImageData(28L, Paths.get(imgAddress + "spring.png"));
+                imageServer.setImageData(29L, Paths.get(imgAddress + "walden.jpg"));
                 LOGGER.debug("CommandLineRunner on dev-postgresql: images loaded");
 
                 //load book titles
                 Map<Long,String> titles = new HashMap<>();
-                titles.put(1L,"MILES DAVIS FOR SOLO GUITAR");
-                titles.put(2L,"Leonardos's Notebooks - Writing and Art of the Great Master");
-                titles.put(3L,"DR. SPOCK'S BABY AND CHILD CARE");
-                titles.put(4L,"ART/WORK - Everything You Need to Know (and Do) As You Pursue Your Art Career");
-                titles.put(5L,"THE FIRST-TIME MANAGER");
-                titles.put(6L,"HOW TO WIN FRIENDS & INFLUENCE PEOPLE");
-                titles.put(7L,"PRACTICAL ELECTRONICS FOR INVENTORS");
-                titles.put(8L,"UGLY'S ELECTRICAL REFERENCES");
-                titles.put(9L,"Java - A Beginner's Guide");
-                titles.put(10L,"The Clockmaker's Daughter");
+                titles.put(1L,"a FÓRMULA de DEUS");
+                titles.put(2L,"ALICE'S ADVENTURES IN WONDERLAND");
+                titles.put(3L,"O ALQUIMISTA");
+                titles.put(4L,"Automata Theory, Languages, and Computation");
+                titles.put(5L,"Cálculo Vectorial");
+                titles.put(6L,"Cinderella");
+                titles.put(7L,"Viagem ao Centro da Terra");
+                titles.put(8L,"Como Água para Chocolate");
+                titles.put(9L,"CRIME AND PUNISHMENT");
+                titles.put(10L,"CRIME AND PUNISHMENT");
                 titles.put(11L,"REINA ROJA");
                 titles.put(12L,"Compilers - Principles, Techniques & Tools");
                 titles.put(13L,"Computer Networking - A Top-Down Approach");
                 titles.put(14L,"Momo");
                 titles.put(15L,"DIE UNENDLICHE GESCHICHTE");
                 titles.put(16L,"Historias de Ninguno");
+                titles.put(17L,"DR. SPOCK'S BABY AND CHILD CARE");
+                titles.put(18L,"mecánica de fluidos");
+                titles.put(19L,"Haskell Programming from first principles");
+                titles.put(20L,"Istanbul - Memories and the City");
+                titles.put(21L,"Java - A Beginner's Guide");
+                titles.put(22L,"Peter Pan");
+                titles.put(23L,"Propaganda");
+                titles.put(24L,"RAICES");
+                titles.put(25L,"REVOLUCIONES IMAGINARIAS - LOS CAMBIOS POLÍTICOS EN LA ESPAÑA CONTEMPORÁNEA");
+                titles.put(26L,"El LIBRO de la SELVA");
+                titles.put(27L,"LA SOMBRA DEL VIENTO");
+                titles.put(28L,"Spring IN ACTION");
+                titles.put(29L,"Walden");
+
                 bookRepository.findAll().forEach(book -> {
                     if (!book.getImage().isDefault()) {
                         book.setTitle(titles.get(book.getImage().getId()));

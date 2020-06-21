@@ -30,7 +30,7 @@ public class ValueGenerator extends Random {
     private static final int MIN_USER_ID = 2; // admin dont order
     private static final int MAX_USER_ID = 64;
     private static final int MAX_CATEGORY_ID = 310;
-    private static final int MAX_IMAGE_ID = 17;
+    private static final int MAX_IMAGE_ID = 29;
     private static final int MAX_PUBLISHER_ID = 128;
     private static final int MAX_AUTHOR_ID = 128;
     private static final int MAX_BOOK_ID = 1000; // link with BookBuilder's numBooks parameter
