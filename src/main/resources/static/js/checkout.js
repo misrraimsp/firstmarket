@@ -183,28 +183,28 @@ document.addEventListener("DOMContentLoaded", function() {
                             buildErrorBox("ERROR: ", result.error.message, true);
                     }
                 } else {
-                    //local-dev
-                    mockWebhook(result.paymentIntent);
-                    setTimeout(function() {
-                        if (result.paymentIntent.status === 'succeeded') {
-                            document.getElementById("successLink").click();
-                        }
-                        else {
-                            console.log(result.paymentIntent);
-                            spinner.style.visibility = 'hidden';
-                            payButton.disabled = true;
-                            buildErrorBox("EXCEPTION: ", "An unexpected situation has took place. Please, contact us at afirstmarket@gmail.com", false);
-                        }
-                    }, (5 * 1000));
-                    /*if (result.paymentIntent.status === 'succeeded') {
-                        document.getElementById("successLink").click();
-                    }
-                    else {
-                        console.log(result.paymentIntent);
-                        spinner.style.visibility = 'hidden';
-                        payButton.disabled = true;
-                        buildErrorBox("EXCEPTION: ", "An unexpected situation has took place. Please, contact us at afirstmarket@gmail.com", false);
-                    }*/
+                    /*//local-dev
+                     mockWebhook(result.paymentIntent);
+                     setTimeout(function() {
+                         if (result.paymentIntent.status === 'succeeded') {
+                             document.getElementById("successLink").click();
+                         }
+                         else {
+                             console.log(result.paymentIntent);
+                             spinner.style.visibility = 'hidden';
+                             payButton.disabled = true;
+                             buildErrorBox("EXCEPTION: ", "An unexpected situation has took place. Please, contact us at afirstmarket@gmail.com", false);
+                         }
+                     }, (5 * 1000));*/
+                     if (result.paymentIntent.status === 'succeeded') {
+                         document.getElementById("successLink").click();
+                     }
+                     else {
+                         console.log(result.paymentIntent);
+                         spinner.style.visibility = 'hidden';
+                         payButton.disabled = true;
+                         buildErrorBox("EXCEPTION: ", "An unexpected situation has took place. Please, contact us at afirstmarket@gmail.com", false);
+                     }
                 }
             });
         }
