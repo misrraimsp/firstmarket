@@ -11,7 +11,12 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title(text = 'Book Form')"></div>
+            <div th:if="${bookForm.bookId eq null}">
+                <div th:replace="fragments/components::title_2_8_2(text = 'New Book')"></div>
+            </div>
+            <div th:unless="${bookForm.bookId eq null}">
+                <div th:replace="fragments/components::title_2_8_2(text = 'Book Edition')"></div>
+            </div>
             <!-- main content -->
             <div class="row">
                 <div class="col-sm-2"></div>
@@ -26,28 +31,28 @@
                             <div class="col-sm-6">
                                 <!-------------------------------------------------------------------------Title-->
                                 <div class="form-group">
-                                    <label for="title">Title:</label>
+                                    <label class="small font-weight-lighter" for="title">Title</label>
                                     <input class="form-control" type="text" th:field="*{title}" id="title" placeholder="enter title" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('title')"></div>
                                 <!-------------------------------------------------------------------------Publisher-->
                                 <div class="form-group">
-                                    <label for="publisher">Publisher:</label>
+                                    <label class="small font-weight-lighter" for="publisher">Publisher</label>
                                     <input class="form-control" type="text" th:field="*{publisherName}" id="publisher" placeholder="enter publisher name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('publisherName')"></div>
                                 <!-------------------------------------------------------------------------Year-->
                                 <div class="form-group">
-                                    <label for="year">Year of Publication:</label>
+                                    <label class="small font-weight-lighter" for="year">Year of Publication</label>
                                     <input class="form-control" type="text" th:field="*{year}" id="year" placeholder="enter year" th:pattern="${@environment.getProperty('fm.validation.regex.year')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('year')"></div>
                                 <!-------------------------------------------------------------------------Category-->
                                 <div class="form-group">
-                                    <label for="category">Category:</label>
+                                    <label class="small font-weight-lighter" for="category">Category</label>
                                     <select class="custom-select" th:field="*{categoryId}" id="category">
                                         <option th:each="ic : ${indentedCategories}"
                                                 th:value="${ic.id}"
@@ -57,7 +62,7 @@
                                 </div>
                                 <!-------------------------------------------------------------------------Stored Image-->
                                 <div class="form-group">
-                                    <label for="input1">Image:</label>
+                                    <label class="small font-weight-lighter" for="input1">Image</label>
                                     <select class="custom-select" id="input1" th:field="*{storedImageId}">
                                         <option th:each="imageInfo : ${imagesInfo}"
                                                 th:value="${imageInfo.id}"
@@ -71,7 +76,7 @@
                                     <div class="pretty p-default p-round p-thick mb-2">
                                         <input type="checkbox" id="switch"/>
                                         <div class="state p-info-o">
-                                            <label for="switch">Select New Image:</label>
+                                            <label class="small font-weight-lighter" for="switch">Select New Image</label>
                                         </div>
                                     </div>
                                     <!-- new-image input -->
@@ -81,7 +86,7 @@
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('image')"></div>
                                 <!-------------------------------------------------------------------------Description-->
                                 <div class="form-group">
-                                    <label for="description">Description:</label>
+                                    <label class="small font-weight-lighter" for="description">Description</label>
                                     <textarea class="form-control" rows="5" th:field="*{description}" id="description" placeholder="enter description"></textarea>
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
@@ -90,7 +95,7 @@
                             <div class="col-sm-6">
                                 <!-------------------------------------------------------------------------Authors-->
                                 <!-- label -->
-                                <label>Author/s:</label>
+                                <label class="small font-weight-lighter">Author/s</label>
                                 <!-- authorsFirstName backend errors -->
                                 <div class="mt-n2" th:if="${#fields.hasErrors('authorsFirstName')}">
                                     <div class="alert alert-danger alert-dismissible fade show mb-1" th:each="error : ${#fields.errors('authorsFirstName')}">
@@ -128,37 +133,38 @@
                                 </div>
                                 <!-------------------------------------------------------------------------ISBN-->
                                 <div class="form-group">
-                                    <label for="isbn">ISBN:</label>
+                                    <label class="small font-weight-lighter" for="isbn">ISBN *</label>
                                     <input class="form-control" type="text" th:field="*{isbn}" id="isbn" placeholder="enter isbn" required th:pattern="${@environment.getProperty('fm.validation.regex.isbn-code')}">
                                     <div class="invalid-feedback">Please fill out this field with a valid ISBN</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('isbn')"></div>
                                 <!-------------------------------------------------------------------------Language-->
                                 <div class="form-group">
-                                    <label for="language">Language:</label>
-                                    <select class="custom-select" th:field="*{language}" id="language">
+                                    <label class="small font-weight-lighter" for="language">Language</label>
+                                    <select class="custom-select" name="language" id="language">
                                         <option th:each="lan : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language).values()}"
                                                 th:value="${lan.ordinal()}"
-                                                th:text="${lan.name()}">
+                                                th:text="${lan.text}"
+                                                th:selected="${lan.text.equals(bookForm.language.text)}">
                                         </option>
                                     </select>
                                 </div>
                                 <!-------------------------------------------------------------------------Pages-->
                                 <div class="form-group">
-                                    <label for="pages">Number of Pages:</label>
+                                    <label class="small font-weight-lighter" for="pages">Number of Pages</label>
                                     <input class="form-control" type="number" th:field="*{pages}" id="pages" placeholder="enter number of pages" th:min="${@environment.getProperty('fm.validation.numeric.pages').split(',')[0]}" th:max="${@environment.getProperty('fm.validation.numeric.pages').split(',')[1]}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('pages')"></div>
                                 <!-------------------------------------------------------------------------Stock-->
                                 <div class="form-group">
-                                    <label for="stock">Units in Stock:</label>
+                                    <label class="small font-weight-lighter" for="stock">Units in Stock</label>
                                     <input class="form-control" type="number" th:field="*{stock}" id="stock" placeholder="enter stock" th:min="${@environment.getProperty('fm.validation.numeric.stock').split(',')[0]}" th:max="${@environment.getProperty('fm.validation.numeric.stock').split(',')[1]}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('stock')"></div>
                                 <!-------------------------------------------------------------------------Price-->
-                                <label for="price">Price:</label>
+                                <label class="small font-weight-lighter" for="price">Price</label>
                                 <div class="input-group mb-3">
                                     <input class="form-control" type="text" th:field="*{price}" id="price" placeholder="enter price" th:pattern="${@environment.getProperty('fm.validation.regex.price')}">
                                     <div class="input-group-append">
@@ -168,9 +174,17 @@
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('price')"></div>
                             </div>
-                            <div class="col-sm-12">
-                                <button th:replace="fragments/components::saveButton"></button>
-                                <a th:replace="fragments/components::cancelButtonToBack"></a>
+                            <!-- submit or cancel -->
+                            <div class="col-sm-12 d-flex align-items-end">
+                                <div th:if="${bookForm.bookId eq null}">
+                                    <button th:replace="fragments/components::submitButton(text = 'Create Book')"></button>
+                                </div>
+                                <div th:unless="${bookForm.bookId eq null}">
+                                    <button th:replace="fragments/components::submitButton(text = 'Save Changes')"></button>
+                                </div>
+                                <div class="ml-auto">
+                                    <a th:replace="fragments/components::cancelButtonToBack(text = 'Cancel')"></a>
+                                </div>
                             </div>
                         </div>
                     </form>

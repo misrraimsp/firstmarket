@@ -2,45 +2,55 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       lang="en">
-    <head th:replace="fragments/components::head('New User')"></head>
+    <head th:replace="fragments/components::head('FirstMarket Registration')"></head>
     <body>
         <!-- fm-content -->
         <div class="container-fluid fm-content">
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <div th:replace="fragments/components::title(text = 'New User')"></div>
+            <div th:replace="fragments/components::title_2_8_2(text = 'Register to FirstMarket')"></div>
             <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                    <form class="needs-validation" novalidate th:action="@{/newUser}" th:object="${userForm}" method="POST" action="#">
-                        <!-- email -->
-                        <div class="form-group">
-                            <label for="email">E-mail:</label>
-                            <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter email" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
-                            <div class="invalid-feedback">Please fill out this field with your email</div>
+                <!-- left margin -->
+                <div class="col-sm-2"></div>
+                <!-- form -->
+                <div class="col-sm-8">
+                    <form class="needs-validation" novalidate th:action="@{/newUser}" th:object="${userForm}" method="POST">
+                        <div class="form-row">
+                            <div class="col-sm-12">
+                                <!-- email -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="email">E-mail *</label>
+                                    <input class="form-control" type="email" th:field="*{email}" id="email" placeholder="enter your email" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
+                                    <div class="invalid-feedback">Please fill out this field with your email</div>
+                                </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('email')"></div>
+                                <!-- password -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="newPassword">Password *</label>
+                                    <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter your password" required th:pattern="${@environment.getProperty('fm.validation.regex.password')}" th:title="#{password.invalidFormat}"/>
+                                    <div class="invalid-feedback" th:text="#{password.invalidFormat}">Please fill out this field with a valid password</div>
+                                </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('password')"></div>
+                                <!-- confirm password -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="newPasswordConfirm">Confirm Password *</label>
+                                    <input class="form-control" type="password" th:field="*{matchingPassword}" id="newPasswordConfirm" placeholder="confirm your password" required pattern=".*" title="Please enter the same password as above"/>
+                                    <div class="invalid-feedback" th:text="#{password.notMatching}">Please enter the same password as above</div>
+                                </div>
+                            </div>
+                            <!-- submit or cancel -->
+                            <div class="col-sm-12 d-flex align-items-end">
+                                <button th:replace="fragments/components::submitButton(text = 'Register')"></button>
+                                <div class="ml-auto">
+                                    <a th:replace="fragments/components::cancelButtonToHome(text = 'Cancel')"></a>
+                                </div>
+                            </div>
                         </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('email')"></div>
-                        <!-- password -->
-                        <div class="form-group">
-                            <label for="newPassword">Password:</label>
-                            <input class="form-control" type="password" th:field="*{password}" id="newPassword" placeholder="enter password" required th:pattern="${@environment.getProperty('fm.validation.regex.password')}" th:title="#{password.invalidFormat}"/>
-                            <div class="invalid-feedback" th:text="#{password.invalidFormat}">Please fill out this field with a valid password</div>
-                        </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('password')"></div>
-                        <!-- confirm password -->
-                        <div class="form-group">
-                            <label for="newPasswordConfirm">Confirm Password:</label>
-                            <input class="form-control" type="password" th:field="*{matchingPassword}" id="newPasswordConfirm" placeholder="confirm password" required pattern=".*" title="Please enter the same password as above"/>
-                            <div class="invalid-feedback" th:text="#{password.notMatching}">Please enter the same password as above</div>
-                        </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('matchingPassword')"></div>
-                        <!-- save or cancel -->
-                        <button th:replace="fragments/components::saveButton"></button>
-                        <a th:replace="fragments/components::cancelButtonToBack"></a>
                     </form>
                 </div>
-                <div class="col-sm-3"></div>
+                <!-- right margin -->
+                <div class="col-sm-2"></div>
             </div>
         </div>
         <!-- footer -->

@@ -9,45 +9,46 @@
             <header th:replace="fragments/components::header"></header>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
-            <div th:replace="fragments/components::title(text = ${user.profile.firstName} + ', we\'re sorry to see you go')"></div>
+            <div th:replace="fragments/components::title_2_8_2(text = ${user.profile.firstName} + ', we\'re sorry to see you go')"></div>
             <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                    <form class="needs-validation" novalidate th:action="@{/user/deleteUser}" th:object="${userDeletionForm}" method="POST" action="#">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <form class="needs-validation" novalidate th:action="@{/user/deleteUser}" th:object="${userDeletionForm}" method="POST">
                         <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
                         <!-- deletion reason -->
-                        <div class="d-flex flex-column pt-3">
-                            <div>
-                                <p>Please, tell us why you are closing your account:</p>
-                            </div>
+                        <div class="d-flex flex-column">
+                            <h5 class="mb-3 font-weight-lighter">Please, tell us why you are closing your account:</h5>
                             <div class="pretty p-default p-round p-thick mb-3" th:each="dr : ${deletionReasons}">
                                 <input type="radio" th:field="*{deletionReason}" th:value="${dr.ordinal()}" th:id="'dr-' + ${dr.ordinal()}"/>
                                 <div class="state p-info-o">
-                                    <label class="font-weight-lighter" th:for="'dr-' + ${dr.ordinal()}" th:text="${dr.getText()}">deletion reason</label>
+                                    <label class="font-weight-lighter" th:for="'dr-' + ${dr.ordinal()}" th:text="${dr.text}">deletion reason</label>
                                 </div>
                             </div>
                         </div>
                         <!-- comment -->
                         <div class="form-group">
-                            <label for="comment">Your feedback matters, so feel free to leave us a comment:</label>
+                            <h5 class="mb-3 font-weight-lighter">Your feedback matters, so feel free to leave us a comment:</h5>
                             <textarea class="form-control" rows="5" th:field="*{comment}" id="comment" placeholder="enter your comment"></textarea>
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('comment')"></div>
-                        <hr/>
                         <!-- password -->
                         <div class="form-group">
-                            <label class="font-weight-bold" for="password">To complete the deletion, we need you to enter your password:</label>
-                            <input class="form-control" type="password" th:field="*{password}" id="password" placeholder="enter your password" />
+                            <h5 class="mb-3 font-weight-lighter">To complete the deletion, we need you to enter your password: *</h5>
+                            <input class="form-control" type="password" th:field="*{password}" id="password" placeholder="enter your password" required/>
                             <div class="invalid-feedback">Please introduce your current password</div>
                         </div>
                         <div th:replace="fragments/components::backendSpecificObjectFieldErrors('password')"></div>
                         <!-- delete or cancel -->
-                        <button th:replace="fragments/components::deleteAccountButton"></button>
-                        <a th:replace="fragments/components::cancelButtonToHome"></a>
+                        <div class="d-flex">
+                            <button class="btn btn-outline-danger btn-block px-5 mr-2" type="submit">Delete Account</button>
+                            <div class="ml-auto">
+                                <a th:replace="fragments/components::cancelButtonToBack(text = 'Cancel')"></a>
+                            </div>
+                        </div>
                     </form>
                 </div>
-                <div class="col-sm-3"></div>
+                <div class="col-sm-2"></div>
             </div>
         </div>
         <!-- footer -->

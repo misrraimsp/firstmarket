@@ -11,39 +11,60 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title(text = 'Category Form')"></div>
+            <div th:if="${categoryForm.categoryId eq null}">
+                <div th:replace="fragments/components::title_2_8_2(text = 'New Category')"></div>
+            </div>
+            <div th:unless="${categoryForm.categoryId eq null}">
+                <div th:replace="fragments/components::title_2_8_2(text = 'Category Edition')"></div>
+            </div>
             <!-- main content -->
             <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                    <form class="needs-validation" novalidate th:action="@{/admin/categoryForm}" th:object="${categoryForm}" method="POST" action="#">
-                        <input type="hidden" th:field="*{categoryId}"/>
-                        <input type="hidden" th:field="*{parent.name}"/>
-                        <!-- name -->
-                        <div class="form-group">
-                            <label for="name">Name:</label>
-                            <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
-                            <div class="invalid-feedback">Please fill out this field correctly</div>
+                <!-- left margin -->
+                <div class="col-sm-2"></div>
+                <!-- form -->
+                <div class="col-sm-8">
+                    <form class="needs-validation" novalidate th:action="@{/admin/categoryForm}" th:object="${categoryForm}" method="POST">
+                        <div class="form-row">
+                            <div class="col-sm-12">
+                                <input type="hidden" th:field="*{categoryId}"/>
+                                <input type="hidden" th:field="*{parent.name}"/>
+                                <!-- name -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="name">Name</label>
+                                    <input class="form-control" type="text" th:field="*{name}" id="name" placeholder="enter the category name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
+                                    <div class="invalid-feedback">Please fill out this field correctly</div>
+                                </div>
+                                <div th:replace="fragments/components::backendSpecificObjectFieldErrors('name')"></div>
+                                <!-- parent category -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="parent">Nested under</label>
+                                    <select class="custom-select" th:field="*{parent.id}" id="parent" >
+                                        <option th:each="ic : ${indentedCategories}"
+                                                th:value="${ic.id}"
+                                                th:text="${ic.name}"
+                                                th:selected="${ic.id==categoryForm.parent.id}"
+                                                th:disabled="${descendants.contains(ic)}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- submit or cancel -->
+                            <div class="col-sm-12 d-flex align-items-end">
+                                <div th:if="${categoryForm.categoryId eq null}">
+                                    <button th:replace="fragments/components::submitButton(text = 'Create Category')"></button>
+                                </div>
+                                <div th:unless="${categoryForm.categoryId eq null}">
+                                    <button th:replace="fragments/components::submitButton(text = 'Save Changes')"></button>
+                                </div>
+                                <div class="ml-auto">
+                                    <a th:replace="fragments/components::cancelButtonToBack(text = 'Cancel')"></a>
+                                </div>
+                            </div>
                         </div>
-                        <div th:replace="fragments/components::backendSpecificObjectFieldErrors('name')"></div>
-                        <!-- parent category -->
-                        <div class="form-group">
-                            <label for="parent">Nested under:</label>
-                            <select class="custom-select" th:field="*{parent.id}" id="parent" >
-                                <option th:each="ic : ${indentedCategories}"
-                                        th:value="${ic.id}"
-                                        th:text="${ic.name}"
-                                        th:selected="${ic.id==categoryForm.parent.id}"
-                                        th:disabled="${descendants.contains(ic)}">
-                                </option>
-                            </select>
-                        </div>
-                        <!-- save or cancel -->
-                        <button th:replace="fragments/components::saveButton"></button>
-                        <a th:replace="fragments/components::cancelButtonToBack"></a>
                     </form>
                 </div>
-                <div class="col-sm-3"></div>
+                <!-- right margin -->
+                <div class="col-sm-2"></div>
             </div>
         </div>
         <!-- footer -->

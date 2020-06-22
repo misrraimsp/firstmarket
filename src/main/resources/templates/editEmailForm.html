@@ -11,31 +11,42 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title(text = 'Edit Email')"></div>
+            <div th:replace="fragments/components::title_2_8_2(text = 'Email Edition')"></div>
             <!-- main content -->
             <div class="row">
-                <div class="col-sm-3"></div>
-                <div class="col-sm-6">
-                    <div th:replace="fragments/components::backendRequestParamError"></div>
-                    <form class="needs-validation" novalidate id="form" th:action="@{/user/editEmail}" method="POST" action="#">
-                        <!-- new email -->
-                        <div class="form-group">
-                            <label for="editedEmail">New E-mail:</label>
-                            <input class="form-control" type="email" name="editedEmail" id="editedEmail" placeholder="enter the new email" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
-                            <div class="invalid-feedback">Please fill out this field with your email</div>
+                <!-- left margin -->
+                <div class="col-sm-2"></div>
+                <!-- form -->
+                <div class="col-sm-8">
+                    <form class="needs-validation" novalidate id="form" th:action="@{/user/editEmail}" method="POST">
+                        <div th:replace="fragments/components::backendRequestParamError"></div>
+                        <div class="form-row">
+                            <div class="col-sm-12">
+                                <!-- new email -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="editedEmail">New E-mail *</label>
+                                    <input class="form-control" type="email" name="editedEmail" id="editedEmail" placeholder="enter the new email" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
+                                    <div class="invalid-feedback">Please fill out this field with the desired new email</div>
+                                </div>
+                                <!-- password -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="password">Password *</label>
+                                    <input class="form-control" type="password" name="password" id="password" placeholder="enter your password" required />
+                                    <div class="invalid-feedback">Please introduce your password</div>
+                                </div>
+                            </div>
+                            <!-- submit or cancel -->
+                            <div class="col-sm-12 d-flex align-items-end">
+                                <button th:replace="fragments/components::submitButton(text = 'Change email')"></button>
+                                <div class="ml-auto">
+                                    <a th:replace="fragments/components::cancelButtonToBack(text = 'Cancel')"></a>
+                                </div>
+                            </div>
                         </div>
-                        <!-- password -->
-                        <div class="form-group">
-                            <label for="password">Your Password:</label>
-                            <input class="form-control" type="password" name="password" id="password" placeholder="enter your password" required />
-                            <div class="invalid-feedback">Please introduce your current password</div>
-                        </div>
-                        <!-- save or cancel -->
-                        <button th:replace="fragments/components::saveButton"></button>
-                        <a th:replace="fragments/components::cancelButtonToHome"></a>
                     </form>
                 </div>
-                <div class="col-sm-3"></div>
+                <!-- right margin -->
+                <div class="col-sm-2"></div>
             </div>
         </div>
         <!-- footer -->
