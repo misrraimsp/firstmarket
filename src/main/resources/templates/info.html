@@ -11,12 +11,11 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title_1_11(text = ${infoTitle})"></div>
+            <div th:replace="fragments/components::title_1_10_1(text = ${infoTitle})"></div>
             <!-- Content -->
             <div class="row">
                 <div class="col-sm-1"></div>
                 <div class="col-sm-10">
-                    <hr class="mb-4 mt-0"/>
                     <div th:each="message : ${infoMessages}">
                         <h5 th:text="${message}"></h5>
                         <br/>

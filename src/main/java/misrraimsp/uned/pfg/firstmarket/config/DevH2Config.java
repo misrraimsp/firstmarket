@@ -261,7 +261,7 @@ public class DevH2Config {
             bookForm1.setAuthorsFirstName(List.of("Julio", "", "Julio"));
             bookForm1.setAuthorsLastName(List.of("Verne", "", "Verne"));
             bookForm1.setPublisherName("Anaya");
-            bookForm1.setLanguage(Language.Spanish);
+            bookForm1.setLanguage(Language.SPANISH);
             bookForm1.setPages(123);
             bookForm1.setDescription("Este es un libro que trata acerca de los fundamentos " +
                     "en los que se basa las construcción de ordenadores modernos");
@@ -283,7 +283,7 @@ public class DevH2Config {
             bookForm2.setAuthorsFirstName(List.of("Julio", "Miguel"));
             bookForm2.setAuthorsLastName(List.of("Verne", "Delibes"));
             bookForm2.setPublisherName("Manning");
-            bookForm2.setLanguage(Language.English);
+            bookForm2.setLanguage(Language.ENGLISH);
             bookForm2.setPages(100);
             bookForm2.setDescription("En este libro se recogen las principales " +
                     "características de la música tradicional española");
@@ -305,7 +305,7 @@ public class DevH2Config {
             bookForm3.setAuthorsFirstName(List.of("Miguel", "Pablo", "Julio"));
             bookForm3.setAuthorsLastName(List.of("Delibes", "Iglesias", "Verne"));
             bookForm3.setPublisherName("Cabildo de Gran Canaria");
-            bookForm3.setLanguage(Language.German);
+            bookForm3.setLanguage(Language.GERMAN);
             bookForm3.setPages(422);
             bookForm3.setDescription("Recorrido por los principales aspectos del análisis, " +
                     "diseño y construcción de compiladores modernos");
@@ -326,7 +326,7 @@ public class DevH2Config {
             bookForm4.setAuthorsFirstName(List.of("", "", "", "", "Antonio"));
             bookForm4.setAuthorsLastName(List.of("", "", "", "", "Escohotado"));
             bookForm4.setPublisherName("Planeta");
-            bookForm4.setLanguage(Language.French);
+            bookForm4.setLanguage(Language.FRENCH);
             bookForm4.setPages(111);
             bookForm4.setDescription("Breve comentario sobre los principales " +
                     "temas relacionados con la conectividad de computadores");
@@ -348,7 +348,7 @@ public class DevH2Config {
             bookForm5.setAuthorsFirstName(List.of("Julio", "", "Julio"));
             bookForm5.setAuthorsLastName(List.of("Verne", "", "Cesar"));
             bookForm5.setPublisherName("Cambridge");
-            bookForm5.setLanguage(Language.Portuguese);
+            bookForm5.setLanguage(Language.PORTUGUESE);
             bookForm5.setPages(128);
             bookForm5.setDescription("");
             bookForm5.setPrice("19.99");
@@ -369,7 +369,7 @@ public class DevH2Config {
             bookForm6.setAuthorsFirstName(List.of(""));
             bookForm6.setAuthorsLastName(List.of(""));
             bookForm6.setPublisherName("Uned");
-            bookForm6.setLanguage(Language.Estonian);
+            bookForm6.setLanguage(Language.ESTONIAN);
             bookForm6.setPages(123);
             bookForm6.setDescription("");
             bookForm6.setPrice("55");
@@ -390,7 +390,7 @@ public class DevH2Config {
             bookForm7.setAuthorsFirstName(List.of("Misrraim", "Andrea"));
             bookForm7.setAuthorsLastName(List.of("Suárez", "Grau"));
             bookForm7.setPublisherName("Espasa");
-            bookForm7.setLanguage(Language.Czech);
+            bookForm7.setLanguage(Language.CZECH);
             bookForm7.setPages(599);
             bookForm7.setDescription("");
             bookForm7.setPrice("14.99");
@@ -411,7 +411,7 @@ public class DevH2Config {
             bookForm8.setAuthorsFirstName(List.of("", "   ", "Cristiano"));
             bookForm8.setAuthorsLastName(List.of("Messi", "            ", "Ronaldo"));
             bookForm8.setPublisherName("Alianza");
-            bookForm8.setLanguage(Language.Polish);
+            bookForm8.setLanguage(Language.POLISH);
             bookForm8.setPages(344);
             bookForm8.setDescription("");
             bookForm8.setPrice("99.99");
@@ -432,7 +432,7 @@ public class DevH2Config {
             bookForm9.setAuthorsFirstName(List.of("Julio"));
             bookForm9.setAuthorsLastName(List.of("Verne"));
             bookForm9.setPublisherName("Anaya");
-            bookForm9.setLanguage(Language.Basque);
+            bookForm9.setLanguage(Language.BASQUE);
             bookForm9.setPages(12);
             bookForm9.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
                     " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");
@@ -453,7 +453,7 @@ public class DevH2Config {
             bookForm10.setAuthorsFirstName(List.of(""));
             bookForm10.setAuthorsLastName(List.of(""));
             bookForm10.setPublisherName("");
-            bookForm10.setLanguage(Language.Basque);
+            bookForm10.setLanguage(Language.BASQUE);
             bookForm10.setPages(12);
             bookForm10.setDescription("Estocolmo, 1913. Agneta, la descendiente de una familia" +
                     " que se dedica desde hace varias generaciones a la cría de caballos, finalmente ha logrado su gran sueño.");

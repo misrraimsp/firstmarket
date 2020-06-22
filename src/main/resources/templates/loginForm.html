@@ -11,37 +11,49 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div th:replace="fragments/components::title(text = 'Login')"></div>
+            <div th:replace="fragments/components::title_3_6_3(text = 'Login')"></div>
             <div class="row">
+                <!-- left margin -->
                 <div class="col-sm-3"></div>
+                <!-- form -->
                 <div class="col-sm-6">
-                    <!-- login form -->
                     <form class="needs-validation" novalidate th:action="@{/login}" method="POST">
-                        <div th:replace="fragments/components::loginError"></div>
-                        <!-- email -->
-                        <div class="form-group">
-                            <label for="email">E-mail:</label>
-                            <input class="form-control" type="email" id="email" placeholder="enter email" name="username" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
-                            <div class="invalid-feedback">Please fill out this field with your email</div>
+                        <div class="form-row">
+                            <div class="col-sm-12">
+                                <div th:replace="fragments/components::loginError"></div>
+                                <!-- email -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="email">E-mail *</label>
+                                    <input class="form-control" type="email" id="email" placeholder="enter your email" name="username" required th:pattern="${@environment.getProperty('fm.validation.regex.email')}">
+                                    <div class="invalid-feedback">Please fill out this field with your email</div>
+                                </div>
+                                <!-- password -->
+                                <div class="form-group">
+                                    <label class="small font-weight-lighter" for="password">Password *</label>
+                                    <input class="form-control" type="password" id="password" placeholder="enter your password" name="password" required>
+                                    <div class="invalid-feedback">Please fill out this field</div>
+                                </div>
+                            </div>
+                            <!-- submit or cancel -->
+                            <div class="col-sm-12 d-flex align-items-end">
+                                <button th:replace="fragments/components::submitButton(text = 'Login')"></button>
+                                <div class="ml-auto">
+                                    <a th:replace="fragments/components::cancelButtonToHome(text = 'Cancel')"></a>
+                                </div>
+                            </div>
                         </div>
-                        <!-- password -->
-                        <div class="form-group">
-                            <label for="password">Password:</label>
-                            <input class="form-control" type="password" id="password" placeholder="enter password" name="password" required>
-                            <div class="invalid-feedback">Please fill out this field</div>
-                        </div>
-                        <button class="btn btn-info px-5 mb-3" type="submit">Login</button>
                     </form>
+                    <hr style="max-width: 50%; margin-top: 2rem; margin-bottom: 0.5rem; margin-left: 0"/>
                     <!-- new user link -->
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <span>New? Click <a class="text-info" th:href="@{/newUser}" style="text-decoration: none">here</a> to register.</span>
                     </div>
                     <!-- forgot password? link -->
-                    <hr/>
-                    <div class="small text-muted mb-3">
+                    <div class="small text-muted">
                         <span>Forgot your password? Click <a class="text-info" th:href="@{/resetPassword}" style="text-decoration: none">here</a> to restore it.</span>
                     </div>
                 </div>
+                <!-- right margin -->
                 <div class="col-sm-3"></div>
             </div>
         </div>

@@ -22,7 +22,7 @@ public class BookForm {
         authorsLastName = Collections.singletonList("");
         pages = 1;
         year = Year.now();
-        language = Language.Spanish;
+        language = Language.SPANISH;
         status = ProductStatus.OUT_OF_STOCK;
     }
 

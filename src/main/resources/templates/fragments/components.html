@@ -154,28 +154,47 @@
             </div>
         </div>
 
-        <!-- Title 1 11 -->
-        <div class="row mt-5 mb-3" th:fragment="title_1_11(text)">
+        <!-- Title 1 10 1 -->
+        <div class="row mt-5 mb-3" th:fragment="title_1_10_1(text)">
             <div class="col-sm-1"></div>
-            <div class="col-sm-11">
+            <div class="col-sm-10">
                 <h2 class="text-dark font-weight-light" th:text="${text}">Title</h2>
+                <hr/>
             </div>
+            <div class="col-sm-1"></div>
+        </div>
+
+        <!-- Title 2 8 2 -->
+        <div class="row mt-5 mb-3" th:fragment="title_2_8_2(text)">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <h2 class="text-dark font-weight-light" th:text="${text}">Title</h2>
+                <hr/>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+
+        <!-- Title 3 6 3 -->
+        <div class="row mt-5 mb-3" th:fragment="title_3_6_3(text)">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <h2 class="text-dark font-weight-light" th:text="${text}">Title</h2>
+                <hr/>
+            </div>
+            <div class="col-sm-3"></div>
         </div>
 
         <!-- snackbar -->
         <div th:fragment="snackbar" id="snackbar" th:text="${@environment.getProperty('fm.front-end.common-components.snackbar')}">snackbar</div>
 
-        <!-- Save button -->
-        <button th:fragment="saveButton" class="btn btn-outline-info px-5 my-3" type="submit">Save</button>
+        <!-- submit button -->
+        <button th:fragment="submitButton(text)" class="btn btn-outline-info px-5" type="submit"><span th:text="${text}"></span></button>
 
-        <!-- Delete account button -->
-        <button th:fragment="deleteAccountButton" class="btn btn-danger px-5 my-3" type="submit">Delete Account</button>
+        <!-- cancel button (toBack) -->
+        <a th:fragment="cancelButtonToBack(text)" class="btn btn-outline-secondary px-3" href="#" onclick="window.history.back();"><small th:text="${text}"></small></a>
 
-        <!-- Cancel button (toBack) -->
-        <a th:fragment="cancelButtonToBack" class="btn btn-outline-secondary px-5 my-3" onclick="window.history.back();">Cancel</a>
-
-        <!-- Cancel button (toHome) -->
-        <a th:fragment="cancelButtonToHome" class="btn btn-outline-secondary px-5 my-3" th:href="@{/home}">Cancel</a>
+        <!-- cancel button (toHome) -->
+        <a th:fragment="cancelButtonToHome(text)" class="btn btn-outline-secondary px-3" th:href="@{/home}"><small th:text="${text}"></small></a>
 
         <!-- host address -->
         <i th:fragment="host-address" id="host" th:attr="host-address=${@environment.getProperty('fm.host.address')}"></i>
@@ -288,7 +307,7 @@
 
         <!-- footer -->
         <footer class="footer bg-white text-center pb-3" th:fragment="footer">
-            <hr/>
+            <hr style="max-width: 33%"/>
             <span class="info-copyrigth"><a class="text-info" href="https://github.com/misrraimsp/firstmarket" style="text-decoration: none">FirstMarket Project</a> © 2020</span>
         </footer>
 

@@ -10,44 +10,28 @@
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
             <!-- title -->
-            <div class="row">
-                <div class="col-sm-2"></div>
-                <div class="col-sm-10">
-                    <h2 class="text-dark my-5 font-weight-light">Edit Profile</h2>
-                </div>
-            </div>
+            <div th:replace="fragments/components::title_1_10_1(text = ${user.profile.firstName} + '\'s Profile')"></div>
             <!-- main content -->
             <div class="row">
-                <div class="col-sm-2"></div>
+                <!-- left margin -->
+                <div class="col-sm-1"></div>
                 <!-- profile form -->
-                <div class="col-sm-6">
+                <div class="col-sm-8 bg-white py-3">
                     <form class="needs-validation" novalidate th:action="@{/user/profileForm}" th:object="${profileForm}" method="POST" action="#">
                         <input type="hidden" th:field="*{profileId}"/>
                         <div th:replace="fragments/components::backendGenericObjectFieldErrors"></div>
                         <div class="form-row">
                             <div class="col-sm-6">
-                                <!-- full name
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">First name</small></span>
-                            </div>
-                            <input class="form-control" type="text" id="firstName" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text"><small class="font-weight-lighter">Last name</small></span>
-                            </div>
-                            <input class="form-control" type="text" id="lastName" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
-                            <div class="invalid-feedback">Please fill out this field correctly</div>
-                        </div>-->
                                 <!-------------------------------------------------------------------------firstname-->
                                 <div class="form-group">
-                                    <label class="mt-1" for="firstName">First Name:</label>
+                                    <label class="small font-weight-lighter" for="firstName">First Name</label>
                                     <input class="form-control" type="text" th:field="*{firstName}" id="firstName" placeholder="enter firstName" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('firstName')"></div>
                                 <!------------------------------------------------------------------------- phone -->
                                 <div class="form-group">
-                                    <label for="phone">Phone Number:</label>
+                                    <label class="small font-weight-lighter" for="phone">Phone Number</label>
                                     <input class="form-control" type="text" th:field="*{phone}" id="phone" placeholder="enter your phone number" th:pattern="${@environment.getProperty('fm.validation.regex.phone')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
@@ -56,14 +40,14 @@
                             <div class="col-sm-6">
                                 <!-------------------------------------------------------------------------lastname-->
                                 <div class="form-group">
-                                    <label class="mt-1" for="lastName">Last Name:</label>
+                                    <label class="small font-weight-lighter" for="lastName">Last Name</label>
                                     <input class="form-control" type="text" th:field="*{lastName}" id="lastName" placeholder="enter lastName" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                     <div class="invalid-feedback">Please fill out this field correctly</div>
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('lastName')"></div>
                                 <!------------------------------------------------------------------------- gender -->
                                 <div class="form-group">
-                                    <label for="gender">Gender:</label>
+                                    <label class="small font-weight-lighter" for="gender">Gender</label>
                                     <select class="custom-select" th:field="*{gender}" id="gender" >
                                         <option th:each="gen : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender).values()}"
                                                 th:value="${gen}"
@@ -74,7 +58,7 @@
                             </div>
                             <div class="col-sm-12">
                                 <!------------------------------------------------------------------------- birthdate -->
-                                <label>Date of Birth :</label>
+                                <label class="small font-weight-lighter">Date of Birth</label>
                                 <div class="input-group mb-3">
                                     <!-- year -->
                                     <select class="custom-select" th:field="*{year}" id="year" >
@@ -100,38 +84,34 @@
                                 </div>
                                 <div th:replace="fragments/components::backendSpecificObjectFieldErrors('year')"></div>
                             </div>
-                            <div class="col-sm-12">
-                                <!-- save or cancel -->
-                                <button th:replace="fragments/components::saveButton"></button>
-                                <a th:replace="fragments/components::cancelButtonToHome"></a>
+                            <!-- submit or cancel -->
+                            <div class="col-sm-12 d-flex align-items-end">
+                                <button th:replace="fragments/components::submitButton(text = 'Save')"></button>
+                                <div class="ml-auto">
+                                    <a th:replace="fragments/components::cancelButtonToHome(text = 'Cancel')"></a>
+                                </div>
                             </div>
                         </div>
                     </form>
                 </div>
                 <!-- action buttons -->
-                <div class="col-sm-3">
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-10 py-4">
-                            <!-- edit email button -->
-                            <div class="my-3">
-                                <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/user/editEmail}">Change Email</a>
-                            </div>
-                            <!-- edit password button -->
-                            <div class="my-3">
-                                <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/editPassword}">Change Password</a>
-                            </div>
-                            <hr class="my-3">
-                            <!-- delete account button -->
-                            <div class="my-3">
-                                <a class="btn btn-sm btn-outline-danger btn-block font-weight-lighter" th:href="@{/user/deleteUser}">Delete Account</a>
-                            </div>
-                        </div>
-                        <div class="col-sm-1"></div>
+                <div class="col-sm-2 d-flex flex-column pb-3">
+                    <!-- edit email button -->
+                    <div class="mt-0 mb-2">
+                        <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/user/editEmail}">Change Email</a>
+                    </div>
+                    <!-- edit password button -->
+                    <div class="my-2">
+                        <a class="btn btn-sm btn-outline-dark btn-block font-weight-light" th:href="@{/editPassword}">Change Password</a>
+                    </div>
+                    <!-- delete account button -->
+                    <div class="mt-auto">
+                        <a class="btn btn-sm btn-outline-danger btn-block font-weight-lighter" th:href="@{/user/deleteUser}"><small>Delete Account</small></a>
+                    </div>
                 </div>
-                <div class="col-sm-2 bg-white"></div>
+                <!-- right margin -->
+                <div class="col-sm-1"></div>
             </div>
-        </div>
         </div>
         <!-- footer -->
         <footer th:replace="fragments/components::footer"></footer>
