@@ -11,13 +11,15 @@
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
+            <div th:replace="fragments/components::title_1_10_1(text = ${book.title})"></div>
             <!-- main content -->
-            <div class="row my-5 py-4">
+            <div class="row">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
                 <!-- image -->
                 <div class="col-sm-3">
-                    <img class="img-fluid" th:src="@{/image/{id}(id=${book.image.id})}"/>
+                    <a th:href="@{/image/{id}(id=${book.image.id})}"><img class="img-fluid" th:src="@{/image/{id}(id=${book.image.id})}"/></a>
                 </div>
                 <!-- book content -->
                 <div class="col-sm-7">
@@ -25,60 +27,41 @@
                         <!-- book info -->
                         <div class="col-sm-8">
                             <div class="row">
-                                <div class="col-sm-6" >
-                                    <!-- title -->
-                                    <div>
-                                        <p th:unless="${book.title.isBlank()}">
-                                            <strong>Title: </strong><span th:text="${book.title}">title</span>
-                                        </p>
-                                        <p th:if="${book.title.isBlank()}">
-                                            <strong>Title: </strong><span><small><i>unknown</i></small></span>
-                                        </p>
-                                    </div>
-                                    <!-- publisher -->
-                                    <div>
-                                        <p th:if="${book.publisher ne null}">
-                                            <strong>Publisher: </strong><span th:text="${book.publisher.name}"></span>
-                                        </p>
-                                        <p th:unless="${book.publisher ne null}">
-                                            <strong>Publisher: </strong><small><i>unknown</i></small>
-                                        </p>
-                                    </div>
-                                    <!-- year -->
-                                    <div>
-                                        <p><strong>Year: </strong><span th:text="${book.year}"></span></p>
-                                    </div>
-                                    <!-- category -->
-                                    <div>
-                                        <p><strong>Category: </strong><span th:text="${book.category.name}"></span></p>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6" >
+                                <div class="col-sm-7">
                                     <!-- authors -->
-                                    <div>
-                                        <p th:unless="${book.authorsString.isBlank()}">
-                                            <strong>Authors: </strong><span th:text="${book.authorsString}"></span>
-                                        </p>
-                                        <p th:if="${book.authorsString.isBlank()}">
-                                            <strong>Authors: </strong><span><small><i>unknown</i></small></span>
+                                    <div th:unless="${book.authors.size() eq 0}">
+                                        <p class="text-dark my-3">
+                                            <span class="font-weight-lighter">Written by </span>
+                                            <strong th:each="author,stats : ${book.authors}"><span th:if="${stats.first}" th:text="(${author.firstName.isBlank()}? '' : ${author.firstName}) + ' ' + (${author.lastName.isBlank()}? '' : ${author.lastName})"></span><span th:unless="${stats.first || stats.last}" th:text="', ' + (${author.firstName.isBlank()}? '' : ${author.firstName}) + ' ' + (${author.lastName.isBlank()}? '' : ${author.lastName})"></span><span th:if="${stats.last && !stats.first}" th:text="' and ' + (${author.firstName.isBlank()}? '' : ${author.firstName}) + ' ' + (${author.lastName.isBlank()}? '' : ${author.lastName})"></span></strong>
                                         </p>
                                     </div>
+                                    <p th:if="${book.authors.size() eq 0}" class="text-secondary font-weight-light">
+                                        <em>unknown author</em>
+                                    </p>
+                                    <!-- publisher and year -->
+                                    <div>
+                                        <p class="text-dark my-3">
+                                            <span class="font-weight-light">Published in </span><strong th:text="${(book.year eq null)? 'unknown' : book.year}"></strong><span class="font-weight-light"> by </span><strong th:text="${(book.publisher ne null && !book.publisher.name.isBlank()) ? book.publisher.name : 'unknown'}"></strong>
+                                        </p>
+                                    </div>
+                                    <!-- language and pages -->
+                                    <p class="text-dark my-3">
+                                        <small class="font-weight-light">Language </small><strong th:text="${book.language.text}"></strong>, <strong th:text="${book.pages}"></strong><small class="font-weight-light"> Pages</small>
+                                    </p>
+                                </div>
+                                <div class="col-sm-5">
+                                    <!-- category -->
+                                    <p class="text-dark my-3">
+                                        <span class="font-weight-light">Category </span><strong th:text="${book.category.name}"></strong>
+                                    </p>
                                     <!-- isbn -->
-                                    <div>
-                                        <p><strong>ISBN: </strong><span th:text="${book.isbn}"></span></p>
-                                    </div>
-                                    <!-- language -->
-                                    <div>
-                                        <p><strong>Language: </strong><span th:text="${book.language}"></span></p>
-                                    </div>
-                                    <!-- pages -->
-                                    <div>
-                                        <p><strong>Pages: </strong><span th:text="${book.pages}"></span></p>
-                                    </div>
+                                    <p class="text-dark my-3">
+                                        <span class="font-weight-light">ISBN </span><strong th:text="${book.isbn}"></strong>
+                                    </p>
                                     <!-- price -->
-                                    <div>
-                                        <p><strong>Price: </strong><span th:text="${book.price}"></span>€</p>
-                                    </div>
+                                    <p class="text-info my-3">
+                                        <span class="font-weight-light">Price € </span><strong th:text="${book.price}"></strong>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -87,7 +70,7 @@
                             <!-- no-admin specific buttons -->
                             <div sec:authorize="!hasRole('ADMIN')">
                                 <!-- addBook to cart button -->
-                                <button class="btn btn-outline-info btn-lg align-center btn-block" ajax="addBook" th:id="'ab-' + ${book.id}">
+                                <button class="btn btn-outline-info btn-lg align-center btn-block my-3" ajax="addBook" th:id="'ab-' + ${book.id}">
                                     Add to Cart<i class="fas fa-cart-plus ml-3"></i>
                                 </button>
                             </div>
@@ -127,12 +110,10 @@
                         </div>
                         <!-- description -->
                         <div class="col-sm-12" style="text-align: justify; text-justify: inter-word;">
-                            <p th:unless="${book.description.isBlank()}">
-                                <strong>Description: </strong><span th:text="${book.description}"></span>
-                            </p>
-                            <p th:if="${book.title.isBlank()}">
-                                <strong>Description: </strong><span><small><i>unknown</i></small></span>
-                            </p>
+                            <p class="font-weight-bolder my-0"><strong>Description</strong></p>
+                            <hr style="max-width: 50%; margin-top: 0.5rem; margin-bottom: 0.5rem; margin-left: 0"/>
+                            <p class="my-0" th:unless="${book.description.isBlank()}" th:text="${book.description}"></p>
+                            <p class="my-0" th:if="${book.title.isBlank()}"><em>unknown</em></p>
                         </div>
                     </div>
                 </div>
