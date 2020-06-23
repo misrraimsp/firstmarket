@@ -143,6 +143,7 @@ public class OrderController extends BasicController {
                 populateModel(model.asMap(), authUser);
                 model.addAttribute("itemsDisabled", e.getItemsDisabled());
                 model.addAttribute("itemsOutOfStock", e.getItemsOutOfStock());
+                model.addAttribute("cartBookRegistry", bookServer.getCartBookRegistry());
                 cartServer.pruneCart(user.getCart(), e.getItemsDisabled());
                 e.getItemsOutOfStock().forEach(item ->
                         LOGGER.debug("Book(id={}) run out of stock (Item: id={}, quantity={})", item.getBook().getId(), item.getId(), item.getQuantity())

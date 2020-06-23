@@ -428,6 +428,7 @@ public class UserController extends BasicController {
                            @AuthenticationPrincipal User authUser) {
 
         model.addAttribute("itemsOutOfStock", null);
+        model.addAttribute("cartBookRegistry", bookServer.getCartBookRegistry());
         populateModel(model.asMap(), authUser);
         return "cart";
     }

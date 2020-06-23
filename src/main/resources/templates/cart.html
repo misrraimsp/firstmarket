@@ -94,6 +94,15 @@
                                             </p>
                                         </a>
                                     </div>
+                                    <!-- stock alarms -->
+                                    <p class="small mt-n3 font-weight-lighter">
+                                        <span class="text-danger" th:if="${item.book.stock eq 0}">
+                                            Sold out
+                                        </span>
+                                        <span class="text-danger" th:if="${item.book.stock gt 0 && item.book.stock le cartBookRegistry.getOrDefault(item.book.id, 0) && item.book.stock le __${@environment.getProperty('fm.front-end.books.stock-usage-warning-threshold')}__}">
+                                            Only <strong th:text="${item.book.stock}"></strong> available and it's in <strong th:text="${cartBookRegistry.get(item.book.id)}"></strong> person's cart
+                                        </span>
+                                    </p>
                                     <!-- authors -->
                                     <div th:unless="${item.book.authors.size() eq 0}" th:each="author,stats : ${item.book.authors}">
                                         <p th:if="${stats.index < __${@environment.getProperty('fm.front-end.cart.authors-max')}__}" class="text-dark small my-1">
