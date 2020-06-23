@@ -174,16 +174,6 @@
             <div class="col-sm-2"></div>
         </div>
 
-        <!-- Title 3 6 3 -->
-        <div class="row mt-5 mb-3" th:fragment="title_3_6_3(text)">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
-                <h2 class="text-dark font-weight-light" th:text="${text}">Title</h2>
-                <hr/>
-            </div>
-            <div class="col-sm-3"></div>
-        </div>
-
         <!-- snackbar -->
         <div th:fragment="snackbar" id="snackbar" th:text="${@environment.getProperty('fm.front-end.common-components.snackbar')}">snackbar</div>
 
