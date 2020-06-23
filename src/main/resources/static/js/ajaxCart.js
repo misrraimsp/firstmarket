@@ -135,6 +135,11 @@ document.addEventListener("DOMContentLoaded", function() {
             target = e.currentTarget;
             action = target.getAttribute("ajax");
             id = extractNumber(target.getAttribute("id"));
+            if (action === "decrementItem") {
+                const item = document.getElementById("i-" + id);
+                item.classList.remove("out-of-stock");
+                item.classList.add("bg-white");
+            }
             url = baseUrl + action;
             url += (action === "removeItems") ? "?ids=" + [...setOfItemIdsToRemove.keys()].toString() : "/" + id;
             xmlHttpRequest = new XMLHttpRequest();

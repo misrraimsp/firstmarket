@@ -16,16 +16,13 @@ body {
     font-family: 'Lora', serif;
     font-family: 'EB Garamond', serif;
     font-family: 'Nanum Myeongjo', serif;
-
     font-family: 'El Messiri', sans-serif;
     font-family: 'Quicksand', sans-serif;
     font-family: 'Gotu', sans-serif;
     font-family: 'PT Sans', sans-serif;
-
     font-family: 'Inconsolata', monospace;
     */
     font-family: 'Noto Serif JP', serif;
-    /*animation: pulse 20s infinite; pulse*/
 }
 .fm-content {
     flex: 1 0 auto;
@@ -34,20 +31,9 @@ body {
     flex-shrink: 0;
 }
 
-/******************************* pulse
-@keyframes pulse {
-    0%, 100% {
-        background-color: lightblue;
-    }
-    50% {
-        background-color: lightgray;
-    }
-}*/
-
 /******************************* gradient */
 .container-fluid {
     background: linear-gradient(#e9ecef, white);
-    /*background: #e9ecef;*/
 }
 
 /******************************* card responsiveness */
@@ -132,8 +118,6 @@ body {
     padding:.35em;
     border-radius:999px;
     line-height:.75em;
-    /*color: white;
-    color: #0275d8;  bs4 primary */
     color: #17a2b8; /* bs4 info */
     text-align:center;
     min-width:1em;
@@ -247,14 +231,20 @@ body {
 }
 /********************************/
 
-/********************************* BS4 alert-danger like on out-of-stock cart elements */
+/******************************* pulse */
+@keyframes pulse {
+    0%, 100% {
+        background-color: #ffdf7e;
+    }
+    50% {
+        background-color: #fff3cd;
+    }
+}
+
+/********************************* out-of-stock cart elements */
 .out-of-stock {
-    /*BS4 alert-danger
-    background-color: #f8d7da;
-    border-color: #f5c6cb;*/
-    /*BS4 alert-warning*/
-    background-color: #fff3cd;
     border-color: #ffeeba;
+    animation: pulse 5s infinite; /*pulse*/
 }
 /********************************/
 

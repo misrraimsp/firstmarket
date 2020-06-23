@@ -10,13 +10,15 @@
             <div th:replace="fragments/components::header"></div>
             <!-- main categories -->
             <div th:replace="fragments/components::mainCatsNavBar"></div>
+            <!-- title -->
+            <div th:replace="fragments/components::title_1_10_1(text = ${user.profile.firstName} + '\'s Cart')"></div>
             <!-- items pruned alert box -->
-            <div class="row mt-3 mb-n4" th:if="${itemsDisabled ne null}" th:each="item : ${itemsDisabled}">
+            <div class="row" th:if="${itemsDisabled ne null}" th:each="item : ${itemsDisabled}">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
                 <!-- alert box -->
-                <div class="col-sm-10 px-0">
-                    <div class="alert alert-danger alert-dismissible fade show mr-4">
+                <div class="col-sm-10">
+                    <div class="alert alert-danger alert-dismissible fade show">
                         <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <small>Book removed from cart due to unavailability: <strong th:text="${item.book.title}"></strong></small>
                     </div>
@@ -25,13 +27,14 @@
                 <div class="col-sm-1"></div>
             </div>
             <!-- out-of-stock alert box -->
-            <div class="row mt-3 mb-n4" th:if="${itemsOutOfStock ne null && !itemsOutOfStock.isEmpty()}">
+            <div class="row" th:if="${itemsOutOfStock ne null && !itemsOutOfStock.isEmpty()}">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
                 <!-- alert box -->
-                <div class="col-sm-10 px-0">
-                    <div class="alert alert-warning mr-4">
+                <div class="col-sm-10">
+                    <div class="alert alert-warning alert-dismissible fade show">
                         <!--<small>En estos momentos no disponemos -en la cantidad pedida- de los libros resaltados. Por favor, para continuar con la compra disminuya su cantidad</small>-->
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
                         <small>At the moment we do not have, <strong>in the quantity ordered</strong>, the highlighted books. Please, to continue with the purchase, <strong>decrease the quantity and try again</strong>.</small>
                     </div>
                 </div>
@@ -39,33 +42,33 @@
                 <div class="col-sm-1"></div>
             </div>
             <!-- main content -->
-            <div class="row my-4">
+            <div class="row">
                 <!-- left margin -->
                 <div class="col-sm-1"></div>
                 <!-- cart items -->
-                <div class="col-sm-7">
-                    <div class="row d-flex flex-column">
-                        <!-- items header -->
-                        <div class="col-sm-12 d-flex justify-content-between bg-white">
-                            <!-- select all items -->
-                            <div class="my-3">
-                                <div class="pretty p-default p-round p-thick">
-                                    <input type="checkbox" id="selectAll"/>
-                                    <div class="state p-info-o">
-                                        <label th:for="selectAll"><span class="font-weight-light">Select All</span></label>
-                                    </div>
+                <div class="col-sm-7 d-flex flex-column">
+                    <!-- items header -->
+                    <div class="d-flex justify-content-between mb-2 bg-white">
+                        <!-- select all items -->
+                        <div class="my-3 ml-3">
+                            <div class="pretty p-default p-round p-thick">
+                                <input type="checkbox" id="selectAll"/>
+                                <div class="state p-info-o">
+                                    <label th:for="selectAll"><span class="font-weight-light">Select All</span></label>
                                 </div>
                             </div>
-                            <!-- delete items -->
-                            <div class="my-3">
-                                <button class="btn btn-sm btn-outline-secondary" ajax="removeItems" id="removeItems">
-                                    <span class="font-weight-lighter small mr-2">Remove selected</span><i class='fas fa-trash'></i>
-                                </button>
-                            </div>
                         </div>
-                        <!-- items -->
-                        <div class="col-sm-12" th:id="'i-' + ${item.id}" th:each="item : ${user.cart.items}">
-                            <div class="row my-3 d-flex align-items-center" th:classappend="${itemsOutOfStock ne null && itemsOutOfStock.contains(item)} ? 'out-of-stock' : 'bg-white'">
+                        <!-- delete items -->
+                        <div class="my-3 mr-3">
+                            <button class="btn btn-sm btn-outline-secondary" ajax="removeItems" id="removeItems">
+                                <span class="font-weight-lighter small mr-2">Remove selected</span><i class='fas fa-trash'></i>
+                            </button>
+                        </div>
+                    </div>
+                    <!-- items -->
+                    <div class="d-flex flex-column">
+                        <div class="my-2" th:each="item : ${user.cart.items}">
+                            <div class="row d-flex align-items-center px-0 mx-0" th:classappend="${itemsOutOfStock ne null && itemsOutOfStock.contains(item)} ? 'out-of-stock' : 'bg-white'" th:id="'i-' + ${item.id}">
                                 <!-- select item -->
                                 <div class="col-sm-1">
                                     <div class="pretty p-default p-round p-thick">
@@ -125,7 +128,7 @@
                                 <!-- total price -->
                                 <div class="col-sm-2 d-flex justify-content-end">
                                     <p th:id="'ibp-' + ${item.id}" style="display: none" th:text="${item.book.price}"></p>
-                                    <p>EUR <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
+                                    <p>€ <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
                                 </div>
                             </div>
                         </div>
@@ -133,45 +136,41 @@
                 </div>
                 <!-- checkout panel -->
                 <div class="col-sm-3">
-                    <div class="row">
-                        <div class="col-sm-1"></div>
-                        <div class="col-sm-10 d-flex flex-column bg-white">
-                            <!-- panel title -->
-                            <div class="d-flex justify-content-center mt-3 mb-5">
-                                <strong>Purchase Summary</strong>
+                    <div class="d-flex flex-column bg-white">
+                        <!-- panel title -->
+                        <div class="d-flex justify-content-center mt-3 mb-5">
+                            <strong class="text-dark">Purchase Summary</strong>
+                        </div>
+                        <!-- purchase info -->
+                        <div class="d-flex flex-column mx-3">
+                            <!-- number of books -->
+                            <div class="d-flex justify-content-between">
+                                <div><p>Number of books</p></div>
+                                <div><p id="numOfBooks" th:text="${user.cart.size}">38</p></div>
                             </div>
-                            <!-- purchase info -->
-                            <div class="d-flex flex-column">
-                                <!-- number of books -->
-                                <div class="d-flex justify-content-between">
-                                    <div><p>Number of books:</p></div>
-                                    <div><p id="numOfBooks" th:text="${user.cart.size}">38</p></div>
-                                </div>
-                                <!-- subtotal price -->
-                                <div class="d-flex justify-content-between">
-                                    <div><p>Subtotal:</p></div>
-                                    <div><p>€ <span id="subtotal" th:text="${user.cart.price}">380</span></p></div>
-                                </div>
-                                <!-- total saving -->
-                                <div class="d-flex justify-content-between">
-                                    <div><p>Discount:</p></div>
-                                    <div><p>€ <span id="discount">0</span></p></div>
-                                </div>
+                            <!-- subtotal price -->
+                            <div class="d-flex justify-content-between">
+                                <div><p>Subtotal</p></div>
+                                <div><p>€ <span id="subtotal" th:text="${user.cart.price}">380</span></p></div>
                             </div>
-                            <!-- purchase -->
-                            <div class="d-flex flex-column mt-3">
-                                <!-- final price -->
-                                <div class="d-flex justify-content-between">
-                                    <div><strong>Total:</strong></div>
-                                    <div><strong>€ <span id="total" th:text="${user.cart.price}">380</span></strong></div>
-                                </div>
-                                <!-- checkout button -->
-                                <form th:action="@{/user/checkout}" method="GET">
-                                    <button class="btn btn-outline-info btn-sm my-2 btn-block" id="purchase" type="submit">Checkout</button>
-                                </form>
+                            <!-- total saving -->
+                            <div class="d-flex justify-content-between">
+                                <div><p>Discount</p></div>
+                                <div><p>€ <span id="discount">0</span></p></div>
                             </div>
                         </div>
-                        <div class="col-sm-1"></div>
+                        <!-- purchase -->
+                        <div class="d-flex flex-column mt-3 mx-3">
+                            <!-- final price -->
+                            <div class="d-flex justify-content-between">
+                                <div><strong>Total</strong></div>
+                                <div><strong>€ <span id="total" th:text="${user.cart.price}">380</span></strong></div>
+                            </div>
+                            <!-- checkout button -->
+                            <form th:action="@{/user/checkout}" method="GET">
+                                <button class="btn btn-outline-info btn-sm my-3 btn-block" id="purchase" type="submit">Checkout</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <!-- right margin -->

@@ -231,7 +231,7 @@
                                             <input type="hidden" name="sort" th:value="${sort.ordinal()}"/>
                                             <div class="form-group">
                                                 <div class="input-group">
-                                                    <select class="custom-select custom-select-sm text-secondary border border-secondary" name="bookStatus">
+                                                    <select class="custom-select custom-select-sm text-secondary border border-secondary" name="productStatus">
                                                         <option th:each="status : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus).values()}"
                                                                 th:value="${status.ordinal()}"
                                                                 th:text="${status.text}"
