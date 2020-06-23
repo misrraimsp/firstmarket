@@ -15,7 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // functions
     let extractNumber = (str) => str.slice(str.indexOf("-") + 1);
-
     let getSetOfDisplayedItemIds = function() {
         let displayedItemIds = new Set();
         let items = document.querySelectorAll('div[id|="i"]');
@@ -24,7 +23,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
         return displayedItemIds;
     };
-
     let onHttpOk = function(action, id, q) {
 
         // local functions
@@ -32,20 +30,17 @@ document.addEventListener("DOMContentLoaded", function() {
             subtotal.innerHTML = (parseFloat(subtotal.innerHTML) + increment).toFixed(2);
             total.innerHTML = (parseFloat(total.innerHTML) + increment).toFixed(2);
         }
-
         function updatePrices(id, increment) {
             itemPrice = document.getElementById("ip-" + id);
             itemPrice.innerHTML = (parseFloat(itemPrice.innerHTML) + increment).toFixed(2);
             updateGlobalPrices(increment);
         }
-
         function hideItem(id) {
             document.getElementById("i-" + id).style.display = "none";
             setOfItemIdsToRemove.delete(id);
             setOfDisplayedItemIds.delete(id);
             setAppearance();
         }
-
         function hideItems() {
             increment = 0;
             for (const id of setOfItemIdsToRemove.keys()) {
@@ -57,7 +52,6 @@ document.addEventListener("DOMContentLoaded", function() {
             setAppearance();
             updateGlobalPrices(increment);
         }
-
         function setAppearance() {
             removeButton.disabled = (setOfItemIdsToRemove.size === 0);
             masterCheckbox.disabled = (setOfDisplayedItemIds.size === 0);
@@ -74,7 +68,15 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
             case 'decrementItem':
                 itemQuantity = document.getElementById("iq-" + id);
-                (parseFloat(itemQuantity.innerHTML) > 1) ? itemQuantity.innerHTML-- : hideItem(id);
+                if (parseFloat(itemQuantity.innerHTML) > 1) {
+                    itemQuantity.innerHTML--;
+                    const item = document.getElementById("i-" + id);
+                    item.classList.remove("out-of-stock");
+                    item.classList.add("bg-white");
+                }
+                else{
+                    hideItem(id);
+                }
                 updatePrices(id, 0 - parseFloat(document.getElementById("ibp-" + id).innerHTML));
                 break;
             case 'removeItems':
@@ -82,7 +84,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 break;
         }
     };
-
     let onHttpUnauthorized = function() {
         loginLink.click();
     };
@@ -113,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function() {
             masterCheckbox.checked = (setOfItemIdsToRemove.size === setOfDisplayedItemIds.size);
         }, false);
     }
+
     // masterCheckbox event attachment
     masterCheckbox.addEventListener("click", function () {
         if (masterCheckbox.checked) {
@@ -135,11 +137,6 @@ document.addEventListener("DOMContentLoaded", function() {
             target = e.currentTarget;
             action = target.getAttribute("ajax");
             id = extractNumber(target.getAttribute("id"));
-            if (action === "decrementItem") {
-                const item = document.getElementById("i-" + id);
-                item.classList.remove("out-of-stock");
-                item.classList.add("bg-white");
-            }
             url = baseUrl + action;
             url += (action === "removeItems") ? "?ids=" + [...setOfItemIdsToRemove.keys()].toString() : "/" + id;
             xmlHttpRequest = new XMLHttpRequest();
