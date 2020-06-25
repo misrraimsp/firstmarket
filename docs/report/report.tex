@@ -4,26 +4,93 @@
 \title{FirstMarket}
 
 \usepackage{comment}
+\usepackage[utf8]{inputenc}
+
+\usepackage{csquotes}
+
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
+
+
+
 \begin{document}
 
     \maketitle
     \tableofcontents
 
     % INTRODUCCION
-    \section{Introducci\'on}
-    \subsection{Objetivos y Motivaci\'on}
-    Los objetivos y la motivacion van aqui
-    \subsection{Aplicaciones Web}
-    Aplicaciones comentario sobre las
+    \section{Introducción}
+    El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática
+    de la Universidad Nacional de Educación a Distancia.
+
+    Se basa en el proyecto específico ofertado por el Departamento de Sistemas de Comunicación y Control de la UNED titulado \emph{Desarrollo de un portal de comercio electrónico}.
+    Citando la propia descripción de dicha oferta de proyecto específico:
+    \begin{displayquote}
+        El proyecto consiste en el desarrollo de un portal web orientado al comercio electrónico.
+        Dicha aplicación permitirá al comprador seleccionar artículos, realizar pedidos y pagos a través de una pasarela.
+        El sistema también ofrecerá al comerciante gestionar los artículos expuestos en el portal.
+    \end{displayquote}
+
+
+    \subsection{Motivación y Objetivos}
+    Desde un primer momento la intención fue desarrollar un proyecto que tuviese la mayor proyección posible en el mercado laboral, lo que,
+    junto con un fuerte interés personal hacia el ecosistema de internet, llevó a la decisión de escoger esta propuesta.
+
+    La idea era desarrollar algo moderno, útil, con reflejo real en la sociedad y que, como se ha dicho, cumpliese el papel de facilitar la inserción laboral.
+
+    En este sentido, las aplicaciones web en general, y las específicas de comercio electrónico en particular, cumplen a la perfección los requisitos comentados.
+    A nadie se le escapa hoy en día la implantación casi ubicua que estas tecnologías tienen en la sociedad.
+
+    Por otro lado, y en clara conexión con lo comentado, otro objetivo de este último trabajo del plan de estudios fue el de servir como \emph{compensador} final de carencias formativas.
+    En este sentido, el control de versiones con Git era una tarea pendiente inaplazable, así como profundizar en tecnologías web básicas como HTTP, HTML, CSS ó JavaScript.
+    Además, ampliar el dominio de las tecnologías Java siempre fue algo muy deseable.
+
+    Conviene no dejar de lado, por obvio, que un objetivo fundamental del presente trabajo es el de dar fin al plan de estudios.
+    Remarcar esto es relevante porque en múltiples situaciones puede entrar en conflicto con la intención de desarrollar una aplicación web lo más moderna posible.
+    Como se explicará más adelante en esta memoria, el mundo de las tecnologías web es muy cambiante,
+    y pretender desarrollar una aplicación web alineada con el estado del arte en la materia partiendo, como es el caso, desde prácticamente cero conocimientos,
+    sale fuera del marco de un trabajo de estas características.
+
+    Por tanto, siempre se ha tenido en cuenta un compromiso entre recursos disponibles (principalmente tiempo y conocimientos) y grado de modernidad en las tecnologías usadas.
+
+    En definitiva, el principio fundamental que ha guiado la toma de decisión ha sido el reforzar, y alinear en la medida de lo posible con el estado del arte,las habilidades técnicas fruto del plan de estudios, de forma a facilitar una futura integración en la industria web,
+    a la par de satisfacer una histórica inquietud personal en la materia.
+
+
+    \subsection{Internet, Web y Aplicaciones Web}
+    En esta sección se pretende ofrecer una pequeña descripción que establezca el contexto en el que situar la aplicación web desarrollada.
+
+    \subsubsection{¿Qué es Internet?}
+    Tal como se explica en [computer-networking], esta pregunta puede ser respondida desde dos puntos de vista complementarios.
+
+    Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo,
+    denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
+    
+    Los enlaces de comunicación son diferentes tipos de medios físicos que transfieren ondas electromagnéticas. Así, puede tratarse de medios guiados, como cables de cobre, cables coaxiales o fibra óptica, o no guiados, como el espectro de radio.
+    
+    Cuando un sistema final decide enviar información a otro sistema final, el emisor fragmenta los datos en \emph{paquetes} de información y los envía al destinatario a través de la red. Una vez en destino, el sistema final receptor ensambla los paquetes para reconstruir los datos originales.
+
+    Un conmutador de paquetes toma un paquete que llega a uno de sus enlaces de comunicación entrantes y lo reenvía a uno de sus enlaces de comunicación salientes.
+
+    Estas \emph{redes de conmutación de paquetes} se pueden entender de forma análoga a una empresa que necesita mover una gran cantidad de carga entre dos almacenes separados gran distancia. En el almacén de origen la carga se divide y organiza en diferentes contenedores. Cada uno de los contenedores viaja de forma independiente a través de la red de transporte disponible siguiendo posiblemente rutas no del todo iguales. Por ejemplo, unos contenedores pueden ir por ciertas carreteras en ciertos camiones mientras que otros pueden viajar en tren o incluso en barco, o cualquier combinación de los anteriores. Lo importante es la independencia entre la ruta de un contenedor concreto con los demás. Una vez llegados al almacén de destino, la carga se extrae de los contenedores y se agrupa con el resto que llega del mismo envío.
+    
+    Así, los paquetes son análogos a los contenedores, los enlaces de comunicación son análogos a las vías de transporte, los conmutadores de paquetes son análogos a las intersecciones o discontinuidades en las vías de transporte (piénsese en una simple rotonda), y los sistemas finales son análogos a los almacenes. Pues bien, de igual forma que un contenedor toma un camino a través de la red de transporte, un paquete de información toma un camino a través de la infraestructura de Internet.
+
+    Por otro lado, es posible describir Internet desde un punto de vista \textbf{software} como un servicio a las aplicaciones distribuidas. Se dice que las aplicaciones son aplicaciones distribuidas, o \textbf{aplicaciones de Internet}, cuando se ejecutan en diferentes máquinas que intercambian datos entre sí. Es importante destacar que las aplicaciones de Internet se ejecutan estrictamente en los sistemas finales, no en la infraestructura de la red, que es agnóstica (o debiera serlo) de la semántica de la información que está trasportando.
+    
+    Así, puede pensarse en Internet como un servicio postal, que garantiza el envío de información entre partes, las cuales pueden estar desarrollando cualquier tipo de actividad basada, entre otras cosas, en la propia comunicación que mantienen.
+    
+    \subsubsection{¿Qué es la World Wide Web?}
+    
+    \subsubsection{¿Qué es una Aplicación Web?}
+
     \subsection{Estructura de la Memoria}
     Estructura
 
     % ANALISIS
-    \section{An\'alisis}\label{sec:An'alisis}
+    \section{Análisis}
 
-        \subsection{Requisitos}\label{subsec:requisitos}
+        \subsection{Requisitos}
 
             La aplicaci\'on debe admitir los roles y capacidades siguientes:
             \begin{enumerate}
@@ -73,17 +140,17 @@
                 \item[b)] mostrar un mensaje de error cuando un usuario introduzca incorrectamente sus credenciales de autenticaci\'on
             \end{enumerate}
 
-        \subsection{Casos de Uso}\label{subsec:casos-de-uso}
+        \subsection{Casos de Uso}
             En este apartado se presenta las interacciones mas comunes que los usuarios pueden realizar con la aplicacion web.
             No se pretende proporcionar una enumeracion exhaustiva de todos los casos de uso, sino un subconjunto relevante
             de los mismos, a modo de introduccion a las capacidades basicas que se espera de la aplicacion.
 
             \begin{figure}[h]
                 \centering
-                \includegraphics[width=\textwidth]{Use-Case Diagram}\label{fig:Use-Case Diagram}
+                \includegraphics[width=\textwidth]{Use-Case_Diagram}
             \end{figure}
 
-            \subsubsection{CU01\_B\'usqueda}
+            \subsubsection{CU01\_Búsqueda}
             Proceso por el cual un usuario explora el cat\'alogo y acaba por visualizar la pagina de un libro.
             \begin{itemize}
                 \item[+] Actores implicados: Usuario An\'onimo, Usuario Registrado.
@@ -203,7 +270,7 @@
                         \item[2.] El sistema muestra la pagina de area personal, en donde se muestra el formulario de datos personales, rellenado con la informacion actual del usuario.
                         \item[3.] El usuario modifica los datos del formulario y lo envia al sistema.
                         \item[4.] El sistema comprueba los datos.
-                        \item[5.] Comprobacion correcta. El sistema actualiza la informacion del usuario.
+                        \item[5.] Comprobación correcta.El sistema actualiza la información del usuario.
                         \item[6.] El sistema muestra la pagina de inicio.
                     \end{enumerate}
                     \item[+] Flujo alternativo: \emph{error\_datos\_formulario}. Los datos proporcionados en el formulario de informacion personal no son validos.
@@ -305,10 +372,10 @@
 
 
     % DISEÑO
-    \section{Dise\~no}
+    \section{Diseño}
     Dise
     \subsection{Arquitectura del Sistema}
-    Arquitectura
+    Arquitectura en capas. Capa de presentacion, capa de control, capa de servicio, capa de persistencia
     \subsection{Modelo de Datos}
     Modelo
 
@@ -316,14 +383,14 @@
     \section{Implementacion}
     La implementacion del analisis y diseno detallados en los puntos anteriores lo conforma el conjunto de programas que se incluyen en el CD distribuido con la presente memoria.
     No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que se pasan a explicar a continuacion.
-
-        \subsection{Jerarquia de Datos - Categorias}
-
-        \subsection{Validacion de Datos}
-            \subsubsection{ISBN}
+    \subsection{Persistencia de Datos Jerarquicos. Categorias}
+    \subsection{Validacion de Inputs}
+    \subsubsection{ISBN}
+    \subsection{Control de Concurrencia. Stock Consistente}
+    \subsection{Creacion de Muestras}
 
     % TECNOLOGIAS
-    \section{Tecnol\'ogias Usadas}
+    \section{Stack Tecnol\'ogico}
     En este apartado se ofrece un comentario del stack tecnologico con el que se ha llevado a cabo la aplicacion web.
 
     \subsection{Spring Framework}
@@ -332,13 +399,13 @@
     \subsubsection{Spring Data JPA - Hibernate}
     \subsubsection{Spring Security}
     \subsection{Thymeleaf - HTML5}
+    \subsection{Bootstrap 4 - CSS3}
+    \subsection{Stripe}
     \subsection{PostgreSQL}
     \subsection{JavaScript}
     \subsubsection{Ajax}
-    \subsection{Bootstrap 4 - CSS3}
-    \subsection{Stripe}
     \subsection{FontAwesome - Pretty Checkbox - Google Fonts}
-    \subsection{Transversales}
+    \subsection{Tecnologias Transversales}
     \subsubsection{Git}
     \subsubsection{Java 11}
     \subsubsection{Maven}
