@@ -1,6 +1,6 @@
 \documentclass[a4paper]{report}
 
-\author{Misrraim~Su\'arez~P\'erez}
+\author{Misrraim~Suárez~Pérez}
 \title{FirstMarket}
 
 \usepackage{comment}
@@ -11,7 +11,38 @@
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
 
+\usepackage{xcolor}
+
 \usepackage{listings}
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, let, const},
+	keywordstyle=\color{blue}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{olive}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+\lstset{
+	language=JavaScript,
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\footnotesize\ttfamily,
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\footnotesize,
+	numbersep=9pt,
+	tabsize=2,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
 
 
 
@@ -408,42 +439,116 @@
     
     \subsection{Persistencia de Datos Jerárquicos}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
+    \\
     
     Tal como se explica con detalle en [], existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
+    \\
     
     Si los datos jerárquicos son siempre de pequeño tamaño y las operaciones son principalmente de lectura, una solución sería cargarlos en memoria principal y gestionarlos desde allí con alguna estructura de datos apropiada. Este podría argumentarse que es el caso de la información de las categorías de los libros, ya que en principio estas no superarían a lo sumo algunas decenas de centenas, y la actividad principal realizada sería la lectura. La frecuencia con que el administrador de la tienda crea, modifica o elimina una categoría es despreciable respecto de la frecuencia con que las categorías son leídas para los usuarios en general.
+    \\
     
     Por otro lado, si se implementase la funcionalidad de los comentarios anidados, el escenario es claramente diferente. La cantidad de información es potencialmente mucho mayor, con lo que trabajar directamente en memoria principal no es una opción. Además, las operaciones de creación, modificación y eliminación cobran mayor protagonismo.
+    \\
     
-    La solución más común en este caso se conoce como listas de adyacencia, y no es otra cosa que añadir a cada entidad una referencia (clave extranjera) al id de su predecesor jerárquico. El problema de esta solución es que escala muy mal a medida que aumenta la profundidad del árbol. Imagínese que se tiene un hilo de comentarios arbitrariamente profundo, el cual precisaría de consultas recurrentes por cada nivel si se pretendiera extraer todo el hilo (algo habitual en estos sistemas de comentarios), ya que a priori se desconoce la profundidad. Sin embargo, existen métodos para extraer todo el hilo de comentarios con una sola consulta (de forma general, extraer cualquier subarbol), como se verá más adelante.
+    La solución más común en este caso se conoce como listas de adyacencia, y no es otra cosa que añadir a cada entidad una referencia (clave extranjera) al id de su predecesor jerárquico. El problema de esta solución es que escala muy mal a medida que aumenta la profundidad del árbol. Imagínese que se tiene un hilo de comentarios arbitrariamente profundo, el cual precisaría de consultas recurrentes por cada nivel si se pretendiera extraer todo el hilo (algo habitual en estos sistemas de comentarios), ya que a priori se desconoce la profundidad. Sin embargo, existen métodos para extraer todo el hilo de comentarios con una sola consulta (de forma general, extraer cualquier subarbol), como se verá a continuación.
+    \\
     
     La funcionalidad de que los libros estén clasificados por categorías es imprescindible para la aplicación, y en consecuencia ha sido implementada. No es el caso de los comentarios. No obstante, en un intento de hacer la aplicación fácilmente ampliable en este sentido, y dado que se trata de un proyecto académico, se optó por una solución que fuese eficiente y versátil: la denominada \textbf{Closure Table}.
+    \\
     
     La idea principal es mantener la información de las relaciones entre las entidades en una tabla diferente. Es decir, por una parte se encuentra la tabla \emph{category} y por otra la tabla \emph{catpath}. En la primera se almacena la información relativa a las categorías (su id, nombre, etc), mientras que en la segunda se almacena la información de los caminos en el árbol de categorías. De todos los caminos, incluso de una categoría consigo misma.
+    \\
     
     Así, por cada fila en la tabla \emph{catpath} se tiene el identificador del ancestro (clave extranjera de la tabla category), el identificador del descendiente (también clave extranjera de la tabla category) y el tamaño del camino. Para una relación de una categoría consigo misma el tamaño del camino es 0, para una relación padre-hijo el tamaño es 1, abuelo-nieto es 2 y así sucesivamente.
     
-    \begin{figure}[h]
+    \begin{figure}[t]
     	\centering
     	\includegraphics[width=\textwidth]{closure_table}
     \end{figure}
     
     Esta solución es la más versátil y rápida de todas las mostradas en [], permitiendo incluso a un nodo pertenecer a varios árboles. Sin embargo, estos beneficios los consigue a costa de espacio. Este consumo puede ser importante si la estructura almacena jerarquías muy profundas.
+    \\
     
     No obstante todo lo discutido con anterioridad, la solución real implementada para el trato específico de las categorías es triple: Closure table, lista de adyacencia y trabajo en memoria principal con una estructura de datos en árbol. Esto es así por una cuestión de eficiencia y por desarrollar experiencia en el uso de estas soluciones.
+    \\
     
-    \begin{lstlisting}[language=SQL]
-    	create table category(id,...,name,parent_id,...);
-    	create table catpath(id,...,size,ancestor_id,descendant_id,...);
+    \begin{lstlisting}[language=SQL, caption=Tablas que gestionan las categorías]
+    create table category(id,..,name,parent_id,..);
+    create table catpath(id,..,size,ancestor_id,descendant_id,..);
     \end{lstlisting}
     
-    \subsection{Validacion de Inputs}
-    \subsubsection{ISBN}
+    \subsection{Validación}
+    Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y por motivos de seguridad, como evitar ataques de inyección SQL.
+    \\
+    
+    Esta comprobación se puede hacer tanto en cliente como en servidor. Desde el punto de vista de la seguridad, realizar la comprobación en servidor es obligatorio, ya que las comprobaciones en cliente son muy fácilmente circunvaladas. Por otro lado, desde el punto de vista de la experiencia de usuario es muy recomendable implemetarla también en cliente, ya que permite al usuario tener un feedback mucho más rápido que si debiese esperar a que el servidor responda. En definitiva, la mejor práctica es implemetar la validación tanto en backend como en frontend. Y así se ha hecho.
+    \\
+    
+    Mucha es la información que FirstMarket tiene que validar, pero a grandes rasgos se puede dividir en numérica y textual. El primer grupo presenta poca dificultad, se trata de comprobar rangos de valores principalmente. Para el segundo grupo las expresiones regulares son el arma perfecta. En el archivo de configuración \emph{application.yml} se detallan las expresiones regulares y los rangos numéricos utilizados. A modo de ejemplo, la propiedad definida en este archivo de configuración que especifica la expresión regular contra la que comparar las contraseñas es la siguiente:
+    \\
+     
+    \begin{lstlisting}[caption=Expresión regular para las contraseñas]
+    fm:
+      validation:
+        regex:
+          password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$
+    \end{lstlisting}
+    
+    Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en frontend como en backend, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
+    \\
+    
+    Sin embargo, existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes, a saber, sintáctica y semántica. La validación sintáctica se realiza utilizando las ya mencionadas expresiones regulares, pero para validar si se trata de un ISBN válido aún hay que calcular mediante un algoritmo concreto un dígito de control y ver si el último dígito coincide. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006 pero, desde enero de 2007, tienen siempre 13 dígitos (ambas versiones con diferentes algoritmos de cálculo de dígito de control). Así pues, la validación debe dar soporte a ambos formatos de ISBN.
+    \\
+    
+    A modo de ejemplo se detalla a continuación la función en JavaScript desarrollada para comprobar en el cliente el dígito de control:
+    \\
+    
+    \begin{lstlisting}[language=JavaScript,caption=Validación del dígito de control del ISBN en cliente]
+    const isbnChecksum = function() {
+    	let chars, last, sum, check, i;
+    	const isbn = document.getElementById("isbn");
+    	if (isbn.checkValidity()) {
+    		// Remove non ISBN digits, then split into an array
+    		chars = isbn.value.replace(/[- ]|^ISBN(?:-1[03])?:?/g, "").split("");
+    		// Remove the final ISBN digit from `chars`, and assign it to `last`
+    		last = chars.pop();
+    		sum = 0;
+    		if (chars.length == 9) {
+    			// Compute the ISBN-10 check digit
+    			chars.reverse();
+    			for (i = 0; i < chars.length; i++) {
+    				sum += (i + 2) * parseInt(chars[i], 10);
+    			}
+    			check = 11 - (sum % 11);
+    			if (check == 10) {
+    				check = "X";
+    			} else if (check == 11) {
+    				check = "0";
+    			}
+    		} else {
+    			// Compute the ISBN-13 check digit
+    			for (i = 0; i < chars.length; i++) {
+    				sum += (i % 2 * 2 + 1) * parseInt(chars[i], 10);
+    			}
+    			check = 10 - (sum % 10);
+    			if (check == 10) {
+    				check = "0";
+    			}
+    		}
+    		if (check != last) {
+    			alert("Error: Invalid ISBN checksum digit (" + last + "). Try with (" + check + ")");
+    			isbn.focus();
+    			isbn.value = isbn.value.substring(0, isbn.value.length - 1);
+    		}
+    	}
+    };
+    \end{lstlisting}
+    
     \subsection{Control de Concurrencia. Stock Consistente}
     \subsection{Creacion de Muestras}
 
     % TECNOLOGIAS
-    \section{Stack Tecnol\'ogico}
+    \section{Stack Tecnológico}
     En este apartado se ofrece un comentario del stack tecnologico con el que se ha llevado a cabo la aplicacion web.
 
     \subsection{Spring Framework}
