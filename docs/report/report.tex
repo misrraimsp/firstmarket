@@ -3,6 +3,8 @@
 \author{Misrraim~Suárez~Pérez}
 \title{FirstMarket}
 
+\linespread{1.25}
+
 \usepackage{comment}
 \usepackage[utf8]{inputenc}
 
@@ -53,11 +55,10 @@
 
     % INTRODUCCION
     \section{Introducción}
-    El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática
-    de la Universidad Nacional de Educación a Distancia.
-
-    Se basa en el proyecto específico ofertado por el Departamento de Sistemas de Comunicación y Control de la UNED titulado \emph{Desarrollo de un portal de comercio electrónico}.
-    Citando la propia descripción de dicha oferta de proyecto específico:
+    El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática de la Universidad Nacional de Educación a Distancia.
+    \\
+    
+    Se basa en el proyecto específico ofertado por el Departamento de Sistemas de Comunicación y Control de la UNED titulado \emph{Desarrollo de un portal de comercio electrónico}. Citando la propia descripción de dicha oferta de proyecto específico:
     
     \begin{displayquote}
         El proyecto consiste en el desarrollo de un portal web orientado al comercio electrónico.
@@ -68,28 +69,19 @@
 	En este contexto, el comercio electrónico desarrollado a sido una librería, denominada \textbf{FirstMarket}.
 
     \subsection{Motivación y Objetivos}
-    Desde un primer momento la intención fue desarrollar un proyecto que tuviese la mayor proyección posible en el mercado laboral, lo que,
-    junto con un fuerte interés personal hacia el ecosistema de internet, llevó a la decisión de escoger esta propuesta.
+    Desde un primer momento la intención fue desarrollar un proyecto que tuviese la mayor proyección posible en el mercado laboral, lo que, junto con un fuerte interés personal hacia el ecosistema de internet, llevó a la decisión de escoger esta propuesta.
+    \\
+    
+    La idea era desarrollar algo moderno, útil, con reflejo real en la sociedad y que, como se ha dicho, cumpliese el papel de facilitar la inserción laboral. En este sentido, las aplicaciones web en general, y las específicas de comercio electrónico en particular, cumplen a la perfección los requisitos comentados. A nadie se le escapa hoy en día la implantación casi ubicua que estas tecnologías tienen en la sociedad.
+    \\
 
-    La idea era desarrollar algo moderno, útil, con reflejo real en la sociedad y que, como se ha dicho, cumpliese el papel de facilitar la inserción laboral.
+    Por otro lado, y en clara conexión con lo comentado, otro objetivo de este último trabajo del plan de estudios fue el de servir como \emph{compensador} final de carencias formativas. En este sentido, el control de versiones con Git era una tarea pendiente inaplazable, así como profundizar en tecnologías web básicas como HTTP, HTML, CSS ó JavaScript. Además, ampliar el dominio de las tecnologías Java siempre fue algo muy deseable.
+    \\
 
-    En este sentido, las aplicaciones web en general, y las específicas de comercio electrónico en particular, cumplen a la perfección los requisitos comentados.
-    A nadie se le escapa hoy en día la implantación casi ubicua que estas tecnologías tienen en la sociedad.
-
-    Por otro lado, y en clara conexión con lo comentado, otro objetivo de este último trabajo del plan de estudios fue el de servir como \emph{compensador} final de carencias formativas.
-    En este sentido, el control de versiones con Git era una tarea pendiente inaplazable, así como profundizar en tecnologías web básicas como HTTP, HTML, CSS ó JavaScript.
-    Además, ampliar el dominio de las tecnologías Java siempre fue algo muy deseable.
-
-    Conviene no dejar de lado, por obvio, que un objetivo fundamental del presente trabajo es el de dar fin al plan de estudios.
-    Remarcar esto es relevante porque en múltiples situaciones puede entrar en conflicto con la intención de desarrollar una aplicación web lo más moderna posible.
-    Como se explicará más adelante en esta memoria, el mundo de las tecnologías web es muy cambiante,
-    y pretender desarrollar una aplicación web alineada con el estado del arte en la materia partiendo, como es el caso, desde prácticamente cero conocimientos,
-    sale fuera del marco de un trabajo de estas características.
-
-    Por tanto, siempre se ha tenido en cuenta un compromiso entre recursos disponibles (principalmente tiempo y conocimientos) y grado de modernidad en las tecnologías usadas.
-
-    En definitiva, el principio fundamental que ha guiado la toma de decisión ha sido el reforzar, y alinear en la medida de lo posible con el estado del arte,las habilidades técnicas fruto del plan de estudios, de forma a facilitar una futura integración en la industria web,
-    a la par de satisfacer una histórica inquietud personal en la materia.
+    Conviene no dejar de lado, por obvio, que un objetivo fundamental del presente trabajo es el de dar fin al plan de estudios. Remarcar esto es relevante porque en múltiples situaciones puede entrar en conflicto con la intención de desarrollar una aplicación web lo más moderna posible. Como se explicará más adelante en esta memoria, el mundo de las tecnologías web es muy cambiante, y pretender desarrollar una aplicación web alineada con el estado del arte en la materia partiendo, como es el caso, desde prácticamente cero conocimientos, sale fuera del marco de un trabajo de estas características. Por tanto, siempre se ha tenido en cuenta un compromiso entre recursos disponibles (principalmente tiempo y conocimientos) y grado de modernidad en las tecnologías usadas.
+    \\
+    
+    En definitiva, el principio fundamental que ha guiado la toma de decisión ha sido el reforzar, y alinear en la medida de lo posible con el estado del arte,las habilidades técnicas fruto del plan de estudios, de forma a facilitar una futura integración en la industria web, a la par de satisfacer una histórica inquietud personal en la materia.
 
 
     \subsection{Internet, Web y Aplicaciones Web}
@@ -97,43 +89,52 @@
 
     \subsubsection{¿Qué es Internet?}
     Tal como se explica en [computer-networking], esta pregunta puede ser enfocada desde dos puntos de vista complementarios.
+    \\
 
-    Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo,
-    denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
+    Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo, denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
+    \\
     
-    Los enlaces de comunicación son diferentes tipos de medios físicos que transfieren ondas electromagnéticas. Puede tratarse de medios guiados, como cables de cobre, cables coaxiales o fibra óptica, o no guiados, como el espectro de radio. Cuando un sistema final decide enviar información a otro sistema final, el emisor fragmenta los datos en \emph{paquetes} de información y los envía al destinatario a través de la red. Una vez en destino, el sistema final receptor ensambla los paquetes para reconstruir los datos originales. Un conmutador de paquetes toma un paquete que llega a uno de sus enlaces de comunicación entrantes y decide hacia cuál de sus enlaces de comunicación salientes lo reenvía.
+    Los enlaces de comunicación son diferentes tipos de medios físicos a través de los cuales se transfieren ondas electromagnéticas que portan la información. Puede tratarse de medios guiados, como cables de cobre, cables coaxiales o fibra óptica, o no guiados, como el espectro de radio. Cuando un sistema final decide enviar información a otro sistema final, el emisor fragmenta los datos en \emph{paquetes} de información y los envía al destinatario a través de la red. Una vez en destino, el sistema final receptor ensambla los paquetes para reconstruir los datos originales. Un conmutador de paquetes toma un paquete que llega a uno de sus enlaces de comunicación entrantes y decide hacia cuál de sus enlaces de comunicación salientes lo reenvía.
+    \\
 
     Estas \emph{redes de conmutación de paquetes} se pueden entender de forma análoga a una empresa que necesita mover una gran cantidad de carga entre dos almacenes separados gran distancia. En el almacén de origen la carga se divide y organiza en diferentes contenedores. Cada uno de los contenedores viaja de forma independiente a través de la red de transporte disponible siguiendo posiblemente rutas no del todo iguales. Por ejemplo, unos contenedores pueden ir por ciertas carreteras en ciertos camiones mientras que otros pueden viajar en tren o incluso en barco, o cualquier combinación de los anteriores. Lo importante es la independencia entre la ruta de un contenedor concreto con los demás. Una vez llegados al almacén de destino, la carga se extrae de los contenedores y se agrupa con el resto que llega del mismo envío. Así, los paquetes son análogos a los contenedores, los enlaces de comunicación son análogos a las vías de transporte, los conmutadores de paquetes son análogos a las intersecciones o discontinuidades en las vías de transporte (piénsese en una simple rotonda), y los sistemas finales son análogos a los almacenes. Pues bien, de igual forma que un contenedor toma un camino a través de la red de transporte, un paquete de información toma un camino a través de la infraestructura de Internet.
+    \\
 
     Por otro lado, es posible describir Internet desde un punto de vista \textbf{software} como un servicio prestado a las aplicaciones distribuidas, es decir, como una interfaz de programación que las aplicaciones distribuidas consumen.
+    \\
     
-    Se dice que las aplicaciones son aplicaciones distribuidas, o \textbf{aplicaciones de Internet}, cuando se ejecutan en diferentes máquinas que intercambian datos entre sí. Es importante destacar que las aplicaciones de Internet se ejecutan estrictamente en los sistemas finales, no en la infraestructura de la red, que es agnóstica (o debiera serlo) de la semántica de la información que está trasportando.
-    
-    Así, puede pensarse en Internet como un servicio postal, que garantiza el envío de información entre partes, las cuales pueden estar desarrollando cualquier tipo de actividad basada, entre otras cosas, en la propia comunicación que mantienen. Al igual que el servicio postal impone una serie de reglas para ser usado, como dónde depositar la carta que se pretende enviar o dónde y de qué manera especificar la dirección de envío, Internet ofrece unas reglas en forma de interfaz de programación que las aplicaciones de Internet deben adoptar.
+    Se dice que las aplicaciones son aplicaciones distribuidas, o \textbf{aplicaciones de Internet}, cuando se ejecutan en diferentes máquinas que intercambian datos entre sí. Es importante destacar que las aplicaciones de Internet se ejecutan estrictamente en los sistemas finales, no en la infraestructura de la red, que es agnóstica (o debiera serlo) de la semántica de la información que está trasportando. Así, puede pensarse en Internet como un servicio postal, que garantiza el envío de información entre partes, las cuales pueden estar desarrollando cualquier tipo de actividad basada, entre otras cosas, en la propia comunicación que mantienen. Al igual que el servicio postal impone una serie de reglas para ser usado, como dónde depositar la carta que se pretende enviar o dónde y de qué manera especificar la dirección de envío, Internet ofrece unas reglas en forma de interfaz de programación que las aplicaciones de Internet deben adoptar.
     
     \subsubsection{¿Qué es la Web?}
     Siguiendo el hilo de la discusión del epígrafe anterior, la World Wide Web es una de las muchas aplicaciones de Internet existentes. Otras serían el correo electrónico, las aplicaciones para acceder remotamente a otra máquina, la transferencia de archivos, el streaming de video, la telefonía por Internet, y más.
+    \\
     
     A veces, dado que la Web es la aplicación más conocida, se confunde la parte con el todo al identificarla con la propia Internet. Sin embargo, esta aplicación surgió bastante tiempo después de que otras ya estuvieran ampliamente implantadas y maduras, como el correo electrónico o la transferencia de ficheros, si bien su uso era principalmente en ámbitos académicos.
+    \\
     
     Lo que da tanta importancia a la Web es que fue la aplicación de Internet que, a principios de los años 90, abrió al gran público a la hasta entonces desconocida Internet. De hecho, esta aplicación llevó a Internet de ser tan sólo una más de muchas redes existentes a ser la dominante por excelencia.
+    \\
     
     Entonces, como se ha dicho, la Web es una aplicación de Internet, y como tal se trata de software que se ejecuta en diferentes máquinas que intercambian mensajes entre sí. El formato de estos mensajes, su timing y demás \emph{reglas de conversación} se recogen en un protocolo, el HyperText Transfer Protocol (HTTP). Este protocolo es el corazón de la Web, encontrandose definido en [RFC 1945] y en [RFC 2616], y su implementación se materializa en dos programas ejecutados en diferentes sistemas finales, un programa cliente y un programa servidor.
+    \\
     
     La mecánica básica gira en torno a peticiones y respuestas. El programa cliente envía un mensaje HTTP conteniendo una petición al programa servidor. Por su parte, siguiendo las reglas definidas en el protocolo, el programa servidor contesta enviando otro mensaje HTTP al cliente. En el caso más común, el cliente le solicita al servidor el envío de una \emph{página web}.
+    \\
     
     Una página web es un documento de texto escrito con unas reglas de sintaxis específicas. Estas reglas definen el Hypertext Markup Language (HTML). En el sistema final cliente, la página web es presentada en pantalla de una manera amigable al usuario por medio de programas que procesan el contenido en HTML.
+    \\
     
     En definitiva, y sin entrar en matices que desvíen de la esencia, la Web es la aplicación de Internet que permite el consumo de páginas web bajo demanda por parte de los usuarios (en contraste con el modelo broadcast, en el que se emite y el usuario sólo puede consumir lo emitido, como en la radio).
     
     \subsubsection{¿Qué es una Aplicación Web?}
     Las páginas web que son enviadas desde el servidor al cliente se dice que pueden ser estáticas o dinámicas. Esta característica, más que hablar de la página web en sí misma, habla del proceso mediante el cual su contenido ha sido creado y modificado a lo largo del tiempo.
+    \\
     
-    Así, las páginas estáticas lo son en el sentido de que su contenido, creado comunmente por un humano, no varía con el tiempo de manera programática. La información que presentan es la misma, a menos que se modifique \emph{a mano}. Así eran todas las páginas web en los primeros años.
-    
-    En contraste, en las páginas web dinámicas, el contenido no está dado de antemano, sino que se genera en cada ciclo de petición-respuesta. Esto es útil porque entre otras cosas permite páginas web personalizadas para cada usuario, e incluso que sea él mismo quien aporte contenido a la página web.
+    Las páginas estáticas lo son en el sentido de que su contenido, creado comunmente por un humano, no varía con el tiempo de manera programática. La información que presentan es la misma, a menos que se modifique \emph{a mano}. Así eran todas las páginas web en los primeros años. En contraste, en las páginas web dinámicas, el contenido no está dado de antemano, sino que se genera en cada ciclo de petición-respuesta. Esto es útil porque entre otras cosas permite páginas web personalizadas para cada usuario, e incluso que sea él mismo quien aporte contenido a la página web.
+    \\
     
     Una \textbf{aplicación web} es el sistema software encargado de la generación dinámica de páginas webs. Normalmente, y a diferencia del modelo estático, entre sus componentes se encuentra una base de datos que permita la persistencia de la información, cambiante por definición de la propia arquitectura.
+    \\
     
     Desde este punto de vista, en el presente proyecto se ha desarrollado una aplicación web encargada de generar contenido web que los usuarios pueden visitar con el objetivo de comprar libros a través de Internet.
 
@@ -145,7 +146,7 @@
 
         \subsection{Requisitos}
 
-            La aplicaci\'on debe admitir los roles y capacidades siguientes:
+            La aplicación debe admitir los roles y capacidades siguientes:
             \begin{enumerate}
                 \item Usuario an\'onimo (UA).
                 \begin{itemize}
@@ -187,16 +188,14 @@
                 \end{itemize}
             \end{enumerate}
 
-            Adem\'as de lo anterior, la aplicaci\'on debe:
+            Además de lo anterior, la aplicación debe:
             \begin{enumerate}
-                \item[a)] garantizar la persistencia de los datos referentes a UR, pedidos, pagos, productos y sus categor\'\i{}as
-                \item[b)] mostrar un mensaje de error cuando un usuario introduzca incorrectamente sus credenciales de autenticaci\'on
+                \item[a)] garantizar la persistencia de los datos referentes a UR, pedidos, pagos, productos y sus categorías
+                \item[b)] mostrar un mensaje de error cuando un usuario introduzca incorrectamente sus credenciales de autenticación
             \end{enumerate}
 
         \subsection{Casos de Uso}
-            En este apartado se presenta las interacciones mas comunes que los usuarios pueden realizar con la aplicacion web.
-            No se pretende proporcionar una enumeracion exhaustiva de todos los casos de uso, sino un subconjunto relevante
-            de los mismos, a modo de introduccion a las capacidades basicas que se espera de la aplicacion.
+            En este apartado se presenta las interacciones más comunes que los usuarios pueden realizar con la aplicación web. No se pretende proporcionar una enumeración exhaustiva de todos los casos de uso, sino un subconjunto relevante de los mismos, a modo de introducción a las capacidades básicas que se espera de la aplicación.
 
             \begin{figure}[h]
                 \centering
@@ -433,10 +432,53 @@
     Modelo
 
     % IMPLEMENTACION
-    \section{Implementacion}
-    La implementacion del analisis y diseno detallados en los puntos anteriores lo conforma el conjunto de programas que se incluyen en el CD distribuido con la presente memoria.
-    No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
+    \section{Implementación}
+    La implementacion del analisis y diseno detallados en los puntos anteriores lo conforma el conjunto de programas que se incluyen en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
+    \subsection{Control de Concurrencia}
+    Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus carritos y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
+    \\
+    
+    \begin{figure}[hbt!]
+    	\centering
+    	\includegraphics[width=\textwidth]{cart_diagram}
+    \end{figure}
+    
+    Como se puede apreciar en la imagen X, cuando un usuario decide proceder con el pedido de los libros contenidos en su carrito, lo primero que hace el sistema es comprobar que esos libros están disponibles. Pueden no estarlo por dos motivos, a saber, que estén agotados en ese momento o que el administrador de la aplicación web los haya desabilitado (además, en este último caso el sistema automáticamente retira del carrito dichos libros al detectar la situación). Si alguno de estos escenarios ocurriese la aplicación informaría al usuario en la propia vista del carrito, sin avanzar a la vista de checkout, tal como se muestra en la imagen X.
+    \\
+    
+    \begin{figure}[hbt!]
+    	\centering
+    	\includegraphics[width=\textwidth]{cart_alert}
+    \end{figure}
+    
+    Tras comprobar que los libros están disponibles el sistema \textbf{compromete} el carrito. Este es el paso fundamental donde se garantiza la consistencia. El sistema se compromete con el usuario a que si este finaliza la compra (dentro de un tiempo establecido) se le entregarán los libros seleccionados y al precio actual. Internamente, lo más destacado que el sistema realiza se sumariza en:
+    
+    \begin{itemize}
+    	\item[-] Se actualiza el stock, sustrayendo los libros en las cantidades correspondientes.
+    	\item[-] Se crea una entidad \emph{sale} en la base datos por cada item del carrito, para así capturar el estado (principalmente el precio) de los libros en ese momento.
+    	\item[-] Se contacta con Stripe para crear un nuevo \emph{Payment Intent}.
+    	\item[-] Se activa el contador de tiempo disponible para finalizar la compra.
+    \end{itemize}
+    
+    Todas estas acciones que realiza el sistema para comprometer el carrito las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA. Resaltar que por transaccional se hace referencia al cumplimiento de las características ACID (del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability) que aseguran la consistencia de los datos.
+    \\
+    
+    Una vez comprometido el carrito, que otro usuario modifique el stock (ya sea un cliente al comprar un libro o el administrador al variar el stock), o que el administrador varíe el precio de algún libro de los recién comprometidos, o que incluso deshabilite alguno de estos libros, sería transparente para el usuario que acaba de comprometer su carrito. Mientras dure el tiempo disponible para finalizar la compra, el carrito comprometido es un contrato inmodificable. En este punto pueden suceder dos cosas: 
+    
+    \begin{enumerate}
+    	\item El usuario completa el formulario de checkout y paga correctamente dentro del plazo, en cuyo caso se tramitaría el nuevo pedido.
+    	\item El tiempo disponible para finalizar el pago se agota sin haber sido realizado, o el usuario, en la vista del carrito, modifica las cantidades de los libros. Ante ambos eventos el sistema procede a \textbf{descomprometer} el carrito, abortándose de facto la compra.
+    \end{enumerate}
+    
+    El procedimiento de descomprometer el carrito es el inverso al de comprometerlo, y también se realiza transaccionalmente. Así, lo más destacado que el sistema lleva a cabo internamente en este proceso se resume en:
+    
+    \begin{itemize}
+    	\item[-] Se actualiza el stock, aumentando los libros en las cantidades correspondientes.
+    	\item[-] Se eliminan las entidades \emph{sale} correspondientes de la base de datos.
+    	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
+    \end{itemize}
+
     \subsection{Persistencia de Datos Jerárquicos}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
     \\
@@ -472,9 +514,43 @@
     No obstante todo lo discutido con anterioridad, la solución real implementada para el trato específico de las categorías es triple: Closure table, lista de adyacencia y trabajo en memoria principal con una estructura de datos en árbol. Esto es así por una cuestión de eficiencia y por desarrollar experiencia en el uso de estas soluciones.
     \\
     
-    \begin{lstlisting}[language=SQL, caption=Tablas que gestionan las categorías]
-    create table category(id,..,name,parent_id,..);
-    create table catpath(id,..,size,ancestor_id,descendant_id,..);
+    \begin{lstlisting}[caption=Tablas que gestionan las categorías]
+    create table category (
+    	id bigint not null, 
+    	created_by varchar(255), 
+    	created_date timestamp, 
+    	last_modified_by varchar(255), 
+    	last_modified_date timestamp, 
+    	name varchar(255), 
+    	parent_id bigint, 
+    	primary key (id)
+    );
+    	
+    create table catpath (
+    	id bigint not null, 
+    	created_by varchar(255), 
+    	created_date timestamp, 
+    	last_modified_by varchar(255), 
+    	last_modified_date timestamp, 
+    	size integer not null, 
+    	ancestor_id bigint, 
+    	descendant_id bigint, 
+    	primary key (id)
+    );
+    
+    alter table category 
+    	add constraint fk_parentIdOnCategory foreign key (parent_id) references category(id)
+    ;
+    
+    alter table catpath 
+    	add constraint fk_ancestorIdOnCatpath foreign key (ancestor_id) references category(id)
+    ;
+    
+    alter table catpath 
+    	add constraint fk_descendantIdOnCatpath foreign key (descendant_id) references category(id)
+    ;
+    
+    
     \end{lstlisting}
     
     \subsection{Validación}
@@ -497,10 +573,7 @@
     Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en frontend como en backend, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
     \\
     
-    Sin embargo, existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes, a saber, sintáctica y semántica. La validación sintáctica se realiza utilizando las ya mencionadas expresiones regulares, pero para validar si se trata de un ISBN válido aún hay que calcular mediante un algoritmo concreto un dígito de control y ver si el último dígito coincide. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006 pero, desde enero de 2007, tienen siempre 13 dígitos (ambas versiones con diferentes algoritmos de cálculo de dígito de control). Así pues, la validación debe dar soporte a ambos formatos de ISBN.
-    \\
-    
-    A modo de ejemplo se detalla a continuación la función en JavaScript desarrollada para comprobar en el cliente el dígito de control:
+    Sin embargo, existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes, a saber, sintáctica y semántica. La validación sintáctica se realiza utilizando las ya mencionadas expresiones regulares, pero para validar si se trata de un ISBN válido aún hay que calcular mediante un algoritmo concreto un dígito de control y ver si el último dígito coincide. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006 pero, desde enero de 2007, tienen siempre 13 dígitos (ambas versiones con diferentes algoritmos de cálculo de dígito de control). Así pues, la validación debe dar soporte a ambos formatos de ISBN. A modo de ejemplo se detalla a continuación la función en JavaScript desarrollada para comprobar en el cliente el dígito de control:
     \\
     
     \begin{lstlisting}[language=JavaScript,caption=Validación del dígito de control del ISBN en cliente]
@@ -544,8 +617,10 @@
     };
     \end{lstlisting}
     
-    \subsection{Control de Concurrencia. Stock Consistente}
-    \subsection{Creacion de Muestras}
+    
+    
+    
+    
 
     % TECNOLOGIAS
     \section{Stack Tecnológico}
@@ -590,6 +665,9 @@
     aqui va la descripcion para el usuario cliente
         \subsection{Usuario Administrador}
     aquie se describe el uso del admin
+
+	% PRESUPUESTO
+	\section{Presupuesto}
 
     % MEJORAS Y AMPLIACIONES
     \section{Mejoras y Ampliaciones}
