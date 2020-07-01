@@ -1,6 +1,6 @@
 \documentclass[a4paper]{report}
 
-\author{Misrraim~Suárez~Pérez}
+\author{Misrraim~Su\'arez~P\'erez}
 \title{FirstMarket}
 
 \linespread{1.25}
@@ -425,9 +425,37 @@
 
     % DISEÑO
     \section{Diseño}
-    Dise
+    En este apartado se ofrece una descripción de las decisiones tomadas a nivel de diseño de la aplicación web.
     \subsection{Arquitectura del Sistema}
-    Arquitectura en capas. Capa de presentacion, capa de control, capa de servicio, capa de persistencia
+    Sin entrar en detalles internos, a vista de pájaro, la aplicación web ha sido construida siguiendo la arquitectura clásica de tres capas cliente-servidor-datos. Hoy en día, quizás, esta no sea la organización más vanguardista. Los términos \emph{serverless}, \emph{microservicios} o \emph{single-page-application} son los que con mayor eco resuenan en la industria web actual.
+    
+    \begin{figure}[h]
+    	\centering
+    	\includegraphics[width=\textwidth]{desing_diagram}
+    \end{figure}
+    
+    Como muchas tendencias dentro del mundo de la computación, estos términos no están del todo delimitados, ofreciendo en ocasiones diferentes interpretaciones y/o solapamientos entre sí. Serverless hace mención a aquellas aplicaciones web que en su mayor parte, o por completo, incorporan servicios cloud de terceras partes para gestionar su propia lógica de negocio. La arquitectura de microservicios está muy relacionada con lo anterior, ya que esta concibe las aplicaciones como un agregado de servicios muy especializados ejecutados de forma independiente, puede que en máquinas remotas, que se comunican entre sí de manera ligera y eficiente. Por su parte, las SPA usan la elevada capacidad de cómputo de los clientes actuales para trasladar allí parte de la lógica que tradicionalmente implementa el servidor. En una SPA o bien todo el contenido HTML, JavaScript y CSS es cargado una sola vez, o bien se carga dinámicamente bajo demanda, normalmente como respuesta a las acciones del usuario, dando así una mayor sensación de fluidez.
+    
+    No obstante, a pesar de las muchas ventajas que presentan estas formas de enfocar las aplicaciones web, se ha optado por la arquitectura clásica (con pinceladas, como se verá, de aspectos serverless y SPA), y el motivo es doble:
+    
+    \begin{itemize}
+    	\item[-] Antes del 2 va el 1. El punto de partida en el desarrollo de la presente aplicación web fue el de prácticamente nulos conocimientos sobre esta rama de la informática. En este escenario, antes de estudiar directamente las arquitecturas surgidas en los últimos años, se ha preferido estudiar la arquitectura clásica, en el convencimiento de que es el camino formativo correcto.
+    	\item[-] Tecnología viva. En contra de lo que hace unos años algunas voces avanzaban, la arquitectura browser-server-database no está muerta y previsiblemente no lo va a estar. Esta es una tecnología madura, robusta y muy extendida. Aunque es muy cierto que su cuota de mercado ha descendido en pro de otras arquitecturas más recientes, muestra tener un suelo estable y un lugar propio dentro de las tecnologías web. En parte esto es así porque, como casi siempre, no es oro todo lo que reluce. Las arquitecturas modernas no son la perfección, mostrando tener algunos puntos débiles. Ver []
+    \end{itemize}
+    
+    En la imagen XX se presenta un esquema de la arquitectura de la aplicación web. Como se aprecia, responde a la mencionada arquitectura clásica de tres capas cliente-servidor-datos. No obstante, existen ciertos elementos que descansan en servicios cloud externos. Este es el aspecto serverless al que se hizo mención anteriormente. Asi, el servicio de pagos es ofrecido por Stripe (ref sección stripe). Como se aprecia en la imagen XX, existe una vía de comunicación directa entre el cliente y Stripe. Esto es así para garanatizar que la aplicación web no tiene nunca acceso a los datos confidenciales de pago del cliente (p.e., número de la tarjeta de crédito), sino que esta información es enviada directamente desde el cliente a Stripe. Por su parte, el servicio de correo es delegado en Gmail, a través de la capa de abstracción que Spring Framework ofrece de la API JavaMail. Y, por último, la base de datos. Este caso es especial porque dependiendo del entorno de ejecución se puede asimilar a un servicio cloud o no. En este sentido, cuando el entorno de ejecución es producción, la base datos es accedida como un servicio que AWS presta a Heroku.
+    \\
+    
+    Centrando la atención ahora en el núcleo de la aplicación, es decir, dejando de lado los servicios periféricos de pago y correo, el principio de diseño más relevante es la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Como se muestra en la imagen YY, esto se consigue organizando funcionalmente la aplicación en capas: web, negocio y persistencia. Además, la aplicación ha sido desarrollada haciendo uso de un framework -Spring Framework [ref]- de inversión de control (\emph{inversion of control}, IoC) e inyección de dependencias (\emph{dependency injection}, DI), dos patrones de diseño sumamente importantes.
+    
+    \begin{figure}[h]
+    	\centering
+    	\includegraphics[width=\textwidth]{desing_layer_diagram}
+    \end{figure}
+    
+    \subsubsection{Separación de Responsabilidades}
+    \subsubsection{Inversión de Control. Inyección de Dependencias}
+    
     \subsection{Modelo de Datos}
     Modelo
 
