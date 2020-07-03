@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
 import misrraimsp.uned.pfg.firstmarket.core.data.ItemRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Item;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

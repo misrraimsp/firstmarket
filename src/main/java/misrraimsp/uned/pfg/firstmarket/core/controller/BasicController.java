@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.controller;
+package misrraimsp.uned.pfg.firstmarket.core.controller;
 
-import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.*;
+import misrraimsp.uned.pfg.firstmarket.core.model.User;
+import misrraimsp.uned.pfg.firstmarket.core.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.model.projection;
+package misrraimsp.uned.pfg.firstmarket.core.model.projection;
 
 public interface AuthorView {
 

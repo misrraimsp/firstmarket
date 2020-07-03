@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.security;
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityLockProperties;
-import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
-import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.core.model.User;
+import misrraimsp.uned.pfg.firstmarket.core.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.util.mail.MailClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

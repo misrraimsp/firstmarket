@@ -1,9 +1,9 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
 import misrraimsp.uned.pfg.firstmarket.core.data.PublisherRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Publisher;
 import misrraimsp.uned.pfg.firstmarket.core.model.projection.PublisherView;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.data;
+package misrraimsp.uned.pfg.firstmarket.core.data;
 
-import misrraimsp.uned.pfg.firstmarket.model.Category;
-import misrraimsp.uned.pfg.firstmarket.model.Catpath;
+import misrraimsp.uned.pfg.firstmarket.core.model.Category;
+import misrraimsp.uned.pfg.firstmarket.core.model.Catpath;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;

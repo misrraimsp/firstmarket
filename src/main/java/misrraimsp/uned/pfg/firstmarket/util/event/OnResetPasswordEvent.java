@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.event;
+package misrraimsp.uned.pfg.firstmarket.util.event;
 
 import org.springframework.context.ApplicationEvent;
 

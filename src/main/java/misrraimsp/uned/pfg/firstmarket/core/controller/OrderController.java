@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.controller;
+package misrraimsp.uned.pfg.firstmarket.core.controller;
 
 import com.google.gson.JsonSyntaxException;
 import com.stripe.Stripe;
@@ -13,14 +13,14 @@ import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.PaymentProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.OrderSortCriteria;
-import misrraimsp.uned.pfg.firstmarket.event.OnCartCommittedEvent;
-import misrraimsp.uned.pfg.firstmarket.event.OnPaymentCancellationEvent;
-import misrraimsp.uned.pfg.firstmarket.event.OnPaymentSuccessEvent;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
-import misrraimsp.uned.pfg.firstmarket.model.Order;
-import misrraimsp.uned.pfg.firstmarket.model.User;
-import misrraimsp.uned.pfg.firstmarket.service.*;
+import misrraimsp.uned.pfg.firstmarket.core.model.Order;
+import misrraimsp.uned.pfg.firstmarket.core.model.User;
+import misrraimsp.uned.pfg.firstmarket.core.service.*;
+import misrraimsp.uned.pfg.firstmarket.util.event.OnCartCommittedEvent;
+import misrraimsp.uned.pfg.firstmarket.util.event.OnPaymentCancellationEvent;
+import misrraimsp.uned.pfg.firstmarket.util.event.OnPaymentSuccessEvent;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.ItemsAvailabilityException;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;

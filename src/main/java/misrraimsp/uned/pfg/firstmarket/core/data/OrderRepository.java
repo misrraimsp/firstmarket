@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.data;
+package misrraimsp.uned.pfg.firstmarket.core.data;
 
-import misrraimsp.uned.pfg.firstmarket.model.Order;
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.core.model.Order;
+import misrraimsp.uned.pfg.firstmarket.core.model.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;

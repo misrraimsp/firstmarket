@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.validation;
+package misrraimsp.uned.pfg.firstmarket.util.validation;
 
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;

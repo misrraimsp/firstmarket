@@ -1,10 +1,10 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
 import misrraimsp.uned.pfg.firstmarket.core.data.ImageRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
-import misrraimsp.uned.pfg.firstmarket.exception.NoDefaultImageException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Image;
+import misrraimsp.uned.pfg.firstmarket.util.exception.BadImageException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.NoDefaultImageException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

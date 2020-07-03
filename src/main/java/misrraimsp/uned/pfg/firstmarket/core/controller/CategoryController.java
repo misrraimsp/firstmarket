@@ -1,8 +1,8 @@
-package misrraimsp.uned.pfg.firstmarket.controller;
+package misrraimsp.uned.pfg.firstmarket.core.controller;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
-import misrraimsp.uned.pfg.firstmarket.model.Category;
-import misrraimsp.uned.pfg.firstmarket.service.*;
+import misrraimsp.uned.pfg.firstmarket.core.model.Category;
+import misrraimsp.uned.pfg.firstmarket.core.service.*;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.CategoryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;

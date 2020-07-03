@@ -1,19 +1,19 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.SearchCriteria;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
 import misrraimsp.uned.pfg.firstmarket.core.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
-import misrraimsp.uned.pfg.firstmarket.exception.IsbnAlreadyExistsException;
-import misrraimsp.uned.pfg.firstmarket.exception.ItemsAvailabilityException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Book;
 import misrraimsp.uned.pfg.firstmarket.core.model.Image;
 import misrraimsp.uned.pfg.firstmarket.core.model.Item;
 import misrraimsp.uned.pfg.firstmarket.core.model.projection.AuthorView;
 import misrraimsp.uned.pfg.firstmarket.core.model.projection.LanguageView;
 import misrraimsp.uned.pfg.firstmarket.core.model.projection.PublisherView;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.SearchCriteria;
+import misrraimsp.uned.pfg.firstmarket.util.exception.BadImageException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.IsbnAlreadyExistsException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.ItemsAvailabilityException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

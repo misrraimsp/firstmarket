@@ -1,8 +1,8 @@
-package misrraimsp.uned.pfg.firstmarket.data;
+package misrraimsp.uned.pfg.firstmarket.core.data;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
-import misrraimsp.uned.pfg.firstmarket.model.Book;
-import misrraimsp.uned.pfg.firstmarket.model.projection.LanguageView;
+import misrraimsp.uned.pfg.firstmarket.core.model.Book;
+import misrraimsp.uned.pfg.firstmarket.core.model.projection.LanguageView;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;

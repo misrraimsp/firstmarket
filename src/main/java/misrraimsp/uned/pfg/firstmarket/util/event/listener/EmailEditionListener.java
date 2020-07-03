@@ -1,9 +1,9 @@
-package misrraimsp.uned.pfg.firstmarket.event.listener;
+package misrraimsp.uned.pfg.firstmarket.util.event.listener;
 
-import misrraimsp.uned.pfg.firstmarket.event.OnEmailEditionEvent;
-import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
 import misrraimsp.uned.pfg.firstmarket.core.model.User;
 import misrraimsp.uned.pfg.firstmarket.core.service.UserServer;
+import misrraimsp.uned.pfg.firstmarket.util.event.OnEmailEditionEvent;
+import misrraimsp.uned.pfg.firstmarket.util.mail.MailClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.ApplicationListener;

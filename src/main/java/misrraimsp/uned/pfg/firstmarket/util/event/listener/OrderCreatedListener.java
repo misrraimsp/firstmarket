@@ -1,9 +1,9 @@
-package misrraimsp.uned.pfg.firstmarket.event.listener;
+package misrraimsp.uned.pfg.firstmarket.util.event.listener;
 
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.HostProperties;
-import misrraimsp.uned.pfg.firstmarket.event.OnOrderCreatedEvent;
-import misrraimsp.uned.pfg.firstmarket.mail.MailClient;
 import misrraimsp.uned.pfg.firstmarket.core.model.Order;
+import misrraimsp.uned.pfg.firstmarket.util.event.OnOrderCreatedEvent;
+import misrraimsp.uned.pfg.firstmarket.util.mail.MailClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.mail.MailProperties;
 import org.springframework.context.ApplicationListener;

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.mail;
+package misrraimsp.uned.pfg.firstmarket.util.mail;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

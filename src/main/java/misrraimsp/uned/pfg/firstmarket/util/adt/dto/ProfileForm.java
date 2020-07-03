@@ -1,9 +1,9 @@
-package misrraimsp.uned.pfg.firstmarket.adt.dto;
+package misrraimsp.uned.pfg.firstmarket.util.adt.dto;
 
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
-import misrraimsp.uned.pfg.firstmarket.validation.ValidDate;
-import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
+import misrraimsp.uned.pfg.firstmarket.util.validation.ValidDate;
+import misrraimsp.uned.pfg.firstmarket.util.validation.ValidPattern;
 
 import java.time.Month;
 

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.exception;
+package misrraimsp.uned.pfg.firstmarket.util.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

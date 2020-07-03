@@ -1,5 +1,6 @@
-package misrraimsp.uned.pfg.firstmarket.controller;
+package misrraimsp.uned.pfg.firstmarket;
 
+import misrraimsp.uned.pfg.firstmarket.core.controller.HomeController;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;

@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 @EnableScheduling
 public class FirstmarketApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(FirstmarketApplication.class, args);
     }

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.config.sqlBuilder;
+package misrraimsp.uned.pfg.firstmarket.util.sqlBuilder;
 
 import org.jdom2.Content;
 import org.jdom2.Document;

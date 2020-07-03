@@ -1,10 +1,10 @@
-package misrraimsp.uned.pfg.firstmarket.adt.dto;
+package misrraimsp.uned.pfg.firstmarket.util.adt.dto;
 
 import lombok.Data;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PriceInterval;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
-import misrraimsp.uned.pfg.firstmarket.validation.ValidPattern;
+import misrraimsp.uned.pfg.firstmarket.util.validation.ValidPattern;
 
 import java.util.Set;
 

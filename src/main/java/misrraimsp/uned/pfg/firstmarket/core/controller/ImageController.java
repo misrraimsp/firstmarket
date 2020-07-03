@@ -1,10 +1,10 @@
-package misrraimsp.uned.pfg.firstmarket.controller;
+package misrraimsp.uned.pfg.firstmarket.core.controller;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.ImagesWrapper;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.ImageSortCriteria;
-import misrraimsp.uned.pfg.firstmarket.model.Image;
-import misrraimsp.uned.pfg.firstmarket.service.*;
+import misrraimsp.uned.pfg.firstmarket.core.model.Image;
+import misrraimsp.uned.pfg.firstmarket.core.service.*;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.ImagesWrapper;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

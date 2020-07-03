@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.data;
+package misrraimsp.uned.pfg.firstmarket.core.data;
 
-import misrraimsp.uned.pfg.firstmarket.model.Publisher;
-import misrraimsp.uned.pfg.firstmarket.model.projection.PublisherView;
+import misrraimsp.uned.pfg.firstmarket.core.model.Publisher;
+import misrraimsp.uned.pfg.firstmarket.core.model.projection.PublisherView;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;

@@ -1,6 +1,6 @@
-package misrraimsp.uned.pfg.firstmarket.validation;
+package misrraimsp.uned.pfg.firstmarket.util.validation;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.TwinPasswordContainer;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.TwinPasswordContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

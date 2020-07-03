@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.exception;
+package misrraimsp.uned.pfg.firstmarket.util.exception;
 
 
 public class NoEntityStatusException extends NoApplicationComponentException {

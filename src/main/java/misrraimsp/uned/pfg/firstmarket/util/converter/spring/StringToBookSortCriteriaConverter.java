@@ -1,8 +1,8 @@
-package misrraimsp.uned.pfg.firstmarket.converter.spring;
+package misrraimsp.uned.pfg.firstmarket.util.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.BookSortCriteria;
-import misrraimsp.uned.pfg.firstmarket.exception.NoSortCriteriaException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Book;
+import misrraimsp.uned.pfg.firstmarket.util.exception.NoSortCriteriaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;

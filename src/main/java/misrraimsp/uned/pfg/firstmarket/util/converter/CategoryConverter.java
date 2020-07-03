@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.converter;
+package misrraimsp.uned.pfg.firstmarket.util.converter;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
 import misrraimsp.uned.pfg.firstmarket.core.model.Category;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.CategoryForm;
 import org.springframework.stereotype.Component;
 
 @Component

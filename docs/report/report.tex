@@ -427,7 +427,7 @@
     \section{Diseño}
     En este apartado se ofrece una descripción de las decisiones tomadas a nivel de diseño de la aplicación web.
     \subsection{Arquitectura del Sistema}
-    Sin entrar en detalles internos, a vista de pájaro, la aplicación web ha sido construida siguiendo la arquitectura clásica de tres capas cliente-servidor-datos. Hoy en día, quizás, esta no sea la organización más vanguardista. Los términos \emph{serverless}, \emph{microservicios} o \emph{single-page-application} son los que con mayor eco resuenan en la industria web actual.
+    Desde un punto de vista lo suficientemente alejado como para no percibir los detalles internos, la aplicación web está organizada siguiendo la arquitectura clásica cliente-servidor-datos. Hoy en día, quizás, esta no sea la organización más vanguardista. Los términos \emph{serverless}, \emph{microservicios} o \emph{single-page-application} son los que con mayor eco resuenan en la industria web actual.
     
     \begin{figure}[h]
     	\centering
@@ -443,21 +443,36 @@
     	\item[-] Tecnología viva. En contra de lo que hace unos años algunas voces avanzaban, la arquitectura browser-server-database no está muerta y previsiblemente no lo va a estar. Esta es una tecnología madura, robusta y muy extendida. Aunque es muy cierto que su cuota de mercado ha descendido en pro de otras arquitecturas más recientes, muestra tener un suelo estable y un lugar propio dentro de las tecnologías web. En parte esto es así porque, como casi siempre, no es oro todo lo que reluce. Las arquitecturas modernas no son la perfección, mostrando tener algunos puntos débiles. Ver []
     \end{itemize}
     
-    En la imagen XX se presenta un esquema de la arquitectura de la aplicación web. Como se aprecia, responde a la mencionada arquitectura clásica de tres capas cliente-servidor-datos. No obstante, existen ciertos elementos que descansan en servicios cloud externos. Este es el aspecto serverless al que se hizo mención anteriormente. Asi, el servicio de pagos es ofrecido por Stripe (ref sección stripe). Como se aprecia en la imagen XX, existe una vía de comunicación directa entre el cliente y Stripe. Esto es así para garanatizar que la aplicación web no tiene nunca acceso a los datos confidenciales de pago del cliente (p.e., número de la tarjeta de crédito), sino que esta información es enviada directamente desde el cliente a Stripe. Por su parte, el servicio de correo es delegado en Gmail, a través de la capa de abstracción que Spring Framework ofrece de la API JavaMail. Y, por último, la base de datos. Este caso es especial porque dependiendo del entorno de ejecución se puede asimilar a un servicio cloud o no. En este sentido, cuando el entorno de ejecución es producción, la base datos es accedida como un servicio que AWS presta a Heroku.
+    En la imagen XX se presenta un esquema de la arquitectura de la aplicación web. Como se aprecia, responde a la mencionada arquitectura clásica cliente-servidor-datos. No obstante, existen ciertos elementos que descansan en servicios cloud externos, dotando a la aplicación de cierto caracter serverless. Asi, el servicio de pagos es ofrecido por Stripe (ref sección stripe). Como se aprecia en la imagen XX, existe una vía de comunicación directa entre el cliente y Stripe. Esto es así para garanatizar que la aplicación web no tiene nunca acceso a los datos confidenciales de pago del cliente (p.e., número de la tarjeta de crédito), sino que esta información es enviada directamente desde el cliente a Stripe. Por su parte, el servicio de correo es delegado en Gmail, a través de la capa de abstracción que Spring Framework ofrece de la API JavaMail. Y, por último, la base de datos. Este caso es especial porque dependiendo del entorno de ejecución se puede asimilar a un servicio cloud o no. En este sentido, cuando el entorno de ejecución es producción, la base datos es accedida como un servicio que AWS presta a Heroku.
     \\
     
-    Centrando la atención ahora en el núcleo de la aplicación, es decir, dejando de lado los servicios periféricos de pago y correo, el principio de diseño más relevante es la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Como se muestra en la imagen YY, esto se consigue organizando funcionalmente la aplicación en capas: web, negocio y persistencia. Además, la aplicación ha sido desarrollada haciendo uso de un framework -Spring Framework [ref]- de inversión de control (\emph{inversion of control}, IoC) e inyección de dependencias (\emph{dependency injection}, DI), dos patrones de diseño sumamente importantes.
+    Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
-    \begin{figure}[h]
-    	\centering
-    	\includegraphics[width=\textwidth]{desing_layer_diagram}
-    \end{figure}
+    %Centrando la atención ahora en el núcleo de la aplicación, es decir, dejando de lado los servicios periféricos de pago y correo, los principios de diseño aplicados más relevantes han sido la \textbf{inyección de dependencias} (\emph{dependency injection}, DI) y la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). El primero se obtiene de la mano del contenedor de inversión de control usado para el desarrollo de la aplicación -Spring Framework [ref]-, mientras que al segundo se llega organizando funcionalmente la aplicación en capas: web, negocio y persistencia. A continuación se comentará cada uno de estos principios.
+    
+    
+    \subsubsection{Inversión de Control. Inyección de Dependencias}
+    %La inversión de control es un concepto de gestión de la complejidad que hoy en día prácticamente cualquier aplicación Java Empresarial (y fuera del mundo Java también) utiliza.
+    Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
+    
+    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su artículo seminal en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por inversión de control se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de inyección de dependencias del mundo Java líder en la actualidad, Spring Framework.
+    
     
     \subsubsection{Separación de Responsabilidades}
-    \subsubsection{Inversión de Control. Inyección de Dependencias}
+    libro de martin fowler, pag 19
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=0.75\textwidth,keepaspectratio]{desing_layer_diagram}
+    \end{figure}
     
     \subsection{Modelo de Datos}
-    Modelo
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[height=\textwidth,angle=90,origin=c]{Package_model}
+    	\caption{Modelo de Dominio}  \label{fig:dominio}
+    \end{figure}
 
     % IMPLEMENTACION
     \section{Implementación}
@@ -490,6 +505,22 @@
     \end{itemize}
     
     Todas estas acciones que realiza el sistema para comprometer el carrito las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA. Resaltar que por transaccional se hace referencia al cumplimiento de las características ACID (del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability) que aseguran la consistencia de los datos.
+    
+    Software transactions are often described in terms of the ACID properties:
+    -Atomicity: Each step in the sequence of actions performed within the
+    boundaries of a transaction must complete successfully or all work must
+    roll back. Partial completion is not a transactional concept. Thus, if Mar-
+    tin is transferring some money from his savings to his checking account
+    and the server crashes after he’s withdrawn the money from his savings,
+    the system behaves as if he never did the withdrawal. Committing says
+    both things occurred; a roll back says neither occurred. It has to be both
+    or neither.
+    -Consistency: A system’s resources must be in a consistent, noncorrupt
+    state at both the start and the completion of a transaction.
+    -Isolation: The result of an individual transaction must not be visible to any
+    other open transactions until that transaction commits successfully.
+    -Durability: Any result of a committed transaction must be made perma-
+    nent. This translates to “Must survive a crash of any sort.”
     \\
     
     Una vez comprometido el carrito, que otro usuario modifique el stock (ya sea un cliente al comprar un libro o el administrador al variar el stock), o que el administrador varíe el precio de algún libro de los recién comprometidos, o que incluso deshabilite alguno de estos libros, sería transparente para el usuario que acaba de comprometer su carrito. Mientras dure el tiempo disponible para finalizar la compra, el carrito comprometido es un contrato inmodificable. En este punto pueden suceder dos cosas: 

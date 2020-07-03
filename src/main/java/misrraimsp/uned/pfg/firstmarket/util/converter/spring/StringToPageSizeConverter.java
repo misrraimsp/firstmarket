@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.converter.spring;
+package misrraimsp.uned.pfg.firstmarket.util.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize;
-import misrraimsp.uned.pfg.firstmarket.exception.NoPageSizeException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.NoPageSizeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;

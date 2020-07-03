@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.converter.spring;
+package misrraimsp.uned.pfg.firstmarket.util.converter.spring;
 
-import misrraimsp.uned.pfg.firstmarket.exception.BadImageException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Image;
+import misrraimsp.uned.pfg.firstmarket.util.exception.BadImageException;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;

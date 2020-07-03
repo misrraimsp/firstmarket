@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.converter.spring;
+package misrraimsp.uned.pfg.firstmarket.util.converter.spring;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;

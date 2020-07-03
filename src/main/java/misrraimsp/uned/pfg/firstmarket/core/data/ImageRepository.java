@@ -1,6 +1,6 @@
-package misrraimsp.uned.pfg.firstmarket.data;
+package misrraimsp.uned.pfg.firstmarket.core.data;
 
-import misrraimsp.uned.pfg.firstmarket.model.Image;
+import misrraimsp.uned.pfg.firstmarket.core.model.Image;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

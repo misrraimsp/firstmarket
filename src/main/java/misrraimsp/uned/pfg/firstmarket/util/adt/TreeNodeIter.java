@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.adt;
+package misrraimsp.uned.pfg.firstmarket.util.adt;
 
 import java.util.Iterator;
 

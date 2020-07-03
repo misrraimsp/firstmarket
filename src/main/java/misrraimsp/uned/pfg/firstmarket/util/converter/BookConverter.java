@@ -1,11 +1,11 @@
-package misrraimsp.uned.pfg.firstmarket.converter;
+package misrraimsp.uned.pfg.firstmarket.util.converter;
 
 import lombok.NonNull;
-import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.ValidationRegexProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.ProductStatus;
-import misrraimsp.uned.pfg.firstmarket.exception.BookFormAuthorsConversionException;
 import misrraimsp.uned.pfg.firstmarket.core.model.*;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.BookForm;
+import misrraimsp.uned.pfg.firstmarket.util.exception.BookFormAuthorsConversionException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

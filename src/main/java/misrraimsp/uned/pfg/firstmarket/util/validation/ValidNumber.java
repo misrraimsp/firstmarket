@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.validation;
+package misrraimsp.uned.pfg.firstmarket.util.validation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

@@ -1,6 +1,6 @@
-package misrraimsp.uned.pfg.firstmarket.validation;
+package misrraimsp.uned.pfg.firstmarket.util.validation;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.DateContainer;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.DateContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,7 +1,7 @@
-package misrraimsp.uned.pfg.firstmarket.converter;
+package misrraimsp.uned.pfg.firstmarket.util.converter;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
 import misrraimsp.uned.pfg.firstmarket.core.model.Profile;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.ProfileForm;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;

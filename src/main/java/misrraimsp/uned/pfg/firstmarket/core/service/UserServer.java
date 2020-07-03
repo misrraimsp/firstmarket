@@ -1,20 +1,20 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.ProfileForm;
-import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityRandomPasswordProperties;
 import misrraimsp.uned.pfg.firstmarket.config.propertyHolder.SecurityTokenProperties;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.DeletionReason;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.SecurityEvent;
-import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
 import misrraimsp.uned.pfg.firstmarket.core.data.SecurityTokenRepository;
 import misrraimsp.uned.pfg.firstmarket.core.data.UserDeletionRepository;
 import misrraimsp.uned.pfg.firstmarket.core.data.UserRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.EmailNotFoundException;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.core.model.*;
 import misrraimsp.uned.pfg.firstmarket.security.LockManager;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.ProfileForm;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.UserForm;
+import misrraimsp.uned.pfg.firstmarket.util.converter.ConversionManager;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EmailNotFoundException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
 import org.passay.CharacterData;
 import org.passay.CharacterRule;
 import org.passay.EnglishCharacterData;

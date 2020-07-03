@@ -1,8 +1,8 @@
-package misrraimsp.uned.pfg.firstmarket.converter.spring;
+package misrraimsp.uned.pfg.firstmarket.util.converter.spring;
 
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.OrderStatus;
-import misrraimsp.uned.pfg.firstmarket.exception.NoEntityStatusException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Order;
+import misrraimsp.uned.pfg.firstmarket.util.exception.NoEntityStatusException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.converter.Converter;

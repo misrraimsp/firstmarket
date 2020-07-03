@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.exception;
+package misrraimsp.uned.pfg.firstmarket.util.exception;
 
 import misrraimsp.uned.pfg.firstmarket.core.model.Item;
 

@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.adt.dto;
+package misrraimsp.uned.pfg.firstmarket.util.adt.dto;
 
 import java.time.Month;
 

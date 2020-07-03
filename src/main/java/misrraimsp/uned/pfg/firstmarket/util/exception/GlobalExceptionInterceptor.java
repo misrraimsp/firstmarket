@@ -1,4 +1,4 @@
-package misrraimsp.uned.pfg.firstmarket.exception;
+package misrraimsp.uned.pfg.firstmarket.util.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
 import misrraimsp.uned.pfg.firstmarket.core.data.ProfileRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Profile;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

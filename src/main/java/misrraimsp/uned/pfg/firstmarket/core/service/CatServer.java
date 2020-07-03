@@ -1,14 +1,14 @@
 package misrraimsp.uned.pfg.firstmarket.core.service;
 
-import misrraimsp.uned.pfg.firstmarket.adt.TreeNode;
-import misrraimsp.uned.pfg.firstmarket.adt.dto.CategoryForm;
-import misrraimsp.uned.pfg.firstmarket.converter.CategoryConverter;
 import misrraimsp.uned.pfg.firstmarket.core.data.CategoryRepository;
 import misrraimsp.uned.pfg.firstmarket.core.data.CatpathRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.EntityNotFoundByIdException;
-import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
 import misrraimsp.uned.pfg.firstmarket.core.model.Category;
 import misrraimsp.uned.pfg.firstmarket.core.model.Catpath;
+import misrraimsp.uned.pfg.firstmarket.util.adt.TreeNode;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.CategoryForm;
+import misrraimsp.uned.pfg.firstmarket.util.converter.CategoryConverter;
+import misrraimsp.uned.pfg.firstmarket.util.exception.EntityNotFoundByIdException;
+import misrraimsp.uned.pfg.firstmarket.util.exception.NoRootCategoryException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

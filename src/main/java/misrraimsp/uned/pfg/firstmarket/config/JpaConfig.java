@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
-import misrraimsp.uned.pfg.firstmarket.data.AuditorAwareImplementation;
+import misrraimsp.uned.pfg.firstmarket.core.data.AuditorAwareImplementation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
