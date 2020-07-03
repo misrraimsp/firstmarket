@@ -1,15 +1,15 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
-import misrraimsp.uned.pfg.firstmarket.adt.dto.BookForm;
-import misrraimsp.uned.pfg.firstmarket.adt.dto.UserForm;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Gender;
 import misrraimsp.uned.pfg.firstmarket.config.staticParameter.Language;
-import misrraimsp.uned.pfg.firstmarket.converter.ConversionManager;
-import misrraimsp.uned.pfg.firstmarket.data.OrderRepository;
-import misrraimsp.uned.pfg.firstmarket.data.ProfileRepository;
-import misrraimsp.uned.pfg.firstmarket.exception.NoRootCategoryException;
-import misrraimsp.uned.pfg.firstmarket.model.*;
-import misrraimsp.uned.pfg.firstmarket.service.*;
+import misrraimsp.uned.pfg.firstmarket.core.data.OrderRepository;
+import misrraimsp.uned.pfg.firstmarket.core.data.ProfileRepository;
+import misrraimsp.uned.pfg.firstmarket.core.model.*;
+import misrraimsp.uned.pfg.firstmarket.core.service.*;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.BookForm;
+import misrraimsp.uned.pfg.firstmarket.util.adt.dto.UserForm;
+import misrraimsp.uned.pfg.firstmarket.util.converter.ConversionManager;
+import misrraimsp.uned.pfg.firstmarket.util.exception.NoRootCategoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -54,7 +54,7 @@ public class DevH2Config {
             //Images
 
             Image img0 = new Image();
-            Path path0 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/fm.png");
+            Path path0 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/logo.jpg");
             img0.setDefault(true);
             img0.setData(Files.readAllBytes(path0));
             img0.setName(path0.getFileName().toString());
@@ -62,7 +62,7 @@ public class DevH2Config {
             imageServer.persist(img0);
 
             Image img1 = new Image();
-            Path path1 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/rojo.jpg");
+            Path path1 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/momo.jpg");
             img1.setDefault(false);
             img1.setData(Files.readAllBytes(path1));
             img1.setName(path1.getFileName().toString());
@@ -70,7 +70,7 @@ public class DevH2Config {
             imageServer.persist(img1);
 
             Image img2 = new Image();
-            Path path2 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/amarillo.jpg");
+            Path path2 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/haskell.png");
             img2.setDefault(false);
             img2.setData(Files.readAllBytes(path2));
             img2.setName(path2.getFileName().toString());
@@ -78,7 +78,7 @@ public class DevH2Config {
             imageServer.persist(img2);
 
             Image img3 = new Image();
-            Path path3 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/marron.jpg");
+            Path path3 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/istanbul.jpg");
             img3.setDefault(false);
             img3.setData(Files.readAllBytes(path3));
             img3.setName(path3.getFileName().toString());
@@ -86,7 +86,7 @@ public class DevH2Config {
             imageServer.persist(img3);
 
             Image img4 = new Image();
-            Path path4 = Paths.get("/Users/andreagrau/Desktop/EmbajadaMisrra/pfg/img/negro.jpg");
+            Path path4 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/java.jpg");
             img4.setDefault(false);
             img4.setData(Files.readAllBytes(path4));
             img4.setName(path4.getFileName().toString());
@@ -529,7 +529,7 @@ public class DevH2Config {
             userForm1.setPassword("admin");
             userForm1.setMatchingPassword("admin");
             User admin = userServer.persist(userForm1, passwordEncoder, Collections.singleton(role1), cart1);
-            misrraimsp.uned.pfg.firstmarket.model.Profile adminProfile = admin.getProfile();
+            misrraimsp.uned.pfg.firstmarket.core.model.Profile adminProfile = admin.getProfile();
             adminProfile.setFirstName("adminFirstName");
             adminProfile.setLastName("adminLastName");
             adminProfile.setPhone("666 333 666");
@@ -543,7 +543,7 @@ public class DevH2Config {
             userForm2.setPassword("misrra");
             userForm2.setMatchingPassword("misrra");
             User misrra = userServer.persist(userForm2, passwordEncoder, null, null);
-            misrraimsp.uned.pfg.firstmarket.model.Profile misrraProfile = misrra.getProfile();
+            misrraimsp.uned.pfg.firstmarket.core.model.Profile misrraProfile = misrra.getProfile();
             misrraProfile.setFirstName("Misrraim");
             misrraProfile.setLastName("Suárez");
             misrraProfile.setPhone("111 222 333");
@@ -557,7 +557,7 @@ public class DevH2Config {
             userForm3.setPassword("andrea");
             userForm3.setMatchingPassword("andrea");
             User andrea = userServer.persist(userForm3, passwordEncoder, Collections.singleton(role2), cart3);
-            misrraimsp.uned.pfg.firstmarket.model.Profile andreaProfile = andrea.getProfile();
+            misrraimsp.uned.pfg.firstmarket.core.model.Profile andreaProfile = andrea.getProfile();
             andreaProfile.setFirstName("Andrea");
             andreaProfile.setLastName("Grau");
             andreaProfile.setPhone("123 456 789");
@@ -571,7 +571,7 @@ public class DevH2Config {
             userForm4.setPassword("eric");
             userForm4.setMatchingPassword("eric");
             User eric = userServer.persist(userForm4, passwordEncoder, Collections.singleton(role2), cart4);
-            misrraimsp.uned.pfg.firstmarket.model.Profile ericProfile = eric.getProfile();
+            misrraimsp.uned.pfg.firstmarket.core.model.Profile ericProfile = eric.getProfile();
             ericProfile.setFirstName("Eric");
             ericProfile.setLastName("Forman");
             ericProfile.setPhone("123 456 789");

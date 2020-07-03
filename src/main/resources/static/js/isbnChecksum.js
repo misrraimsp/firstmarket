@@ -5,7 +5,7 @@ computes the checksum digit and alerts if an error is detected
 'use strict';
 
 const isbnChecksum = function() {
-    var chars, last, sum, check, i;
+    let chars, last, sum, check, i;
     const isbn = document.getElementById("isbn");
     if (isbn.checkValidity()) {
         // Remove non ISBN digits, then split into an array

@@ -1,8 +1,8 @@
 package misrraimsp.uned.pfg.firstmarket.config;
 
-import misrraimsp.uned.pfg.firstmarket.data.BookRepository;
-import misrraimsp.uned.pfg.firstmarket.model.Payment;
-import misrraimsp.uned.pfg.firstmarket.service.*;
+import misrraimsp.uned.pfg.firstmarket.core.data.BookRepository;
+import misrraimsp.uned.pfg.firstmarket.core.model.Payment;
+import misrraimsp.uned.pfg.firstmarket.core.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;

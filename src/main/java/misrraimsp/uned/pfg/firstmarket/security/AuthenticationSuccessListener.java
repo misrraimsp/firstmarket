@@ -1,6 +1,6 @@
 package misrraimsp.uned.pfg.firstmarket.security;
 
-import misrraimsp.uned.pfg.firstmarket.model.User;
+import misrraimsp.uned.pfg.firstmarket.core.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
