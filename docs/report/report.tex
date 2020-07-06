@@ -162,8 +162,8 @@
                 \begin{itemize}
                     \item[-] Poder editar la información de su perfil de usuario.
                     \item[-] Realizar pedidos y efectuar los correspondientes pagos a través de una pasarela segura.
-                    \item[-] Disponer de un carrito virtual para la gestión de la compra.
-                    \item[-] En el carrito se debe poder introducir, modificar la cantidad o eliminar libros (esto último de uno en uno o todos a la vez).
+                    \item[-] Disponer de una cesta virtual para la gestión de la compra.
+                    \item[-] En la cesta se debe poder introducir, modificar la cantidad o eliminar libros (esto último de uno en uno o todos a la vez).
                     \item[-] En cualquier momento del proceso de realizar un pedido, el UR debe poder cancelarlo.
                     \item[-] Tras una compra, el UR debe recibir confirmación en su correo electrónico.
                     \item[-] Un UR debe poder consultar el estado de sus pedidos.
@@ -263,7 +263,7 @@
                     \item[+] Actores implicados: Usuario Anónimo.
                     \item[+] Flujo principal:
                     \begin{enumerate}
-                        \item[1.] El usuario hace click en el link de \emph{login}, o intenta realizar alguna operación que requiera autenticación (por ejemplo, añadir un libro al carrito).
+                        \item[1.] El usuario hace click en el link de \emph{login}, o intenta realizar alguna operación que requiera autenticación (por ejemplo, añadir un libro a la cesta).
                         \item[2.] El sistema presenta el formulario de acceso (dirección de email y la contraseña).
                         \item[3.] El usuario introduce y envía la información pedida.
                         \item[4.] El sistema comprueba las credenciales.
@@ -338,17 +338,17 @@
                     \item[+] Precondiciones: Desde cualquier página en la que se muestren libros (página de inicio, página de resultados de búsqueda o página de un libro) el usuario hace click en \emph{add to cart}, para uno o mas libros.
                     \item[+] Flujo principal:
                     \begin{enumerate}
-                        \item[1.] El usuario hace click en el icono del carrito.
-                        \item[2.] El sistema muestra la página del carrito del usuario, con todos los libros contenidos en el mismo.
+                        \item[1.] El usuario hace click en el icono de la cesta.
+                        \item[2.] El sistema muestra la página de la cesta del usuario, con todos los libros contenidos en el mismo.
                         \item[3.] El usuario puede aumentar o disminuir el número de unidades de un libro, o incluso eliminarlo por completo, y hace click en \emph{checkout}.
-                        \item[4.] El sistema comprueba la disponibilidad de los libros contenidos en el carrito.
+                        \item[4.] El sistema comprueba la disponibilidad de los libros contenidos en la cesta.
                         \item[5.] Stock suficiente. El sistema muestra la página de checkout, con el formulario de datos de envío y pago, y el resumen de la compra.
                         \item[6.] El usuario completa los datos de envío y de pago y hace click en \emph{Pay}.
                         \item[7.] El sistema tramita el pago.
                         \item[8.] Pago ok. El sistema registra el nuevo pedido.
                         \item[9.] El sistema confirma al usuario por pantalla y por email que el pedido se ha realizado con éxito.
                     \end{enumerate}
-                    \item[+] Flujo alternativo: \emph{stock\_insuficiente}. No hay stock suficiente para satisfacer el contenido del carrito.
+                    \item[+] Flujo alternativo: \emph{stock\_insuficiente}. No hay stock suficiente para satisfacer el contenido de la cesta.
                     \begin{itemize}
                         \item[5.b.] El sistema vuelve al punto 2 del flujo principal, informando al usuario de los libros para los cuales no hay stock suficiente.
                         \item[3.b.] El usuario reduce la cantidad demandada de los libros correspondientes y hace click en \emph{checkout}.
@@ -357,9 +357,9 @@
                     \begin{itemize}
                         \item[8.b.] El sistema vuelve al punto 5 del flujo principal, informando al usuario del problema respecto al pago.
                     \end{itemize}
-                    \item[+] Flujo excepcional: \emph{libro\_eliminado}. Algún libro del carrito ya no esta disponible en el sistema.
+                    \item[+] Flujo excepcional: \emph{libro\_eliminado}. Algún libro de la cesta ya no esta disponible en el sistema.
                     \begin{itemize}
-                        \item[5.b.] El sistema elimina del carrito automáticamente los libros que el administrador haya deshabilitado.
+                        \item[5.b.] El sistema elimina de la cesta automáticamente los libros que el administrador haya deshabilitado.
                         \item[6.b.] El sistema vuelve al punto 2 del flujo principal, informando al usuario de los libros que han sido eliminados.
                     \end{itemize}
                     \item[+] Post-Condiciones: El usuario ha efectuado un nuevo pedido.
@@ -575,7 +575,7 @@
     La implementación del análisis y diseño detallados en los puntos anteriores lo conforma el conjunto de programas que se incluyen en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
     \subsection{Control de Concurrencia}
-    Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus carritos y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
+    Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus cestas y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
     
     \begin{figure}[hbt!]
     	\centering
@@ -584,7 +584,7 @@
     	\label{fig:cart_concurrent}
     \end{figure}
     
-    Como se puede apreciar en la figura \ref{fig:cart_concurrent}, cuando un usuario decide proceder con el pedido de los libros contenidos en su carrito, lo primero que hace el sistema es comprobar que esos libros están disponibles. Pueden no estarlo por dos motivos, a saber, que estén agotados en ese momento o que el administrador de la aplicación web los haya deshabilitado (además, en este último caso el sistema automáticamente retira del carrito dichos libros al detectar dicha situación). Si alguno de estos escenarios ocurriese la aplicación informaría al usuario en la propia vista del carrito, sin avanzar a la vista de checkout, tal como se muestra en la figura \ref{fig:cart_alert}.
+    Como se puede apreciar en la figura \ref{fig:cart_concurrent}, cuando un usuario decide proceder con el pedido de los libros contenidos en su cesta, lo primero que hace el sistema es comprobar que esos libros están disponibles. Pueden no estarlo por dos motivos, a saber, que estén agotados en ese momento o que el administrador de la aplicación web los haya deshabilitado (además, en este último caso el sistema automáticamente retira de la cesta dichos libros al detectar dicha situación). Si alguno de estos escenarios ocurriese la aplicación informaría al usuario en la propia vista de la cesta, sin avanzar a la vista de checkout, tal como se muestra en la figura \ref{fig:cart_alert}.
     
     \begin{figure}[hbt!]
     	\centering
@@ -593,16 +593,16 @@
     	\label{fig:cart_alert}
     \end{figure}
     
-    Tras comprobar que los libros están disponibles el sistema \textbf{compromete} el carrito. Este es el paso fundamental donde se garantiza la consistencia. El sistema se compromete con el usuario a que si este finaliza la compra (dentro de un tiempo establecido) se le entregarán los libros seleccionados y al precio actual. Internamente, lo más destacado que el sistema realiza se recoge en:
+    Tras comprobar que los libros están disponibles el sistema \textbf{compromete} la cesta. Este es el paso fundamental donde se garantiza la consistencia. El sistema se compromete con el usuario a que si este finaliza la compra (dentro de un tiempo establecido) se le entregarán los libros seleccionados y al precio actual. Internamente, lo más destacado que el sistema realiza se recoge en:
     
     \begin{itemize}
     	\item[-] Se actualiza el stock, sustrayendo los libros en las cantidades correspondientes.
-    	\item[-] Se crea una entidad \emph{sale} en la base datos por cada item del carrito, para así capturar el estado (principalmente el precio) de los libros en ese momento.
+    	\item[-] Se crea en la base de datos una entidad \emph{sale} por cada item de la cesta, para así capturar el estado (principalmente el precio) de los libros en ese momento.
     	\item[-] Se contacta con Stripe para crear un nuevo \emph{Payment Intent}.
     	\item[-] Se activa el contador de tiempo disponible para finalizar la compra.
     \end{itemize}
     
-    Todas estas acciones que realiza el sistema para comprometer el carrito las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA (ver \ref{sec:springdata}). Las transacciones software se describen en términos de las características ACID, del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability:
+    Todas estas acciones que realiza el sistema para comprometer la cesta las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA (ver \ref{sec:springdata}). Las transacciones software se describen en términos de las características ACID, del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability:
     
     \begin{itemize}
     	\item[-] Atomicity. Cada paso en la secuencia de acciones realizadas dentro de los límites de una transacción deben completarse con éxito o todo el trabajo debe
@@ -612,14 +612,14 @@
     	\item[-] Durability. El resultado de una transacción comprometida debe hacerse permanente, independientemente a cualquier fallo del sistema.
     \end{itemize}
     
-    Una vez comprometido el carrito, que otro usuario modifique el stock (ya sea un cliente al comprar un libro o el administrador al variar el stock), o que el administrador varíe el precio de algún libro de los recién comprometidos, o que incluso deshabilite alguno de estos libros, sería transparente para el usuario que acaba de comprometer su carrito. Mientras dure el tiempo disponible para finalizar la compra, el carrito comprometido es un contrato inmodificable. En este punto pueden suceder dos cosas: 
+    Una vez comprometida la cesta, que otro usuario modifique el stock (ya sea un cliente al comprar un libro o el administrador al variar el stock), o que el administrador varíe el precio de algún libro de los recién comprometidos, o que incluso deshabilite alguno de estos libros, sería transparente para el usuario que acaba de comprometer su cesta. Mientras dure el tiempo disponible para finalizar la compra, la cesta comprometida es un contrato inmodificable. En este punto pueden suceder dos cosas: 
     
     \begin{enumerate}
     	\item El usuario completa el formulario de checkout y paga correctamente dentro del plazo, en cuyo caso se tramitaría el nuevo pedido.
-    	\item El tiempo disponible para finalizar el pago se agota sin haber sido realizado, o el usuario, en la vista del carrito, modifica las cantidades de los libros. Ante ambos eventos el sistema procede a \textbf{descomprometer} el carrito, abortándose de facto la compra.
+    	\item El tiempo disponible para finalizar el pago se agota sin haber sido realizado, o el usuario, en la vista de la cesta, modifica las cantidades de los libros. Ante ambos eventos el sistema procede a \textbf{descomprometer} la cesta, abortándose de facto la compra.
     \end{enumerate}
     
-    El procedimiento de descomprometer el carrito es el inverso al de comprometerlo, y también se realiza transaccionalmente. Así, lo más destacado que el sistema lleva a cabo internamente en este proceso se resume en:
+    El procedimiento de descomprometer la cesta es el inverso al de comprometerla, y también se realiza transaccionalmente. Así, lo más destacado que el sistema lleva a cabo internamente en este proceso se resume en:
     
     \begin{itemize}
     	\item[-] Se actualiza el stock, aumentando los libros en las cantidades correspondientes.
@@ -627,22 +627,20 @@
     	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
     \end{itemize}
 
-    \subsection{Persistencia de Datos Jerárquicos}
+    \subsection{Persistencia y Visualización de Datos Jerárquicos}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
     
     Tal como se explica con detalle en [bib ref], existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
     
-    Si los datos jerárquicos son siempre de pequeño tamaño y las operaciones son principalmente de lectura, una solución sería cargarlos en memoria principal y gestionarlos desde allí con alguna estructura de datos apropiada. Este podría argumentarse que es el caso de la información de las categorías de los libros, ya que en principio estas no superarían a lo sumo algunas decenas de centenas, y la actividad principal realizada sería la lectura. La frecuencia con que el administrador de la tienda crea, modifica o elimina una categoría es despreciable respecto de la frecuencia con que las categorías son leídas para los usuarios en general.
+    Si los datos jerárquicos son siempre de pequeño tamaño y las operaciones son principalmente de lectura, una solución sería cargarlos en memoria principal y gestionarlos desde allí con alguna estructura de datos apropiada. Este podría argumentarse que es el caso de la información de las categorías de los libros, ya que en principio estas no superarían a lo sumo algunas decenas de centenas, y la actividad principal realizada sería la lectura. La frecuencia con que el administrador de la tienda crea, modifica o elimina una categoría es despreciable respecto de la frecuencia con que las categorías son leídas por los usuarios en general.
     
     Por otro lado, si se implementase la funcionalidad de los comentarios anidados, el escenario es claramente diferente. La cantidad de información es potencialmente mucho mayor, con lo que trabajar directamente en memoria principal no es una opción. Además, las operaciones de creación, modificación y eliminación cobran mayor protagonismo.
     
-    La solución más común en este caso se conoce como listas de adyacencia, y no es otra cosa que añadir a cada entidad una referencia (clave extranjera) al id de su predecesor jerárquico. El problema de esta solución es que escala muy mal a medida que aumenta la profundidad del árbol. Imagínese que se tiene un hilo de comentarios arbitrariamente profundo, el cual precisaría de consultas recurrentes por cada nivel si se pretendiera extraer todo el hilo (algo habitual en estos sistemas de comentarios), ya que a priori se desconoce la profundidad. Sin embargo, existen métodos para extraer todo el hilo de comentarios con una sola consulta (de forma general, extraer cualquier subárbol), como se verá a continuación.
+    La solución más común en este caso se conoce como listas de adyacencia, y no es otra cosa que añadir a cada entidad una referencia (clave extranjera) al id de su predecesor jerárquico. El problema de esta solución es que escala muy mal a medida que aumenta la profundidad del árbol. Imagínese que se tiene un hilo de comentarios arbitrariamente profundo, el cual precisaría de consultas recurrentes por cada nivel si se pretendiera extraer todo el hilo (algo habitual en estos sistemas de comentarios), ya que a priori se desconoce la profundidad. Sin embargo, existen métodos para extraer todo el hilo de comentarios con una sola consulta (en general, extraer cualquier subárbol), como se verá a continuación.
     
     La funcionalidad de que los libros estén clasificados por categorías es imprescindible para la aplicación, y en consecuencia ha sido implementada. No es el caso de los comentarios. No obstante, en un intento de hacer la aplicación fácilmente ampliable en este sentido, y dado que se trata de un proyecto académico, se optó por una solución que fuese eficiente y versátil: la denominada \textbf{Closure Table}.
     
-    La idea principal es mantener la información de las relaciones entre las entidades en una tabla diferente. Es decir, por una parte se encuentra la tabla \emph{category} y por otra la tabla \emph{catpath}. En la primera se almacena la información relativa a las categorías (su id, nombre, etc), mientras que en la segunda se almacena la información de los caminos en el árbol de categorías. De todos los caminos, incluso de una categoría consigo misma.
-    
-    Así, por cada fila en la tabla \emph{catpath} se tiene el identificador del ancestro (clave extranjera de la tabla \emph{category}), el identificador del descendiente (también clave extranjera de la tabla \emph{category}) y el tamaño del camino. Para una relación de una categoría consigo misma el tamaño del camino es 0, para una relación padre-hijo el tamaño es 1, abuelo-nieto es 2 y así sucesivamente.
+    La idea principal es mantener la información de las relaciones entre las entidades en una tabla diferente. Es decir, por una parte se encuentra la tabla \emph{category} y por otra la tabla \emph{catpath}. En la primera se almacena la información relativa a las categorías (su id, nombre, etc), mientras que en la segunda se almacena la información de los caminos en el árbol de categorías. De todos los caminos, incluso de una categoría consigo misma. Así, por cada fila en la tabla \emph{catpath} se tiene el identificador del ancestro (clave extranjera de la tabla \emph{category}), el identificador del descendiente (también clave extranjera de la tabla \emph{category}) y el tamaño del camino. Para una relación de una categoría consigo misma el tamaño del camino es 0, para una relación directa el tamaño es 1, abuelo-nieto es 2 y así sucesivamente.
     
     \begin{figure}[htb!]
     	\centering
@@ -692,9 +690,129 @@
     alter table catpath 
     	add constraint fk_descendantIdOnCatpath foreign key (descendant_id) references category(id)
     ;
-    
-    
     \end{lstlisting}
+    
+    Aparejado con el problema descrito en los párrafos anteriores se encuentra el de presentar al usuario dicha información jerárquica. Muy al principio del desarrollo de este proyecto se utilizó la tecnología de plantillas Java Server Pages para general el contenido HTML, la cual permite insertar en las vistas código Java de servidor. Así, se desarrolló una vista que contenía una función recursiva que permitía generar código HTML que mostrase la estructura anidada de las categorías. Pero esta aproximación de mezclar HTML y código Java de servidor es considerada una mala práctica y está en desuso.
+    
+    Posteriormente se adoptó el uso de Thymeleaf como motor de plantillas (ver \ref{sec:thymeleaf}), que no contempla esta posibilidad de insertar código de servidor en las vistas (al menos de la manera tan natural como lo permite JSP). Thymeleaf permite generar contenido \emph{lineal} (una lista, por ejemplo) haciendo uso de la directiva \emph{th:each}, que hace la veces de bucle \emph{for}, pero para generar contenido \emph{anidado} no dispone de ninguna funcionalidad nativa.
+    
+    Por todo lo anterior, para resolver este problema se optó por desarrollar código JavaScript (\emph{categoriesBuilder.js}) que se encargase, en el cliente, de construir y conectar, entre sí y al lugar apropiado en \emph{categories.html} (ver línea 15 del listado \ref{list:html_categories}), los componentes DOM necesarios para mostrar la estructura anidada de las categorías.
+    \\
+    
+    \begin{lstlisting}[caption=Contenido principal de la vista categories.html,label=list:html_categories]
+    <div class="container-fluid fm-content">
+	    ...
+	    <!-- main content -->
+	    <div class="row">
+		    <div class="col-sm-1"></div>
+		    <div class="col-sm-10" id="root-hook">
+			    <!-- new category -->
+			    <div class="my-2 d-flex">
+				    <a class="btn btn-outline-secondary align-center px-4 ml-auto" th:href="@{/admin/categoryForm}">
+				    	<i class="fas fa-folder-plus fa-lg mr-4"></i>New Category
+				    </a>
+			    </div>
+			    <hr/>
+			    <!--
+			    js dynamic generated content here
+			    -->
+		    </div>
+		    <div class="col-sm-1"></div>
+	    </div>
+	    ...
+    </div>
+    \end{lstlisting}
+    
+    Como resultado, el administrador de la aplicación web puede visualizar la estructura jerárquica de las categorías a través de desplegables anidados, como se muestra en la figura \ref{fig:nested_categories}.
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=\textwidth]{nested_categories}
+    	\caption{Visualización de la estructura anidada de las categorías}
+    	\label{fig:nested_categories}
+    \end{figure}
+    
+    \subsection{Experiencia de Usuario Mejorada}
+    Uno de los requisitos básicos de la aplicación web desarrollada es el de permitir a los usuarios gestionar su compra mediante el uso de una cesta virtual, que sirva de almacenamiento para la compra en curso. Esta funcionalidad permite a los usuarios:
+    
+    \begin{itemize}
+    	\item[-] Añadir libros a la cesta. Esto se puede realizar desde cualquier vista que muestre información de un libro, a saber, la página de inicio, la página de resultados de búsqueda y la página de detalles de un libro.
+    	\item[-] Modificar la cantidad de un libro en la cesta, o eliminar un libro de la cesta. Estas acciones se pueden realizar desde la vista de la cesta de un usuario.
+    \end{itemize}
+    
+    Para la gestión de estas acciones, la arquitectura clásica de petición de un recurso por parte del cliente y respuesta con contenido HTML por parte del servidor (con su consecuente refresco de la página) se juzgó inapropiada. Un usuario que esté visualizando la página de su cesta y aumente en una unidad un libro tendría que esperar, para ver el resultado de dicho aumento, a que el servidor responda con el nuevo contenido HTML y que el navegador lo renderice, todo ello para únicamente cambiar unos pocos números respecto de la página previa. Situaciones similares ocurren en el caso de disminuir la cantidad de un libro, o eliminarlo de la cesta por completo. Peor aún es el caso del usuario que decide añadir un libro a su cesta, ya que el contenido HTML por el que debiera esperar sería igual (salvo el icono del número de elementos en la cesta) al de la página desde donde se solicita tal acción.
+    
+    En este contexto, y como pretexto perfecto para su estudio, se decidió desarrollar estas acciones con tecnología Ajax (ver \ref{sec:ajax}), de forma que no tenga lugar el refresco de la página en la que el usuario se encuentre. Así, el script \emph{ajaxCart.js} se encarga, entre otras cosas, de actualizar el DOM de la vista de la cesta del usuario, \emph{cart.html}, de manera consistente con las acciones que este realice, mientras que el script \emph{ajaxAddBook.js} gestiona el DOM de las citadas vistas desde las cuales es posible añadir libros a la cesta. Ambos scripts establecen en background la comunicación con el servidor, de forma transparente al usuario, haciendo uso del objeto \emph{XMLHttpRequest}, tal como muestra el extracto de \emph{ajaxCart.js} mostrado en el listado \ref{list:js_ajax}.
+    \\
+    
+    \begin{lstlisting}[language=JavaScript,caption=Comunicación Ajax con el servidor,label=list:js_ajax]
+    xmlHttpRequest = new XMLHttpRequest();
+    xmlHttpRequest.open("GET", url, true);
+    xmlHttpRequest.setRequestHeader('isAjaxCartRequested', '1');
+    xmlHttpRequest.send();
+    xmlHttpRequest.onreadystatechange = function() {
+    	if (this.readyState === 4 && this.status === 200) {
+    		onHttpOk(action, id, this.responseText);
+    	}
+    	if (this.readyState === 4 && this.status === 401) {
+    		onHttpUnauthorized();
+    	}
+    };
+    \end{lstlisting}
+    
+    \subsection{Registro de Libros Referenciados en Cestas}
+    En este apartado se describe una funcionalidad añadida que, si bien no estaba presente en los requisitos de la aplicación, se ha mostrado muy útil y de relativa facilidad de implementación. La inspiración provino, como se aprecia en la figura \ref{fig:etsy}, del portal de comercio electrónico \href{https://www.etsy.com}{Etsy}, al querer imitar su capacidad de informar de la situación en la que, para un producto determinado, queden igual o menos unidades en stock de las que están siendo referenciadas en cestas de los usuarios. Esto es, que un libro esté en la cesta de \emph{x} usuarios diferentes, que de ese mismo libro queden en stock \emph{y} unidades, y que \emph{x} sea igual o mayor que \emph{y}.
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=0.5\textwidth]{etsy}
+    	\caption{Aviso de producto escaso y demandado en Etsy.com}
+    	\label{fig:etsy}
+    \end{figure}
+    
+    Con este objetivo en mente, se pensó en tres alternativas para implementarlo. Por un lado, la solución trivial sería realizar una consulta a la base de datos para conocer de esta situación cada vez que se necesite mostrar al usuario información de un libro. En este sentido, sería necesario explorar las cestas de todos los usuarios, para cada libro del cual se requiera información. No es desacertado estimar que la frecuencia con se requiere información de libros en una tienda de libros sea alta. Además, el número de usuarios puede ser todo lo grande que se pueda. Por ello, esta solución sería bastante pobre en tiempo de respuesta.
+    
+    La segunda alternativa, con objeto a disminuir el tiempo de respuesta, sería aumentar la información de cada libro que se almacena en la base de datos, creando un nuevo campo en el que se contabilizase el número de referencias que a dicho libro le son realizadas en las cestas de los usuarios. Esta solución sería muy rápida, pero a costa de un uso redundante de los recursos de almacenamiento, puesto que la información necesaria \emph{ya} estaba en la base de datos.
+    
+    Finalmente, la tercera vía, que es la implementada, trata de aunar rapidez y no redundancia en la base de datos. Esto se consigue manteniendo la información necesaria en una estructura de datos llave-valor en memoria principal, sólo para los libros referenciados. La llave sería el \emph{id} de un libro, y el valor el número de referencias en cestas que posea. Los tiempos necesarios para consultar esta estructura de datos, así como para actualizarla, son muy bajos. Además, la base de datos se mantiene no redundante. Es cierto que existe un grado de redundancia, pero esta es ajena a la base de datos, y se limita a los libros que estén referenciados (en contraste con la segunda solución, en la que \emph{todos} los libros en la base de datos ampliaban su información).
+    
+    Esta estructura de datos es mantenida eficientemente por la clase \emph{BookServer}, como se aprecia en el listado \ref{list:java_cartbooks}, de manera que cada vez que algún usuario añade o elimina un libro de su cesta queda reflejado en el registro.
+    \\
+    
+    \begin{lstlisting}[language=Java,caption=Gestión del registro de libros referenciados en cestas,label=list:java_cartbooks]
+    @Service
+    public class BookServer {
+    
+    	private final Map<Long,Integer> cartBookRegistry = new HashMap<>();
+    	
+    	...
+    	
+	    public void incrementCartBookRegistry(Long cartBookId) {
+		    cartBookRegistry.merge(cartBookId, 1, (oldValue, defaultValue) -> ++oldValue);
+	    }
+	    
+	    public void decrementCartBookRegistry(Long cartBookId) {
+		    cartBookRegistry.computeIfPresent(cartBookId, (key, value) -> (value > 1L) ? --value : null);
+	    }
+	    
+	    public void incrementCartBookRegistry(List<Long> cartBookIds) {
+	    	cartBookIds.forEach(this::incrementCartBookRegistry);
+	    }
+	    
+	    public Map<Long,Integer> getCartBookRegistry() {
+	    	return cartBookRegistry;
+	    }
+    }
+    \end{lstlisting}
+    
+    Así, este registro es utilizado para avisar a los usuarios cuando un libro presenta escasez y alta demanda, como se muestra en la figura \ref{fig:fm_cartBookRegistry_alert}. Pero también es usado como \textbf{medida de la popularidad} de los libros, empleándose este uso en la página de inicio de la aplicación. Es cierto que el parámetro \emph{popularidad} se puede definir de muchas maneras, y que sería conveniente que en él se reflejase el volumen de ventas en una ventana temporal local, pero como una primera aproximación de bajo coste al concepto funciona perfectamente.
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=\textwidth]{fm_cartBookRegistry_alert}
+    	\caption{Aviso de producto escaso y demandado en FirstMarket}
+    	\label{fig:fm_cartBookRegistry_alert}
+    \end{figure}
     
     \subsection{Validación}
     Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y por motivos de seguridad, como evitar ataques de inyección SQL.
@@ -703,6 +821,7 @@
     \\
     
     Mucha es la información que FirstMarket tiene que validar, pero a grandes rasgos se puede dividir en numérica y textual. El primer grupo presenta poca dificultad, se trata de comprobar rangos de valores principalmente. Para el segundo grupo las expresiones regulares son el arma perfecta. En el archivo de configuración \emph{application.yml} se detallan las expresiones regulares y los rangos numéricos utilizados. A modo de ejemplo, la propiedad definida en este archivo de configuración que especifica la expresión regular contra la que validar las contraseñas se muestra en el listado \ref{list:regex_pw}.
+    \\
      
     \begin{lstlisting}[caption=Expresión regular para las contraseñas,label=list:regex_pw]
     fm:
@@ -768,12 +887,12 @@
     \subsubsection{Spring MVC}
     \subsubsection{Spring Data JPA - Hibernate} \label{sec:springdata}
     \subsubsection{Spring Security}
-    \subsection{Thymeleaf - HTML5}
+    \subsection{Thymeleaf - HTML5} \label{sec:thymeleaf}
     \subsection{Bootstrap 4 - CSS3}
     \subsection{Stripe} \label{sec:stripe}
     \subsection{PostgreSQL}
     \subsection{JavaScript}
-    \subsubsection{Ajax}
+    \subsubsection{Ajax} \label{sec:ajax}
     \subsection{FontAwesome - Pretty Checkbox - Google Fonts}
     \subsection{Tecnologias Transversales}
     \subsubsection{Git}
