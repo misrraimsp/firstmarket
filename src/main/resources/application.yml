@@ -6,8 +6,8 @@ server:
 spring:
    profiles:
       active:
-         #- dev-postgresql  # comment @Lob on image.data
-         - dev-h2          # un-comment @Lob on image.data
+         - dev-postgresql  # comment @Lob on image.data
+         #- dev-h2          # un-comment @Lob on image.data
    jpa:
       show-sql: false
    mail:
@@ -137,8 +137,8 @@ spring:
       password: ${JDBC_DATABASE_PASSWORD}
       driver-class-name: org.postgresql.Driver
       initialization-mode: always
-      #schema: classpath:sql/schema.sql
-      #data: classpath:sql/data*.sql
+      schema: classpath:sql/schema.sql
+      data: classpath:sql/data*.sql
    jpa:
       properties:
          hibernate:
