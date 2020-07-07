@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +24,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final MessageSource messageSource;
 
     @Autowired
-    public SecurityConfig(UserServer userServer, MessageSource messageSource) {
+    public SecurityConfig(UserServer userServer,
+                          MessageSource messageSource) {
+
         this.userServer = userServer;
         this.messageSource = messageSource;
     }
@@ -58,15 +61,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoringAntMatchers("/listener") // open for stripe notifications
                 .ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
 
-                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
-                .and()
-                .headers()
-                .frameOptions()
-                .sameOrigin()
-
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                .and()
+                .headers()
+                .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
+                //.frameOptions()
+                //.sameOrigin()
         ;
     }
 
