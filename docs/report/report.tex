@@ -445,7 +445,7 @@
     Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
     
-    \subsubsection{Inversión de Control. Inyección de Dependencias}
+    \subsubsection{Inversión de Control. Inyección de Dependencias} \label{sec:ioc}
     Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
     
     Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su \href{https://martinfowler.com/articles/injection.html}{artículo seminal} en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por inversión de control se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de inyección de dependencias del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
@@ -487,8 +487,8 @@
 		\label{fig:di_bookController}
 	\end{figure}
     
-    \subsubsection{Capas funcionales}
-    Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia. Estas capas están contenidas dentro del paquete \emph{core}.
+    \subsubsection{Capas funcionales} \label{sec:design_layer}
+    Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:springframework}).
     
     \begin{figure}[htb!]
     	\centering
@@ -497,7 +497,7 @@
     	\label{fig:desing_layer}
     \end{figure}
     
-    La capa web se encarga de gestionar las peticiones HTTP y de resolver y renderizar el contenido HTML. A parte de toda la infraestructura que ofrece Spring Framework para esta tarea, se ha desarrollado una serie de \emph{controladores}, contenidos en el paquete \emph{core.controller} (ver figura \ref{fig:package_controller}), que sirven un conjunto de \emph{vistas}, contenidas en \emph{classpath: resources/templates}. Esta capa recibe el servicio de la capa de negocio.
+    La capa web se encarga de gestionar las peticiones HTTP encauzadas a través del \emph{DispatcherServler} y de resolver y generar el contenido HTML. A parte de toda la infraestructura que ofrece Spring Framework para esta tarea, se ha desarrollado una serie de \emph{controladores} (anotados con \emph{@Controller}), contenidos en el paquete \emph{core.controller} (ver figura \ref{fig:package_controller}), que sirven un conjunto de \emph{vistas}, contenidas en \emph{classpath: resources/templates}. Esta capa recibe el servicio de la capa de negocio.
     	
    	\begin{figure}[htb!]
    		\centering
@@ -513,7 +513,7 @@
    		\label{fig:detail_bookController}
    	\end{figure}
     	
-   	En la capa de negocio reside la lógica que modela el funcionamiento de una tienda de libros a través del código contenido en el paquete \emph{core.service} (ver figura \ref{fig:package_service}). Esta capa da servicio a la capa web y a sí misma, mientras que se apoya en el servicio que le ofrece la capa de persistencia.
+   	En la capa de negocio reside la lógica (objetos anotados con \emph{@Service}) que modela el funcionamiento de una tienda de libros a través del código contenido en el paquete \emph{core.service} (ver figura \ref{fig:package_service}). Esta capa da servicio a la capa web y a sí misma, mientras que se apoya en el servicio que le ofrece la capa de persistencia.
     	
    	\begin{figure}[htb!]
 		\centering
@@ -529,7 +529,7 @@
 		\label{fig:detail_bookServer}
 	\end{figure}
 
-   	La capa de persistencia toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos. Esta capa presta servicio a la capa de negocio mediante un conjunto de interfaces definidas en \emph{core.data} (ver figura \ref{fig:package_data}).
+   	La capa de persistencia toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos (objetos anotados con \emph{@Repository}). Esta capa presta servicio a la capa de negocio mediante un conjunto de interfaces definidas en \emph{core.data} (ver figura \ref{fig:package_data}).
     	
    	\begin{figure}[htb!]
    		\centering
@@ -572,7 +572,7 @@
 
     % IMPLEMENTACION
     \section{Implementación}
-    La implementación del análisis y diseño detallados en los puntos anteriores lo conforma el conjunto de programas que se incluyen en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
+    La materialización del análisis y diseño detallado en las secciones anteriores lo conforma el conjunto software que se incluye en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
     \subsection{Control de Concurrencia}
     Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus cestas y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
@@ -882,10 +882,80 @@
     \section{Stack Tecnológico}
     En este apartado se ofrece un comentario del stack tecnológico con el que se ha llevado a cabo la aplicación web.
 
-    \subsection{Spring Framework} \label{sec:spring}
+    \subsection{Spring} \label{sec:spring}
+    Sin duda, Spring ha sido una de las tecnologías que más impacto ha tenido en el presente proyecto. En esta sección se pretende dar una idea lo más general y amplia posible de sus características.
+    
+    Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos} Spring, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
+    
+    Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring MVC}, \emph{Spring Data} y \emph{Spring Security}.
+    
+    \subsubsection{Spring Framework} \label{sec:springframework}
+    En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/}{documentación}.
+    
+    Tal como establecen sus autores, los principios de diseño que han guiado su desarrollo a lo largo del tiempo han sido:
+    
+    \begin{itemize}
+    	\item[-] Estar orientado a permitir que se tomen las decisiones de diseño lo más tarde posible. Por ejemplo, permite cambiar la tecnología de persistencia sin alterar el código de la aplicación (esto fue constatado en el desarrollo de la aplicación web, al pasar de forma transparente, en una etapa bastante avanzada del proyecto, de MariaDB a PostgreSQL).
+    	\item[-] Ser capaz de acomodar diferentes perspectivas de desarrollo. Spring es extensamente configurable, no imponiendo ningún estilo o manera de resolver los problemas.
+    	\item[-] Ser altamente retrocompatible.
+    	\item[-] Tomar muchas precauciones a la hora de diseñar las APIs, de forma que sean intuitivas y perduren a través de las diferentes versiones.
+    	\item[-] Seguir los más altos estándares de calidad del código.
+    \end{itemize}
+    
+    De todas las funcionalidades integradas dentro del proyecto Spring Framework, la más importante es el contenedor de Inversión de Control (inversion of control, IoC). Este concepto, tratado en la sección \ref{sec:ioc}, hace referencia a la capacidad de gestionar el ciclo de vida de los \emph{beans}, que es como en el ecosistema Spring se conoce a los objetos gestionados por el contenedor.
+    
+    La interfaz \emph{org.springframework.context.ApplicationContext}, que representa el contenedor de IoC de Spring, es la responsable de instanciar, configurar y ensamblar los \emph{beans}.
+    
+    Por su parte, el contenedor conoce qué objetos instanciar y cómo configurarlos y ensamblarlos entre sí a través de la lectura de metadatos de configuración especificados por el desarrollador.
+    
+    La figura \ref{fig:container_magic}, tomada de la documentación oficial, muestra un diagrama de alto nivel de cómo funciona lo explicado. Esto es, el código desarrollado en forma de POJOs (Plain Old Java Object) es gestionado en el contenedor de IoC según se haya especificado en los metadatos de configuración, produciendo como resultado una aplicación completamente funcional.
+    
+    \begin{figure}[hbt!]
+    	\centering
+    	\includegraphics[width=0.8\textwidth,keepaspectratio]{container_magic}
+    	\caption{Flujo de información en el contenedor de IoC}
+    	\label{fig:container_magic}
+    \end{figure}
+    
+    Existen diversas formas de especificar los metadatos de configuración. La manera original fue a través de un fichero XML, pero en la actualidad también se puede realizar con anotaciones insertadas en el código de la aplicación (añadido en la versión 2.5), o con código Java dedicado de configuración (añadido en la versión 3.0). El contenedor de IoC está completamente desacoplado de estos mecanismos de especificación de los metadatos de configuración.
+    
+    Existe la cuestión de qué tipo de configuración es mejor. La respuesta no es clara, ya que cada opción posee su dosis de ventajas e inconvenientes. Las anotaciones son la manera más concisa y quizás mas simple para un principiante, pero mezclan código de negocio con configuración del framework, algo que mina el principio de separación de responsabilidades. Además poseen el inconveniente de descentralizar la configuración, impactando negativamente en su mantenibilidad. La configuración con código Java permite un control centralizado, pero se pierde en facilidad y brevedad. Por su parte, los ficheros XML son inmejorables a la hora separar responsabilidades, pudiéndose alterar la configuración sin tocar una línea de código y, por tanto, sin tener que recompilar. El inconveniente de este sistema es el elevado tamaño y complejidad que muchas veces estos ficheros alcanzan, siendo además su curva de aprendizaje más pronunciada.
+    
+    En el desarrollo de la presente aplicación web se ha utilizado la configuración a través de anotaciones y de código Java dedicado. Además, se ha utilizado Spring Boot, lo que, como se verá, implica que una gran parte (la mayoría) de la configuración necesaria ha sido establecida por defecto.
+    \\
+    
+    Además del contenedor de IoC, la aplicación web desarrollada hace uso de otras capacidades ofrecidas por Spring Framework:
+    
+    \begin{itemize}
+    	\item[-] Publicación y escucha de eventos.
+    	\item[-] Gestión de transacciones.
+    	\item[-] Planificación de tareas.
+    	\item[-] Validación.
+    	\item[-] El framework de desarrollo web \emph{Spring Web MVC} (comúnmente conocido como simplemente Spring MVC).
+    \end{itemize}
+
+	Spring MVC, como muchos otros frameworks de desarrollo web, está implementado alineado con el patrón de diseño \emph{Front Controller}, donde un Servlet central, el llamado \emph{DispatcherServlet}, recibe las peticiones HTTP y delega su procesamiento a los componentes apropiados, en el caso de la presente aplicación los objetos anotados con \emph{@Controller}. Cada uno de estos objetos es responsable de llevar a cabo las acciones necesarias para cada \emph{endpoint} expuesto, apoyándose para ello en la capa de negocio, es decir, en los objetos anotados con \emph{@Service}. Como ya se explicó en la sección \ref{sec:design_layer}, estos objetos \emph{@Service} se apoyan, a su vez, en otros objetos de su clase y en objetos anotados con \emph{@Repository}, que actúan como puerta de entrada a los datos. Cumplida la lógica de negocio, el objeto \emph{@Controller} implicado devuelve el nombre de la vista a proporcionar como respuesta, así como los datos con los que poblarla. El motor de plantillas genera en este punto el contenido HTML, que es devuelto por el \emph{DispatcherServlet} al usuario.
+	
+	En resumen, Spring MVC ofrece la infraestructura \emph{Front Controller}, esto es, los objetos necesarios para resolver el mapeo de las peticiones HTTP a los métodos apropiados de los objetos \emph{@Controller}, los objetos encargados de resolver las vistas, los encargados del enlace de datos, etc, permitiendo al desarrollador centrarse en especificar la lógica de negocio.
+    
+    
     \subsubsection{Spring Boot}
-    \subsubsection{Spring MVC}
-    \subsubsection{Spring Data JPA - Hibernate} \label{sec:springdata}
+    Este proyecto ha sido el gran avance de los últimos años dentro del universo Spring. De hecho, ha cambiado por completo el paradigma, permitiendo el desarrollo de aplicaciones totalmente funcionales en un espacio de tiempo dramáticamente inferior al necesario con anterioridad a su aparición. Tal como viene recogido en la \href{https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/}{documentación} oficial, sus principales objetivos son:
+    
+    \begin{itemize}
+    	\item[-] Ofrecer una vía de entrada al uso de las tecnologías Spring radicalmente más rápida y sencilla.
+    	\item[-] Proporcionar una configuración por defecto sensata, y al mismo tiempo de ágil modificación si los requisitos así lo necesitan.
+    	\item[-] Ofrecer todo un abanico de funcionalidades transversales a la mayoría de aplicaciones, como los servidores embebidos.
+    	\item[-] Supresión de la necesidad de configuración a través de ficheros XML.
+    \end{itemize}
+
+	Así, Spring Boot no es una alternativa a otros proyectos Spring. Su objetivo no es proporcionar nuevas soluciones para problemas ya resueltos, sino ofrecer una manera de mejorar el aprovechamiento del ecosistema entero, fomentando una experiencia de desarrollo que simplifique el uso de los módulos ya disponibles. Esto hace que Spring Boot sea una opción ideal para toda clase de desarrolladores, tanto los que ya están familiarizados con el ecosistema Spring como aquellos recién llegados, al permitirles adoptar las tecnologías de Spring de una manera simplificada. En este sentido, Spring Boot ha supuesto un vector de expansión de las tecnologías Spring, disminuyendo su barrera de entrada y maximizando el aprovechamiento de sus variadas funcionalidades.
+    
+    En gran medida, lo expuesto se consigue gracias a que Spring Boot ejercita el paradigma de diseño conocido como Convención sobre Configuración (\emph{Convention over Configuration, CoC}), o también como Código por Convención (\emph{Coding by Convention}). Este principio de diseño trata de disminuir el número de decisiones que el desarrollador debe tomar y aliviar así la complejidad de tener que configurar todas y cada una de las áreas que conforman una aplicación, todo ello sin necesariamente merma alguna en la flexibilidad. Así, el desarrollador sólo está llamado a especificar los aspectos no convencionales de la configuración de la aplicación, obteniendo como resultado inmediato un aumento en la productividad considerable.
+    
+    Conviene destacar también que Spring Boot permite ejecutar aplicaciones web sin necesidad de hacerlo en un contenedor de servlets externo o un servidor de aplicaciones, ya que el propio Spring Boot incluye un Tomcat embebido, el cual se despliega automáticamente en tiempo de ejecución.
+    
+    \subsubsection{Spring Data} \label{sec:springdata}
     \subsubsection{Spring Security}
     \subsection{Thymeleaf - HTML5} \label{sec:thymeleaf}
     \subsection{Bootstrap 4 - CSS3}
@@ -898,6 +968,13 @@
     \subsubsection{Git}
     \subsubsection{Java 11}
     \subsubsection{Maven}
+    Las librerías son ficheros que proporcionan una serie de funciones que simplifican el trabajo del programador y que suelen ser un elemento fundamental de cualquier desarrollo software. Normalmente, el desarrollador necesita saber qué librería usar y qué versión en particular. Además, una librería puede depender de otras para operar adecuadamente, lo que obliga a tener que gestionarlas para que no entren en conflicto entre sí.
+    
+    Para lidiar con este problema, existe una herramienta llamada Maven que se ocupa de la gestión de las distintas librerías mediante el uso de los llamados Artefactos o Artifacts, que son elementos que engloban las clases de una librería y la información necesaria para su óptima gestión (grupo, nombre, versión, otras dependencias...). Los Artifact se definen en el archivo POM.xml, que es el fichero que almacena toda la información del proyecto.
+    
+    Maven, por tanto, se encarga de descargar mediante un sencillo artefacto todas las librerías declaradas en el fichero POM.xml. Además, también hace posible la descarga de documentación relativa a estas librerías u otras dependencias subyacentes que no hayan sido definidas intencionadamente por el desarrollador.
+    
+    En última instancia, Maven usa las librerías descargadas para la compilación del proyecto.
     \subsubsection{IntelliJ IDEA}
     \subsubsection{Logback}
     \subsubsection{Lombok}
@@ -905,10 +982,12 @@
 
     % DESPLIEGUE Y SEGURIDAD
     \section{Despliegue y Seguridad}
+    En esta sección se aborda todos los aspectos relevantes en relación con el despliegue de la aplicación web, así como de las medidas de seguridad adoptadas.
         \subsection{Heroku Platform}
+        La aplicación ha sido desplegada en Heroku.
             \subsubsection{Heroku-postgresql}
-            \subsubsection{PaperTrail}
-            \subsubsection{Snyk}
+            \subsubsection{LogDNA}
+            \subsubsection{Probely}
         \subsection{Spring Security}
         \subsection{HTTPS}
         \subsection{Cross-Site Request Forgery}
