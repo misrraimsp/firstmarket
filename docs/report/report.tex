@@ -885,9 +885,9 @@
     \subsection{Spring} \label{sec:spring}
     Sin duda, Spring ha sido una de las tecnologías que más impacto ha tenido en el presente proyecto. En esta sección se pretende dar una idea lo más general y amplia posible de sus características.
     
-    Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos} Spring, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
+    Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos Spring}, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
     
-    Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}.
+    Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las principales características de cada uno de ellos que han tenido relación con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
     
     \subsubsection{Spring Framework} \label{sec:springframework}
     En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/}{documentación}.
@@ -993,8 +993,17 @@
     
     En resumen, Spring Data JPA añade una capa de abstracción sobre JPA, lo que significa que hace uso de todas las funcionalidades que esta especificación proporciona, y además suministra sus propias facilidades, como la implementación sin código del patrón \emph{Repositorio} o la creación de consultas a la base datos a partir del nombre de los métodos.
     
-    \subsubsection{Spring Security}
-    \subsection{Thymeleaf - HTML5} \label{sec:thymeleaf}
+    \subsection{Thymeleaf} \label{sec:thymeleaf}
+    Thymeleaf es un motor de plantillas para aplicaciones Java, tanto web como de escritorio, que permite crear dinámicamente documentos HTML5 (y otros, como XML o XHTML). Como principales características de esta tecnología cabe resaltar:
+    
+    \begin{itemize}
+    	\item[-] Thymeleaf ejercita el concepto llamado \emph{natural templating}, esto es, las propias plantillas son documentos HTML5 válidos, de forma que prácticamente cualquier navegador las puede renderizar, mostrando su contenido por defecto. Esto es muy útil en la fase de desarrollo de la aplicación, ya que no hay necesidad de contar con un contenedor web para visualizar el resultado de la plantilla (como ocurre con la tecnología JSP), facilitando el trabajo en paralelo sobre una misma vista de las labores frontend y backend.
+    	\item[-] Es altamente extendible. Cualquiera puede crear su propio conjunto de atributos o etiquetas, con los nombres que se desee, definir sintaxis para expresiones y su lógica de evaluación, etc. Esto es, es posible crear lo que se denominan \emph{dialectos} de Thymeleaf, actuando así esta tecnología como un framework de plantillas. Por defecto se usa el conocido como dialecto \emph{Standard}.
+    	\item[-] Thymeleaf se integra con muchísima facilidad con la tecnología Spring. De hecho, desde Spring se recomienda preferentemente su uso. Así, se dispone de un dialecto propio: el \emph{SpringStandard}, el cual permite el uso de Spring Expression Language. La integración con Spring Security es muy sencilla, permitiendo acoplar lógica de autenticación y/o autorización en las plantillas de una manera muy poco intrusiva.
+    \end{itemize}
+
+	En el presente proyecto, los documentos incorporados en \emph{classpath: resources/templates} son las plantillas HTML que el motor toma, junto con los datos de negocio que Spring MVC le suministra, para producir el contenido HTML5 que se sirve al cliente.
+    
     \subsection{Bootstrap 4 - CSS3}
     \subsection{Stripe} \label{sec:stripe}
     \subsection{PostgreSQL}
@@ -1025,7 +1034,7 @@
             \subsubsection{Heroku-postgresql}
             \subsubsection{LogDNA}
             \subsubsection{Probely}
-        \subsection{Spring Security}
+        \subsection{Spring Security} \label{sec:springsec}
         \subsection{HTTPS}
         \subsection{Cross-Site Request Forgery}
         \subsection{Brute-Force Authentication}
