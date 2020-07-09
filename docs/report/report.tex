@@ -529,7 +529,7 @@
 		\label{fig:detail_bookServer}
 	\end{figure}
 
-   	La capa de persistencia toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos (objetos anotados con \emph{@Repository}). Esta capa presta servicio a la capa de negocio mediante un conjunto de interfaces definidas en \emph{core.data} (ver figura \ref{fig:package_data}).
+   	La capa de persistencia sigue el patrón de diseño \href{https://thorben-janssen.com/implementing-the-repository-pattern-with-jpa-and-hibernate/}{\emph{Repositorio}}. Así, toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos, desacoplando por completo esta funcionalidad de la lógica de negocio, a la cual sirve mediante un conjunto de interfaces (anotadas con \emph{@Repository}) definidas en \emph{core.data} (ver figura \ref{fig:package_data}).
     	
    	\begin{figure}[htb!]
    		\centering
@@ -887,7 +887,7 @@
     
     Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos} Spring, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
     
-    Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring MVC}, \emph{Spring Data} y \emph{Spring Security}.
+    Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}.
     
     \subsubsection{Spring Framework} \label{sec:springframework}
     En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/}{documentación}.
@@ -955,7 +955,44 @@
     
     Conviene destacar también que Spring Boot permite ejecutar aplicaciones web sin necesidad de hacerlo en un contenedor de servlets externo o un servidor de aplicaciones, ya que el propio Spring Boot incluye un Tomcat embebido, el cual se despliega automáticamente en tiempo de ejecución.
     
-    \subsubsection{Spring Data} \label{sec:springdata}
+    \subsubsection{Spring Data JPA - Hibernate ORM} \label{sec:springdata}
+    El proyecto Spring Data JPA, parte de la amplia familia Spring Data, es una capa de abstracción extra sobre la implementación de la especificación JPA que se utilice, que en el caso del presente proyecto ha sido Hibernate ORM.
+    
+    Por persistencia se hace referencia a la funcionalidad que permite que determinados objetos creados por la aplicación puedan sobrevivir más allá de la frontera de la misma. En términos Java, se trata de que el estado de ciertos objetos pueda perdurar fuera del entorno de la JVM, de modo que dicho estado esté disponible en cualquier momento posterior.
+    
+    \begin{figure}[hbt!]
+    	\centering
+    	\includegraphics[width=\textwidth,keepaspectratio]{data_access}
+    	\caption{Esquema de la infraestructura de acceso a datos}
+    	\label{fig:data_access}
+    \end{figure}
+    
+    JPA es una especificación que define una API de mapeo objeto-relacional y gestión de objetos persistentes. Además, hace innecesario el tratamiento explícito de las conexiones/recursos usuales al trabajar directamente con JDBC. Actualmente se encuentra en su versión 2.2, siendo su implementación de referencia EclipseLink. No obstante, Spring usa por defecto Hibernate ORM como proveedor de JPA, y en el presente proyecto no se ha modificado dicha configuración preestablecida.
+    
+    El mapeo objeto-relacional es la funcionalidad que permite la traducción entre los objetos de la aplicación (llamados entidades en este contexto) y las tablas de la base datos. Esto implica gestionar, entre otras cosas, las relaciones que existen entre las entidades. Esta es una tarea no trivial que los proyectos con necesidades de persistencia relacional (en contraposición con los modelos no relacionales, no tratados en el presente proyecto) deben afrontar. En este sentido, Hibernate ORM (Object/Relational Mapping) es un framework que permite la simplificación y en parte automatización de esta tarea. Como ejemplo, y sin entrar en detalles, las relaciones entre las entidades son especificadas a través de las anotaciones \emph{@OneToOne}, \emph{@OneToMany}, \emph{@ManyToOne} y \emph{@ManyToMany}.
+    
+    Resaltar que además del mapeo objeto-relacional, la abstracción JPA ofrece (de la mano de Hibernate ORM, en este caso) la gestión del ciclo de vida de las entidades y el lenguaje de consultas relacionales orientado a objeto JPQL. En el listado \ref{list:jpql} se muestra un ejemplo de consulta con este lenguaje extraído del presente proyecto.
+    
+    \begin{lstlisting}[caption=Ejemplo de consulta especificada en JPQL,label=list:jpql]
+    @Query("SELECT b.id FROM Book b WHERE b.publisher.id IN :publisherIds")
+    Set<Long> findIdByPublisherIds(@Param("publisherIds") Set<Long> publisherIds);
+    \end{lstlisting}
+    
+    En este punto, vistas las capacidades de abstracción que ofrece JPA a través de sus implementaciones, cabe preguntarse porqué añadir otra capa de abstracción encima con Spring Data JPA. La respuesta es que esta tecnología añade aún más facilidades de desarrollo y mantenimiento, en concreto:
+    
+    \begin{itemize}
+    	\item[-] Permite la integración de JPA con el ecosistema Spring de una forma natural.
+    	\item[-] Permite la adopción del patrón de diseño \emph{Repositorio} (ver sección \ref{sec:design_layer}) sin necesidad de añadir código extra, ya que Spring Data JPA, como subconjunto de Spring Data, proporciona una serie de interfaces al efecto, tal como se esquematiza en la figura \ref{fig:data_access}. Así, construir una interfaz repositorio para cualquier entidad de la aplicación es tan fácil como extender alguna de las proporcionadas. En el presente proyecto todos los repositorios extienden a \emph{CrudRepository\textless{}T,ID\textgreater{}}.
+    	\item[-] Además de ofrecer las interfaces, también lo hace con sus implementaciones. Es decir, el desarrollador puede olvidarse de crear código que implemente las interfaces de acceso a datos, Spring Data JPA lo realiza automáticamente.
+    	\item[-] Posibilidad de inferir las consultas de acceso a datos a partir del nombre del método en la interfaz. Esta funcionalidad ha sido usada extensamente en el desarrollo del presente proyecto. En el listado \ref{list:query_inference} se muestra un método de la interfaz \emph{SecurityTokenRepository}, a partir del cual Spring Data JPA construye la consulta necesaria para obtener los \emph{SecurityToken} que cumplan estar asociados a un usuario determinado, con un \emph{SecurityEvent} dado y creados después de un punto temporal dado.
+    \end{itemize}
+    
+    \begin{lstlisting}[caption=Ejemplo de método a partir del cual Spring Data JPA infiere la consulta apropiada,label=list:query_inference]
+    Set<SecurityToken> findByTargetUserAndSecurityEventAndCreatedDateAfter(User targetUser, SecurityEvent securityEvent, LocalDateTime dateTime);
+    \end{lstlisting}
+    
+    En resumen, Spring Data JPA añade una capa de abstracción sobre JPA, lo que significa que hace uso de todas las funcionalidades que esta especificación proporciona, y además suministra sus propias facilidades, como la implementación sin código del patrón \emph{Repositorio} o la creación de consultas a la base datos a partir del nombre de los métodos.
+    
     \subsubsection{Spring Security}
     \subsection{Thymeleaf - HTML5} \label{sec:thymeleaf}
     \subsection{Bootstrap 4 - CSS3}
