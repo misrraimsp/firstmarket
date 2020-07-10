@@ -35,12 +35,4 @@ public class Book extends Product {
     @Transient
     private int count;
 
-
-    public String getAuthorsString(){
-        String str = "";
-        for (Author author : authors){
-            str += " " + author.getLastName() + ", " + author.getFirstName() + ".";
-        }
-        return str;
-    }
 }

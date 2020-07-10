@@ -58,6 +58,9 @@
 
 \urlstyle{same}
 
+\setcounter{tocdepth}{4}
+
+\setcounter{secnumdepth}{4}
 
 
 \begin{document}
@@ -141,7 +144,6 @@
 
     % ANALISIS
     \section{Análisis}
-
         \subsection{Requisitos}
 
             La aplicación debe admitir los roles y capacidades siguientes:
@@ -202,7 +204,7 @@
                 \label{fig:use-case_diagram}
             \end{figure}
 
-            \subsubsection{CU01\_Búsqueda}
+            \subparagraph{CU01\_Búsqueda}
             Proceso por el cual un usuario explora el catálogo y acaba por visualizar la página de un libro.
             \begin{itemize}
                 \item[+] Actores implicados: Usuario Anónimo, Usuario Registrado.
@@ -226,7 +228,7 @@
                 \end{itemize}
             \end{itemize}
 
-            \subsubsection{CU02\_Alta}
+            \subparagraph{CU02\_Alta}
             Proceso por el cual se crea un nuevo usuario registrado.
             \begin{itemize}
                 \item[+] Actores implicados: Usuario Anónimo.
@@ -257,7 +259,7 @@
                 \end{itemize}
             \end{itemize}
 
-            \subsubsection{CU03\_Login}
+            \subparagraph{CU03\_Login}
                 Proceso por el cual un usuario se autentica en el sistema.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Anónimo.
@@ -282,7 +284,7 @@
                     \item[+] Post-Condiciones: El usuario pasa a tener rol de usuario registrado en el sistema.
                 \end{itemize}
 
-            \subsubsection{CU04\_RecuperarContraseña}
+            \subparagraph{CU04\_RecuperarContraseña}
                 Un usuario previamente registrado en el sistema intenta acceder al mismo, pero no recuerda su contraseña. El sistema intentará crear una nueva contraseña y enviarla al e-mail del usuario.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Anónimo.
@@ -307,7 +309,7 @@
                     \end{itemize}
                 \end{itemize}
 
-            \subsubsection{CU05\_EditarPerfil}
+            \subparagraph{CU05\_EditarPerfil}
                 Proceso por el cual un usuario modifica alguno de los datos de su perfil personal.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -331,7 +333,7 @@
                     \item[+] Post-Condiciones: El usuario ha alterado su información personal almacenada en la aplicación.
                 \end{itemize}
 
-            \subsubsection{CU06\_RealizarPedido}
+            \subparagraph{CU06\_RealizarPedido}
                 Proceso por el cual un usuario realiza una compra a través de la aplicación web.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -365,7 +367,7 @@
                     \item[+] Post-Condiciones: El usuario ha efectuado un nuevo pedido.
                 \end{itemize}
 
-            \subsubsection{CU07\_ConsultarPedido}
+            \subparagraph{CU07\_ConsultarPedido}
                 Proceso por el cual un usuario consulta el historial de pedidos que ha realizado.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -377,7 +379,7 @@
                     \end{enumerate}
                 \end{itemize}
 
-            \subsubsection{CU08\_Baja}
+            \subparagraph{CU08\_Baja}
                 Proceso por el cual un usuario elimina su cuenta de la tienda online.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -403,7 +405,7 @@
                     \item[+] Post-Condiciones: El usuario ya no figura como dado de alta en la aplicación.
                 \end{itemize}
 
-            \subsubsection{CU09\_Logout}
+            \subparagraph{CU09\_Logout}
                 Proceso por el cual un usuario cierra su sesión en el sistema.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -879,17 +881,141 @@
     
     
     % TECNOLOGIAS
-    \section{Stack Tecnológico}
-    En este apartado se ofrece un comentario del stack tecnológico con el que se ha llevado a cabo la aplicación web.
+    \subsection{Tecnologías}
+    En este apartado se ofrece un comentario sobre las principales decisiones tomadas acerca de las tecnologías empleadas en el desarrollo de la aplicación web.
 
-    \subsection{Spring} \label{sec:spring}
+	\subsubsection{Git}
+	\subsubsection{Java}
+	Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado el background adquirido a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
+	
+	Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS, \emph{Long Term Support}).
+	\\
+	
+	Java es un lenguaje que, como muchos otros, ha ido evolucionando con el tiempo, dando como resultado un conjunto de capacidades muy variado. En 2014, con la publicación de Java 8, el lenguaje experimentó una de las mayores expansiones, si no la mayor, de su historia. En ese momento se le introdujeron potentes capacidades de programación declarativa, como las \emph{Labmda Expressions} y la \emph{Stream API}.
+	\\
+	
+	\begin{lstlisting}[language=Java,caption=Programación declarativa con Java,label=list:java_declarative]
+	private Set<Long> getIdsByExcludedStatus(ProductStatus excludedStatus) {
+		return bookRepository
+			.findAll()
+			.stream()
+			.filter(book -> !book.getStatus().equals(excludedStatus))
+			.map(Book::getId)
+			.collect(Collectors.toSet())
+		;
+	}
+	\end{lstlisting}
+	
+	Como se ha comentado, una de las intenciones de usar la tecnología Java era precisamente profundizar en su conocimiento. Así, se ha aprovechado el desarrollo de la presente aplicación para estudiar estas capacidades declarativas, aplicándolas progresivamente. Como ejemplo, en el listado \ref{list:java_declarative} se muestra la implementación del método \emph{getIdsByExcludedStatus}, perteneciente a la clase \emph{BookServer}. Se puede apreciar la facilidad de lectura que el estilo declarativo proporciona, además de la potencia expresiva.
+	\\
+	
+	También es necesario comentar un par de librerías que merecen especial mención, por la relevancia que han tenido en el proyecto:
+
+	\subparagraph{Project Lombok}
+	Aparte del nombre de una isla indonesia (como Java), Lombok es una librería Java destinada a aumentar la productividad. Se encarga de suprimir la necesidad de especificar cierto código repetitivo, como los constructores, los \emph{getters} y los \emph{setters}, o los \emph{equals} y los \emph{hashCode}. Así, como se muestra en el listado \ref{list:lombok_close}, a través de anotaciones se puede ahorrar una grandísima cantidad de código, que es generado por esta herramienta automáticamente antes de la compilación.
+	\\
+
+	\begin{lstlisting}[language=Java,caption=Clase \emph{Role} usando las anotaciones Lombok,label=list:lombok_close]
+	package misrraimsp.uned.pfg.firstmarket.core.model;
+	
+	import lombok.Data;
+	import lombok.EqualsAndHashCode;
+	
+	import javax.persistence.Entity;
+	
+	@Data
+	@EqualsAndHashCode(callSuper = true)
+	@Entity
+	public class Role extends BasicEntity {
+	
+		private String name;
+	
+	}
+	\end{lstlisting}
+	
+	No obstante, en cualquier momento se puede efectuar un \emph{Delombok} y ver el código generado, como se muestra en el listado \ref{list:lombok_open}. Como se aprecia, la cantidad de código ahorrado es más que significativa.
+	\\
+	
+	\begin{lstlisting}[language=Java,caption=Clase \emph{Role} tras efectuar un \emph{Delombok},label=list:lombok_open]
+	package misrraimsp.uned.pfg.firstmarket.core.model;
+	
+	import javax.persistence.Entity;
+	
+	@Entity
+	public class Role extends BasicEntity {
+	
+		private String name;
+		
+		public Role() {
+		}
+		
+		public String getName() {
+			return this.name;
+		}
+		
+		public void setName(String name) {
+			this.name = name;
+		}
+		
+		public String toString() {
+			return "Role(name=" + this.getName() + ")";
+		}
+		
+		public boolean equals(final Object o) {
+			if (o == this) return true;
+			if (!(o instanceof Role)) return false;
+			final Role other = (Role) o;
+			if (!other.canEqual((Object) this)) return false;
+			if (!super.equals(o)) return false;
+			final Object this$name = this.getName();
+			final Object other$name = other.getName();
+			if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+			return true;
+		}
+		
+		protected boolean canEqual(final Object other) {
+			return other instanceof Role;
+		}
+		
+		public int hashCode() {
+			final int PRIME = 59;
+			int result = super.hashCode();
+			final Object $name = this.getName();
+			result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+			return result;
+		}
+	}
+	\end{lstlisting}
+	
+	\subparagraph{SLF4J - Logback}
+	SLF4J (Simple Logging Facade for Java) es una API Java para tareas de registro que implementa el patrón de diseño \href{https://en.wikipedia.org/wiki/Facade_pattern}{\emph{facade}}, el cual permite desacoplar completamente el código de la aplicación de la tecnología específica de registro que subyaga bajo la fachada.
+	
+	Logback es la tecnología elegida que en el presente proyecto se conecta como backend de SLF4J. Se trata de una librería moderna, diseñada por el fundador de la famosa Log4j (Ceki Gülcü), y que pretende ser su sucesora.
+	
+	La configuración se encuentra en el fichero \emph{classpath: logback-spring.xml}, donde se detallan todos los aspectos relevantes, como el formato utilizado en los registros o la política de escritura y rotación de los ficheros de registro producidos.
+	
+	Esta es una de las funcionalidades añadidas al proyecto que, aún siendo muy humilde, ha tenido enorme impacto en la facilidad de desarrollo y mantenimiento. Es clave que desde fases tempranas se tenga un sistema de registro, el cual poder utilizar, por ejemplo, en las múltiples tareas de depuración que se deben llevar a cabo casi constantemente.
+	\\
+	
+	Por último, un apunte acerca del entorno de desarrollo utilizado. Durante las primeras semanas se usó el mismo que en toda la carrera: Eclipse. Sin embargo, en el transcurso de una formación en Spring tomada en fases iniciales del proyecto, se entró en contacto con \textbf{IntelliJ IDEA}. Desde entonces ese fue el IDE empleado, destacándose su capacidad de aumentar la productividad y su facilidad de uso.
+
+	\subsubsection{Maven}
+	Las librerías son ficheros que proporcionan una serie de funciones que simplifican el trabajo del programador y que suelen ser un elemento fundamental de cualquier desarrollo software. Normalmente, el desarrollador necesita saber qué librería usar y qué versión en particular. Además, una librería puede depender de otras para operar adecuadamente, lo que obliga a tener que gestionarlas para que no entren en conflicto entre sí.
+	
+	Para lidiar con este problema, existe una herramienta llamada Maven que se ocupa de la gestión de las distintas librerías mediante el uso de los llamados Artefactos o Artifacts, que son elementos que engloban las clases de una librería y la información necesaria para su óptima gestión (grupo, nombre, versión, otras dependencias...). Los Artifact se definen en el archivo POM.xml, que es el fichero que almacena toda la información del proyecto.
+	
+	Maven, por tanto, se encarga de descargar mediante un sencillo artefacto todas las librerías declaradas en el fichero POM.xml. Además, también hace posible la descarga de documentación relativa a estas librerías u otras dependencias subyacentes que no hayan sido definidas intencionadamente por el desarrollador.
+	
+	En última instancia, Maven usa las librerías descargadas para la compilación del proyecto.
+
+    \subsubsection{Spring} \label{sec:spring}
     Sin duda, Spring ha sido una de las tecnologías que más impacto ha tenido en el presente proyecto. En esta sección se pretende dar una idea lo más general y amplia posible de sus características.
     
     Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos Spring}, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
     
     Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las principales características de cada uno de ellos que han tenido relación con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
     
-    \subsubsection{Spring Framework} \label{sec:springframework}
+    \paragraph{Spring Framework} \label{sec:springframework}
     En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/}{documentación}.
     
     Tal como establecen sus autores, los principios de diseño que han guiado su desarrollo a lo largo del tiempo han sido:
@@ -939,7 +1065,7 @@
 	En resumen, Spring MVC ofrece la infraestructura \emph{Front Controller}, esto es, los objetos necesarios para resolver el mapeo de las peticiones HTTP a los métodos apropiados de los objetos \emph{@Controller}, los objetos encargados de resolver las vistas, los encargados del enlace de datos, etc, permitiendo al desarrollador centrarse en especificar la lógica de negocio.
     
     
-    \subsubsection{Spring Boot}
+    \paragraph{Spring Boot}
     Este proyecto ha sido el gran avance de los últimos años dentro del universo Spring. De hecho, ha cambiado por completo el paradigma, permitiendo el desarrollo de aplicaciones totalmente funcionales en un espacio de tiempo dramáticamente inferior al necesario con anterioridad a su aparición. Tal como viene recogido en la \href{https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/}{documentación} oficial, sus principales objetivos son:
     
     \begin{itemize}
@@ -955,7 +1081,7 @@
     
     Conviene destacar también que Spring Boot permite ejecutar aplicaciones web sin necesidad de hacerlo en un contenedor de servlets externo o un servidor de aplicaciones, ya que el propio Spring Boot incluye un Tomcat embebido, el cual se despliega automáticamente en tiempo de ejecución.
     
-    \subsubsection{Spring Data JPA - Hibernate ORM} \label{sec:springdata}
+    \paragraph{Spring Data JPA - Hibernate ORM} \label{sec:springdata}
     El proyecto Spring Data JPA, parte de la amplia familia Spring Data, es una capa de abstracción extra sobre la implementación de la especificación JPA que se utilice, que en el caso del presente proyecto ha sido Hibernate ORM.
     
     Por persistencia se hace referencia a la funcionalidad que permite que determinados objetos creados por la aplicación puedan sobrevivir más allá de la frontera de la misma. En términos Java, se trata de que el estado de ciertos objetos pueda perdurar fuera del entorno de la JVM, de modo que dicho estado esté disponible en cualquier momento posterior.
@@ -993,38 +1119,21 @@
     
     En resumen, Spring Data JPA añade una capa de abstracción sobre JPA, lo que significa que hace uso de todas las funcionalidades que esta especificación proporciona, y además suministra sus propias facilidades, como la implementación sin código del patrón \emph{Repositorio} o la creación de consultas a la base datos a partir del nombre de los métodos.
     
-    \subsection{Thymeleaf} \label{sec:thymeleaf}
+    \subsubsection{Thymeleaf} \label{sec:thymeleaf}
     Thymeleaf es un motor de plantillas para aplicaciones Java, tanto web como de escritorio, que permite crear dinámicamente documentos HTML5 (y otros, como XML o XHTML). Como principales características de esta tecnología cabe resaltar:
     
     \begin{itemize}
-    	\item[-] Thymeleaf ejercita el concepto llamado \emph{natural templating}, esto es, las propias plantillas son documentos HTML5 válidos, de forma que prácticamente cualquier navegador las puede renderizar, mostrando su contenido por defecto. Esto es muy útil en la fase de desarrollo de la aplicación, ya que no hay necesidad de contar con un contenedor web para visualizar el resultado de la plantilla (como ocurre con la tecnología JSP), facilitando el trabajo en paralelo sobre una misma vista de las labores frontend y backend.
+    	\item[-] Thymeleaf ejercita el concepto llamado \emph{natural templating}, esto es, las propias plantillas son documentos HTML5 válidos, de forma que prácticamente cualquier navegador las puede renderizar, mostrando su contenido por defecto. Esto es muy útil en la fase de desarrollo de la aplicación, ya que no hay necesidad de contar con un contenedor web para visualizar el resultado de la plantilla (como ocurre con la tecnología JSP), facilitando el trabajo paralelo sobre una misma vista en las labores frontend y backend.
     	\item[-] Es altamente extendible. Cualquiera puede crear su propio conjunto de atributos o etiquetas, con los nombres que se desee, definir sintaxis para expresiones y su lógica de evaluación, etc. Esto es, es posible crear lo que se denominan \emph{dialectos} de Thymeleaf, actuando así esta tecnología como un framework de plantillas. Por defecto se usa el conocido como dialecto \emph{Standard}.
     	\item[-] Thymeleaf se integra con muchísima facilidad con la tecnología Spring. De hecho, desde Spring se recomienda preferentemente su uso. Así, se dispone de un dialecto propio: el \emph{SpringStandard}, el cual permite el uso de Spring Expression Language. La integración con Spring Security es muy sencilla, permitiendo acoplar lógica de autenticación y/o autorización en las plantillas de una manera muy poco intrusiva.
     \end{itemize}
 
 	En el presente proyecto, los documentos incorporados en \emph{classpath: resources/templates} son las plantillas HTML que el motor toma, junto con los datos de negocio que Spring MVC le suministra, para producir el contenido HTML5 que se sirve al cliente.
     
-    \subsection{Bootstrap 4 - CSS3}
-    \subsection{Stripe} \label{sec:stripe}
-    \subsection{PostgreSQL}
-    \subsection{JavaScript}
-    \subsubsection{Ajax} \label{sec:ajax}
-    \subsection{FontAwesome - Pretty Checkbox - Google Fonts}
-    \subsection{Tecnologias Transversales}
-    \subsubsection{Git}
-    \subsubsection{Java 11}
-    \subsubsection{Maven}
-    Las librerías son ficheros que proporcionan una serie de funciones que simplifican el trabajo del programador y que suelen ser un elemento fundamental de cualquier desarrollo software. Normalmente, el desarrollador necesita saber qué librería usar y qué versión en particular. Además, una librería puede depender de otras para operar adecuadamente, lo que obliga a tener que gestionarlas para que no entren en conflicto entre sí.
-    
-    Para lidiar con este problema, existe una herramienta llamada Maven que se ocupa de la gestión de las distintas librerías mediante el uso de los llamados Artefactos o Artifacts, que son elementos que engloban las clases de una librería y la información necesaria para su óptima gestión (grupo, nombre, versión, otras dependencias...). Los Artifact se definen en el archivo POM.xml, que es el fichero que almacena toda la información del proyecto.
-    
-    Maven, por tanto, se encarga de descargar mediante un sencillo artefacto todas las librerías declaradas en el fichero POM.xml. Además, también hace posible la descarga de documentación relativa a estas librerías u otras dependencias subyacentes que no hayan sido definidas intencionadamente por el desarrollador.
-    
-    En última instancia, Maven usa las librerías descargadas para la compilación del proyecto.
-    \subsubsection{IntelliJ IDEA}
-    \subsubsection{Logback}
-    \subsubsection{Lombok}
-    \subsubsection{Guava}
+    \subsubsection{Bootstrap}
+    %\hablar de{FontAwesome - Pretty Checkbox - Google Fonts}
+    \subsubsection{Stripe} \label{sec:stripe}
+    \subsubsection{PostgreSQL}
 
     % DESPLIEGUE Y SEGURIDAD
     \section{Despliegue y Seguridad}
