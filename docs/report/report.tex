@@ -885,6 +885,19 @@
     En este apartado se ofrece un comentario sobre las principales decisiones tomadas acerca de las tecnologías empleadas en el desarrollo de la aplicación web.
 
 	\subsubsection{Git}
+	Como se comentó en la exposición de motivos, Git es una tecnología clave para el control de versiones, y desde el principio se puso el foco en ella. Aunque existen otras herramientas muy válidas, como Mercurial, la decisión fue seguir la tendencia global.
+	
+	Formalmente, Git es un sistema de control de versiones distribuido, permitiendo gestionar los cambios introducidos en un conjunto de ficheros, conocido como \emph{repositorio}, por un número arbitrario de personas. Sus principales características son:
+	
+	\begin{itemize}
+		\item[-] \textbf{Basado en instantáneas}. Otros sistemas de control de versiones tratan la información que almacenan como un conjunto de archivos más sus cambios a lo largo del tiempo, los incrementos. En cambio, Git piensa en sus datos más como una serie de instantáneas de un sistema de archivos en miniatura. Así, cada vez que se efectúa un \emph{commit} o se guarda el estado de un proyecto, Git toma una fotografía de cómo se están todos los archivos en ese momento y almacena una referencia a esa instantánea. Además, para ser eficiente, si los archivos no han cambiado no almacena el archivo nuevamente, sino un enlace al archivo idéntico anterior almacenado. En resumen, Git trata los datos que gestiona como una secuencia de capturas.
+		\item[-] \textbf{Trabajo en local}. Git es un sistema distribuido que permite que todos los implicados en un proyecto tengan en su máquina una copia completamente funcional del repositorio. Así, la mayoría de las operaciones necesitan sólo archivos y recursos locales para funcionar, siendo muy poco lo que no se puede hacer sin conexión a Internet. 
+		\item[-] \textbf{Integridad de la información}. Es casi imposible que algo varíe en los archivos gestionados por Git sin que el sistema lo detecte, dado que a todos estos archivos se les aplica la función \emph{hash} SHA-1, obteniendo como resultado una cadena de 40 caracteres hexadecimales. Esta cadena es luego usada en todo momento para referenciar el contenido usado para generarla.
+		\item[-] \textbf{Seguridad ante accidentes}. Con Git es muy difícil que, una vez realizado un \emph{commit}, se pierda el trabajo almacenado.
+	\end{itemize}
+	
+	En el presente proyecto el uso de Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
+
 	\subsubsection{Java}
 	Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado el background adquirido a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
 	
@@ -1133,7 +1146,6 @@
     \subsubsection{Bootstrap}
     %\hablar de{FontAwesome - Pretty Checkbox - Google Fonts}
     \subsubsection{Stripe} \label{sec:stripe}
-    \subsubsection{PostgreSQL}
 
     % DESPLIEGUE Y SEGURIDAD
     \section{Despliegue y Seguridad}
