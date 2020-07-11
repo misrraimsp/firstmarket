@@ -1012,15 +1012,41 @@
 	
 	Por último, un apunte acerca del entorno de desarrollo utilizado. Durante las primeras semanas se usó el mismo que en toda la carrera: Eclipse. Sin embargo, en el transcurso de una formación en Spring tomada en fases iniciales del proyecto, se entró en contacto con \textbf{IntelliJ IDEA}. Desde entonces ese fue el IDE empleado, destacándose su capacidad de aumentar la productividad y su facilidad de uso.
 
-	\subsubsection{Maven}
-	Las librerías son ficheros que proporcionan una serie de funciones que simplifican el trabajo del programador y que suelen ser un elemento fundamental de cualquier desarrollo software. Normalmente, el desarrollador necesita saber qué librería usar y qué versión en particular. Además, una librería puede depender de otras para operar adecuadamente, lo que obliga a tener que gestionarlas para que no entren en conflicto entre sí.
+	\subsubsection{Apache Maven}
+	En el mundo del desarrollo software una fase de especial importancia es aquella encargada de transformar todos los archivos de código fuente del proyecto en un paquete susceptible de ser distribuido, instalado y ejecutado en cualquier máquina. A esto se le conoce como el proceso de construcción del proyecto, y representa una tarea no trivial desde el momento en que el proyecto en sí adquiere cierta complejidad.
 	
-	Para lidiar con este problema, existe una herramienta llamada Maven que se ocupa de la gestión de las distintas librerías mediante el uso de los llamados Artefactos o Artifacts, que son elementos que engloban las clases de una librería y la información necesaria para su óptima gestión (grupo, nombre, versión, otras dependencias...). Los Artifact se definen en el archivo POM.xml, que es el fichero que almacena toda la información del proyecto.
+	Antiguamente, este proceso tenía que ser diseñado e implementado \emph{ad hoc}, de una manera específica para cada proyecto. Sin embargo, en la actualidad este proceso se encuentra altamente optimizado. En el caso del mundo Java las principales herramientas empleadas al efecto son Apache Maven y Gradle.
 	
-	Maven, por tanto, se encarga de descargar mediante un sencillo artefacto todas las librerías declaradas en el fichero POM.xml. Además, también hace posible la descarga de documentación relativa a estas librerías u otras dependencias subyacentes que no hayan sido definidas intencionadamente por el desarrollador.
+	En el presente proyecto se ha optado por utilizar Apache Maven. La justificación reside en que el punto de partida fue el total desconocimiento de este tipo de tecnologías, y al representar Gradle, aparentemente, una suerte de superconjunto o mejora sobre Apache Maven, se juzgó conveniente tomar a este último como puerta de entrada o primer escalón, teniendo en cuenta, además, que Apache Maven aún posee una profunda implantación en la industria y la documentación y recursos de todo tipo para su estudio es ingente.
 	
-	En última instancia, Maven usa las librerías descargadas para la compilación del proyecto.
+	Apache Maven supuso una revolución en la forma de construir software en el mundo Java. Pero esta herramienta va más allá, siendo concebida como una utilidad de gestión y de comprensión de los proyectos software. Tal como se explica en su \href{https://maven.apache.org/what-is-maven.html}{web oficial}, sus principales objetivos son:
+	
+	\begin{itemize}
+		\item[-] Facilitar la construcción software.
+		\item[-] Homogeneizar el proceso de construcción software.
+		\item[-] Ofrecer un lenguaje común a la hora de obtener información sobre un proyecto, es decir, establecer una manera homogénea de \emph{definir} a un proyecto software.
+		\item[-] Incentivar buenas prácticas de desarrollo software.
+	\end{itemize}
+	
+	Las características que han permitido a Apache Maven alcanzar estos objetivos descansan en gran medida en:
+	
+	\begin{itemize}
+		\item[-] \textbf{Convención sobre configuración}. Como también se comentará en la sección \ref{sec:springboot}, este principio de diseño persigue que el desarrollador sólo deba especificar los aspectos no convencionales, confiando para el resto en la configuración por defecto ofrecida por Apache Maven. Como dichos valores por defecto normalmente son reflejo de buenas prácticas, más o menos consensuados por agentes expertos en la materia, automáticamente se está consiguiendo alinear el proyecto a dichas buenas prácticas, al tiempo de estarse facilitando el propio trabajo de construcción software. La adopción de Apache Maven de este paradigma se traduce en, entre otros muchas cosas, establecer una distribución de carpetas y ficheros estándar para el proyecto, o seguir determinadas convenciones a la hora de compilar el código fuente o ensamblar los paquetes.
+		\item[-] \textbf{Interfaz común}. Muy ligado con el aspecto anterior está el hecho de que Apache Maven ofrece un marco de trabajo o interfaz común para la construcción de proyectos software. Como ya se comentó, antes de la existencia de este tipo de herramientas el software se construía de una manera singular en cada proyecto. Con Apache Maven, sin embargo, se establece una manera estándar o canónica de hacerlo. Así, cuando un desarrollador aprecia que un determinado proyecto está gestionado con Apache Maven puede asumir mucha información sobre él.
+		\item[-] \textbf{Reutilización a través de \emph{plugins}}. Apache Maven está diseñado de forma que se maximiza la flexibilidad y la reutilización de la lógica de construcción. El núcleo de la herramienta se encarga de muy pocas tareas, actuando más como un orquestador que lee la información centralizada acerca del proyecto en un fichero XML y delega el grueso del trabajo en plugins. Es decir, son los plugins los que realizan las diferentes labores de construcción, como compilar, instalar o empaquetar. Apache Maven ofrece una serie de plugins por defecto, pero también la posibilidad de construir nuevos e implementar la lógica de construcción que se desee. De hecho, en el presente proyecto se ha añadido el plugin que ofrece Spring Boot.
+		\item[-] \textbf{Modelo conceptual de proyecto}. Dicho lo anterior, la gran característica que aporta Apache Maven es la abstracción de toda la información necesaria referente a un proyecto en un fichero, el \textbf{Project Object Model} (en el presente proyecto ver el fichero \emph{pom.xml}). En él se especifica, entre otras cosas, las dependencias con otros proyectos, de forma que es Apache Maven quien se encarga de gestionarlas, esto es, resolverlas, descargarlas de un repositorio central, colocarlas en las carpetas apropiadas, enlazarlas durante la construcción, etc. En el listado \ref{list:maven_dependency} se muestra, como ejemplo, la declaración de una dependencia con la librería \href{https://www.passay.org/}{Passay}, utilizada en la aplicación web para generar nuevas contraseñas aleatorias. 
+	\end{itemize}
 
+	\begin{lstlisting}[caption=Declaración de dependencia en Apache Maven, label=list:maven_dependency]
+	<dependency>
+		<groupId>org.passay</groupId>
+		<artifactId>passay</artifactId>
+		<version>1.5.0</version>
+	</dependency>
+	\end{lstlisting}
+
+	El desarrollo del presente proyecto ha servido para tomar un primer contacto serio con Apache Maven, resultando de vital importancia para la construcción y para la gestión de dependencias.
+	
     \subsubsection{Spring} \label{sec:spring}
     Sin duda, Spring ha sido una de las tecnologías que más impacto ha tenido en el presente proyecto. En esta sección se pretende dar una idea lo más general y amplia posible de sus características.
     
@@ -1078,7 +1104,7 @@
 	En resumen, Spring MVC ofrece la infraestructura \emph{Front Controller}, esto es, los objetos necesarios para resolver el mapeo de las peticiones HTTP a los métodos apropiados de los objetos \emph{@Controller}, los objetos encargados de resolver las vistas, los encargados del enlace de datos, etc, permitiendo al desarrollador centrarse en especificar la lógica de negocio.
     
     
-    \paragraph{Spring Boot}
+    \paragraph{Spring Boot} \label{sec:springboot}
     Este proyecto ha sido el gran avance de los últimos años dentro del universo Spring. De hecho, ha cambiado por completo el paradigma, permitiendo el desarrollo de aplicaciones totalmente funcionales en un espacio de tiempo dramáticamente inferior al necesario con anterioridad a su aparición. Tal como viene recogido en la \href{https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/}{documentación} oficial, sus principales objetivos son:
     
     \begin{itemize}
