@@ -904,7 +904,7 @@
 	Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS, \emph{Long Term Support}).
 	\\
 	
-	Java es un lenguaje que, como muchos otros, ha ido evolucionando con el tiempo, dando como resultado un conjunto de capacidades muy variado. En 2014, con la publicación de Java 8, el lenguaje experimentó una de las mayores expansiones, si no la mayor, de su historia. En ese momento se le introdujeron potentes capacidades de programación declarativa, como las \emph{Labmda Expressions} y la \emph{Stream API}.
+	Java es un lenguaje que, como muchos otros, ha ido evolucionando con el tiempo, dando como resultado un conjunto de capacidades muy variado. En 2014, con la publicación de Java 8, el lenguaje experimentó una de las mayores expansiones, si no la mayor, de su historia. En ese momento se le introdujeron potentes capacidades de programación declarativa, como las \emph{Labmda Expressions} y la \emph{Stream API}, que, en cierto modo, han revolucionado la programación Java (véase, por ejemplo, el framework de desarrollo de aplicaciones web \href{http://sparkjava.com/}{Spark}, que sólo usa capacidades Java 8+)
 	\\
 	
 	\begin{lstlisting}[language=Java,caption=Programación declarativa con Java,label=list:java_declarative]
@@ -919,7 +919,7 @@
 	}
 	\end{lstlisting}
 	
-	Como se ha comentado, una de las intenciones de usar la tecnología Java era precisamente profundizar en su conocimiento. Así, se ha aprovechado el desarrollo de la presente aplicación para estudiar estas capacidades declarativas, aplicándolas progresivamente. Como ejemplo, en el listado \ref{list:java_declarative} se muestra la implementación del método \emph{getIdsByExcludedStatus}, perteneciente a la clase \emph{BookServer}. Se puede apreciar la facilidad de lectura que el estilo declarativo proporciona, además de la potencia expresiva.
+	Como se ha comentado, una de las intenciones de usar la tecnología Java era precisamente profundizar en su conocimiento. Así, se ha aprovechado el desarrollo de la presente aplicación para estudiar estas capacidades declarativas, aplicándolas progresivamente. Como ejemplo, en el listado \ref{list:java_declarative} se muestra la implementación del método \emph{getIdsByExcludedStatus}, perteneciente a la clase \emph{BookServer}. Se puede apreciar la facilidad de lectura que el estilo declarativo proporciona, además de la potencia expresiva. 
 	\\
 	
 	También es necesario comentar un par de librerías que merecen especial mención, por la relevancia que han tenido en el proyecto:
@@ -1170,7 +1170,18 @@
 	En el presente proyecto, los documentos incorporados en \emph{classpath: resources/templates} son las plantillas HTML que el motor toma, junto con los datos de negocio que Spring MVC le suministra, para producir el contenido HTML5 que se sirve al cliente.
     
     \subsubsection{Bootstrap}
-    %\hablar de{FontAwesome - Pretty Checkbox - Google Fonts}
+    En el ámbito del diseño frontend de la presente aplicación, la herramienta que más ha destacado a sido Bootstrap, versión 4. Se trata de un framework de HTML, CSS y JavaScript, que prima el desarrollo \emph{responsive}. Esto quiere decir que la aplicación web adapta su presentación al tamaño de la pantalla disponible, esto es, que \emph{responde} automáticamente a los cambios de tamaño de pantalla, de forma que en cada caso optimiza la presentación.
+    
+    Gracias a Bootstrap, con relativamente poco esfuerzo se puede ofrecer una experiencia de usuario muy correcta. Un gran número de elementos HTML como formularios, botones, encabezados, etc. son proporcionados por este framework, con estilo CSS ya preconfigurado, además de otros elementos como \emph{spinners}, \emph{modals}, \emph{cards} etc., lo que aumenta enormemente la productividad.  Además, aparte de los objetos, Bootstrap permite controlar el layout de las vistas de una manera muy sencilla y potente, basada en los Flexbox de CSS.
+    
+    Cuando el framework no es capaz de ofrecer una funcionalidad siempre se pueden usar directamente hojas de estilo CSS3, como ha sido el caso en el presente proyecto en varias ocasiones (\emph{classpath: resources/static/css/fmstyle.css}). Además, se han utilizado otros componentes que merecen especial mención:
+    
+    \begin{itemize}
+    	\item[-] \href{https://fontawesome.com/}{FontAwesome}. Todos los iconos mostrados en la aplicación web han sido obtenidos de FontAwesome.
+    	\item[-] \href{https://lokesh-coder.github.io/pretty-checkbox/}{Pretty Checkbox}. Con el objetivo de dar un mejor aspecto a los \emph{check boxes} utilizados, respecto del ofrecido por Bootstrap, se decidió usar esta librería CSS.
+    	\item[-] \href{https://fonts.google.com/}{Google Fonts}. A efectos de dar un cariz más personalizado a la aplicación web se usó este servicio de Google. La fuente usada en la aplicación web ha sido \href{https://fonts.google.com/specimen/Noto+Serif+JP}{Noto Serif JP}.
+    \end{itemize}
+    
     \subsubsection{Stripe} \label{sec:stripe}
 
     % DESPLIEGUE Y SEGURIDAD
