@@ -6,8 +6,8 @@ server:
 spring:
    profiles:
       active:
-         #- dev-postgresql  # comment @Lob on image.data
-         - dev-h2          # un-comment @Lob on image.data
+         - dev-postgresql  # comment @Lob on image.data
+         #- dev-h2          # un-comment @Lob on image.data
    jpa:
       show-sql: false
    mail:
