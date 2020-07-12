@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: LinguisticsPro-Regular
+font link: https://github.com/StefanPeev/Linguistics-Pro
+font author: Local Fonts
+font author site: https://localfonts.eu/
+Slogan Font: Neuton-Extralight.ttf
+
+icon designer: Derrick Snider
+icon designer link: /derrick_snider
+        
+{"bg":"transparent","icon-gradient-0":"#050922","icon-gradient-1":"#6EE6C7","font":"#000000","slogan":"#141414"}
+      

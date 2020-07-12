@@ -163,7 +163,7 @@ public class BookServer {
         Set<Long> idsByLanguage = (searchCriteria.getLanguageId() != null) ? bookRepository.findIdByLanguageIds(searchCriteria.getLanguageId()) : null;
         Set<Long> idsByPrice  = (searchCriteria.getPriceId() != null) ? this.getIdsByPriceIntervals(searchCriteria.getPriceId()) : null;
         Set<Long> idsByQ  = (searchCriteria.getQ() != null) ? this.getIdsByQueryText(searchCriteria.getQ()) : null;
-        Set<Long> idsByStatus  = (searchCriteria.getExcludedStatus() == null) ? null : this.getIdsByStatus(searchCriteria.getExcludedStatus());
+        Set<Long> idsByStatus  = (searchCriteria.getExcludedStatus() == null) ? null : this.getIdsByExcludedStatus(searchCriteria.getExcludedStatus());
 
         Set<Long> resultIds = intersect(idsByCategory, idsByPrice, idsByAuthor, idsByPublisher, idsByLanguage, idsByQ, idsByStatus);
         if (resultIds.size() == 0){
@@ -172,7 +172,7 @@ public class BookServer {
         return bookRepository.findByIds(resultIds, pageable);
     }
 
-    private Set<Long> getIdsByStatus(ProductStatus excludedStatus) {
+    private Set<Long> getIdsByExcludedStatus(ProductStatus excludedStatus) {
         return bookRepository
                 .findAll()
                 .stream()
