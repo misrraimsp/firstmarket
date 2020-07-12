@@ -118,7 +118,7 @@ public class OrderController extends BasicController {
         //wait for backend payment-success process take place
         User user = userServer.findById(authUser.getId());
         int numOfNaps = 0;
-        while (user.getCart().getSize() > 0 || numOfNaps < 5) {
+        while (user.getCart().getSize() > 0 && numOfNaps < 5) {
             //take a nap
             TimeUnit.SECONDS.sleep(3);
             //wakeup
