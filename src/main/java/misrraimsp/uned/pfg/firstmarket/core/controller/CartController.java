@@ -16,16 +16,7 @@ import java.security.Principal;
 import java.util.Set;
 
 @RestController
-@CrossOrigin(origins = {
-        "https://firstmarket.tech/",
-        "http://firstmarket.tech/",
-        "https://www.firstmarket.tech/",
-        "http://www.firstmarket.tech/",
-        "https://firstmarket.herokuapp.com/",
-        "http://firstmarket.herokuapp.com/",
-        "https://www.firstmarket.herokuapp.com/",
-        "http://www.firstmarket.herokuapp.com/"
-})
+@CrossOrigin
 public class CartController extends BasicController {
 
     private final CartServer cartServer;
