@@ -576,7 +576,7 @@
     \section{Implementación}
     La materialización del análisis y diseño detallado en las secciones anteriores lo conforma el conjunto software que se incluye en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
-    \subsection{Control de Concurrencia}
+    \subsection{Control de Concurrencia} \label{sec:concurrencia}
     Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus cestas y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
     
     \begin{figure}[hbt!]
@@ -1191,28 +1191,130 @@
     
     Así, como se ha comentado, el pago es una tarea de vital importancia, transversal a todas las plataformas de comercio, con unos estrictos requisitos de seguridad a fin de generar la confianza que demanda el mercado. Es en este contexto donde juegan un papel esencial los proveedores de servicios de pago \emph{online}.
     
-    Actualmente en el mercado existen múltiples alternativas de servicios de este tipo, como \href{https://www.paypal.com/}{PayPal} o \href{https://securionpay.com/}{SecurionPay}, pero el elegido para el desarrollo del presente proyecto ha sido \href{https://stripe.com/}{Stripe}. La principal característica diferenciadora ha sido la muy cuidada colección de documentación, guías, ejemplos, etc. que ofrecen para facilitar la integración con su infraestructura. 
+    Actualmente en el mercado existen múltiples alternativas de servicios de este tipo, como \href{https://www.paypal.com/}{PayPal} o \href{https://securionpay.com/}{SecurionPay}, pero el elegido para el desarrollo del presente proyecto ha sido \href{https://stripe.com/}{Stripe}. Amén de su consolidada posición en el mercado como uno de los servicios líderes en el sector, la principal característica diferenciadora ha sido la \href{https://stripe.com/docs}{cuidada colección} de documentación, guías, ejemplos, etc. que mantienen para facilitar la integración con su infraestructura. En el resto de esta sección se comentará los detalles de dicha integración con Stripe, mientras que en la sección \ref{sec:striperadar} se hará lo propio con la funcionalidad anti-fraude que esta plataforma de pagos \emph{online} ofrece.
+    \\
+    
+    Fundamentalmente, la aplicación web desarrollada se integra con la infraestructura de Stripe haciendo uso de dos puntos de enlace, uno en backend y otro en frontend:
+    
+    \begin{itemize}
+    	\item[-] Una extensa interfaz de programación backend, \href{https://stripe.com/docs/api}{Stripe API}, para varios lenguajes (entre ellos Java), plena de funcionalidades que cubren multitud de casos de uso relacionados con la gestión de transacciones monetarias y sus aspectos asociados.
+    	
+    	La integración de la presente aplicación web se ha basado en el objeto \href{https://stripe.com/docs/api/payment_intents}{PaymentIntent}. Un PaymentIntent mantiene la información relacionada con un pago puntual. Entre dicha información, una pieza clave es el \emph{client\_secret}, que es el código identificativo de la transacción que permite al cliente, usándolo como parámetro en la invocación de funciones en \emph{Stripe.js}, finalizar el pago. Además, el PaymentIntent mantiene la información sobre la situación del pago que gestiona al recorrer una serie de \href{https://stripe.com/docs/payments/intents#intent-statuses}{estados} desde su creación (su ciclo de vida). Como se verá, FirstMarket conoce de estos estados al escuchar las notificaciones que Stripe le envía al \emph{webhook} configurado.
+    	
+    	\item[-] Una librería frontend, \href{https://stripe.com/docs/js}{\emph{Stripe.js}}, que permite, entre otras cosas, gestionar la comunicación entre el cliente y Stripe, y la inserción de elementos gráficos configurables en las vistas que la aplicación web sirve al cliente. Estos \href{https://stripe.com/docs/js/elements_object}{elementos} son empleados para recabar la información sensible de los formularios de pago (por ejemplo, el número de la tarjeta de débito).
+    	
+    	La presente aplicación web coordina todo el proceso de pago en el lado del cliente mediante el script desarrollado \emph{checkout.js}. En él, como se muestra en el listado \ref{list:js_checkout_card}, se ha usado el elemento \emph{card} ofrecido en \emph{Stripe.js}. En la figura \ref{fig:checkout_form} se muestra el resultado obtenido, siendo el citado elemento \emph{card} la entrada del formulario donde se solicita la información de la tarjeta bancaria.
+    \end{itemize}
+	
+	\begin{lstlisting}[language=Javascript,caption=Extracto de checkout.js donde se crea y enlaza el elemento \emph{card},label=list:js_checkout_card]
+	//...
+	
+	let stripe = Stripe(stripePublicKey);
+	let elements = stripe.elements();
+	let cardElement = elements.create('card');
+	cardElement.mount('#card-element');
+	
+	//...
+	\end{lstlisting}
+	
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=\textwidth,keepaspectratio]{checkout_form}
+		\caption{Formulario de checkout}
+		\label{fig:checkout_form}
+	\end{figure}
+	
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=\textwidth,keepaspectratio]{stripe}
+		\caption{Flujo de información durante un pago}
+		\label{fig:stripe}
+	\end{figure}
+	
+	Una vez se ha comentado todo lo anterior, se está en disposición de esbozar el flujo de información que tiene lugar durante el proceso de pago, tomando como apoyo el esquema presentado en la figura \ref{fig:stripe}:
+	
+	\begin{itemize}
+		\item[1.] El cliente, estando en la vista de su cesta, decide proceder a finalizar la compra y hace click en el botón de ckeckout. Esto se traduce en una petición a FirstMarket al \emph{endpoint} GET \nolinkurl{~/user/checkout}. 
+		\item[2.] Tal como se explica en \ref{sec:concurrencia}, el sistema comprueba la disponibilidad de los libros pedidos y, si es el caso, compromete la cesta. En el proceso de comprometer la cesta contacta con Stripe para crear el PaymentIntent, especificando en este punto, entre otras cosas, la cantidad exacta a cobrar.
+		\item[3.] Stripe devuelve al sistema el PaymentIntent recién creado, el cual contiene el \emph{client\_secret}.
+		\item[4.] El sistema sirve la vista \emph{checkoutForm.html} al cliente, la cual lleva inserta el \emph{client\_secret}. Resaltar en este punto la importancia del encriptado que protocolos de transporte seguro proporcionan, ya que este código sólo debe ser conocido, fuera de Stripe y de Firstmarket, por el cliente. Así, como se explica en la sección \ref{sec:https}, la aplicación web desarrollada emplea HTTPS.
+		\item[5.] Tras completar correctamente el formulario de checkout (presentado en la figura \ref{fig:checkout_form}), el cliente presiona el botón de pagar. Esto desencadena que desde \emph{checkout.js} se invoque la función \emph{confirmCardPayment} (perteneciente a la librería \emph{Stripe.js}), tomando como parámetro, entre otros valores, el \emph{client\_secret}.
+		\item[6.] Stripe procesa el pago y responde al cliente enviándole el objeto \emph{result} (más adelante se explicará que en este punto, y en otros, Stripe notifica a FirstMarket a través del \emph{webhook}). Dependiendo del éxito o no del pago, este objeto contendrá en su interior, respectivamente, el PaymentIntent o un objeto \emph{error}. En ambos casos, \emph{checkout.js} toma las medidas oportunas. En caso de éxito, se realiza lo explicado en el siguiente punto. En caso contrario se notifica por pantalla al cliente para que tome las medidas oportunas.
+		\item[7.] \emph{checkout.js} realiza en background una petición a FirstMarket al \emph{endpoint} GET \nolinkurl{~/user/success}.
+		\item[8.] El sistema sirve la vista \emph{info.html} al cliente, la cual le comunica que el pedido se ha realizado con éxito y que pronto recibirá confirmación por email.
+	\end{itemize}
+	
+	Notar en la figura \ref{fig:stripe} que, tal como se explicó en la sección \ref{sec:concurrencia}, cuando se produce el \emph{timeout} y el pago no se ha efectuado se activa la vía de descomprometer la cesta y, por tanto, cancelar el PaymentIntent.
+	
+	Por otro lado, podría pensarse que FirstMarket conoce de la finalización con éxito del pago a través de la solicitud que en el punto 7 anterior el cliente le realiza. Sin embargo, esa solicitud sólo es usada en backend como disparador para servir el mensaje estándar de finalización de una compra. Es decir, el sistema no realiza ninguna acción de lógica de negocio (no crea ningún pedido, de modifica ninguna cesta, etc.) al recibir la petición del punto 7. Sólo se limita a servir una vista con un mensaje. De hecho, cualquier cliente con sesión abierta en FirstMarket puede escribir en su navegador la dirección \nolinkurl{~/user/success} y el sistema le devolverá el mensaje de compra finalizada (por supuesto, sin haber realizado ninguna compra en realidad).
+	
+	Esto es así porque para conocer del estado de un pago FirstMarket no debe depender del cliente, sino de Stripe directamente. Y esta comunicación directa se realiza por medio del \emph{webhook} configurado en Stripe. Esto es, Stripe permite configurar el envío de notificaciones POST ante los eventos que se desee, existiendo multitud de \href{https://stripe.com/docs/api/events/types}{eventos disponibles}. FirstMarket escucha notificaciones POST provenientes de Stripe (se comprueba que es Stripe quien notifica al comparar la dirección IP de origen con las \href{https://stripe.com/docs/ips}{oficiales} de Stripe, además de por existir un código de verificación en las notificaciones) en el \emph{endpoint} \nolinkurl{~/listener}. En concreto, se ha configurado la notificación de los eventos relacionados con el ciclo de vida de los PaymentIntent:
+	
+	\begin{itemize}
+		\item[-] \emph{payment\_intent.succeeded}. El pago ha concluido con éxito. Es al recibir esta notificación cuando el sistema realiza las acciones necesarias de lógica de negocio para, por ejemplo, crear el nuevo pedido.
+		\item[-] \emph{payment\_intent.canceled}. El PaymentIntent ha sido cancelado. Se procede, si fuese necesario, a descomprometer la cesta.
+		\item[-] \emph{payment\_intent.payment\_failed}. Ocurre cuando el pago ha fallado. No se realiza ninguna acción aparte de su registro.
+		\item[-] \emph{payment\_intent.created}. El PaymentIntent ha sido creado. No se realiza ninguna acción aparte de su registro.
+		\item[-] \emph{payment\_intent.processing}. Ocurre cuando el PaymentIntent ha comenzado su procesamiento. No se realiza ninguna acción aparte de su registro.
+		\item[-] \emph{payment\_intent.amount\_capturable\_updated}. Se da cuando el PaymentIntent posee fondos aún por capturar. No se realiza ninguna acción aparte de su registro.
+	\end{itemize}
 
+	La principal consecuencia de la arquitectura explicada es que \textbf{FirstMarket nunca tiene contacto con la información sensible del cliente}. Esta se envía directamente a Stripe desde el cliente. Las implicaciones en términos de seguridad de este aspecto son profundas, mejorándose la exposición al riesgo de los clientes al tiempo que se alivian los requisitos y el coste de la aplicación web. De hecho, todo agente involucrado en el procesamiento, transmisión o almacenamiento de datos bancarios sensibles debe cumplir con los estándares del \href{https://www.pcisecuritystandards.org/pci_security/}{\emph{Payment Card Industry Security Standards Council}}. En este sentido, Stripe ha sido certificado como \emph{PCI Level 1 Service Provider}, el nivel de certificación más estricto disponible en la industria de pagos. Por su parte, Firstmarket se alinea con los estándares PCI al no tener relación, como se ha dicho, con la información sensible de los clientes, y al garantizar la utilización de TLS en sus comunicaciones.
+	\\
+	
+	Como último apunte, Stripe no es gratis. Su modelo de negocio se basa en cobrar una comisión por cada transferencia que procesa. Para identificar a cada comercio ofrece un par de llaves, una pública y otra privada. Además, para facilitar las labores de desarrollo software, proporciona dos juegos de estas llaves: unas para \emph{test} y otras \emph{live}. Como su nombre indica, las primeras pueden ser usadas durante las labores de testeo de la integración, pudiendo simularse transacciones usando los datos de \href{https://stripe.com/docs/payments/accept-a-payment#web-test-integration}{tarjetas bancarias ficticias} ofrecidas por Stripe. El juego de llaves \emph{live}, por su parte, permite realizar pagos reales. Sin embargo, dada la política de Stripe para el control de blanqueo de capitales, para activar este juego de llaves se debe presentar la documentación oficial de la constitución de la persona jurídica que recibe los pagos. Es por ello que en el presente proyecto sólo se ha empleado el juego de llaves \emph{test}, aceptando únicamente transacciones simuladas. En la figura \ref{fig:stripe_dashboard} se muestra el \emph{dashboard} de Stripe, desde donde es posible controlar todo lo referente a la integración con esta plataforma. Se puede apreciar el requerimiento para proveer la información legal necesaria para desbloquear las llaves \emph{live}.
+	
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=\textwidth,keepaspectratio]{stripe_dashboard}
+		\caption{Stripe Dashboard}
+		\label{fig:stripe_dashboard}
+	\end{figure}
 
     % DESPLIEGUE Y SEGURIDAD
     \section{Despliegue y Seguridad}
-    En esta sección se aborda todos los aspectos relevantes en relación con el despliegue de la aplicación web, así como de las medidas de seguridad adoptadas.
-        \subsection{Heroku Platform}
-        La aplicación ha sido desplegada en Heroku.
-            \subsubsection{Heroku-postgresql}
-            \subsubsection{LogDNA}
-            \subsubsection{Probely}
+    En esta sección se abordan aspectos relevantes en relación con el despliegue y la seguridad de la aplicación web desarrollada.
+        \subsection{Heroku}
+        Desde el surgimiento de las tecnologías web hasta nuestros días, las herramientas a disposición de los desarrolladores para abrir al público una aplicación web se han incrementado considerablemente. Desde tener cada uno que adquirir, configurar y mantener el hardware necesario, a los modernos servicios de \emph{cloud-computing}.
+        
+        La presente aplicación web ha sido desplegada en Heroku, una infraestructura de \emph{cloud-computing} que sigue el modelo \emph{platform as a service}.
+        
+        A parte de las ventajas que de por sí ofrece el modelo de computación en la nube, Heroku destaca por proporcionar una experiencia de desarrollo excepcional. Así, los desarrolladores sólo tienen que enfocarse en las tareas propias de programación, reduciéndose las labores de despliegue a unas pocas configuraciones y a efectuar un \emph{git push}. Literalmente, tras una mínima configuración (en el común de los casos sólo necesaria la primera vez), desplegar la aplicación en Heroku se realiza enviando el repositorio Git a la plataforma (existen otras formas, como integrar GitHub o IntelliJ IDEA con Heroku).
+        
+        Las aplicaciones desplegadas en Heroku son ejecutadas en contenedores Linux, denominados en la jerga Heroku como \href{https://devcenter.heroku.com/articles/dynos}{\emph{Dynos}}. Cada uno de estos contenedores puede tener una configuración \emph{Web} (los únicos que admiten tráfico HTTP), \emph{Worker} o \emph{One-off}. Además, Heroku ofrece varios tipos de \emph{dynos}, cada uno adaptado a diferentes necesidades, desde pequeños proyectos hasta servicios en producción con gran tráfico. Así, como se muestra en la figura \ref{fig:dyno_types}, tomada de la documentación oficial, cada tipo de dyno posee diferentes características, como la memoria disponible o la exclusividad de los recursos que utiliza.
+        
+        \begin{figure}[hbt!]
+        	\centering
+        	\includegraphics[width=0.9\textwidth,keepaspectratio]{dyno_types}
+        	\caption{Diferentes tipos de \emph{dynos} en Heroku}
+        	\label{fig:dyno_types}
+        \end{figure}
+        
+        FirstMarket ha sido desplegada en Heroku usando un \emph{Dyno} del tipo \emph{Hobby} con configuración \emph{Web}.
+        
+        \subparagraph{Heroku Add-ons}
+        Uno de los aspectos más interesantes de Heroku es su oferta de \emph{Add-ons}, accesible en su \href{https://elements.heroku.com/addons}{marketplace}. Se trata de módulos que se le pueden añadir a la aplicación web, algunos gratuitos y otros de pago. La aplicación web desarrollada hace uso de los siguientes:
+        
+        \begin{itemize}
+        	\item[-] \href{https://elements.heroku.com/addons/heroku-postgresql}{Heroku Postgres}. Este es el servicio de base de datos utilizado para la capa de persistencia de la aplicación web cuando está desplegada en Heroku. El plan contratado es el gratuito, estando restringido a que el total de filas en la base de datos no supere las 10000, y con un máximo de 20 conexiones disponibles.
+        	\item[-] \href{https://elements.heroku.com/addons/logdna}{LogDNA}. Este servicio permite acceder a los registros emitidos, tanto por la Heroku como por la aplicación web, de una manera sencilla a través del navegador. Tiene multitud de opciones de configuración, siendo la interfaz gráfica mostrada en la figura \ref{label}.
+        	\item[-] \href{https://elements.heroku.com/addons/probely}{Probely}. Este servicio está enfocado a analizar la seguridad de la aplicación desde una multitud de puntos de vista. 
+        	\item[-] \href{https://elements.heroku.com/addons/snyk}{Snyk}. Este add-on revisa las dependencias del proyecto en busca de vulnerabilidades de seguridad.
+        \end{itemize}
+        
+        \subsubsection{HTTPS} \label{sec:https}
         \subsection{Spring Security} \label{sec:springsec}
-        \subsection{HTTPS}
-        \subsection{Cross-Site Request Forgery}
+        \subsubsection{Cross-Site Request Forgery}
         \subsection{Brute-Force Authentication}
+        \subsection{Stripe Radar} \label{sec:striperadar}
+        
 
     % MANUALES
     \section{Manuales}
     En esta seccion se va a describir las cuestiones necesarias para facilitar el uso de la aplicacion web por parte de los usuarios
-        \subsection{Usuario Cliente}
+        \subsection{Cliente}
     aqui va la descripcion para el usuario cliente
-        \subsection{Usuario Administrador}
+        \subsection{Administrador}
     aquie se describe el uso del admin
 
 	% PRESUPUESTO
