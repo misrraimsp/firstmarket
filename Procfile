@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/firstmarket-1.0-SNAPSHOT.jar
+web: java -Dserver.port=$PORT $JAVA_OPTS -Djdk.tls.rejectClientInitiatedRenegotiation=true -jar target/firstmarket-1.0-SNAPSHOT.jar
