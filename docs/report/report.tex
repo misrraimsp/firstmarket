@@ -1350,7 +1350,7 @@
 	Como se comentó en la sección \ref{sec:addons}, la aplicación web ha sido testada con Probely. En total fueron detectadas 5 vulnerabilidades, clasificándose una de ellas como de alto riesgo:
 	
 	\begin{itemize}
-		\item[-] \textbf{\emph{Reflected cross-site scripting}}. Esta vulnerabilidad, considerada de alto riesgo, fue encontrada durante el escáner OWASP top 10.
+		\item[-] \textbf{\emph{Reflected cross-site scripting}}. Esta vulnerabilidad, considerada de alto riesgo, fue encontrada durante el test OWASP top 10.
 		
 		Este riesgo se encuentra bastante extendido por Internet y ocurre cuando el servidor de la aplicación toma un input del cliente y lo devuelve nuevamente sin validar o codificar adecuadamente para ser mostrado por pantalla. El adjetivo \emph{reflected} proviene del código malicioso que se envía al servidor y se refleja en el navegador de la víctima en el código fuente de la página.
 		
@@ -1393,7 +1393,7 @@
 		...
 		\end{lstlisting}
 		
-		\item[-] \textbf{\emph{Potential DoS on TLS Client Renegotiation}}.
+		\item[-] \textbf{\emph{Potential DoS on TLS Client Renegotiation}}. Cuando el cliente inicia una conexión TLS con el servidor, el consumo de recursos por cada parte es asimétrico, soportando el servidor una mayor carga de trabajo.
 		\item[-] \textbf{\emph{Outdated TLS protocol version 1.0 supported}}.
 		\item[-] \textbf{\emph{Referrer policy not defined}}.
 		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}.
