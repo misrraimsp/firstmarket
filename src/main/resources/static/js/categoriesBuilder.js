@@ -101,6 +101,9 @@ document.addEventListener("DOMContentLoaded", function() {
         hook.appendChild(divCollapse);
     };
 
+    //categories from server
+    let jsonStringCategories = document.getElementById("catHolder").getAttribute("jsonStringCategories");
+
     // build html
     let categories = JSON.parse(jsonStringCategories);
     for (let i = 0; i < categories.children.length; i++){
