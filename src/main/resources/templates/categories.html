@@ -38,7 +38,10 @@
         <!-- tooltips -->
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- categories dynamically generated -->
-        <script th:utext="'let jsonStringCategories = \'' + ${jsonStringCategories} + '\';'"></script>
+        <i id="catHolder" th:attr="jsonStringCategories=${jsonStringCategories}"></i>
+        <!-- insecure: reflected XSS
+        <script th:utext="'let jsonStringCats = \'' + ${jsonStringCategories} + '\';'"></script>
+        -->
         <script th:src="@{/js/categoriesBuilder.js}"></script>
         <script th:src="@{/js/categoriesStyler.js}"></script>
         <!-- modal functionality -->
