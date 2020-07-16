@@ -1393,10 +1393,56 @@
 		...
 		\end{lstlisting}
 		
-		\item[-] \textbf{\emph{Potential DoS on TLS Client Renegotiation}}. Cuando el cliente inicia una conexión TLS con el servidor, el consumo de recursos por cada parte es asimétrico, soportando el servidor una mayor carga de trabajo.
-		\item[-] \textbf{\emph{Outdated TLS protocol version 1.0 supported}}.
-		\item[-] \textbf{\emph{Referrer policy not defined}}.
-		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}.
+		\item[-] \textbf{\emph{Potential DoS on TLS Client Renegotiation}}. Esta vulnerabilidad (\href{https://nvd.nist.gov/vuln/detail/CVE-2011-1473}{CVE-2011-1473}) está basada en la asimetría de trabajo que tiene lugar cuando el cliente inicia una renegociación de los parámetros criptográficos de una conexión TLS con el servidor, soportando este la mayor carga de trabajo. Así, un cliente malicioso podría iniciar una conexión TLS y seguidamente requerir el procedimiento de renegociación repetidas veces, en busca de colmar los recursos del servidor.
+		
+		La renegociación para acordar nuevos parámetros de cifrado se desarrolla dentro de una única conexión TCP. Esto es clave, ya que otros ataques DoS relacionados con TLS se basan en inundar al servidor con nuevas conexiones TCP, contra lo cual muchos cortafuegos implementan algún tipo de control del ritmo de peticiones de nuevas conexiones TCP. Pero esta vulnerabilidad explota que la renegociación tiene lugar dentro de una única conexión TCP, evitando así este tipo de controles.
+		
+		Para controlar esta amenaza en la aplicación web desarrollada sería necesario implementar una restricción sobre el ratio de peticiones de renegociación iniciadas por el cliente, o simplemente deshabilitar esta capacidad. Se ha optado por la segunda opción, dada la sencillez de su implementación y el bajo o nulo impacto en la experiencia de usuario. Así, para deshabilitar esta opción, Java 8 introdujo una nueva variable de la JVM, de forma que únicamente es necesario invocar la aplicación con la opción detallada en el listado \ref{list:tls_renegotiation}.
+		\\
+		
+		\begin{lstlisting}[caption=Deshabilitado del inicio por parte del cliente de la renegociación TLS,label=list:tls_renegotiation]
+		-Djdk.tls.rejectClientInitiatedRenegotiation=true
+		\end{lstlisting}
+		
+		\item[-] \textbf{\emph{Outdated TLS protocol version 1.0 supported}}. Como se explica en la sección \ref{sec:https}, Heroku ofrece conexiones TLS, por defecto, a través de su funcionalidad \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}}. La vulnerabilidad descrita en este apartado se produce por el hecho de que ACM no fuerza el uso de TLS v1.2+, es decir, no deshabilita el uso de versiones inseguras de TLS.
+		
+		Tal como se explica en su \href{https://devcenter.heroku.com/articles/understanding-ssl-on-heroku#when-to-use-the-ssl-endpoint}{documentación}, para deshabilitar el soporte a las versiones inseguras, TLS v1.0 y TLS v1.1, sería necesario sustituir ACM por \href{https://devcenter.heroku.com/articles/ssl-endpoint}{SSL Endpoint}, el cual es un servicio con un coste de 20 dólares mensuales.
+		
+		Teniendo en cuenta el coste indicado, y la reciente (8 Jul 2020) notificación recibida desde Heroku, mostrada a seguir, se ha optado por continuar usando ACM:
+		
+		\begin{displayquote}
+			Dear Heroku Customer,
+			\\
+			
+			At Salesforce, our top priority is providing you with a trusted Heroku platform, and today we begin our migration off of older, less secure TLS versions with a plan to completely block TLS v1.0/v1.1 next year after July 31, 2021. [...]
+			\\
+			
+			Heroku currently supports TLS v1.0/v1.1, as well as the latest, more secure TLS v1.2+ protocol on all apps. [...]
+			\\
+			
+			Today, Heroku begins implementing these recommendations to transition all apps to TLS v1.2+, so that we can End of Life TLS v1.0/v1.1 next year. [...]
+			\\
+			
+			Beginning on June 1, 2021, we will begin migration all apps to the new cipher suites and block TLS v1.0/v1.1 completing this migration by July 31, 2021. 
+			\\
+			
+			After July 31, 2021, clients that access Heroku apps using TLS v1.0/v1.0 will be blocked. [...]
+			\\
+			
+			Sincerely, Heroku.
+		\end{displayquote}
+		
+		\item[-] \textbf{\emph{Referrer policy not defined}}. Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Este encabezado permite a los servidores identificar desde dónde los visitan, y usar así esos datos para análisis, registro o almacenamiento en caché, por ejemplo.
+		
+		Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}. Este encabezado puede tener un valor de entre un grupo de ocho opciones, estableciendo cada uno de ellas una \emph{política de Referer}.
+		
+		La vulnerabilidad comentada en este punto se debe a que no se había especificado qué política de \emph{Referer} emplear, con el consecuente riesgo de enviar información sensible en dicho encabezado.
+		
+		Por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
+		
+		Para mitigar este riesgo es necesario, por tanto, especificar una política adecuada de \emph{Referer}, es decir, añadir un encabezado \emph{Referrer-Policy} con un valor apropiado.
+		
+		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}. Esta vulnerabilidad se debe al uso de la versión 3.4.1 de la librería jQuery, sobre la cual se reporta ser insegura. El problema se resuelve actualizando a su versión segura, la 3.5.1.
 	
 	\end{itemize}
 	
