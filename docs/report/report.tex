@@ -1324,7 +1324,7 @@
        	\end{figure}
        	
        	\item[-] \href{https://elements.heroku.com/addons/probely}{Probely}. Este es un servicio de detección de vulnerabilidades de seguridad. En su versión pro, a la cual se ha tenido acceso gratuito durante dos semanas, permite realizar multitud de pruebas a la aplicación web, generando un informe de forma automática con los problemas encontrados y sus posibles soluciones. Se evaluó la aplicación web desarrollada con dos test diferentes: un análisis en profundidad estándar de Probely y un análisis OWASP top 10. Los resultados son comentados en la sección \ref{sec:vulnerabilities}.
-       	\item[-] \href{https://elements.heroku.com/addons/snyk}{Snyk}. Este add-on revisa las dependencias del proyecto en busca de vulnerabilidades de seguridad.
+       	\item[-] \href{https://elements.heroku.com/addons/snyk}{Snyk}. Este add-on revisa las dependencias del proyecto en busca de vulnerabilidades de seguridad conocidas. En su versión gratuita permite realizar hasta 200 test al mes, pero no emite informes es formato pdf. Los resultados son comentados en la sección \ref{sec:vulnerabilities}.
     \end{itemize}
 
 	\subsection{firstmarket.tech}
@@ -1352,17 +1352,34 @@
 			\item[-] Autenticidad. Aún teniendo garantizado que nadie podrá entender los datos enviados, y que nadie los podrá alterar sin notarse, persiste la duda de si se está comunicando con el interlocutor pretendido. Esto es, cuando alguien accede a www.firstmarket.tech debe tener la certeza de que efectivamente está intercambiando información con FirstMarket (hipotética persona jurídica). Para esta labor TLS hace uso de los certificados digitales, que un tercer agente \emph{de confianza} emite garantizando que la web de FirstMarket es www.firstmarket.tech. Este agente es el conocido en la industria como \emph{Certificate Authority} (CA). Pero, ¿quién establece la autoridad de este CA, es decir, quién asegura que es \emph{de confianza}? Otro CA, de mayor autoridad, y así sucesivamente. Esto crea una cadena de confianza, finita, englobada dentro de la \emph{Public Key Infrastructure} (PKI), la tecnología fundamental de Internet para construir la confianza acerca de la autenticidad de los agentes en la red.
 		\end{itemize}
 	
-	La aplicación web desarrollada hace uso de HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}} (ACM). Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
+	La aplicación web desarrollada puede usar HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}} (ACM). Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
+	
+	Para finalizar, resaltar que www.firstmarket.tech impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra en el listado \ref{list:https}, donde se detalla el fragmento del método \emph{configure} que especifica este comportamiento.
+	\\
+	
+	\begin{lstlisting}[caption=Configuración de Spring Security para imponer el uso de HTTPS,label=list:https]
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+			//...
+			.and()
+			.requiresChannel()
+			.antMatchers("/**")
+			.requiresSecure()
+			//...
+		;
+	}
+	\end{lstlisting}
 	
 	\subsection{Spring Security} \label{sec:springsec}
 	\subparagraph{Cross-Site Request Forgery}
 	\subsection{Brute-Force Authentication}
 	\subsection{Stripe Radar} \label{sec:striperadar}
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
-	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con Probely. En total fueron detectadas 5 vulnerabilidades, clasificándose una de ellas como de alto riesgo:
+	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con la ayuda de \href{https://probely.com/}{Probely} y \href{https://snyk.io/}{Snyk}. La primera herramienta detectó 5 vulnerabilidades, mientras que la segunda 13. Del total, 14 responden a vulnerabilidades conocidas en librerías utilizadas por la aplicación web, por lo que su resolución se basa en actualizar las versiones de dichas dependencias. A continuación se pasa a comentar los problemas encontrados, haciendo especial énfasis en las 4 vulnerabilidades propias de la aplicación web desarrollada: 
 	
 	\begin{itemize}
-		\item[-] \textbf{\emph{Reflected cross-site scripting}}. Esta vulnerabilidad, considerada de \textbf{alto riesgo}, fue encontrada durante el test OWASP top 10.
+		\item[-] \textbf{\emph{Reflected cross-site scripting}}. Esta vulnerabilidad, considerada de \textbf{alto riesgo}, fue encontrada durante el test OWASP top 10 realizado con Probely.
 		
 		Este riesgo se encuentra bastante extendido por Internet y ocurre cuando el servidor de la aplicación toma un input del cliente y lo devuelve nuevamente sin validar o codificar adecuadamente para ser mostrado por pantalla. El adjetivo \emph{reflected} proviene del código malicioso que se envía al servidor y se refleja en el navegador de la víctima en el código fuente de la página.
 		
@@ -1416,7 +1433,7 @@
 		-Djdk.tls.rejectClientInitiatedRenegotiation=true
 		\end{lstlisting}
 		
-		\item[-] \textbf{\emph{Outdated TLS protocol version 1.0 supported}}. Como se explica en la sección \ref{sec:https}, Heroku ofrece conexiones TLS, por defecto, a través de su funcionalidad \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}}. La vulnerabilidad descrita en este apartado se produce por el hecho de que ACM no fuerza el uso de TLS v1.2+, es decir, no deshabilita el uso de versiones inseguras de TLS.
+		\item[-] \textbf{\emph{Outdated TLS protocol version 1.0 supported}}. Como se explica en la sección \ref{sec:https}, Heroku ofrece conexiones seguras con TLS, por defecto, a través de su funcionalidad \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}}. La vulnerabilidad descrita en este apartado se produce por el hecho de que ACM no fuerza el uso de TLS v1.2+, es decir, no deshabilita el uso de versiones obsoletas de TLS.
 		
 		Tal como se explica en su \href{https://devcenter.heroku.com/articles/understanding-ssl-on-heroku#when-to-use-the-ssl-endpoint}{documentación}, para deshabilitar el soporte a las versiones inseguras, TLS v1.0 y TLS v1.1, sería necesario sustituir ACM por \href{https://devcenter.heroku.com/articles/ssl-endpoint}{SSL Endpoint}, el cual es un servicio con un coste de 20 dólares mensuales.
 		
@@ -1469,7 +1486,27 @@
 		}
 		\end{lstlisting}
 		
-		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}. Esta vulnerabilidad se debe al uso de la versión 3.4.1 de la librería jQuery, sobre la cual se reporta ser insegura. El problema se resuelve actualizando a su versión segura, la 3.5.1.
+		\item[-] \textbf{\emph{Vulnerabilidades en librerías de terceros}}. Las restantes 14 vulnerabilidades se han solucionado por medio de actualizaciones. Por la propia naturaleza de la herramienta, todas los problemas detectados por Snyk entran dentro de este epígrafe, mostrándose en la figura \ref{fig:snyk} dos de las vulnerabilidades más graves que ha detectado. Las actualizaciones realizadas han sido las siguientes:
+		
+		\begin{itemize}
+			\item[1.] org.springframework.boot:spring-boot $\rightarrow$ 2.3.1.RELEASE
+			\item[2.] org.springframework:spring-web $\rightarrow$ 5.2.4.RELEASE
+			\item[3.] org.springframework:spring-webmvc $\rightarrow$ 5.2.4.RELEASE
+			\item[4.] org.hibernate:hibernate-core $\rightarrow$ 5.4.18.Final
+			\item[5.] org.springframework.security:spring-security-core $\rightarrow$ 5.3.2.RELEASE
+			\item[6.] org.apache.tomcat.embed:tomcat-embed-core $\rightarrow$ 9.0.37
+			\item[7.] org.webjars:jquery $\rightarrow$ 3.5.1
+		\end{itemize}
+		
+		\begin{figure}[hbt!]
+			\centering
+			\includegraphics[width=\textwidth,keepaspectratio]{snyk}
+			\caption{Ejemplo de vulnerabilidades encontradas por Snyk}
+			\label{fig:snyk}
+		\end{figure}
+		
+		Un aspecto que debe resaltarse es que las actualizaciones de la 2 a la 6, incluidas ellas, han tenido que establecerse sobrescribiendo la configuración que por defecto ofrece Spring Boot a través del fichero \emph{spring-boot-starter-parent}, del cual hereda el \emph{pom.xml} de la aplicación web desarrollada. Esto es importante porque se está saliendo del terreno seguro que esta configuración por defecto suministra, en el sentido de que desde Spring se ha testado que las versiones establecidas por defecto funcionan sin problemas de compatibilidades entre sí.
+		
 	
 	\end{itemize}
 	
@@ -1495,6 +1532,7 @@
     %STRIPE -- https://stripe.com/docs/radar/checklist
     %Using Customer objects when creating payments allows Stripe to track the payment patterns for each customer over time. This significantly increases our ability to identify irregularities in purchasing behavior. To do this, you should:
     
+    %pentesting con https://www.zaproxy.org/
     
 
 
