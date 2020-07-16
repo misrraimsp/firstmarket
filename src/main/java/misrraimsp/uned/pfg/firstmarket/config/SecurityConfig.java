@@ -47,6 +47,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home", "/login", "/newUser")
                 .access("permitAll")
 
+                //.and()
+                //.requiresChannel()
+                //.antMatchers("/**")
+                //.requiresSecure()
+
                 .and()
                 .formLogin()
                 .loginPage("/login")

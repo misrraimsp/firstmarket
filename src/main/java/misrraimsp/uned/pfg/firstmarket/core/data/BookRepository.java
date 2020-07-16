@@ -34,7 +34,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
             nativeQuery = true,
             value = "SELECT * FROM book LIMIT :numOfBooks"
     )
-    List<Book> findRandom(int numOfBooks);
+    List<Book> findRandom(@Param("numOfBooks") int numOfBooks);
 
     @Override
     Set<Book> findAll();
@@ -43,7 +43,7 @@ public interface BookRepository extends CrudRepository<Book, Long> {
             nativeQuery = true,
             value = "SELECT * FROM book ORDER BY created_date DESC LIMIT :maxNumOfNewBooks"
     )
-    Set<Book> findTopNewBooks(int maxNumOfNewBooks);
+    Set<Book> findTopNewBooks(@Param("maxNumOfNewBooks") int maxNumOfNewBooks);
 
     @Query("SELECT b FROM Book b WHERE b.id IN :ids")
     Page<Book> findByIds(@Param("ids") Set<Long> ids, Pageable pageable);

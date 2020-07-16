@@ -1342,15 +1342,27 @@
 	\section{Seguridad}
 	Esta sección está dedicada a las cuestiones de seguridad relacionadas con FirstMarket.
 	\subsection{HTTPS} \label{sec:https}
+	Como se ha comentado, una de los principales retos que afronta el comercio electrónico es la generación de confianza. Los usuarios demandan seguridad a la hora de realizar sus compras por la red. En este sentido, el desarrollo de protocolos seguros de comunicación ha jugado un papel protagonista en el rápido incremento que el comercio \emph{online} ha vivido en las últimas décadas.
+	
+	HTTPS, la extensión segura de HTTP, es el protocolo de comunicación segura por excelencia en la actualidad. Los datos enviados con HTTPS son protegidos mediante el protocolo Transport Layer Security (TLS), el cual brinda tres tipos de protección:
+	
+		\begin{itemize}
+			\item[-] Privacidad. Los datos son encriptados antes de moverse por la red, de forma que nadie ajeno a la conversación pueda comprender su semántica.
+			\item[-] Integridad. De una manera similar a como Git detecta los cambios en los documentos que gestiona, TLS calcula determinados parámetros criptográficos que hacen extremadamente difícil que los datos sean alterados en su camino por la red, ya sea accidental o intencionadamente, sin que el protocolo lo detecte.
+			\item[-] Autenticidad. Aún teniendo garantizado que nadie podrá entender los datos enviados, y que nadie los podrá alterar sin notarse, persiste la duda de si se está comunicando con el interlocutor pretendido. Esto es, cuando alguien accede a www.firstmarket.tech debe tener la certeza de que efectivamente está intercambiando información con FirstMarket (hipotética persona jurídica). Para esta labor TLS hace uso de los certificados digitales, que un tercer agente \emph{de confianza} emite garantizando que la web de FirstMarket es www.firstmarket.tech. Este agente es el conocido en la industria como \emph{Certificate Authority} (CA). Pero, ¿quién establece la autoridad de este CA, es decir, quién asegura que es \emph{de confianza}? Otro CA, de mayor autoridad, y así sucesivamente. Esto crea una cadena de confianza, finita, englobada dentro de la \emph{Public Key Infrastructure} (PKI), la tecnología fundamental de Internet para construir la confianza acerca de la autenticidad de los agentes en la red.
+		\end{itemize}
+	
+	La aplicación web desarrollada hace uso de HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}} (ACM). Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
+	
 	\subsection{Spring Security} \label{sec:springsec}
 	\subparagraph{Cross-Site Request Forgery}
 	\subsection{Brute-Force Authentication}
 	\subsection{Stripe Radar} \label{sec:striperadar}
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
-	Como se comentó en la sección \ref{sec:addons}, la aplicación web ha sido testada con Probely. En total fueron detectadas 5 vulnerabilidades, clasificándose una de ellas como de alto riesgo:
+	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con Probely. En total fueron detectadas 5 vulnerabilidades, clasificándose una de ellas como de alto riesgo:
 	
 	\begin{itemize}
-		\item[-] \textbf{\emph{Reflected cross-site scripting}}. Esta vulnerabilidad, considerada de alto riesgo, fue encontrada durante el test OWASP top 10.
+		\item[-] \textbf{\emph{Reflected cross-site scripting}}. Esta vulnerabilidad, considerada de \textbf{alto riesgo}, fue encontrada durante el test OWASP top 10.
 		
 		Este riesgo se encuentra bastante extendido por Internet y ocurre cuando el servidor de la aplicación toma un input del cliente y lo devuelve nuevamente sin validar o codificar adecuadamente para ser mostrado por pantalla. El adjetivo \emph{reflected} proviene del código malicioso que se envía al servidor y se refleja en el navegador de la víctima en el código fuente de la página.
 		
@@ -1440,7 +1452,22 @@
 		
 		Por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
 		
-		Para mitigar este riesgo es necesario, por tanto, especificar una política adecuada de \emph{Referer}, es decir, añadir un encabezado \emph{Referrer-Policy} con un valor apropiado.
+		Para mitigar este riesgo es necesario, por tanto, especificar una política adecuada de \emph{Referer}, es decir, añadir un encabezado \emph{Referrer-Policy} con un valor apropiado. En este sentido, la política escogida para FirstMarket es \emph{strict-origin}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de www.firstmarket.tech/login?error=true sólo sería enviado www.firstmarket.tech.
+		
+		En el listado \ref{list:referrer_policy} se detalla el fragmento del método \emph{configure}, de la clase \emph{SecurityConfig}, donde se configura el uso de esta política.
+		\\
+		
+		\begin{lstlisting}[language=Java,caption=Configuración de \emph{Referrer-Policy} como \emph{strict-origin},label=list:referrer_policy]
+		@Override
+		protected void configure(HttpSecurity httpSecurity) throws Exception {
+			httpSecurity
+				//...
+				.headers()
+				.referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
+				//...
+			;
+		}
+		\end{lstlisting}
 		
 		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}. Esta vulnerabilidad se debe al uso de la versión 3.4.1 de la librería jQuery, sobre la cual se reporta ser insegura. El problema se resuelve actualizando a su versión segura, la 3.5.1.
 	
