@@ -56,6 +56,12 @@
                 <version>5.2.4.RELEASE</version>
             </dependency>
 
+            <!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-core -->
+            <dependency>
+                <groupId>org.apache.tomcat.embed</groupId>
+                <artifactId>tomcat-embed-core</artifactId>
+                <version>9.0.37</version>
+            </dependency>
 
         </dependencies>
 
