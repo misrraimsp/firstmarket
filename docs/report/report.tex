@@ -1432,8 +1432,17 @@
 			Sincerely, Heroku.
 		\end{displayquote}
 		
-		\item[-] \textbf{\emph{Referrer policy not defined}}.
-		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}.
+		\item[-] \textbf{\emph{Referrer policy not defined}}. Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Este encabezado permite a los servidores identificar desde dónde los visitan, y usar así esos datos para análisis, registro o almacenamiento en caché, por ejemplo.
+		
+		Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}. Este encabezado puede tener un valor de entre un grupo de ocho opciones, estableciendo cada uno de ellas una \emph{política de Referer}.
+		
+		La vulnerabilidad comentada en este punto se debe a que no se había especificado qué política de \emph{Referer} emplear, con el consecuente riesgo de enviar información sensible en dicho encabezado.
+		
+		Por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
+		
+		Para mitigar este riesgo es necesario, por tanto, especificar una política adecuada de \emph{Referer}, es decir, añadir un encabezado \emph{Referrer-Policy} con un valor apropiado.
+		
+		\item[-] \textbf{\emph{JQuery library with known vulnerabilities}}. Esta vulnerabilidad se debe al uso de la versión 3.4.1 de la librería jQuery, sobre la cual se reporta ser insegura. El problema se resuelve actualizando a su versión segura, la 3.5.1.
 	
 	\end{itemize}
 	
