@@ -26,6 +26,19 @@
         <java.version>11</java.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+            <dependency>
+                <groupId>org.hibernate</groupId>
+                <artifactId>hibernate-core</artifactId>
+                <version>5.4.18.Final</version>
+            </dependency>
+
+        </dependencies>
+
+    </dependencyManagement>
+
     <dependencies>
 
         <dependency>
