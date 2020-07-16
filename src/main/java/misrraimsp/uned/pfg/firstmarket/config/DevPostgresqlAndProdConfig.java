@@ -15,9 +15,9 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
-@Profile("dev-postgresql") //comment @Lob on image.data
+@Profile({"dev-postgresql", "prod"}) //comment @Lob on image.data
 @Configuration
-public class DevPostgresqlConfig {
+public class DevPostgresqlAndProdConfig {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
@@ -39,7 +39,7 @@ public class DevPostgresqlConfig {
                                         BookRepository bookRepository) {
 
         return args -> {
-            LOGGER.debug("CommandLineRunner on dev-postgresql: started");
+            LOGGER.debug("CommandLineRunner (postgresql): started");
 
             //detect database reset
             if (imageServer.getDefaultImage().getSize() == 0) {
@@ -75,7 +75,7 @@ public class DevPostgresqlConfig {
                 imageServer.setImageData(27L, Paths.get(imgAddress + "sombraviento.jpg"));
                 imageServer.setImageData(28L, Paths.get(imgAddress + "spring.png"));
                 imageServer.setImageData(29L, Paths.get(imgAddress + "walden.jpg"));
-                LOGGER.debug("CommandLineRunner on dev-postgresql: images loaded");
+                LOGGER.debug("CommandLineRunner (postgresql): images loaded");
 
                 //load book titles
                 Map<Long,String> titles = new HashMap<>();
@@ -116,7 +116,7 @@ public class DevPostgresqlConfig {
                     book.setDescription(description);
                     bookRepository.save(book);
                 });
-                LOGGER.debug("CommandLineRunner on dev-postgresql: book titles and description loaded");
+                LOGGER.debug("CommandLineRunner (postgresql): book titles and description loaded");
 
                 //set payments amount
                 orderServer.findAll().forEach(order -> {
@@ -129,19 +129,19 @@ public class DevPostgresqlConfig {
                     );
                     orderServer.persistPayment(payment);
                 });
-                LOGGER.debug("CommandLineRunner on dev-postgresql: payments amount set");
+                LOGGER.debug("CommandLineRunner (postgresql): payments amount set");
             }
 
             //load categories
             catServer.loadCategories();
-            LOGGER.debug("CommandLineRunner on dev-postgresql: categories loaded");
+            LOGGER.debug("CommandLineRunner (postgresql): categories loaded");
 
             //load book usage
             bookServer.incrementCartBookRegistry(userServer.getAllCartBookIds());
-            LOGGER.debug("CommandLineRunner on dev-postgresql: CartBookRegistry loaded");
+            LOGGER.debug("CommandLineRunner (postgresql): CartBookRegistry loaded");
             LOGGER.trace("CartBookRegistry: {}", bookServer.getCartBookRegistry());
 
-            LOGGER.debug("CommandLineRunner on dev-postgresql: ended");
+            LOGGER.debug("CommandLineRunner (postgresql): ended");
         };
     }
 }
