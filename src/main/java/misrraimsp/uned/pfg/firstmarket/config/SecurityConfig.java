@@ -89,15 +89,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self'" +
+                                .policyDirectives("default-src 'self' https://*.stripe.com" +
                                         "; " +
                                         "script-src 'self' " +
-                                        "https://*.stripe.com " +
                                         "https://*.fontawesome.com " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://cdnjs.cloudflare.com " +
-                                        "https://*.googleapis.com" +
+                                        "https://ajax.googleapis.com" +
                                         "; " +
+                                        "style-src-attr 'self'" +
+                                        ";" +
                                         "style-src 'self' " +
                                         "https://cdn.jsdelivr.net " +
                                         "https://maxcdn.bootstrapcdn.com " +
@@ -105,7 +106,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "https://*.fontawesome.com" +
                                         "; " +
                                         "font-src 'self' " +
-                                        "https://fonts.gstatic.com"
+                                        "https://fonts.gstatic.com " +
+                                        "https://*.fontawesome.com"
                                 )
                         )
                         .referrerPolicy(referrer -> referrer
