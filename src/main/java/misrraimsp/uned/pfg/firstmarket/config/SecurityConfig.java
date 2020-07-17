@@ -106,7 +106,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "; " +
                                         "font-src 'self' " +
                                         "https://fonts.gstatic.com " +
-                                        "https://*.fontawesome.com"
+                                        "https://*.fontawesome.com" +
+                                        "; " +
+                                        "img-src 'self' data:"
                                 )
                         )
                         .referrerPolicy(referrer -> referrer
