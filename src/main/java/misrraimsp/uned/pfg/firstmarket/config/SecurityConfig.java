@@ -71,11 +71,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
 
+                /*
+                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+        <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+                 */
+
+                /*
+                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap">
+        <link rel="stylesheet" th:href="@{/css/fmstyle.css}" type="text/css"/>
+                 */
 
                 .and()
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self' https://*.stripe.com")
+                                .policyDirectives("default-src 'self'" +
+                                        "; " +
+                                        "script-src-elem 'self' " +
+                                        "https://js.stripe.com " +
+                                        "https://kit.fontawesome.com " +
+                                        "https://maxcdn.bootstrapcdn.com " +
+                                        "https://cdnjs.cloudflare.com " +
+                                        "https://ajax.googleapis.com " +
+                                        "; " +
+                                        "style-src-elem 'self' " +
+                                        "https://cdn.jsdelivr.net " +
+                                        "https://maxcdn.bootstrapcdn.com " +
+                                        "https://fonts.googleapis.com")
                         )
                         .referrerPolicy(referrer -> referrer
                                 .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)
