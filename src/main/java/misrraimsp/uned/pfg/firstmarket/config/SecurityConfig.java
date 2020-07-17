@@ -92,14 +92,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .policyDirectives("default-src 'self' https://*.stripe.com" +
                                         "; " +
                                         "script-src 'self' " +
+                                        "https://*.stripe.com" +
                                         "https://*.fontawesome.com " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://cdnjs.cloudflare.com " +
                                         "https://ajax.googleapis.com" +
-                                        "; " +
-                                        "style-src-attr 'self'" +
                                         ";" +
-                                        "style-src 'self' " +
+                                        "style-src 'self' 'unsafe-inline'" +
                                         "https://cdn.jsdelivr.net " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://fonts.googleapis.com " +
