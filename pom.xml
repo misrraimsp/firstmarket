@@ -106,12 +106,11 @@
             <artifactId>postgresql</artifactId>
         </dependency>
 
-        <!-- only for dev
+        <!-- only for dev -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
         </dependency>
-        -->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
