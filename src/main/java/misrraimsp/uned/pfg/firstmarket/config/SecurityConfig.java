@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -46,10 +47,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home", "/login", "/newUser")
                 .access("permitAll")
 
-                //.and()
-                //.requiresChannel()
-                //.antMatchers("/**")
-                //.requiresSecure()
+                .and()
+                .requiresChannel()
+                .antMatchers("/**")
+                .requiresSecure()
 
                 .and()
                 .formLogin()
@@ -63,18 +64,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .ignoringAntMatchers("/listener") // open for stripe notifications
-                .ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
+                //.ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
 
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
 
-                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+
                 .and()
                 .headers()
-                //.referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
-                .frameOptions()
-                .sameOrigin()
+                .referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
+                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                //.frameOptions()
+                //.sameOrigin()
         ;
     }
 
