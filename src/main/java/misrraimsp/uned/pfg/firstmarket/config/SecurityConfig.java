@@ -98,7 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "https://cdnjs.cloudflare.com " +
                                         "https://ajax.googleapis.com" +
                                         "; " +
-                                        "style-src-elem 'self' " +
+                                        "style-src 'self' " +
                                         "https://cdn.jsdelivr.net " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://fonts.googleapis.com"
