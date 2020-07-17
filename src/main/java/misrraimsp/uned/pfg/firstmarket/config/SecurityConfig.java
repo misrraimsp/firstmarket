@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 
 @Configuration
 @EnableWebSecurity
@@ -47,10 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .access("permitAll")
 
                 // local-dev
-                //.and()
-                //.requiresChannel()
-                //.antMatchers("/**")
-                //.requiresSecure()
+                .and()
+                .requiresChannel()
+                .antMatchers("/**")
+                .requiresSecure()
 
                 .and()
                 .formLogin()
@@ -72,11 +73,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
                 .and()
-                .headers()
+                .headers(headers -> headers
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives("default-src 'self'")
+                        )
+                        .referrerPolicy(referrer -> referrer
+                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)
+                        )
+                )
+
+
+                //.headers()
                 //.referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
                 // Allow pages to be loaded in frames from the same origin; needed for H2-Console
-                .frameOptions()
-                .sameOrigin()
+                //.frameOptions()
+                //.sameOrigin()
         ;
     }
 
