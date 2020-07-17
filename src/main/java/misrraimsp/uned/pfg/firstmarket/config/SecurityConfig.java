@@ -89,19 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self'" +
-                                        "; " +
-                                        "script-src-elem 'self' " +
-                                        "https://js.stripe.com " +
-                                        "https://kit.fontawesome.com " +
-                                        "https://maxcdn.bootstrapcdn.com " +
-                                        "https://cdnjs.cloudflare.com " +
-                                        "https://ajax.googleapis.com " +
-                                        "; " +
-                                        "style-src-elem 'self' " +
-                                        "https://cdn.jsdelivr.net " +
-                                        "https://maxcdn.bootstrapcdn.com " +
-                                        "https://fonts.googleapis.com")
+                                .policyDirectives("default-src 'self'; script-src-elem 'self' https://js.stripe.com https://kit.fontawesome.com https://maxcdn.bootstrapcdn.com https://cdnjs.cloudflare.com https://ajax.googleapis.com; style-src-elem 'self' https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com https://fonts.googleapis.com")
                         )
                         .referrerPolicy(referrer -> referrer
                                 .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)
