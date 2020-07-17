@@ -65,7 +65,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf()
                 .ignoringAntMatchers("/listener") // open for stripe notifications
-                .ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
+                //.ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
 
                 .and()
                 .sessionManagement()
@@ -75,7 +75,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .headers(headers -> headers
                         .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self'")
+                                .policyDirectives("default-src 'self' https://*.stripe.com")
                         )
                         .referrerPolicy(referrer -> referrer
                                 .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)
