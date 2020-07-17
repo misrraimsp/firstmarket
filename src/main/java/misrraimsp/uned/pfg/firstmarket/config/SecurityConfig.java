@@ -93,10 +93,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "; " +
                                         "script-src 'self' " +
                                         "https://*.stripe.com " +
-                                        "https://kit.fontawesome.com " +
+                                        "https://*.fontawesome.com " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://cdnjs.cloudflare.com " +
-                                        "https://ajax.googleapis.com" +
+                                        "https://*.googleapis.com" +
                                         "; " +
                                         "style-src 'self' " +
                                         "https://cdn.jsdelivr.net " +
