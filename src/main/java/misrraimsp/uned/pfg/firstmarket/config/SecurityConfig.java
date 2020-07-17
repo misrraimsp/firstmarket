@@ -101,7 +101,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "style-src 'self' " +
                                         "https://cdn.jsdelivr.net " +
                                         "https://maxcdn.bootstrapcdn.com " +
-                                        "https://fonts.googleapis.com"
+                                        "https://fonts.googleapis.com " +
+                                        "https://*.fontawesome.com" +
+                                        "; " +
+                                        "font-src 'self' " +
+                                        "https://fonts.gstatic.com"
                                 )
                         )
                         .referrerPolicy(referrer -> referrer
