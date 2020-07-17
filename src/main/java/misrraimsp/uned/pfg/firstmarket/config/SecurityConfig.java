@@ -40,54 +40,52 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeRequests()
+
+                // protect role_admin resources
                 .antMatchers("/admin/**")
                 .access("hasRole('ROLE_ADMIN')")
+
+                // protect role_user resources
                 .antMatchers("/user/**")
                 .access("hasRole('ROLE_USER')")
+
+                // publicly open
                 .antMatchers("/", "/home", "/login", "/newUser")
                 .access("permitAll")
 
-                // local-dev
+                // force HTTPS always
                 .and()
                 .requiresChannel()
                 .antMatchers("/**")
                 .requiresSecure()
 
+                // authenticate through login form
                 .and()
                 .formLogin()
                 .loginPage("/login")
+                // failure handler in order to prevent brute-force authentication
                 .failureHandler(customAuthenticationFailureHandler())
 
+                // set logout page
                 .and()
                 .logout()
                 .logoutSuccessUrl("/home")
 
+                // enable csrf protection
                 .and()
                 .csrf()
                 .ignoringAntMatchers("/listener") // open for stripe notifications
-                //.ignoringAntMatchers("/h2-console/**") // Make H2-Console non-secured; for debug purposes
+                // DEV - Make H2-Console non-secured
+                //.ignoringAntMatchers("/h2-console/**")
 
+                // always create new session
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
 
-                /*
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-        <script src="https://kit.fontawesome.com/9902891181.js" crossorigin="anonymous"></script>
-        <script src="https://js.stripe.com/v3/"></script>
-                 */
-
-                /*
-                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pretty-checkbox@3.0/dist/pretty-checkbox.min.css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP&display=swap">
-        <link rel="stylesheet" th:href="@{/css/fmstyle.css}" type="text/css"/>
-                 */
-
                 .and()
                 .headers(headers -> headers
+                        // Content Security Policy
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives("default-src 'self' https://*.stripe.com" +
                                         "; " +
@@ -111,17 +109,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "img-src 'self' data:"
                                 )
                         )
+                        // Referrer Policy
                         .referrerPolicy(referrer -> referrer
-                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.SAME_ORIGIN)
+                                .policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
                         )
                 )
 
-
-                //.headers()
-                //.referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
-                // Allow pages to be loaded in frames from the same origin; needed for H2-Console
-                //.frameOptions()
-                //.sameOrigin()
+                /* DEV - Allow pages to be loaded in frames from the same origin; needed for H2-Console
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
+                 */
         ;
     }
 
