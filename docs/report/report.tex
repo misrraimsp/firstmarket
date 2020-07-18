@@ -1374,11 +1374,60 @@
 	\end{lstlisting}
 	
 	\subsection{Spring Security} \label{sec:springsec}
+	Un enfoque comúnmente empleado, en el ámbito de la seguridad de la información, se basa en considerar los sistemas complejos como un conjunto de capas de abstracción, aplicándose los mecanismos de seguridad apropiados para cada una de ellas.
 	
-	%Spring Security provides comprehensive support for authentication, authorization, and protection against common exploits
+	Si se piensa en la aplicación de comercio electrónico que se ha desarrollado, esta puede modelarse en esencia como un proceso que se ejecuta en el contexto de un sistema operativo, en el seno a su vez de una máquina, la cual se comunica con otras haciendo uso de la infraestructura de Internet. Este modelo simple ya es capaz de hacer contraste entre la aplicación, el sistema operativo, la máquina y la red. Cada una de estas capas implementa sus propias medidas destinadas a proteger la información que maneja.
 	
-	%So this is Spring Security: an application-level security framework built on top of the powerful Spring Framework that deals mainly with the core security concepts of authentication and authorization
+	A nivel de aplicación, los conceptos de autenticación y autorización (o acceso) son nucleares en su ámbito de seguridad. Autenticación hace referencia a la capacidad de la aplicación para identificar al usuario. Es decir, desde el punto de vista de la aplicación, responde a la pregunta ¿quién me está usando? Autorización, por su parte, refleja la capacidad de la aplicación de permitir, o denegar, el acceso a un recurso o funcionalidad de la aplicación a un determinado usuario. Como puede notarse, para que la aplicación pueda \emph{autorizar} a un usuario, debe primero \emph{autenticar} a dicho usuario.
 	
+	Spring Security es la piedra angular de la seguridad a nivel de aplicación del portal de comercio electrónico desarrollado, integrando las funcionalidades de autenticación y autorización encima de las características propias de Spring Framework. Además, como se verá, también ofrece mecanismos de protección frente a multitud de vulnerabilidades comunes a nivel de aplicación.
+	
+	\subsubsection{FilterChain}
+	Como se comenta en la sección \ref{sec:springframework}, las aplicaciones web con Spring basadas en el stack servlet, como es el caso, siguen el patrón \emph{front controller}, en el que el servlet \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet}{\emph{DispatcherServlet}} ejerce de punto de entrada y distribuidor de las peticiones HTTP hacia los \emph{@Controller}/\emph{@RestController} adecuados.
+	
+	El \emph{DispatcherServlet} no integra lógica de autenticación/autorización, por lo que, en ausencia de alternativas, esta debería ser implementada en las clases \emph{@Controller}/\emph{@RestController} en las que delega las peticiones HTTP. Esto, por supuesto, destrozaría el principio de separación de responsabilidades. 
+	
+	Afortunadamente, sí que existe alternativa, los Java \href{https://www.oracle.com/java/technologies/filters.html}{Filters}. Estos componentes interceptan el tráfico entrante y/o saliente de los servlets, permitiendo inyectar la lógica que se desee. Así, la autenticación/autorización puede ser implementada en estos \emph{filters}, de forma que las labores de seguridad sean llevadas a cabo antes de que las peticiones HTTP alcancen el \emph{DispatcherServlet}.
+	
+	Además, los \emph{filters} poseen la capacidad de concatenarse entre sí, creando un \emph{filter chain} o cadena de filtros, como se muestra en la figura \ref{fig:filterchain}, tomada de la documentación oficial de Spring Security. Esto permite, otra vez, separar responsabilidades, e insertar en cada filtro la lógica de una funcionalidad concreta.
+	
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=0.4\textwidth,keepaspectratio]{filterchain}
+		\caption{Encadenamiento de filtros}
+		\label{fig:filterchain}
+	\end{figure}
+	
+	Por ejemplo, una petición HTTP podría primero alcanzar un filtro destinado a recabar las credenciales de autenticación del usuario (por ejemplo un formulario de \emph{login}). Después, con dichas credenciales, atravesar el filtro que las comprueba, y autenticar así o no al usuario. Seguidamente podría estar el filtro que decide si el usuario recién autenticado posee el permiso necesario para acceder al recurso o funcionalidad pedida. Por último, en caso necesario, la petición HTTP llegaría al \emph{DispatcherServlet}.
+	
+	En el listado \ref{list:filter_chain} se aprecia el mensaje de registro emitido durante el arranque de la aplicación en el que se detalla la cadena de filtros que Spring Security proporciona. Pues bien, en esencia, \textbf{Spring Security \emph{es} esta cadena de filtros concatenados antes del \emph{DispatcherServlet}}.
+	\\
+	
+	\begin{lstlisting}[caption=Cadena de filtros creada por Spring Security, label=list:filter_chain]
+	2020-07-18 14:42:11.159  INFO 6752 --- [main] o.s.s.web.DefaultSecurityFilterChain: 
+	Creating filter chain: 
+	any request, [
+	o.s.s.w.access.channel.ChannelProcessingFilter@1805383, 
+	o.s.s.w.context.request.async.WebAsyncManagerIntegrationFilter@786a3477, 
+	o.s.s.w.context.SecurityContextPersistenceFilter@11e834ad, 
+	o.s.s.w.header.HeaderWriterFilter@1187dc82, 
+	o.s.s.w.csrf.CsrfFilter@505d2bac, 
+	o.s.s.w.authentication.logout.LogoutFilter@6f07d414, 
+	o.s.s.w.authentication.UsernamePasswordAuthenticationFilter@64fdcf99, 
+	o.s.s.w.savedrequest.RequestCacheAwareFilter@25d911a, 
+	o.s.s.w.servletapi.SecurityContextHolderAwareRequestFilter@76828577, 
+	o.s.s.w.authentication.AnonymousAuthenticationFilter@286866cb, 
+	o.s.s.w.session.SessionManagementFilter@18e4551, 
+	o.s.s.w.access.ExceptionTranslationFilter@356b6b5d, 
+	o.s.s.w.access.intercept.FilterSecurityInterceptor@7b7068d8
+	]
+	\end{lstlisting}
+	
+	\subsubsection{Autenticación y Autorización}
+	
+	\subsubsection{Protección ante Vulnerabilidades}
+	
+	\subparagraph{Cross-Site Request Forgery}
 	%https://en.wikipedia.org/wiki/Bcrypt
 	
 	
@@ -1386,7 +1435,7 @@
 	
 	%CSP is not intended as a first line of defense against content injection vulnerabilities. Instead, CSP is best used as defense-in-depth. It reduces the harm that a malicious injection can cause, but it is not a replacement for careful input validation and output encoding.
 	
-	\subparagraph{Cross-Site Request Forgery}
+	
 	\subsection{Brute-Force Authentication}
 	\subsection{Stripe Radar} \label{sec:striperadar}
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
