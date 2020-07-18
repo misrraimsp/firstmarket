@@ -1400,27 +1400,120 @@
 	
 	Por ejemplo, una petición HTTP podría primero alcanzar un filtro destinado a recabar las credenciales de autenticación del usuario (por ejemplo un formulario de \emph{login}). Después, con dichas credenciales, atravesar el filtro que las comprueba, y autenticar así o no al usuario. Seguidamente podría estar el filtro que decide si el usuario recién autenticado posee el permiso necesario para acceder al recurso o funcionalidad pedida. Por último, en caso necesario, la petición HTTP llegaría al \emph{DispatcherServlet}.
 	
-	En el listado \ref{list:filter_chain} se aprecia el mensaje de registro emitido durante el arranque de la aplicación en el que se detalla la cadena de filtros que Spring Security proporciona. Pues bien, en esencia, \textbf{Spring Security \emph{es} esta cadena de filtros concatenados antes del \emph{DispatcherServlet}}.
+	En el listado \ref{list:filter_chain} se aprecia el mensaje de registro emitido durante el arranque de la aplicación en el que se detalla la cadena de filtros que Spring Security proporciona. Pues bien, en esencia, \textbf{Spring Security \emph{es} esta concatenación de filtros} antes del \emph{DispatcherServlet}. 
 	\\
 	
 	\begin{lstlisting}[caption=Cadena de filtros creada por Spring Security, label=list:filter_chain]
-	2020-07-18 14:42:11.159  INFO 6752 --- [main] o.s.s.web.DefaultSecurityFilterChain: 
+	2020-07-18 17:20:19.718  INFO 4 --- [main] o.s.s.web.DefaultSecurityFilterChain: 
 	Creating filter chain: 
 	any request, [
-	o.s.s.w.access.channel.ChannelProcessingFilter@1805383, 
-	o.s.s.w.context.request.async.WebAsyncManagerIntegrationFilter@786a3477, 
-	o.s.s.w.context.SecurityContextPersistenceFilter@11e834ad, 
-	o.s.s.w.header.HeaderWriterFilter@1187dc82, 
-	o.s.s.w.csrf.CsrfFilter@505d2bac, 
-	o.s.s.w.authentication.logout.LogoutFilter@6f07d414, 
-	o.s.s.w.authentication.UsernamePasswordAuthenticationFilter@64fdcf99, 
-	o.s.s.w.savedrequest.RequestCacheAwareFilter@25d911a, 
-	o.s.s.w.servletapi.SecurityContextHolderAwareRequestFilter@76828577, 
-	o.s.s.w.authentication.AnonymousAuthenticationFilter@286866cb, 
-	o.s.s.w.session.SessionManagementFilter@18e4551, 
-	o.s.s.w.access.ExceptionTranslationFilter@356b6b5d, 
-	o.s.s.w.access.intercept.FilterSecurityInterceptor@7b7068d8
+	o.s.s.w.access.channel.ChannelProcessingFilter@5177e388, 
+	o.s.s.w.context.request.async.WebAsyncManagerIntegrationFilter@69d6a7cd, 
+	o.s.s.w.context.SecurityContextPersistenceFilter@73017a80, 
+	o.s.s.w.header.HeaderWriterFilter@7c3ebc6b, 
+	o.s.s.w.csrf.CsrfFilter@5bca7664, 
+	o.s.s.w.authentication.logout.LogoutFilter@de18f63, 
+	o.s.s.w.authentication.UsernamePasswordAuthenticationFilter@37b72ea, 
+	o.s.s.w.savedrequest.RequestCacheAwareFilter@4a5905d9, 
+	o.s.s.w.servletapi.SecurityContextHolderAwareRequestFilter@34a0ef00, 
+	o.s.s.w.authentication.AnonymousAuthenticationFilter@3162743f, 
+	o.s.s.w.session.SessionManagementFilter@6a9950f1, 
+	o.s.s.w.access.ExceptionTranslationFilter@7f829c76, 
+	o.s.s.w.access.intercept.FilterSecurityInterceptor@1dc2de84
 	]
+	\end{lstlisting}
+	
+	En estos filtros Spring Security implementa la autenticación/autorización y la protección frente a determinados tipos de ataques. Lo que resta es configurarlos para satisfacer las necesidades propias de cada aplicación. Esta configuración se lleva a cabo extendiendo la clase de Spring Security \emph{WebSecurityConfigurerAdapter} y sobreescribiendo su método \emph{configure(HttpSecurity)} (ver listado \ref{list:springsec_config}), tarea que en la aplicación web desarrollada realiza la clase \emph{SecurityConfig}.
+	\\
+	
+	\begin{lstlisting}[caption=Configuración de Spring Security en FirstMarket, label=list:springsec_config]
+	@Override
+	protected void configure(HttpSecurity httpSecurity) throws Exception {
+		httpSecurity
+		.authorizeRequests()
+		
+		// protect role_admin resources
+		.antMatchers("/admin/**")
+		.access("hasRole('ROLE_ADMIN')")
+		
+		// protect role_user resources
+		.antMatchers("/user/**")
+		.access("hasRole('ROLE_USER')")
+		
+		// publicly open
+		.antMatchers("/", "/home", "/login", "/newUser")
+		.access("permitAll")
+		
+		// force HTTPS always
+		.and()
+		.requiresChannel()
+		.antMatchers("/**")
+		.requiresSecure()
+		
+		// authenticate through login form
+		.and()
+		.formLogin()
+		.loginPage("/login")
+		// failure handler in order to prevent brute-force authentication
+		.failureHandler(customAuthenticationFailureHandler())
+		
+		// set logout page
+		.and()
+		.logout()
+		.logoutSuccessUrl("/home")
+		
+		// enable csrf protection
+		.and()
+		.csrf()
+		.ignoringAntMatchers("/listener") // open for stripe notifications
+		// DEV - Make H2-Console non-secured
+		//.ignoringAntMatchers("/h2-console/**")
+		
+		// always create new session
+		.and()
+		.sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+		
+		.and()
+		.headers(headers -> headers
+		// Content Security Policy
+		.contentSecurityPolicy(csp -> csp
+		.policyDirectives("default-src 'self' https://*.stripe.com" +
+		"; " +
+		"script-src 'self' 'unsafe-inline' " +
+		"https://*.stripe.com " +
+		"https://*.fontawesome.com " +
+		"https://maxcdn.bootstrapcdn.com " +
+		"https://cdnjs.cloudflare.com " +
+		"https://ajax.googleapis.com" +
+		";" +
+		"style-src 'self' 'unsafe-inline' " +
+		"https://cdn.jsdelivr.net " +
+		"https://maxcdn.bootstrapcdn.com " +
+		"https://fonts.googleapis.com " +
+		"https://*.fontawesome.com" +
+		"; " +
+		"font-src 'self' " +
+		"https://fonts.gstatic.com " +
+		"https://*.fontawesome.com" +
+		"; " +
+		"img-src 'self' data:"
+		)
+		)
+		// Referrer Policy
+		.referrerPolicy(referrer -> referrer
+		.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
+		)
+		)
+		
+		/* DEV - Allow pages to be loaded in frames from the same origin; needed for H2-Console
+		.and()
+		.headers()
+		.frameOptions()
+		.sameOrigin()
+		*/
+		;
+	}
 	\end{lstlisting}
 	
 	\subsubsection{Autenticación y Autorización}

@@ -39,28 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeRequests()
-
-                // protect role_admin resources
-                .antMatchers("/admin/**")
-                .access("hasRole('ROLE_ADMIN')")
-
-                // protect role_user resources
-                .antMatchers("/user/**")
-                .access("hasRole('ROLE_USER')")
-
-                // publicly open
-                .antMatchers("/", "/home", "/login", "/newUser")
-                .access("permitAll")
-
-                // force HTTPS always
-                .and()
-                .requiresChannel()
-                .antMatchers("/**")
-                .requiresSecure()
-
                 // authenticate through login form
-                .and()
                 .formLogin()
                 .loginPage("/login")
                 // failure handler in order to prevent brute-force authentication
@@ -70,6 +49,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutSuccessUrl("/home")
+
+                // authorization
+                .and()
+                .authorizeRequests()
+                    // protect role_admin resources
+                .antMatchers("/admin/**")
+                .access("hasRole('ROLE_ADMIN')")
+                    // protect role_user resources
+                .antMatchers("/user/**")
+                .access("hasRole('ROLE_USER')")
+                    // publicly open
+                .antMatchers("/", "/home", "/login", "/newUser")
+                .access("permitAll")
+
+                // force HTTPS always
+                .and()
+                .requiresChannel()
+                .antMatchers("/**")
+                .requiresSecure()
 
                 // enable csrf protection
                 .and()
