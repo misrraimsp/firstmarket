@@ -58,9 +58,9 @@
 
 \urlstyle{same}
 
-\setcounter{tocdepth}{4}
+%\setcounter{tocdepth}{4}
 
-\setcounter{secnumdepth}{4}
+%\setcounter{secnumdepth}{4}
 
 
 \begin{document}
@@ -68,7 +68,6 @@
     \maketitle
     \tableofcontents
 
-    % INTRODUCCION
     \section{Introducción}
     El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática de la Universidad Nacional de Educación a Distancia.
     
@@ -142,10 +141,8 @@
     \subsection{Estructura de la Memoria}
     Estructura
 
-    % ANALISIS
     \section{Análisis}
         \subsection{Requisitos}
-
             La aplicación debe admitir los roles y capacidades siguientes:
             \begin{enumerate}
                 \item Usuario anónimo (UA).
@@ -204,7 +201,7 @@
                 \label{fig:use-case_diagram}
             \end{figure}
 
-            \subparagraph{CU01\_Búsqueda}
+            \paragraph{CU01\_Búsqueda}
             Proceso por el cual un usuario explora el catálogo y acaba por visualizar la página de un libro.
             \begin{itemize}
                 \item[+] Actores implicados: Usuario Anónimo, Usuario Registrado.
@@ -228,7 +225,7 @@
                 \end{itemize}
             \end{itemize}
 
-            \subparagraph{CU02\_Alta}
+            \paragraph{CU02\_Alta}
             Proceso por el cual se crea un nuevo usuario registrado.
             \begin{itemize}
                 \item[+] Actores implicados: Usuario Anónimo.
@@ -259,7 +256,7 @@
                 \end{itemize}
             \end{itemize}
 
-            \subparagraph{CU03\_Login}
+            \paragraph{CU03\_Login}
                 Proceso por el cual un usuario se autentica en el sistema.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Anónimo.
@@ -284,7 +281,7 @@
                     \item[+] Post-Condiciones: El usuario pasa a tener rol de usuario registrado en el sistema.
                 \end{itemize}
 
-            \subparagraph{CU04\_RecuperarContraseña}
+            \paragraph{CU04\_RecuperarContraseña}
                 Un usuario previamente registrado en el sistema intenta acceder al mismo, pero no recuerda su contraseña. El sistema intentará crear una nueva contraseña y enviarla al e-mail del usuario.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Anónimo.
@@ -309,7 +306,7 @@
                     \end{itemize}
                 \end{itemize}
 
-            \subparagraph{CU05\_EditarPerfil}
+            \paragraph{CU05\_EditarPerfil}
                 Proceso por el cual un usuario modifica alguno de los datos de su perfil personal.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -333,7 +330,7 @@
                     \item[+] Post-Condiciones: El usuario ha alterado su información personal almacenada en la aplicación.
                 \end{itemize}
 
-            \subparagraph{CU06\_RealizarPedido}
+            \paragraph{CU06\_RealizarPedido}
                 Proceso por el cual un usuario realiza una compra a través de la aplicación web.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -367,7 +364,7 @@
                     \item[+] Post-Condiciones: El usuario ha efectuado un nuevo pedido.
                 \end{itemize}
 
-            \subparagraph{CU07\_ConsultarPedido}
+            \paragraph{CU07\_ConsultarPedido}
                 Proceso por el cual un usuario consulta el historial de pedidos que ha realizado.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -379,7 +376,7 @@
                     \end{enumerate}
                 \end{itemize}
 
-            \subparagraph{CU08\_Baja}
+            \paragraph{CU08\_Baja}
                 Proceso por el cual un usuario elimina su cuenta de la tienda online.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -405,7 +402,7 @@
                     \item[+] Post-Condiciones: El usuario ya no figura como dado de alta en la aplicación.
                 \end{itemize}
 
-            \subparagraph{CU09\_Logout}
+            \paragraph{CU09\_Logout}
                 Proceso por el cual un usuario cierra su sesión en el sistema.
                 \begin{itemize}
                     \item[+] Actores implicados: Usuario Registrado.
@@ -420,7 +417,6 @@
                 \end{itemize}
 
 
-    % DISEÑO
     \section{Diseño}
     En este apartado se ofrece una descripción de las decisiones tomadas a nivel de diseño de la aplicación web.
     \subsection{Arquitectura del Sistema}
@@ -490,7 +486,7 @@
 	\end{figure}
     
     \subsubsection{Capas funcionales} \label{sec:design_layer}
-    Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:springframework}).
+    Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:spring}).
     
     \begin{figure}[htb!]
     	\centering
@@ -572,7 +568,6 @@
 		\label{fig:er_expanded_diagram}
 	\end{figure}
 
-    % IMPLEMENTACION
     \section{Implementación}
     La materialización del análisis y diseño detallado en las secciones anteriores lo conforma el conjunto software que se incluye en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
@@ -619,7 +614,7 @@
     
     También es necesario comentar un par de librerías que merecen especial mención, por la relevancia que han tenido en el proyecto:
     
-    \subparagraph{Project Lombok}
+    \paragraph{Project Lombok}
     Aparte del nombre de una isla indonesia (como Java), Lombok es una librería Java destinada a aumentar la productividad. Se encarga de suprimir la necesidad de especificar cierto código repetitivo, como los constructores, los \emph{getters} y los \emph{setters}, o los \emph{equals} y los \emph{hashCode}. Así, como se muestra en el listado \ref{list:lombok_close}, a través de anotaciones se puede ahorrar una grandísima cantidad de código, que es generado por esta herramienta automáticamente antes de la compilación.
     \\
     
@@ -636,7 +631,7 @@
     @Entity
     public class Role extends BasicEntity {
     
-    private String name;
+    	private String name;
     
     }
     \end{lstlisting}
@@ -652,50 +647,50 @@
     @Entity
     public class Role extends BasicEntity {
     
-    private String name;
-    
-    public Role() {
-    }
-    
-    public String getName() {
-    return this.name;
-    }
-    
-    public void setName(String name) {
-    this.name = name;
-    }
-    
-    public String toString() {
-    return "Role(name=" + this.getName() + ")";
-    }
-    
-    public boolean equals(final Object o) {
-    if (o == this) return true;
-    if (!(o instanceof Role)) return false;
-    final Role other = (Role) o;
-    if (!other.canEqual((Object) this)) return false;
-    if (!super.equals(o)) return false;
-    final Object this$name = this.getName();
-    final Object other$name = other.getName();
-    if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
-    return true;
-    }
-    
-    protected boolean canEqual(final Object other) {
-    return other instanceof Role;
-    }
-    
-    public int hashCode() {
-    final int PRIME = 59;
-    int result = super.hashCode();
-    final Object $name = this.getName();
-    result = result * PRIME + ($name == null ? 43 : $name.hashCode());
-    return result;
-    }
+	    private String name;
+	    
+	    public Role() {
+	    }
+	    
+	    public String getName() {
+	    	return this.name;
+	    }
+	    
+	    public void setName(String name) {
+	    	this.name = name;
+	    }
+	    
+	    public String toString() {
+	    	return "Role(name=" + this.getName() + ")";
+	    }
+	    
+	    public boolean equals(final Object o) {
+		    if (o == this) return true;
+		    if (!(o instanceof Role)) return false;
+		    final Role other = (Role) o;
+		    if (!other.canEqual((Object) this)) return false;
+		    if (!super.equals(o)) return false;
+		    final Object this$name = this.getName();
+		    final Object other$name = other.getName();
+		    if (this$name == null ? other$name != null : !this$name.equals(other$name)) return false;
+		    return true;
+	    }
+	    
+	    protected boolean canEqual(final Object other) {
+	    	return other instanceof Role;
+	    }
+	    
+	    public int hashCode() {
+		    final int PRIME = 59;
+		    int result = super.hashCode();
+		    final Object $name = this.getName();
+		    result = result * PRIME + ($name == null ? 43 : $name.hashCode());
+		    return result;
+	    }
     }
     \end{lstlisting}
     
-    \subparagraph{SLF4J - Logback}
+    \paragraph{SLF4J - Logback}
     SLF4J (Simple Logging Facade for Java) es una API Java para tareas de registro que implementa el patrón de diseño \href{https://en.wikipedia.org/wiki/Facade_pattern}{\emph{facade}}, el cual permite desacoplar completamente el código de la aplicación de la tecnología específica de registro que subyaga bajo la fachada.
     
     Logback es la tecnología elegida que en el presente proyecto se conecta como backend de SLF4J. Se trata de una librería moderna, diseñada por el fundador de la famosa Log4j (Ceki Gülcü), y que pretende ser su sucesora.
@@ -726,7 +721,7 @@
     Las características que han permitido a Apache Maven alcanzar estos objetivos descansan en gran medida en:
     
     \begin{itemize}
-    	\item[-] \textbf{Convención sobre configuración}. Como también se comentará en la sección \ref{sec:springboot}, este principio de diseño persigue que el desarrollador sólo deba especificar los aspectos no convencionales, confiando para el resto en la configuración por defecto ofrecida por Apache Maven. Como dichos valores por defecto normalmente son reflejo de buenas prácticas, más o menos consensuados por agentes expertos en la materia, automáticamente se está consiguiendo alinear el proyecto a dichas buenas prácticas, al tiempo de estarse facilitando el propio trabajo de construcción software. La adopción de Apache Maven de este paradigma se traduce en, entre otros muchas cosas, establecer una distribución de carpetas y ficheros estándar para el proyecto, o seguir determinadas convenciones a la hora de compilar el código fuente o ensamblar los paquetes.
+    	\item[-] \textbf{Convención sobre configuración}. Como también se comentará en la sección \ref{sec:spring}, este principio de diseño persigue que el desarrollador sólo deba especificar los aspectos no convencionales, confiando para el resto en la configuración por defecto ofrecida por Apache Maven. Como dichos valores por defecto normalmente son reflejo de buenas prácticas, más o menos consensuados por agentes expertos en la materia, automáticamente se está consiguiendo alinear el proyecto a dichas buenas prácticas, al tiempo de estarse facilitando el propio trabajo de construcción software. La adopción de Apache Maven de este paradigma se traduce en, entre otros muchas cosas, establecer una distribución de carpetas y ficheros estándar para el proyecto, o seguir determinadas convenciones a la hora de compilar el código fuente o ensamblar los paquetes.
     	\item[-] \textbf{Interfaz común}. Muy ligado con el aspecto anterior está el hecho de que Apache Maven ofrece un marco de trabajo o interfaz común para la construcción de proyectos software. Como ya se comentó, antes de la existencia de este tipo de herramientas el software se construía de una manera singular en cada proyecto. Con Apache Maven, sin embargo, se establece una manera estándar o canónica de hacerlo. Así, cuando un desarrollador aprecia que un determinado proyecto está gestionado con Apache Maven puede asumir mucha información sobre él.
     	\item[-] \textbf{Reutilización a través de \emph{plugins}}. Apache Maven está diseñado de forma que se maximiza la flexibilidad y la reutilización de la lógica de construcción. El núcleo de la herramienta se encarga de muy pocas tareas, actuando más como un orquestador que lee la información centralizada acerca del proyecto en un fichero XML y delega el grueso del trabajo en plugins. Es decir, son los plugins los que realizan las diferentes labores de construcción, como compilar, instalar o empaquetar. Apache Maven ofrece una serie de plugins por defecto, pero también la posibilidad de construir nuevos e implementar la lógica de construcción que se desee. De hecho, en el presente proyecto se ha añadido el plugin que ofrece Spring Boot.
     	\item[-] \textbf{Modelo conceptual de proyecto}. Dicho lo anterior, la gran característica que aporta Apache Maven es la abstracción de toda la información necesaria referente a un proyecto en un fichero, el \textbf{Project Object Model} (en el presente proyecto ver el fichero \emph{pom.xml}). En él se especifica, entre otras cosas, las dependencias con otros proyectos, de forma que es Apache Maven quien se encarga de gestionarlas, esto es, resolverlas, descargarlas de un repositorio central, colocarlas en las carpetas apropiadas, enlazarlas durante la construcción, etc. En el listado \ref{list:maven_dependency} se muestra, como ejemplo, la declaración de una dependencia con la librería \href{https://www.passay.org/}{Passay}, utilizada en la aplicación web para generar nuevas contraseñas aleatorias. 
@@ -749,7 +744,7 @@
     
     Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las principales características de cada uno de ellos que han tenido relación con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
     
-    \paragraph{Spring Framework} \label{sec:springframework}
+    \paragraph{Spring Framework} 
     En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/}{documentación}.
     
     Tal como establecen sus autores, los principios de diseño que han guiado su desarrollo a lo largo del tiempo han sido:
@@ -798,7 +793,7 @@
     
     En resumen, Spring MVC ofrece la infraestructura \emph{Front Controller}, esto es, los objetos necesarios para resolver el mapeo de las peticiones HTTP a los métodos apropiados de los objetos \emph{@Controller}, los objetos encargados de resolver las vistas, los encargados del enlace de datos, etc, permitiendo al desarrollador centrarse en especificar la lógica de negocio.
     
-    \paragraph{Spring Boot} \label{sec:springboot}
+    \paragraph{Spring Boot}
     Este proyecto ha sido el gran avance de los últimos años dentro del universo Spring. De hecho, ha cambiado por completo el paradigma, permitiendo el desarrollo de aplicaciones totalmente funcionales en un espacio de tiempo dramáticamente inferior al necesario con anterioridad a su aparición. Tal como viene recogido en la \href{https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/html/}{documentación} oficial, sus principales objetivos son:
     
     \begin{itemize}
@@ -814,7 +809,7 @@
     
     Conviene destacar también que Spring Boot permite ejecutar aplicaciones web sin necesidad de hacerlo en un contenedor de servlets externo o un servidor de aplicaciones, ya que el propio Spring Boot incluye un Tomcat embebido, el cual se despliega automáticamente en tiempo de ejecución.
     
-    \paragraph{Spring Data JPA - Hibernate ORM} \label{sec:springdata}
+    \paragraph{Spring Data JPA - Hibernate ORM}
     El proyecto Spring Data JPA, parte de la amplia familia Spring Data, es una capa de abstracción extra sobre la implementación de la especificación JPA que se utilice, que en el caso del presente proyecto ha sido Hibernate ORM.
     
     Por persistencia se hace referencia a la funcionalidad que permite que determinados objetos creados por la aplicación puedan sobrevivir más allá de la frontera de la misma. En términos Java, se trata de que el estado de ciertos objetos pueda perdurar fuera del entorno de la JVM, de modo que dicho estado esté disponible en cualquier momento posterior.
@@ -993,7 +988,7 @@
     	\item[-] Se activa el contador de tiempo disponible para finalizar la compra.
     \end{itemize}
     
-    Todas estas acciones que realiza el sistema para comprometer la cesta las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA (ver \ref{sec:springdata}). Las transacciones software se describen en términos de las características ACID, del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability:
+    Todas estas acciones que realiza el sistema para comprometer la cesta las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA (ver \ref{sec:spring}). Las transacciones software se describen en términos de las características ACID, del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability:
     
     \begin{itemize}
     	\item[-] Atomicity. Cada paso en la secuencia de acciones realizadas dentro de los límites de una transacción deben completarse con éxito o todo el trabajo debe
@@ -1133,7 +1128,7 @@
     
     Para la gestión de estas acciones, la arquitectura clásica de petición de un recurso por parte del cliente y respuesta con contenido HTML por parte del servidor (con su consecuente refresco de la página) se juzgó inapropiada. Un usuario que esté visualizando la página de su cesta y aumente en una unidad un libro tendría que esperar, para ver el resultado de dicho aumento, a que el servidor responda con el nuevo contenido HTML y que el navegador lo renderice, todo ello para únicamente cambiar unos pocos números respecto de la página previa. Situaciones similares ocurren en el caso de disminuir la cantidad de un libro, o eliminarlo de la cesta por completo. Peor aún es el caso del usuario que decide añadir un libro a su cesta, ya que el contenido HTML por el que debiera esperar sería igual (salvo el icono del número de elementos en la cesta) al de la página desde donde se solicita tal acción.
     
-    En este contexto, y como pretexto perfecto para su estudio, se decidió desarrollar estas acciones con tecnología Ajax (ver \ref{sec:ajax}), de forma que no tenga lugar el refresco de la página en la que el usuario se encuentre. Así, el script \emph{ajaxCart.js} se encarga, entre otras cosas, de actualizar el DOM de la vista de la cesta del usuario, \emph{cart.html}, de manera consistente con las acciones que este realice, mientras que el script \emph{ajaxAddBook.js} gestiona el DOM de las citadas vistas desde las cuales es posible añadir libros a la cesta. Ambos scripts establecen en background la comunicación con el servidor, de forma transparente al usuario, haciendo uso del objeto \emph{XMLHttpRequest}, tal como muestra el extracto de \emph{ajaxCart.js} mostrado en el listado \ref{list:js_ajax}.
+    En este contexto, y como pretexto perfecto para su estudio, se decidió desarrollar estas acciones con tecnología Ajax, de forma que no tenga lugar el refresco de la página en la que el usuario se encuentre. Así, el script \emph{ajaxCart.js} se encarga, entre otras cosas, de actualizar el DOM de la vista de la cesta del usuario, \emph{cart.html}, de manera consistente con las acciones que este realice, mientras que el script \emph{ajaxAddBook.js} gestiona el DOM de las citadas vistas desde las cuales es posible añadir libros a la cesta. Ambos scripts establecen en background la comunicación con el servidor, de forma transparente al usuario, haciendo uso del objeto \emph{XMLHttpRequest}, tal como muestra el extracto de \emph{ajaxCart.js} mostrado en el listado \ref{list:js_ajax}.
     \\
     
     \begin{lstlisting}[language=JavaScript,caption=Comunicación Ajax con el servidor,label=list:js_ajax]
@@ -1205,74 +1200,6 @@
     	\label{fig:fm_cartBookRegistry_alert}
     \end{figure}
     
-    \subsection{Validación}
-    Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y por motivos de seguridad, como evitar ataques de inyección SQL.
-    
-    Esta comprobación se puede hacer tanto en cliente como en servidor. Desde el punto de vista de la seguridad, realizar la comprobación en servidor es obligatorio, ya que las comprobaciones en cliente son muy fácilmente circunvaladas. Por otro lado, desde el punto de vista de la experiencia de usuario es muy recomendable implementarla también en cliente, ya que permite al usuario tener un feedback mucho más rápido que si debiese esperar a que el servidor responda. En definitiva, la mejor práctica es implementar la validación tanto en backend como en frontend. Y así se ha hecho.
-    \\
-    
-    Mucha es la información que FirstMarket tiene que validar, pero a grandes rasgos se puede dividir en numérica y textual. El primer grupo presenta poca dificultad, se trata de comprobar rangos de valores principalmente. Para el segundo grupo las expresiones regulares son el arma perfecta. En el archivo de configuración \emph{application.yml} se detallan las expresiones regulares y los rangos numéricos utilizados. A modo de ejemplo, la propiedad definida en este archivo de configuración que especifica la expresión regular contra la que validar las contraseñas se muestra en el listado \ref{list:regex_pw}.
-    \\
-     
-    \begin{lstlisting}[caption=Expresión regular para las contraseñas,label=list:regex_pw]
-    fm:
-      validation:
-        regex:
-          password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$
-    \end{lstlisting}
-    
-    Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en frontend como en backend, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
-    \\
-    
-    Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes, a saber, sintáctica y semántica. La validación sintáctica se realiza utilizando las ya mencionadas expresiones regulares, pero para validar si se trata de un ISBN válido aún hay que calcular mediante un algoritmo concreto un dígito de control y ver si coincide con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 dígitos (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación debe dar soporte a ambos formatos de ISBN. A modo de ejemplo, en el listado \ref{list:js_isbn} se detalla la función JavaScript desarrollada para comprobar en el cliente el dígito de control.
-    \\
-    
-    \begin{lstlisting}[language=JavaScript,caption=Validación del dígito de control del ISBN en cliente,label=list:js_isbn]
-    const isbnChecksum = function() {
-    	let chars, last, sum, check, i;
-    	const isbn = document.getElementById("isbn");
-    	if (isbn.checkValidity()) {
-    		// Remove non ISBN digits, then split into an array
-    		chars = isbn.value.replace(/[- ]|^ISBN(?:-1[03])?:?/g, "").split("");
-    		// Remove the final ISBN digit from `chars`, and assign it to `last`
-    		last = chars.pop();
-    		sum = 0;
-    		if (chars.length == 9) {
-    			// Compute the ISBN-10 check digit
-    			chars.reverse();
-    			for (i = 0; i < chars.length; i++) {
-    				sum += (i + 2) * parseInt(chars[i], 10);
-    			}
-    			check = 11 - (sum % 11);
-    			if (check == 10) {
-    				check = "X";
-    			} else if (check == 11) {
-    				check = "0";
-    			}
-    		} else {
-    			// Compute the ISBN-13 check digit
-    			for (i = 0; i < chars.length; i++) {
-    				sum += (i % 2 * 2 + 1) * parseInt(chars[i], 10);
-    			}
-    			check = 10 - (sum % 10);
-    			if (check == 10) {
-    				check = "0";
-    			}
-    		}
-    		if (check != last) {
-    			alert("Error: Invalid ISBN checksum digit (" + last + "). Try with (" + check + ")");
-    			isbn.focus();
-    			isbn.value = isbn.value.substring(0, isbn.value.length - 1);
-    		}
-    	}
-    };
-    \end{lstlisting}
-    
-    
-    % TECNOLOGIAS
-    
-
-    % DESPLIEGUE Y SEGURIDAD
     \section{Despliegue}
     En esta sección se abordan aspectos relevantes en relación con el despliegue de la aplicación web desarrollada. 
     
@@ -1383,7 +1310,7 @@
 	Spring Security es la piedra angular de la seguridad a nivel de aplicación del portal de comercio electrónico desarrollado, integrando las funcionalidades de autenticación y autorización encima de las características propias de Spring Framework. Además, como se verá, también ofrece mecanismos de protección frente a multitud de vulnerabilidades comunes a nivel de aplicación.
 	
 	\subsubsection{FilterChain}
-	Como se comenta en la sección \ref{sec:springframework}, las aplicaciones web con Spring basadas en el stack servlet, como es el caso, siguen el patrón \emph{front controller}, en el que el servlet \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet}{\emph{DispatcherServlet}} ejerce de punto de entrada y distribuidor de las peticiones HTTP hacia los \emph{@Controller}/\emph{@RestController} adecuados.
+	Como se comenta en la sección \ref{sec:spring}, las aplicaciones web con Spring basadas en el stack servlet, como es el caso, siguen el patrón \emph{front controller}, en el que el servlet \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet}{\emph{DispatcherServlet}} ejerce de punto de entrada y distribuidor de las peticiones HTTP hacia los \emph{@Controller}/\emph{@RestController} adecuados.
 	
 	El \emph{DispatcherServlet} no integra lógica de autenticación/autorización, por lo que, en ausencia de alternativas, esta debería ser implementada en las clases \emph{@Controller}/\emph{@RestController} en las que delega las peticiones HTTP. Esto, por supuesto, destrozaría el principio de separación de responsabilidades. 
 	
@@ -1404,132 +1331,200 @@
 	\\
 	
 	\begin{lstlisting}[caption=Cadena de filtros creada por Spring Security, label=list:filter_chain]
-	2020-07-18 17:20:19.718  INFO 4 --- [main] o.s.s.web.DefaultSecurityFilterChain: 
-	Creating filter chain: 
-	any request, [
-	o.s.s.w.access.channel.ChannelProcessingFilter@5177e388, 
-	o.s.s.w.context.request.async.WebAsyncManagerIntegrationFilter@69d6a7cd, 
-	o.s.s.w.context.SecurityContextPersistenceFilter@73017a80, 
-	o.s.s.w.header.HeaderWriterFilter@7c3ebc6b, 
-	o.s.s.w.csrf.CsrfFilter@5bca7664, 
-	o.s.s.w.authentication.logout.LogoutFilter@de18f63, 
-	o.s.s.w.authentication.UsernamePasswordAuthenticationFilter@37b72ea, 
-	o.s.s.w.savedrequest.RequestCacheAwareFilter@4a5905d9, 
-	o.s.s.w.servletapi.SecurityContextHolderAwareRequestFilter@34a0ef00, 
-	o.s.s.w.authentication.AnonymousAuthenticationFilter@3162743f, 
-	o.s.s.w.session.SessionManagementFilter@6a9950f1, 
-	o.s.s.w.access.ExceptionTranslationFilter@7f829c76, 
-	o.s.s.w.access.intercept.FilterSecurityInterceptor@1dc2de84
+	2020-07-18 17:20:19.718  DefaultSecurityFilterChain: 
+	Creating filter chain: any request, 
+	[
+	ChannelProcessingFilter, 
+	WebAsyncManagerIntegrationFilter, 
+	SecurityContextPersistenceFilter, 
+	HeaderWriterFilter, 
+	CsrfFilter, 
+	LogoutFilter, 
+	UsernamePasswordAuthenticationFilter, 
+	RequestCacheAwareFilter, 
+	SecurityContextHolderAwareRequestFilter, 
+	AnonymousAuthenticationFilter, 
+	SessionManagementFilter, 
+	ExceptionTranslationFilter, 
+	FilterSecurityInterceptor
 	]
 	\end{lstlisting}
 	
-	En estos filtros Spring Security implementa la autenticación/autorización y la protección frente a determinados tipos de ataques. Lo que resta es configurarlos para satisfacer las necesidades propias de cada aplicación. Esta configuración se lleva a cabo extendiendo la clase de Spring Security \emph{WebSecurityConfigurerAdapter} y sobreescribiendo su método \emph{configure(HttpSecurity)} (ver listado \ref{list:springsec_config}), tarea que en la aplicación web desarrollada realiza la clase \emph{SecurityConfig}.
+	\subsubsection{Configuración}
+	En estos filtros Spring Security implementa la autenticación/autorización y la protección frente a determinados tipos de ataques. Lo que resta es configurarlos para satisfacer las necesidades propias de cada aplicación. Esta configuración se lleva a cabo extendiendo la clase de Spring Security \emph{WebSecurityConfigurerAdapter} y sobreescribiendo su método \emph{configure(HttpSecurity)} (expuesto en el listado \ref{list:springsec_config}), tarea que en la aplicación web desarrollada realiza la clase \emph{SecurityConfig}.
 	\\
 	
 	\begin{lstlisting}[caption=Configuración de Spring Security en FirstMarket, label=list:springsec_config]
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
-		.authorizeRequests()
-		
-		// protect role_admin resources
-		.antMatchers("/admin/**")
-		.access("hasRole('ROLE_ADMIN')")
-		
-		// protect role_user resources
-		.antMatchers("/user/**")
-		.access("hasRole('ROLE_USER')")
-		
-		// publicly open
-		.antMatchers("/", "/home", "/login", "/newUser")
-		.access("permitAll")
-		
-		// force HTTPS always
-		.and()
-		.requiresChannel()
-		.antMatchers("/**")
-		.requiresSecure()
-		
-		// authenticate through login form
-		.and()
-		.formLogin()
-		.loginPage("/login")
-		// failure handler in order to prevent brute-force authentication
-		.failureHandler(customAuthenticationFailureHandler())
-		
-		// set logout page
-		.and()
-		.logout()
-		.logoutSuccessUrl("/home")
-		
-		// enable csrf protection
-		.and()
-		.csrf()
-		.ignoringAntMatchers("/listener") // open for stripe notifications
-		// DEV - Make H2-Console non-secured
-		//.ignoringAntMatchers("/h2-console/**")
-		
-		// always create new session
-		.and()
-		.sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-		
-		.and()
-		.headers(headers -> headers
-		// Content Security Policy
-		.contentSecurityPolicy(csp -> csp
-		.policyDirectives("default-src 'self' https://*.stripe.com" +
-		"; " +
-		"script-src 'self' 'unsafe-inline' " +
-		"https://*.stripe.com " +
-		"https://*.fontawesome.com " +
-		"https://maxcdn.bootstrapcdn.com " +
-		"https://cdnjs.cloudflare.com " +
-		"https://ajax.googleapis.com" +
-		";" +
-		"style-src 'self' 'unsafe-inline' " +
-		"https://cdn.jsdelivr.net " +
-		"https://maxcdn.bootstrapcdn.com " +
-		"https://fonts.googleapis.com " +
-		"https://*.fontawesome.com" +
-		"; " +
-		"font-src 'self' " +
-		"https://fonts.gstatic.com " +
-		"https://*.fontawesome.com" +
-		"; " +
-		"img-src 'self' data:"
-		)
-		)
-		// Referrer Policy
-		.referrerPolicy(referrer -> referrer
-		.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
-		)
-		)
-		
-		/* DEV - Allow pages to be loaded in frames from the same origin; needed for H2-Console
-		.and()
-		.headers()
-		.frameOptions()
-		.sameOrigin()
-		*/
+			// authenticate through login form
+			.formLogin()
+			.loginPage("/login")
+			// handler for brute-force authentication prevention
+			.failureHandler(customAuthenticationFailureHandler())
+			
+			// set logout page
+			.and()
+			.logout()
+			.logoutSuccessUrl("/home")
+			
+			// authorization
+			.and()
+			.authorizeRequests()
+			// protect role_admin resources
+			.antMatchers("/admin/**")
+			.access("hasRole('ROLE_ADMIN')")
+			// protect role_user resources
+			.antMatchers("/user/**")
+			.access("hasRole('ROLE_USER')")
+			// publicly open
+			.antMatchers("/", "/home", "/login", "/newUser")
+			.access("permitAll")
+			
+			// force HTTPS always
+			.and()
+			.requiresChannel()
+			.antMatchers("/**")
+			.requiresSecure()
+			
+			// enable csrf protection
+			.and()
+			.csrf()
+			.ignoringAntMatchers("/listener") // open for stripe
+			
+			// always create new session
+			.and()
+			.sessionManagement()
+			.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+			
+			.and()
+			.headers(headers -> headers
+				// Content Security Policy
+				.contentSecurityPolicy(csp -> csp
+					.policyDirectives("default-src 'self' https://*.stripe.com" +
+						"; " +
+						"script-src 'self' 'unsafe-inline' " +
+						"https://*.stripe.com " +
+						"https://*.fontawesome.com " +
+						"https://maxcdn.bootstrapcdn.com " +
+						"https://cdnjs.cloudflare.com " +
+						"https://ajax.googleapis.com" +
+						";" +
+						"style-src 'self' 'unsafe-inline' " +
+						"https://cdn.jsdelivr.net " +
+						"https://maxcdn.bootstrapcdn.com " +
+						"https://fonts.googleapis.com " +
+						"https://*.fontawesome.com" +
+						"; " +
+						"font-src 'self' " +
+						"https://fonts.gstatic.com " +
+						"https://*.fontawesome.com" +
+						"; " +
+						"img-src 'self' data:"
+					)
+				)
+				// Referrer Policy
+				.referrerPolicy(referrer -> referrer
+					.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
+				)
+			)
 		;
 	}
 	\end{lstlisting}
 	
-	\subsubsection{Autenticación y Autorización}
+	\paragraph{Autenticación}
+	Spring Security ofrece toda una gama de métodos de autenticación. El usado en FirstMarket, especificado en las líneas 5 y 6 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña.
 	
-	\subsubsection{Protección ante Vulnerabilidades}
+	Es importante resaltar que, con el fin de garantizar la seguridad de la información de los usuarios, la aplicación web desarrollada almacena las constraseñas en la base de datos encriptadas.  En concreto, se usa el agoritmo \href{https://en.wikipedia.org/wiki/Bcrypt}{Bcrypt}. De esta forma, para saber si la contraseña es correcta, la aplicación web encripta la contraseña enviada en el formulario y la compara con la que tiene almacenada.
 	
-	\subparagraph{Cross-Site Request Forgery}
-	%https://en.wikipedia.org/wiki/Bcrypt
+	Además, Spring Security permite especificar la lógica tras un \emph{logout}, que en el caso de la presente aplicación es simplemente una redirección a la páquina de inicio, como se muestra en las líneas 12 y 13 del listado \ref{list:springsec_config}.
+
+	\paragraph{Autorización}
+	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 15 a la 26, FirstMarket implementa tres tipos de recursos: 
 	
+	\begin{itemize}
+		\item[-] Los que sólo pueden ser accedidos por los usuarios con rol \emph{ROLE\_ADMIN}, ubicados en \emph{\nolinkurl{~/admin/**}}.
+		\item[-] Los que sólo pueden ser accedidos por los usuarios con rol \emph{ROLE\_USER}, ubicados en \emph{\nolinkurl{~/user/**}}.
+		\item[-] El resto, que puede ser accedido por cualquiera.
+	\end{itemize}
+
+	Notar que los dos primeros tipos requieren necesariamente autenticación previa.
 	
+	\paragraph{Cross-Site Request Forgery}
+	\paragraph{Content Security Policy}
 	%This document defines Content Security Policy (CSP), a tool which developers can use to lock down their applications in various ways, mitigating the risk of content injection vulnerabilities such as cross-site scripting, and reducing the privilege with which their applications execute.
 	
 	%CSP is not intended as a first line of defense against content injection vulnerabilities. Instead, CSP is best used as defense-in-depth. It reduces the harm that a malicious injection can cause, but it is not a replacement for careful input validation and output encoding.
+	\paragraph{Referrer  Policy}
+	Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}. Este encabezado puede tener un valor de entre un grupo de ocho opciones, estableciendo cada uno de ellas una \emph{política de Referer}.
 	
+	Es importante establecer un criterio apropiado ya que, por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
 	
-	\subsection{Brute-Force Authentication}
+	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 71 y 72 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
+	
+	\subsection{Autenticación por Fuerza Bruta}
+	\subsection{Validación de Entradas}
+	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y por motivos de seguridad, como evitar ataques de inyección SQL.
+	
+	Esta comprobación se puede hacer tanto en cliente como en servidor. Desde el punto de vista de la seguridad, realizar la comprobación en servidor es obligatorio, ya que las comprobaciones en cliente son muy fácilmente circunvaladas. Por otro lado, desde el punto de vista de la experiencia de usuario es muy recomendable implementarla también en cliente, ya que permite al usuario tener un feedback mucho más rápido que si debiese esperar a que el servidor responda. En definitiva, la mejor práctica es implementar la validación tanto en backend como en frontend. Y así se ha hecho.
+	
+	Mucha es la información que FirstMarket tiene que validar, pero a grandes rasgos se puede dividir en numérica y textual. El primer grupo presenta poca dificultad, se trata de comprobar rangos de valores principalmente. Para el segundo grupo las expresiones regulares son el arma perfecta. En el archivo de configuración \emph{application.yml} se detallan las expresiones regulares y los rangos numéricos utilizados. A modo de ejemplo, la propiedad definida en este archivo de configuración que especifica la expresión regular contra la que validar las contraseñas se muestra en el listado \ref{list:regex_pw}.
+	\\
+	
+	\begin{lstlisting}[caption=Expresión regular para las contraseñas,label=list:regex_pw]
+	fm:
+		validation:
+			regex:
+				password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$
+	\end{lstlisting}
+	
+	Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en frontend como en backend, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
+	
+	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes, a saber, sintáctica y semántica. La validación sintáctica se realiza utilizando las ya mencionadas expresiones regulares, pero para validar si se trata de un ISBN válido aún hay que calcular mediante un algoritmo concreto un dígito de control y ver si coincide con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 dígitos (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación debe dar soporte a ambos formatos de ISBN. A modo de ejemplo, en el listado \ref{list:js_isbn} se detalla la función JavaScript desarrollada para comprobar en el cliente el dígito de control.
+	\\
+	
+	\begin{lstlisting}[language=JavaScript,caption=Validación del dígito de control del ISBN en cliente,label=list:js_isbn]
+	const isbnChecksum = function() {
+		let chars, last, sum, check, i;
+		const isbn = document.getElementById("isbn");
+		if (isbn.checkValidity()) {
+			// Remove non ISBN digits, then split into an array
+			chars = isbn.value.replace(/[- ]|^ISBN(?:-1[03])?:?/g, "").split("");
+			// Remove the final ISBN digit from `chars`, and assign it to `last`
+			last = chars.pop();
+			sum = 0;
+			if (chars.length == 9) {
+				// Compute the ISBN-10 check digit
+				chars.reverse();
+				for (i = 0; i < chars.length; i++) {
+					sum += (i + 2) * parseInt(chars[i], 10);
+				}
+				check = 11 - (sum % 11);
+				if (check == 10) {
+					check = "X";
+				} else if (check == 11) {
+					check = "0";
+				}
+			} else {
+				// Compute the ISBN-13 check digit
+				for (i = 0; i < chars.length; i++) {
+					sum += (i % 2 * 2 + 1) * parseInt(chars[i], 10);
+				}
+				check = 10 - (sum % 10);
+				if (check == 10) {
+					check = "0";
+				}
+			}
+			if (check != last) {
+				alert("Error: Invalid ISBN checksum digit (" + last + "). Try with (" + check + ")");
+				isbn.focus();
+				isbn.value = isbn.value.substring(0, isbn.value.length - 1);
+			}
+		}
+	};
+	\end{lstlisting}
+	
 	\subsection{Stripe Radar} \label{sec:striperadar}
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
 	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con la ayuda de \href{https://probely.com/}{Probely} y \href{https://snyk.io/}{Snyk}. La primera herramienta detectó 5 vulnerabilidades, mientras que la segunda 13. Del total, 14 responden a vulnerabilidades conocidas en librerías utilizadas por la aplicación web, por lo que su resolución se basa en actualizar las versiones de dichas dependencias. A continuación se pasa a comentar los problemas encontrados, haciendo especial énfasis en las 4 vulnerabilidades propias de la aplicación web desarrollada: 
@@ -1617,30 +1612,7 @@
 			Sincerely, Heroku.
 		\end{displayquote}
 		
-		\item[-] \textbf{\emph{Referrer policy not defined}}. Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Este encabezado permite a los servidores identificar desde dónde los visitan, y usar así esos datos para análisis, registro o almacenamiento en caché, por ejemplo.
-		
-		Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}. Este encabezado puede tener un valor de entre un grupo de ocho opciones, estableciendo cada uno de ellas una \emph{política de Referer}.
-		
-		La vulnerabilidad comentada en este punto se debe a que no se había especificado qué política de \emph{Referer} emplear, con el consecuente riesgo de enviar información sensible en dicho encabezado.
-		
-		Por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
-		
-		Para mitigar este riesgo es necesario, por tanto, especificar una política adecuada de \emph{Referer}, es decir, añadir un encabezado \emph{Referrer-Policy} con un valor apropiado. En este sentido, la política escogida para FirstMarket es \emph{strict-origin}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de www.firstmarket.tech/login?error=true sólo sería enviado www.firstmarket.tech.
-		
-		En el listado \ref{list:referrer_policy} se detalla el fragmento del método \emph{configure}, de la clase \emph{SecurityConfig}, donde se configura el uso de esta política.
-		\\
-		
-		\begin{lstlisting}[language=Java,caption=Configuración de \emph{Referrer-Policy} como \emph{strict-origin},label=list:referrer_policy]
-		@Override
-		protected void configure(HttpSecurity httpSecurity) throws Exception {
-			httpSecurity
-				//...
-				.headers()
-				.referrerPolicy(ReferrerPolicyHeaderWriter.ReferrerPolicy.STRICT_ORIGIN)
-				//...
-			;
-		}
-		\end{lstlisting}
+		\item[-] \textbf{\emph{Referrer policy not defined}}. La vulnerabilidad comentada en este punto se debe a que no se había especificado qué política de \emph{Referer} emplear, con el consecuente riesgo de enviar información sensible en dicho encabezado. Como se explica en la sección \ref{sec:springsec}, el riesgo queda mitigado al especificar la política \emph{strict-origin} con Spring Security.
 		
 		\item[-] \textbf{\emph{Vulnerabilidades en librerías de terceros}}. Las restantes 14 vulnerabilidades se han solucionado por medio de actualizaciones. Por la propia naturaleza de la herramienta, todas los problemas detectados por Snyk entran dentro de este epígrafe, mostrándose en la figura \ref{fig:snyk} dos de las vulnerabilidades más graves que ha detectado. Las actualizaciones realizadas han sido las siguientes:
 		
@@ -1675,11 +1647,9 @@
         \subsection{Administrador}
     aquie se describe el uso del admin
 
-	% PRESUPUESTO
 	\section{Presupuesto}
 	%Resaltar que este \emph{dyno} tiene un coste de 7 dólares por mes.
 
-    % MEJORAS Y AMPLIACIONES
     \section{Mejoras y Ampliaciones}
     %Testar el software
     
