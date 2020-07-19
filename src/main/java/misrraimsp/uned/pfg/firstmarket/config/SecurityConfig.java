@@ -83,6 +83,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .and()
                 .headers(headers -> headers
+                        // HTTP Strict Transport Security
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .preload(true)
+                                .maxAgeInSeconds(31536000)
+                        )
                         // Content Security Policy
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives("default-src 'self' https://*.stripe.com" +

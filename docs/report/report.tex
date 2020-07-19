@@ -1433,14 +1433,14 @@
 	}
 	\end{lstlisting}
 	
-	\paragraph{Autenticación}
+	\subsubsection{Autenticación}
 	Spring Security ofrece toda una gama de métodos de autenticación. El usado en FirstMarket, especificado en las líneas 5 y 6 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña.
 	
 	Es importante resaltar que, con el fin de garantizar la seguridad de la información de los usuarios, la aplicación web desarrollada almacena las constraseñas en la base de datos encriptadas.  En concreto, se usa el agoritmo \href{https://en.wikipedia.org/wiki/Bcrypt}{Bcrypt}. De esta forma, para saber si la contraseña es correcta, la aplicación web encripta la contraseña enviada en el formulario y la compara con la que tiene almacenada.
 	
 	Además, Spring Security permite especificar la lógica tras un \emph{logout}, que en el caso de la presente aplicación es simplemente una redirección a la páquina de inicio, como se muestra en las líneas 12 y 13 del listado \ref{list:springsec_config}.
 
-	\paragraph{Autorización}
+	\subsubsection{Autorización}
 	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 15 a la 26, FirstMarket implementa tres tipos de recursos: 
 	
 	\begin{itemize}
@@ -1451,17 +1451,43 @@
 
 	Notar que los dos primeros tipos requieren necesariamente autenticación previa.
 	
-	\paragraph{Cross-Site Request Forgery}
+	\subsubsection{Cross-Site Request Forgery}
 	
-	\paragraph{Encabezados de Seguridad en las Respuestas HTTP}
+	\subsubsection{Encabezados de Seguridad en las Respuestas HTTP}
 	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente.
 	
+	\paragraph{Cache Control}
+	Por defecto, Spring Security instruye al navegador, por medio de las cabeceras de respuesta mostradas en el listado \ref{list:cache_control}, para que no guarde en su caché ninguna información, debido al riesgo que esto representa para el usuario. Piénsese, por ejemplo, en una situación en la que un usuario, tras autenticarse, consulta información confidencial, que el navegador almacena en caché. Después, tras cerrar su sesión, otro usuario podría tener acceso a dicha información privada sin más que consultar las páginas guardadas en el historial de navegación.
+	\\
 	
-	\subparagraph{Content Security Policy}
+	\begin{lstlisting}[caption=Cabeceras para impedir el almacenamiento en caché, label=list:cache_control]
+	Cache-Control: no-cache, no-store, max-age=0, must-revalidate 
+	Pragma: no-cache
+	Expires: 0
+	\end{lstlisting}
+	
+	No obstante, para el contenido estático (principalmente hojas de estilo y código JavaScript), sí se ha permitido al navegador almacenarlo en su caché, con el fin de mejorar el tiempo de carga de las páginas y ganar en experiencia de usuario, sin merma de seguridad.
+
+	\paragraph{Content Type Options}
+	Normalmente, cuando el campo \emph{content type} (tipo de contenido) no es especificado, los navegadores tratan de deducirlo para mejorar la experiencia de usuario. Por ejemplo, si el navegador encuentra un archivo JavaScript sin el tipo de contenido especificado, intentará deducir su naturaleza a partir del propio contenido y, en caso de que finalmente lo juzgue como código JS, lo ejecutará. A este procedimiento de inferencia del tipo de contenido se le conoce como \href{https://en.wikipedia.org/wiki/Content_sniffing}{\emph{content sniffing}}
+	
+	Este sistema de inferencia del tipo de contenido presenta el problema de ser un vector para ataques XSS (\href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}). En efecto, existen archivos contruidos de tal manera que pueden ser interpretados de varias formas al mismo tiempo. Por ejemplo, una aplicación web puede permitir a los usuarios enviar un documento PostScript válido para posteriormente visualizarlo. Un usuario malintencionado podría crear un documento PostScript que también sea un archivo JavaScript válido y ejecutar un ataque XSS con él.
+	
+	Por estas razones, la configuración que por defecto ofrece Spring Security es instruir al navegador para que no realice \emph{content sniffing}, a través de la cabecera mostrada en el listado \ref{list:content_sniffing}. Notar que, como contraparte, ahora en todo momento se debe indicar el tipo de contenido en lo que se envíe al navegador para que funcione correctamente.
+	\\
+	
+	\begin{lstlisting}[caption=Cabeceras para impedir el almacenamiento en caché, label=list:content_sniffing]
+	X-Content-Type-Options: nosniff
+	\end{lstlisting}
+	
+	\paragraph{HTTP Strict Transport Security}
+	\paragraph{X-Frame-Options}
+	\paragraph{X-XSS-Protection}
+	\paragraph{Content Security Policy}
 	%This document defines Content Security Policy (CSP), a tool which developers can use to lock down their applications in various ways, mitigating the risk of content injection vulnerabilities such as cross-site scripting, and reducing the privilege with which their applications execute.
 	
 	%CSP is not intended as a first line of defense against content injection vulnerabilities. Instead, CSP is best used as defense-in-depth. It reduces the harm that a malicious injection can cause, but it is not a replacement for careful input validation and output encoding.
-	\subparagraph{Referrer  Policy}
+	\paragraph{Referrer  Policy}
 	Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}. Este encabezado puede tener un valor de entre un grupo de ocho opciones, estableciendo cada uno de ellas una \emph{política de Referer}.
 	
 	Es importante establecer un criterio apropiado ya que, por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
