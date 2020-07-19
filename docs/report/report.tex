@@ -443,7 +443,7 @@
     Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
     
-    \subsubsection{Inversión de Control. Inyección de Dependencias} \label{sec:ioc}
+    \subsubsection[Inversión de Control]{Inversión de Control - Inyección de Dependencias} \label{sec:ioc}
     Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
     
     Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su \href{https://martinfowler.com/articles/injection.html}{artículo seminal} en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por inversión de control se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de inyección de dependencias del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
@@ -871,7 +871,7 @@
     	\item[-] \href{https://fonts.google.com/}{Google Fonts}. A efectos de dar un cariz más personalizado a la aplicación web se usó este servicio de Google. La fuente usada en la aplicación web ha sido \href{https://fonts.google.com/specimen/Noto+Serif+JP}{Noto Serif JP}.
     \end{itemize}
     
-    \subsection{Gestión de Pagos con Stripe} \label{sec:stripe}
+    \subsection[Pagos con Stripe]{Gestión de Pagos con Stripe} \label{sec:stripe}
     Los comercios, ya sean presenciales u \emph{online}, son en esencia lugares de intercambio. Normalmente, lo que una de las partes ofrece a la otra es dinero, a través de un pago. Por tanto, cabe esperar que, en cualquiera de estos establecimientos, el procedimiento por el cual se materializa el pago tome un lugar especial dentro de la lógica de negocio.
     
     Los comercios en Internet tienen, además, la responsabilidad de ofrecer altos estándares de seguridad a sus clientes, especialmente en lo concerniente con el pago. De hecho, una de las principales barreras que aparta a potenciales usuarios del comercio \emph{online} es la percepción de inseguridad que el proceso de pago telemático lleva asociado. En este sentido, el comercio a través de Internet depende de una manera radical en la confianza de los usuarios, siendo así este uno de los principales capitales a cultivar y fortalecer.
@@ -1013,7 +1013,7 @@
     	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
     \end{itemize}
 
-    \subsection{Persistencia y Visualización de Datos Jerárquicos} \label{sec:hierarchy}
+    \subsection[Datos Jerárquicos]{Persistencia y Visualización de Datos Jerárquicos} \label{sec:hierarchy}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
     
     Tal como se explica con detalle en [bib ref], existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
@@ -1146,7 +1146,7 @@
     };
     \end{lstlisting}
     
-    \subsection{Registro de Libros Referenciados en Cestas}
+    \subsection[Libros Referenciados ]{Registro de Libros Referenciados en Cestas}
     En este apartado se describe una funcionalidad añadida que, si bien no estaba presente en los requisitos de la aplicación, se ha mostrado muy útil y de relativa facilidad de implementación. La inspiración provino, como se aprecia en la figura \ref{fig:etsy}, del portal de comercio electrónico \href{https://www.etsy.com}{Etsy}, al querer imitar su capacidad de informar de la situación en la que, para un producto determinado, queden igual o menos unidades en stock de las que están siendo referenciadas en cestas de los usuarios. Esto es, que un libro esté en la cesta de \emph{x} usuarios diferentes, que de ese mismo libro queden en stock \emph{y} unidades, y que \emph{x} sea igual o mayor que \emph{y}.
     
     \begin{figure}[htb!]
@@ -1400,6 +1400,12 @@
 			
 			.and()
 			.headers(headers -> headers
+				// HTTP Strict Transport Security
+				.httpStrictTransportSecurity(hsts -> hsts
+					.includeSubDomains(true)
+					.preload(true)
+					.maxAgeInSeconds(31536000)
+				)
 				// Content Security Policy
 				.contentSecurityPolicy(csp -> csp
 					.policyDirectives("default-src 'self' https://*.stripe.com" +
@@ -1452,8 +1458,67 @@
 	Notar que los dos primeros tipos requieren necesariamente autenticación previa.
 	
 	\subsubsection{Cross-Site Request Forgery}
+	\href{https://en.wikipedia.org/wiki/Cross-site_request_forgery}{\emph{Cross-Site Request Forgery}} representa un tipo de ataque que toma ventaja de la confianza que un determinado sitio web tiene en un cliente, por ejemplo porque previamente se ha autenticado. Así, el cliente envía (sin saberlo) una petición (maliciosa) al sitio web y este la acepta dada la confianza que deposita en el primero. Es el caso inverso a los ataques \href{https://owasp.org/www-community/attacks/xss/}{\emph{Cross-Site Scripting}}, donde se saca partido de la confianza que el cliente tiene en el sitio web, ejecutando el código (malicioso) que este le envía (sin saberlo).
 	
-	\subsubsection{Encabezados de Seguridad en las Respuestas HTTP}
+	Imagínese que un usuario se encuentra, autenticado, en la aplicación web de su banco, en la vista que le permite transferir fondos de su cuenta a otra. Esta vista, por ejemplo, mostraría un formulario como el mostrado en el listado \ref{list:csrf_form}. Al completarlo y presionar \emph{Transfer} se enviaría al servidor del banco la petición HTTP mostrada en el listado \ref{list:csrf_http}.
+	\\
+	
+	\begin{lstlisting}[caption=Formulario inseguro para la transferencia de fondos,label=list:csrf_form]
+	<form method="post" action="/transfer">
+		<input type="text" name="amount"/>
+		<input type="text" name="account"/>
+		<input type="submit" value="Transfer"/>
+	</form>
+	\end{lstlisting}
+	
+	\begin{lstlisting}[caption=Petición HTTP insegura para la transferencia de fondos,label=list:csrf_http]
+	POST /transfer HTTP/1.1
+	Host: bank.example.com
+	Cookie: JSESSIONID=randomid
+	Content-Type: application/x-www-form-urlencoded
+	
+	amount=100.00&account=9876
+	\end{lstlisting}
+	
+	Hasta aquí todo normal, pero imagínese que, antes de realizar \emph{logout} en la aplicación del banco, se visita otro sitio web, el cual sirve al cliente el formulario mostrado en el listado \ref{list:csrf_form_evil}. Si en esta situación el usuario presiona \emph{Win Money!} se enviará al servidor una petición HTTP exactamente igual que la mostrada en el listado \ref{list:csrf_http}, salvo el número de cuenta a donde se envía el dinero. Es decir, el usuario habrá sido estafado.
+	\\
+	
+	\begin{lstlisting}[caption=Formulario para la transferencia ilegítima de fondos,label=list:csrf_form_evil]
+	<form method="post" action="https://bank.example.com/transfer">
+		<input type="hidden" name="amount" value="100.00"/>
+		<input type="hidden" name="account" value="evilAccountNum"/>
+		<input type="submit" value="Win Money!"/>
+	</form>
+	\end{lstlisting}
+	
+	El banco no tiene posibilidad de distinguir si alguna de las dos peticiones es ilegítima, ya que en ambas cree que las está haciendo el usuario autorizado para ello. ¿Por qué? porque el medio que utiliza para identificar al usuario, la \emph{cookie} de la línea 3 del listado \ref{list:csrf_http}, es exactamente igual en ambas peticiones, ya que el navegador por defecto adjunta las cookies en todas las peticiones.
+	
+	La manera más extendida de solucionar este problema, que Spring Security implementa por defecto, es adjuntar una pieza de información extra (\emph{token}) que sólo conozca el usuario legítimo. Obviamente, este \emph{token} no puede ser colocado en una \emph{cookie}, porque se estaría en la misma situación vulnerable anteriormente descrita. En este sentido, existen diversas alternativas de lugares donde colocar el \emph{token}, siendo en un campo oculto (llamado \emph{\_csrf}) la utilizada por defecto en Spring Security. Así, el formulario que el banco enviaría ahora al usuario sería como el mostrado en el listado \ref{list:csrf_form_token}, mientras que la petición HTTP sería la mostrada en el listado \ref{list:csrf_http_token}.
+	\\
+	
+	\begin{lstlisting}[caption=Formulario seguro para la transferencia de fondos,label=list:csrf_form_token]
+	<form method="post" action="/transfer">
+		<input type="hidden" name="_csrf" value="4bfd1575-3ad1-4d21-96c7-4ef2d9f86721"/>
+		<input type="text" name="amount"/>
+		<input type="hidden" name="account"/>
+		<input type="submit" value="Transfer"/>
+	</form>
+	\end{lstlisting}
+	
+	\begin{lstlisting}[caption=Petición HTTP segura para la transferencia de fondos,label=list:csrf_http_token]
+	 POST /transfer HTTP/1.1
+	Host: bank.example.com
+	Cookie: JSESSIONID=randomid
+	Content-Type: application/x-www-form-urlencoded
+	
+	amount=100.00&account=9876&_csrf=4bfd1575-3ad1-4d21-96c7- 4ef2d9f86721
+	\end{lstlisting}
+	
+	De esta forma, el agente malintencionado ya no podrá tener acceso a la información necesaria para suplantar la identidad del usuario legítimo, teniendo ahora el banco un mecanismo para distinguirlos.
+	
+	Como se ha dicho, esta funcionalidad se implementa por defecto con Spring Security. Sin embargo, como se aprecia en las líneas 34 a 37 del listado \ref{list:springsec_config}, se ha modificado ligeramente el comportamiento por defecto para permitir que desde Stripe se realicen peticiones POST sin necesidad de contar con el token \emph{\_csrf}.
+	
+	\subsubsection[Encabezados HTTP]{Encabezados de Seguridad en las Respuestas HTTP}
 	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente.
 	
 	\paragraph{Cache Control}
@@ -1476,31 +1541,68 @@
 	Por estas razones, la configuración que por defecto ofrece Spring Security es instruir al navegador para que no realice \emph{content sniffing}, a través de la cabecera mostrada en el listado \ref{list:content_sniffing}. Notar que, como contraparte, ahora en todo momento se debe indicar el tipo de contenido en lo que se envíe al navegador para que funcione correctamente.
 	\\
 	
-	\begin{lstlisting}[caption=Cabeceras para impedir el almacenamiento en caché, label=list:content_sniffing]
+	\begin{lstlisting}[caption=Cabecera para impedir el \emph{content sniffing}, label=list:content_sniffing]
 	X-Content-Type-Options: nosniff
 	\end{lstlisting}
 	
 	\paragraph{HTTP Strict Transport Security}
+	Cuando un usuario teclea la dirección web del sitio que pretende visitar, normalmente no especifica que la comunicación se haga a través de HTTPS. Es decir, se suele escribir sólo \emph{firstmarket.tech} en lugar de \emph{https://firstmarket.tech}. Esto representa un riesgo, ya que las comunicaciones HTTP son vulnerables a ataques \href{https://en.wikipedia.org/wiki/Man-in-the-middle_attack}{\emph{man in the middle}}. Es más, aunque la comunicación HTTP sea redirigida a usar la versión segura (como es el caso en la aplicación web desarollada), la vulnerabilidad comentada persistiría entre la comunicación inicial con HTTP y la redirección.
+	
+	Para gestionar esta situación se creó el \href{https://tools.ietf.org/html/rfc6797}{HTTP Strict Transport Security (HSTS)}, un mecanismo para que los sitios web puedan declararse como \emph{HTST host}, esto es, como accesibles únicamente mediante conexiones seguras.
+	
+	Una manera de alcanzar este estatus es ingresar en la lista de dominios web \emph{preloaded} gestionada en \href{https://hstspreload.org/}{hstspreload.org}. En la figura \ref{fig:preload_list_submission_success} se muestra el mensaje tras el envío del formulario de inscripción.
+	
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=0.7\textwidth,keepaspectratio]{preload_list_submission_success}
+		\caption{Candidatura para la inclusión en la lista de dominios web \emph{preloaded}}
+		\label{fig:preload_list_submission_success}
+	\end{figure}
+	
+	Otra forma es incluyendo el encabezado \emph{Strict-Transport-Security} en las respuestas HTTP. En las líneas de la 46 a la 51 del listado \ref{list:springsec_config} se muestra la configuración realizada en Spring Security para incluir la cabecera mostrada en el listado \ref{list:hsts} en las respuestas HTTP.
+	\\
+	
+	\begin{lstlisting}[caption=Cabecera de declaración \emph{HSTS host}, label=list:hsts]
+	 Strict-Transport-Security: max-age=31536000 ; includeSubDomains ; preload
+	\end{lstlisting}
+	
 	\paragraph{X-Frame-Options}
+	Con el objetivo de prevenir los ataques conocidos como \href{https://en.wikipedia.org/wiki/Clickjacking}{\emph{clickjacking}}, Spring Security inhabilita el renderizado de vistas que contengan etiquetas HTML5 \emph{iframe}. Esto se consigue enviando a los navegadores el encabezado que se muestra en el listado \ref{list:iframe}.
+	\\
+	
+	\begin{lstlisting}[caption=Cabecera que inhibe el uso de las etiquetas \emph{iframe}, label=list:iframe]
+	 X-Frame-Options: DENY
+	\end{lstlisting}
+	
 	\paragraph{X-XSS-Protection}
+	Muchos navegadores implementan filtros anti-\href{https://owasp.org/www-community/attacks/xss/}{XSS}. Aún no representando una solución infalible al problema, ayudan mucho a su mitigación. Normalmente estos filtros están habilitados por defecto, siendo posible configurar qué hacer en caso de un positivo (por ejemplo, intentar enmendar el contenido detectado).
+	
+	Spring Security, por defecto, a través del encabezado que se muestra en el listado \ref{list:filtro_xss}, activa explícitamente el filtro del navegador y lo configura para que ante un positivo bloquee el contenido.
+	\\
+	
+	\begin{lstlisting}[caption=Cabecera que activa y configura el filtro anti-XSS del navegador, label=list:filtro_xss]
+	X-XSS-Protection: 1; mode=block
+	\end{lstlisting}
+	
 	\paragraph{Content Security Policy}
-	%This document defines Content Security Policy (CSP), a tool which developers can use to lock down their applications in various ways, mitigating the risk of content injection vulnerabilities such as cross-site scripting, and reducing the privilege with which their applications execute.
+	La \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP}{\emph{Content Security Policy}} (CSP) es un mecanismo de protección frente a vulnerabilidades de inyección de contenido, como por ejemplo el comentado \href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}. A través de esta funcionalidad se puede declarar y, en última instancia, informar al navegador acerca de cuáles son las fuentes autorizadas desde las cuales descargar los recursos que las vistas de la aplicación web necesita.
 	
-	%CSP is not intended as a first line of defense against content injection vulnerabilities. Instead, CSP is best used as defense-in-depth. It reduces the harm that a malicious injection can cause, but it is not a replacement for careful input validation and output encoding.
+	Esta política de permisos, no trivial, depende de las necesidades de cada sitio web, y es por ello que Spring Security no la configura por defecto. Así, en el listado \ref{list:springsec_config}, entre las líneas 52 y 75, se declara la CSP de la aplicación web desarollada. Como se aprecia, se establecen los dominios desde los cuales obtener 4 tipos de recursos: los \emph{scripts}, las hojas de estilo, las fuentes y las imágenes. También se establece que todo el contenido fuera de lo explicitado sólo pueda ser obtenido desde \emph{firstmarket.tech} y desde \emph{*.stripe.com}.
+	
 	\paragraph{Referrer  Policy}
-	Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}. Este encabezado puede tener un valor de entre un grupo de ocho opciones, estableciendo cada uno de ellas una \emph{política de Referer}.
+	Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}.
 	
-	Es importante establecer un criterio apropiado ya que, por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. La información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
+	Es importante establecer un criterio apropiado ya que, por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. En general, la información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
 	
-	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 71 y 72 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
+	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
 	
 	\subsection{Autenticación por Fuerza Bruta}
 	\subsection{Validación de Entradas}
-	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y por motivos de seguridad, como evitar ataques de inyección SQL.
+	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y, quizás más importante, para evitar ataques de inyección de contenido.
 	
-	Esta comprobación se puede hacer tanto en cliente como en servidor. Desde el punto de vista de la seguridad, realizar la comprobación en servidor es obligatorio, ya que las comprobaciones en cliente son muy fácilmente circunvaladas. Por otro lado, desde el punto de vista de la experiencia de usuario es muy recomendable implementarla también en cliente, ya que permite al usuario tener un feedback mucho más rápido que si debiese esperar a que el servidor responda. En definitiva, la mejor práctica es implementar la validación tanto en backend como en frontend. Y así se ha hecho.
+	Esta comprobación se puede hacer tanto en cliente como en servidor. Desde el punto de vista de la seguridad, realizar la comprobación en servidor es \textbf{obligatorio}, ya que las comprobaciones en cliente son muy fácilmente circunvaladas. Por otro lado, desde el punto de vista de la experiencia de usuario es muy recomendable implementarla también en cliente, ya que permite al usuario tener un \emph{feedback} mucho más rápido que si debiese esperar a que el servidor responda. En definitiva, la mejor práctica es implementar la validación tanto en \emph{backend} como en \emph{frontend}, y así se ha implementado en la aplicación web desarrollada. Resaltar, además, que los componentes de validación en \emph{backend} están en el paquete \emph{util.validation}.
 	
-	Mucha es la información que FirstMarket tiene que validar, pero a grandes rasgos se puede dividir en numérica y textual. El primer grupo presenta poca dificultad, se trata de comprobar rangos de valores principalmente. Para el segundo grupo las expresiones regulares son el arma perfecta. En el archivo de configuración \emph{application.yml} se detallan las expresiones regulares y los rangos numéricos utilizados. A modo de ejemplo, la propiedad definida en este archivo de configuración que especifica la expresión regular contra la que validar las contraseñas se muestra en el listado \ref{list:regex_pw}.
+	Mucha es la información que FirstMarket debe validar, pero a grandes rasgos se puede dividir en numérica y textual. El primer grupo presenta poca dificultad, se trata de comprobar rangos de valores principalmente. Para el segundo grupo las expresiones regulares son el arma perfecta. En el archivo de configuración \emph{application.yml} se detallan las expresiones regulares y los rangos numéricos utilizados. A modo de ejemplo, la propiedad definida en este archivo de configuración que especifica la expresión regular contra la que validar las contraseñas se muestra en el listado \ref{list:regex_pw}.
 	\\
 	
 	\begin{lstlisting}[caption=Expresión regular para las contraseñas,label=list:regex_pw]
@@ -1510,51 +1612,9 @@
 				password: ^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$
 	\end{lstlisting}
 	
-	Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en frontend como en backend, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
+	Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en \emph{frontend} como en \emph{backend}, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
 	
-	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes, a saber, sintáctica y semántica. La validación sintáctica se realiza utilizando las ya mencionadas expresiones regulares, pero para validar si se trata de un ISBN válido aún hay que calcular mediante un algoritmo concreto un dígito de control y ver si coincide con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 dígitos (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación debe dar soporte a ambos formatos de ISBN. A modo de ejemplo, en el listado \ref{list:js_isbn} se detalla la función JavaScript desarrollada para comprobar en el cliente el dígito de control.
-	\\
-	
-	\begin{lstlisting}[language=JavaScript,caption=Validación del dígito de control del ISBN en cliente,label=list:js_isbn]
-	const isbnChecksum = function() {
-		let chars, last, sum, check, i;
-		const isbn = document.getElementById("isbn");
-		if (isbn.checkValidity()) {
-			// Remove non ISBN digits, then split into an array
-			chars = isbn.value.replace(/[- ]|^ISBN(?:-1[03])?:?/g, "").split("");
-			// Remove the final ISBN digit from `chars`, and assign it to `last`
-			last = chars.pop();
-			sum = 0;
-			if (chars.length == 9) {
-				// Compute the ISBN-10 check digit
-				chars.reverse();
-				for (i = 0; i < chars.length; i++) {
-					sum += (i + 2) * parseInt(chars[i], 10);
-				}
-				check = 11 - (sum % 11);
-				if (check == 10) {
-					check = "X";
-				} else if (check == 11) {
-					check = "0";
-				}
-			} else {
-				// Compute the ISBN-13 check digit
-				for (i = 0; i < chars.length; i++) {
-					sum += (i % 2 * 2 + 1) * parseInt(chars[i], 10);
-				}
-				check = 10 - (sum % 10);
-				if (check == 10) {
-					check = "0";
-				}
-			}
-			if (check != last) {
-				alert("Error: Invalid ISBN checksum digit (" + last + "). Try with (" + check + ")");
-				isbn.focus();
-				isbn.value = isbn.value.substring(0, isbn.value.length - 1);
-			}
-		}
-	};
-	\end{lstlisting}
+	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes. La primera se realiza utilizando las ya mencionadas expresiones regulares, pero, para validar si se trata de un ISBN válido, aún hay que calcular el dígito de control y comprobar que coincida con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación implementada en FirstMarket da soporte a ambos formatos de ISBN.
 	
 	\subsection{Stripe Radar} \label{sec:striperadar}
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
@@ -1679,6 +1739,7 @@
     aquie se describe el uso del admin
 
 	\section{Presupuesto}
+	%precio de los cursos
 	%Resaltar que este \emph{dyno} tiene un coste de 7 dólares por mes.
 
     \section{Mejoras y Ampliaciones}
