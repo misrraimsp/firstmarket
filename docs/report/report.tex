@@ -1361,7 +1361,6 @@
 			// authenticate through login form
 			.formLogin()
 			.loginPage("/login")
-			// handler for brute-force authentication prevention
 			.failureHandler(customAuthenticationFailureHandler())
 			
 			// set logout page
@@ -1440,11 +1439,34 @@
 	\end{lstlisting}
 	
 	\subsubsection{Autenticación}
-	Spring Security ofrece toda una gama de métodos de autenticación. El usado en FirstMarket, especificado en las líneas 5 y 6 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña.
+	Spring Security ofrece toda una gama de métodos de autenticación. El usado en FirstMarket, configurado entre las líneas 5 y 7 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña. En caso de un fallo de autenticación, la clase \emph{customAuthenticationFailureHandler} toma el control, determina la causa del fallo y presenta el mensaje adecuado al usuario.
 	
 	Es importante resaltar que, con el fin de garantizar la seguridad de la información de los usuarios, la aplicación web desarrollada almacena las constraseñas en la base de datos encriptadas.  En concreto, se usa el agoritmo \href{https://en.wikipedia.org/wiki/Bcrypt}{Bcrypt}. De esta forma, para saber si la contraseña es correcta, la aplicación web encripta la contraseña enviada en el formulario y la compara con la que tiene almacenada.
 	
 	Además, Spring Security permite especificar la lógica tras un \emph{logout}, que en el caso de la presente aplicación es simplemente una redirección a la páquina de inicio, como se muestra en las líneas 12 y 13 del listado \ref{list:springsec_config}.
+	
+	\paragraph{Autenticación por Fuerza Bruta}
+	Como ya se ha comentado, el ecosistema Spring destaca por su extensibilidad. Allá donde se requieran funcionalidades especiales, el framework permite alcanzarlas. En este sentido, aunque Spring Security no implementa ningún mecanismo para prevenir la autenticación por fuerza bruta, sí ofrece facilidades para incorporarlo.
+	
+	Cada vez que un usuario trata de autenticarse, en función del éxito o del motivo del fracaso, Spring Security emite el correspondiente evento. Si la autenticación tuvo éxito se emite el evento \emph{AuthenticationSuccessEvent}, mientras que si fracasa por ser la información proporcionada incorrecta se emite \emph{AuthenticationFailureBadCredentialsEvent}. Otro motivos de fracaso (por ejemplo estar la cuenta de usuario bloqueada por el administrador) emiten diferentes eventos.
+	
+	Escuchando estos eventos, la aplicación web desarrollada implementa, con las clases contenidas en el paquete \emph{firstmarket.security},  una protección frente a intentos de autenticación por fuerza bruta. Esto es, se impide la posibilidad de probar sistemáticamente un número muy grande de contraseñas para descubrir cuál es la correcta.
+	
+	Para ello, la clase \emph{LockManager} mantiene un registro caché (usando la clase \emph{LoadingCache} de la librería \href{https://guava.dev/}{Guava}) con el que llevar el conteo de los intentos fallidos de autenticación, debido a credenciales incorrectas, dentro de una ventana temporal.
+	
+	Así, dentro de un tiempo determinado se restringe el número de intentos con credenciales fallidas, de forma que, si se supera el límite, la cuenta de usuario queda bloqueda temporalmente (por un tiempo igual a la ventana temporal). Por contra, si dentro de dicho intervalo, y sin haber superado el límite de intentos, se proporcionara las credenciales correctas, el registro se limpia. Además, cada entrada en la caché se limpia automáticamente tras superarse un tiempo igual a la ventana disponible sin que se haya producido un bloqueo.
+	
+	Tanto el número de intentos permitidos (\emph{num-of-attempts}) como la ventana temporal (\emph{locking-minutes}) son externalizados en el fichero de propieades de la aplicación, \emph{application.yml}. En el listado \ref{list:lock_params} se muestra su configuación en producción.
+	\\
+	
+	\begin{lstlisting}[caption=Parámetros para configurar la prevención de autenticación por fuerza bruta,label=list:lock_params]
+	fm:
+		security:
+			lock:
+				num-of-attempts: 5
+				locking-minutes: 60
+	\end{lstlisting}
+	
 
 	\subsubsection{Autorización}
 	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 15 a la 26, FirstMarket implementa tres tipos de recursos: 
@@ -1596,7 +1618,7 @@
 	
 	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
 	
-	\subsection{Autenticación por Fuerza Bruta}
+
 	\subsection{Validación de Entradas}
 	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y, quizás más importante, para evitar ataques de inyección de contenido.
 	

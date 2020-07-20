@@ -42,7 +42,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // authenticate through login form
                 .formLogin()
                 .loginPage("/login")
-                // failure handler in order to prevent brute-force authentication
                 .failureHandler(customAuthenticationFailureHandler())
 
                 // set logout page
