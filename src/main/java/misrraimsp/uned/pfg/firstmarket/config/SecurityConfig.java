@@ -90,15 +90,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         )
                         // Content Security Policy
                         .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self' https://*.stripe.com" +
+                                .policyDirectives("default-src 'self'" +
                                         "; " +
                                         "script-src 'self' 'unsafe-inline' " +
-                                        "https://*.stripe.com " +
+                                        "https://js.stripe.com " +
                                         "https://*.fontawesome.com " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://cdnjs.cloudflare.com " +
                                         "https://ajax.googleapis.com" +
-                                        ";" +
+                                        "; " +
                                         "style-src 'self' 'unsafe-inline' " +
                                         "https://cdn.jsdelivr.net " +
                                         "https://maxcdn.bootstrapcdn.com " +
@@ -109,7 +109,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "https://fonts.gstatic.com " +
                                         "https://*.fontawesome.com" +
                                         "; " +
-                                        "img-src 'self' data:"
+                                        "img-src 'self' data:" +
+                                        "; " +
+                                        "frame-src https://js.stripe.com" +
+                                        "; " +
+                                        "connect-src https://api.stripe.com"
                                 )
                         )
                         // Referrer Policy

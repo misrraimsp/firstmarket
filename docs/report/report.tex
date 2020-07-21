@@ -53,7 +53,7 @@
 	colorlinks=true,
 	linkcolor=blue,
 	filecolor=magenta,      
-	urlcolor=cyan,
+	urlcolor=blue,
 }
 
 \urlstyle{same}
@@ -124,12 +124,6 @@
     En definitiva, y sin entrar en matices que desvíen de la esencia, la Web es la aplicación de Internet que permite el consumo de páginas web bajo demanda por parte de los usuarios (en contraste con el modelo broadcast, en el que se emite y el usuario sólo puede consumir lo emitido, como en la radio).
     
     \subsubsection{¿Qué es una Aplicación Web?}
-    
-    %A web application is defined as a hierarchy of directories and files in a standard layout. Such a hierarchy can be accessed in its "unpacked" form, where each directory and file exists in the filesystem separately, or in a "packed" form known as a Web ARchive, or WAR file. The former format is more useful during development, while the latter is used when you distribute your application to be installed.
-    
-    
-    %The complete syntax and semantics for the deployment descriptor is defined in Chapter 13 of the Servlet API Specification, version 2.3.
-    
     Las páginas web que son enviadas desde el servidor al cliente se dice que pueden ser estáticas o dinámicas. Esta característica, más que hablar de la página web en sí misma, habla del proceso mediante el cual su contenido ha sido creado y modificado a lo largo del tiempo.
    	
    	Las páginas estáticas lo son en el sentido de que su contenido, creado comúnmente por un humano, no varía con el tiempo de manera programática. La información que presentan es la misma, a menos que se modifique \emph{a mano}. Así eran todas las páginas web en los primeros años. En contraste, en las páginas web dinámicas, el contenido no está dado de antemano, sino que se genera en cada ciclo de petición-respuesta. Esto es útil porque entre otras cosas permite páginas web personalizadas para cada usuario, e incluso que sea él mismo quien aporte contenido a la página web.
@@ -139,11 +133,25 @@
     Desde este punto de vista, en el presente proyecto se ha desarrollado una aplicación web encargada de generar contenido web que los usuarios pueden visitar con el objetivo de comprar libros a través de Internet.
 
     \subsection{Estructura de la Memoria}
-    Estructura
-
-    \section{Análisis}
+    El resto de la presente memoria está dedicado a presentar los aspectos más relevantes del trabajo desarrollado.
+    
+    En la sección \ref{sec:analysis} se detallan los aspectos relacionados con la fase de análisis en el desarrollo de la aplicación web. Para ello, se comentan los requisitos de partida y se ofrecen varios casos de uso.
+    
+    La sección \ref{sec:design} está enfocada a las decisiones de diseño. En ella se esbozan las principales coordenadas de la aplicación web que se ha desarrollado, discutiendo las decisiones tomadas.
+    
+    El apartado \ref{sec:implementation} se ha utilizado para describir y justificar las decisiones de implementación. Se tratan en esta sección aspectos tan importantes como la tecnología que se ha usado para el desarrollo, la manera de llevar a cabo la gestión de los pagos, o aspectos internos de código que por su especial relevancia se ha decidido explicar.
+    
+    Después, en la sección \ref{sec:deployment}, se comentan los pasos seguidos para conseguir que la aplicación web sea accesible al público. Aunque esto no fuese un requisito de partida, se ha considerado muy deseable, ya que sirve para aprender y ganar experiencia en el mundo de las tecnologías web.
+    
+    El siguiente apartado, el \ref{sec:security}, está focalizado en los aspectos de seguridad que rodean a FirstMarket. Es un apartado clave, que, aunque tampoco estaba contenido en los requisitos básicos, se ha querido profundizar en él. Así, se describen las principales características de seguridad implementadas en \href{https://firstmarket.tech}{firstmarket.tech}, además de un análisis de las vulnerabilidades detectadas.
+    
+    %Por último, para concluir con esta memoria, en la sección \ref{sec:budget} se ofrece un presupuesto estimativo de todos los costes asociados con el desarrollo del presente proyecto.
+    
+    \section{Análisis} \label{sec:analysis}
+    En esta sección se aborda la fase de análisis del desarrollo software. Partiendo de la especificación de los requisitos básicos que debe implementar la aplicación web, se ofrece un conjunto de casos de uso que dé una visión de cuál debe ser el flujo de uso.
+    
         \subsection{Requisitos}
-            La aplicación debe admitir los roles y capacidades siguientes:
+            La aplicación, fundamentalmente, debe admitir los roles y capacidades siguientes:
             \begin{enumerate}
                 \item Usuario anónimo (UA).
                 \begin{itemize}
@@ -416,9 +424,9 @@
                     \item[+] Post-Condiciones: El usuario ha efectuado el logout con éxito.
                 \end{itemize}
 
-
-    \section{Diseño}
-    En este apartado se ofrece una descripción de las decisiones tomadas a nivel de diseño de la aplicación web.
+    \section{Diseño} \label{sec:design}
+    En este apartado se ofrece una descripción de las decisiones tomadas a nivel de diseño a lo largo del desarrollo de la aplicación web.
+    
     \subsection{Arquitectura del Sistema}
     Desde un punto de vista lo suficientemente alejado como para no percibir los detalles internos, la aplicación web está organizada siguiendo la arquitectura clásica cliente-servidor-datos. Hoy en día, quizás, esta no sea la organización más vanguardista. Los términos \emph{serverless}, \emph{microservicios} o \emph{single-page-application} son los que con mayor eco resuenan en la industria web actual.
     
@@ -441,7 +449,6 @@
     En la figura \ref{fig:desing_general} se presenta un esquema de la arquitectura de la aplicación web. Como se aprecia, responde a la mencionada arquitectura clásica cliente-servidor-datos. No obstante, existen ciertos elementos que descansan en servicios cloud externos, dotando a la aplicación de cierto carácter serverless. Así, el servicio de pagos es ofrecido por Stripe (ver \ref{sec:stripe}). Como se aprecia en la figura \ref{fig:desing_general}, existe una vía de comunicación directa entre el cliente y Stripe. Esto es así para garantizar que la aplicación web no tiene nunca acceso a los datos confidenciales de pago del cliente (p.e., número de la tarjeta de crédito), sino que esta información es enviada directamente desde el cliente a Stripe. Por su parte, el servicio de correo es delegado en Gmail, a través de la capa de abstracción que Spring Framework ofrece de la API JavaMail. Y, por último, la base de datos. Este caso es especial porque dependiendo del entorno de ejecución se puede asimilar a un servicio cloud o no. En este sentido, cuando el entorno de ejecución es producción, la base datos es accedida como un servicio que AWS presta a Heroku.
         
     Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
-    
     
     \subsubsection[Inversión de Control]{Inversión de Control - Inyección de Dependencias} \label{sec:ioc}
     Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
@@ -568,7 +575,7 @@
 		\label{fig:er_expanded_diagram}
 	\end{figure}
 
-    \section{Implementación}
+    \section{Implementación} \label{sec:implementation}
     La materialización del análisis y diseño detallado en las secciones anteriores lo conforma el conjunto software que se incluye en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
     \subsection{Stack Tecnológico}
@@ -1200,7 +1207,7 @@
     	\label{fig:fm_cartBookRegistry_alert}
     \end{figure}
     
-    \section{Despliegue}
+    \section{Despliegue} \label{sec:deployment}
     En esta sección se abordan aspectos relevantes en relación con el despliegue de la aplicación web desarrollada. 
     
     \subsection{Heroku} \label{sec:heroku}
@@ -1266,7 +1273,7 @@
 		\label{fig:dns}
 	\end{figure}
 
-	\section{Seguridad}
+	\section{Seguridad} \label{sec:security}
 	La palabra seguridad es empleada en multitud de situaciones dentro del mundo de las tecnologías de la información, normalmente con significados dispares. No obstante, generalizando lo suficiente, viene a referirse a la protección que se debe proporcionar a determinados recursos, por su valor y/o sensibilidad, frente a posibles usos malintencionados.
 	
 	Esta sección está dedicada a las cuestiones de seguridad, en sentido amplio, relacionadas con \href{https://firstmarket.tech}{FirstMarket}.
@@ -1639,6 +1646,7 @@
 	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes. La primera se realiza utilizando las ya mencionadas expresiones regulares, pero, para validar si se trata de un ISBN válido, aún hay que calcular el dígito de control y comprobar que coincida con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación implementada en FirstMarket da soporte a ambos formatos de ISBN.
 	
 	\subsection{Stripe Radar} \label{sec:striperadar}
+	TODO
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
 	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con la ayuda de \href{https://probely.com/}{Probely} y \href{https://snyk.io/}{Snyk}. La primera herramienta detectó 5 vulnerabilidades, mientras que la segunda 13. Del total, 14 responden a vulnerabilidades conocidas en librerías utilizadas por la aplicación web, por lo que su resolución se basa en actualizar las versiones de dichas dependencias. A continuación se pasa a comentar los problemas encontrados, haciendo especial énfasis en las 4 vulnerabilidades propias de la aplicación web desarrollada: 
 	
@@ -1748,23 +1756,20 @@
 		
 		Un aspecto que debe resaltarse es que las actualizaciones de la 2 a la 6, incluidas ellas, han tenido que establecerse sobrescribiendo la configuración que por defecto ofrece Spring Boot a través del fichero \emph{spring-boot-starter-parent}, del cual hereda el \emph{pom.xml} de la aplicación web desarrollada. Esto es importante porque se está saliendo del terreno seguro que esta configuración por defecto suministra, en el sentido de que desde Spring se ha testado que las versiones establecidas por defecto funcionan sin problemas de compatibilidades entre sí.
 		
-	
 	\end{itemize}
 	
 	
-    % MANUALES
-    \section{Manuales}
-    En esta seccion se va a describir las cuestiones necesarias para facilitar el uso de la aplicacion web por parte de los usuarios
-        \subsection{Cliente}
-    aqui va la descripcion para el usuario cliente
-        \subsection{Administrador}
-    aquie se describe el uso del admin
 
-	\section{Presupuesto}
+    %  \section{Manuales}
+    %  En esta seccion se va a describir las cuestiones necesarias para facilitar el uso de la aplicacion web por parte de los usuarios
+    %  \subsection{Cliente}
+    %  \subsection{Administrador}
+
+	%\section{Presupuesto} \label{sec:budget}
 	%precio de los cursos
 	%Resaltar que este \emph{dyno} tiene un coste de 7 dólares por mes.
 
-    \section{Mejoras y Ampliaciones}
+    %\section{Mejoras y Ampliaciones}
     %Testar el software
     
     %Sistema de valoracion por parte de los usuarios de los libros
