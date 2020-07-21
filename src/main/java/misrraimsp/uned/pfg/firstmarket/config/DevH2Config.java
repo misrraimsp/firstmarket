@@ -33,6 +33,8 @@ public class DevH2Config {
 
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
+    private static final String imgAddress = "src/main/resources/static/images/";
+
     @Bean
     public CommandLineRunner dataLoader(BookServer bookServer,
                                         CatServer catServer,
@@ -54,7 +56,7 @@ public class DevH2Config {
             //Images
 
             Image img0 = new Image();
-            Path path0 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/logo.jpg");
+            Path path0 = Paths.get(imgAddress + "logo.jpg");
             img0.setDefault(true);
             img0.setData(Files.readAllBytes(path0));
             img0.setName(path0.getFileName().toString());
@@ -62,7 +64,7 @@ public class DevH2Config {
             imageServer.persist(img0);
 
             Image img1 = new Image();
-            Path path1 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/momo.jpg");
+            Path path1 = Paths.get(imgAddress + "momo.jpg");
             img1.setDefault(false);
             img1.setData(Files.readAllBytes(path1));
             img1.setName(path1.getFileName().toString());
@@ -70,7 +72,7 @@ public class DevH2Config {
             imageServer.persist(img1);
 
             Image img2 = new Image();
-            Path path2 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/haskell.png");
+            Path path2 = Paths.get(imgAddress + "haskell.png");
             img2.setDefault(false);
             img2.setData(Files.readAllBytes(path2));
             img2.setName(path2.getFileName().toString());
@@ -78,7 +80,7 @@ public class DevH2Config {
             imageServer.persist(img2);
 
             Image img3 = new Image();
-            Path path3 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/istanbul.jpg");
+            Path path3 = Paths.get(imgAddress + "istanbul.jpg");
             img3.setDefault(false);
             img3.setData(Files.readAllBytes(path3));
             img3.setName(path3.getFileName().toString());
@@ -86,7 +88,7 @@ public class DevH2Config {
             imageServer.persist(img3);
 
             Image img4 = new Image();
-            Path path4 = Paths.get("/home/andreagrau/Desktop/EmbajadaMisrra/pfg/firstmarket/src/main/resources/static/images/java.jpg");
+            Path path4 = Paths.get(imgAddress + "java.jpg");
             img4.setDefault(false);
             img4.setData(Files.readAllBytes(path4));
             img4.setName(path4.getFileName().toString());

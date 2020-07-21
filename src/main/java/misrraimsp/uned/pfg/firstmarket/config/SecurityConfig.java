@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         )
                         // Content Security Policy
                         .contentSecurityPolicy(csp -> csp
-                                .policyDirectives("default-src 'self'" +
+                                .policyDirectives("default-src 'none'" +
                                         "; " +
                                         "script-src 'self' 'unsafe-inline' " +
                                         "https://js.stripe.com " +
@@ -111,9 +111,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "; " +
                                         "img-src 'self' data:" +
                                         "; " +
-                                        "frame-src https://js.stripe.com" +
+                                        "frame-src 'self' " +
+                                        "https://js.stripe.com" +
                                         "; " +
-                                        "connect-src https://api.stripe.com"
+                                        "connect-src 'self' " +
+                                        "https://api.stripe.com"
                                 )
                         )
                         // Referrer Policy
