@@ -36,7 +36,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Controller
 public class OrderController extends BasicController {
@@ -114,18 +113,6 @@ public class OrderController extends BasicController {
     @GetMapping("/user/success")
     public String showSuccess(Model model,
                               @AuthenticationPrincipal User authUser) throws InterruptedException {
-
-        //wait for backend payment-success process take place
-        User user = userServer.findById(authUser.getId());
-        int numOfNaps = 0;
-        while (user.getCart().getSize() > 0 && numOfNaps < 5) {
-            //take a nap
-            TimeUnit.SECONDS.sleep(3);
-            //wakeup
-            numOfNaps++;
-            user = userServer.findById(authUser.getId());
-        }
-        LOGGER.debug("Number of naps taken to wait for backend payment-success process has been {}", numOfNaps);
 
         populateModel(model.asMap(), authUser);
         populateModelToInfo(

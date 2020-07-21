@@ -103,7 +103,7 @@
                             </div>
                             <!-- go back button -->
                             <div>
-                                <button class="btn btn-sm btn-outline-secondary btn-block my-3" onclick="window.history.back();">
+                                <button class="backButton btn btn-sm btn-outline-secondary btn-block my-3">
                                     <i class="fas fa-chevron-left"></i><span class="font-weight-lighter small ml-3">Go back</span>
                                 </button>
                             </div>
@@ -130,5 +130,7 @@
         <!-- ajax add book to cart -->
         <a th:href="@{/login}" id="loginLink" style="display: none"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
+        <!-- back button -->
+        <script th:src="@{/js/back.js}"></script>
     </body>
 </html>

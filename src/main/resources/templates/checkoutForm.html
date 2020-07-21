@@ -160,5 +160,7 @@
         <i id="pk" th:attr="pk=${@environment.getProperty('fm.payment.stripe.key.public')}"></i>
         <a th:href="@{/user/success}" id="successLink" style="display: none"></a>
         <script th:src="@{/js/checkout.js}"></script>
+        <!-- back button -->
+        <script th:src="@{/js/back.js}"></script>
     </body>
 </html>

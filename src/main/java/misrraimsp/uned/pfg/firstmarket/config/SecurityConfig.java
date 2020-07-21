@@ -92,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .contentSecurityPolicy(csp -> csp
                                 .policyDirectives("default-src 'none'" +
                                         "; " +
-                                        "script-src 'self' 'unsafe-inline' " +
+                                        "script-src 'self' " +
                                         "https://js.stripe.com " +
                                         "https://*.fontawesome.com " +
                                         "https://maxcdn.bootstrapcdn.com " +

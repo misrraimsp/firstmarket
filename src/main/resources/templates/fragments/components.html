@@ -56,12 +56,6 @@
                                 <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                                     <a class="nav-link text-white font-weight-bold" th:href="@{/admin/users}">Users</a>
                                 </li>
-                                <!--<li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/categories}">Categories</a>
-                                </li>
-                                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                                    <a class="nav-link text-white font-weight-bold" th:href="@{/admin/images}">Images</a>
-                                </li>-->
                                 <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
                                     <a class="nav-link dropdown-toggle text-white font-weight-bold" href="#" data-toggle="dropdown">Settings</a><!--id="navbardrop"-->
                                     <div class="dropdown-menu">
@@ -167,7 +161,7 @@
         <button th:fragment="submitButton(text)" class="btn btn-outline-info px-5" type="submit"><span th:text="${text}"></span></button>
 
         <!-- cancel button (toBack) -->
-        <a th:fragment="cancelButtonToBack(text)" class="btn btn-outline-secondary px-3" href="#" onclick="window.history.back();"><small th:text="${text}"></small></a>
+        <a th:fragment="cancelButtonToBack(text)" class="backButton btn btn-outline-secondary px-3" href="#"><small th:text="${text}"></small></a>
 
         <!-- cancel button (toHome) -->
         <a th:fragment="cancelButtonToHome(text)" class="btn btn-outline-secondary px-3" th:href="@{/home}"><small th:text="${text}"></small></a>
