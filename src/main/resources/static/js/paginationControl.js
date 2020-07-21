@@ -4,6 +4,12 @@ document.addEventListener("DOMContentLoaded", function() {
 
     let refreshTrigger = document.getElementById("paginationTrigger");
 
+    let paginationDataHolder = document.getElementById("paginationData");
+    let totalElements = parseInt(paginationDataHolder.getAttribute("totalElements"));
+    let pageIndex = parseInt(paginationDataHolder.getAttribute("pageIndex"));
+    let numberOfElements = parseInt(paginationDataHolder.getAttribute("numberOfElements"));
+    let pageSize = parseInt(paginationDataHolder.getAttribute("pageSize"));
+
     //functions
     let appendURLParam = function(url,paramName) {
         const indexOfParamToken = url.indexOf("?");

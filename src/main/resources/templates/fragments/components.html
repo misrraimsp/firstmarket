@@ -266,15 +266,6 @@
             <small class="text-dark font-weight-lighter">Sort by</small>
         </p>
 
-        <!-- pagination MVC variables -->
-        <script th:fragment="paginationMvcVariables">
-            let totalElements = [[${pageOfEntities.totalElements}]];
-            let totalPages = [[${pageOfEntities.totalPages}]];
-            let pageIndex = [[${pageOfEntities.number}]];
-            let numberOfElements = [[${pageOfEntities.numberOfElements}]];
-            let pageSize = [[${pageOfEntities.size}]];
-        </script>
-
         <!-- footer -->
         <footer class="footer bg-white text-center pb-3" th:fragment="footer">
             <hr style="max-width: 33%; margin-top: 3rem"/>

@@ -173,7 +173,7 @@
         <script th:src="@{/js/collapsing.js}"></script>
         <!-- pagination functionality -->
         <a id="paginationTrigger" style="display: none"></a>
-        <script th:replace="fragments/components::paginationMvcVariables"></script>
+        <i id="paginationData" th:attr="totalElements=${pageOfEntities.totalElements},totalPages=${pageOfEntities.totalPages},pageIndex=${pageOfEntities.number},numberOfElements=${pageOfEntities.numberOfElements},pageSize=${pageOfEntities.size}"></i>
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationControl.js}"></script>
     </body>
