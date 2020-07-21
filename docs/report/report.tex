@@ -1414,15 +1414,15 @@
 				)
 				// Content Security Policy
 				.contentSecurityPolicy(csp -> csp
-					.policyDirectives("default-src 'self' https://*.stripe.com" +
+					.policyDirectives("default-src 'none'" +
 						"; " +
-						"script-src 'self' 'unsafe-inline' " +
-						"https://*.stripe.com " +
+						"script-src 'self' " +
+						"https://js.stripe.com " +
 						"https://*.fontawesome.com " +
 						"https://maxcdn.bootstrapcdn.com " +
 						"https://cdnjs.cloudflare.com " +
 						"https://ajax.googleapis.com" +
-						";" +
+						"; " +
 						"style-src 'self' 'unsafe-inline' " +
 						"https://cdn.jsdelivr.net " +
 						"https://maxcdn.bootstrapcdn.com " +
@@ -1433,7 +1433,13 @@
 						"https://fonts.gstatic.com " +
 						"https://*.fontawesome.com" +
 						"; " +
-						"img-src 'self' data:"
+						"img-src 'self' data:" +
+						"; " +
+						"frame-src 'self' " +
+						"https://js.stripe.com" +
+						"; " +
+						"connect-src 'self' " +
+						"https://api.stripe.com"
 					)
 				)
 				// Referrer Policy
@@ -1579,13 +1585,13 @@
 	
 	Para gestionar esta situación se creó el \href{https://tools.ietf.org/html/rfc6797}{HTTP Strict Transport Security (HSTS)}, un mecanismo para que los sitios web puedan declararse como \emph{HTST host}, esto es, como accesibles únicamente mediante conexiones seguras.
 	
-	Una manera de alcanzar este estatus es ingresar en la lista de dominios web \emph{preloaded} gestionada en \href{https://hstspreload.org/}{hstspreload.org}. En la figura \ref{fig:preload_list_submission_success} se muestra el mensaje tras el envío del formulario de inscripción.
+	Una manera de alcanzar este estatus es ingresar en la lista de dominios web \emph{preloaded} gestionada en \href{https://hstspreload.org/}{hstspreload.org}. En la figura \ref{fig:hsts_preload} se muestra la confirmación de la inclusión de \href{https://firstmarket.tech}{firstmarket.tech} en dicha lista.
 	
 	\begin{figure}[hbt!]
 		\centering
-		\includegraphics[width=0.7\textwidth,keepaspectratio]{preload_list_submission_success}
-		\caption{Candidatura para la inclusión en la lista de dominios web \emph{preloaded}}
-		\label{fig:preload_list_submission_success}
+		\includegraphics[width=\textwidth,keepaspectratio]{hsts_preload}
+		\caption{Confirmación de la inclusión en la lista de dominios web \emph{HSTS preload}}
+		\label{fig:hsts_preload}
 	\end{figure}
 	
 	Otra forma es incluyendo el encabezado \emph{Strict-Transport-Security} en las respuestas HTTP. En las líneas de la 46 a la 51 del listado \ref{list:springsec_config} se muestra la configuración realizada en Spring Security para incluir la cabecera mostrada en el listado \ref{list:hsts} en las respuestas HTTP.
@@ -1616,7 +1622,7 @@
 	\paragraph{Content Security Policy}
 	La \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP}{\emph{Content Security Policy}} (CSP) es un mecanismo de protección frente a vulnerabilidades de inyección de contenido, como por ejemplo el comentado \href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}. A través de esta funcionalidad se puede declarar y, en última instancia, informar al navegador acerca de cuáles son las fuentes autorizadas desde las cuales descargar los recursos que las vistas de la aplicación web necesita.
 	
-	Esta política de permisos, no trivial, depende de las necesidades de cada sitio web, y es por ello que Spring Security no la configura por defecto. Así, en el listado \ref{list:springsec_config}, entre las líneas 52 y 75, se declara la CSP de la aplicación web desarollada. Como se aprecia, se establecen los dominios desde los cuales obtener 4 tipos de recursos: los \emph{scripts}, las hojas de estilo, las fuentes y las imágenes. También se establece que todo el contenido fuera de lo explicitado sólo pueda ser obtenido desde \emph{firstmarket.tech} y desde \emph{*.stripe.com}.
+	Esta política de permisos, no trivial, depende de las necesidades de cada sitio web, y es por ello que Spring Security no la configura por defecto. Así, en el listado \ref{list:springsec_config}, entre las líneas X y Y, se declara la CSP de la aplicación web desarrollada. Como se aprecia, se especifican diversas fuentes para distintos tipos de contenido. Es importante resaltar que tanto con los \emph{scripts} como con las hojas de estilo debe evitarse su uso en modo \emph{inline}, esto es, embebido en el propio HTML, usando en su lugar ficheros \emph{.js} y \emph{.css}.
 	
 	\paragraph{Referrer  Policy}
 	Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}.
@@ -1625,7 +1631,21 @@
 	
 	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
 	
-
+	\paragraph{Subresource Integrity}
+	Por último, para finalizar con este apartado, y aunque no se trate de una funcionalidad ofrecida por Spring Security, es necesario comentar que la aplicación web desarrollada hace uso del mecanismo conocido como \href{https://www.w3.org/TR/SRI/}{\emph{Subresource Integrity}}. 
+	
+	Se trata de una protección destinada a mitigar la vulnerabilidad que entraña depender de librerías (u otros recursos) de terceros. Por ejemplo, si la librería de jQuery se viera comprometida, automáticamente lo estaría también todas las aplicaciones que hacen uso de la misma. Así, para prevenir que se pueda inyectar código en algún recurso del que se dependa, y este sea propagado sin detección, esta técnica introduce metadatos de integridad en la declaración de la fuente. Estos metadatos están ligados al contenido original, así que si este se viese modificado el navegador lo detectaría y lo bloquearía.
+	
+	Los metadatos son un código \emph{hash} criptográfico obtenido a partir del contenido original de la dependencia (como ya se ha comentado, Git emplea la misma estrategia para detectar cambios en los ficheros que gestiona). Estos códigos se pueden obtener de muchas maneras. La presente aplicación web los ha obtenido de \href{https://www.srihash.org/}{srihash.org}. En el listado \ref{list:sri} se muestra un ejemplo de esta técnica, en el que FirstMarket declara la dependencia con la librería JavaScript jQuery.
+	\\
+	
+	\begin{lstlisting}[caption=Subresource Integrity, label=list:sri]
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+		integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2"
+		crossorigin="anonymous">
+	</script>
+	\end{lstlisting}
+	
 	\subsection{Validación de Entradas}
 	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y, quizás más importante, para evitar ataques de inyección de contenido.
 	
