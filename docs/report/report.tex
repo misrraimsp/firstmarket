@@ -91,7 +91,6 @@
     
     En definitiva, el principio fundamental que ha guiado la toma de decisión ha sido el reforzar, y alinear en la medida de lo posible con el estado del arte, las habilidades técnicas adquiridas fruto del plan de estudios, de forma a facilitar una futura integración en la industria web, a la par de satisfacer una histórica inquietud personal en la materia.
 
-
     \subsection{Internet, Web y Aplicaciones Web}
     En esta sección se ofrece una introducción, meramente descriptiva, del contexto en el que situar la aplicación web desarrollada. Se tratará de diferenciar los conceptos de Internet, World Wide Web y aplicaciones web.
 
@@ -145,7 +144,7 @@
     
     El siguiente apartado, el \ref{sec:security}, está focalizado en los aspectos de seguridad que rodean a FirstMarket. Es un apartado clave, que, aunque tampoco estaba contenido en los requisitos básicos, se ha querido profundizar en él. Así, se describen las principales características de seguridad implementadas en \href{https://firstmarket.tech}{firstmarket.tech}, además de un análisis de las vulnerabilidades detectadas.
     
-    %Por último, para concluir con esta memoria, en la sección \ref{sec:budget} se ofrece un presupuesto estimativo de todos los costes asociados con el desarrollo del presente proyecto.
+    Por último, para concluir con esta memoria, en la sección \ref{sec:budget} se ofrece un presupuesto estimativo de todos los costes asociados con el desarrollo del presente proyecto.
     
     \section{Análisis} \label{sec:analysis}
     En esta sección se aborda la fase de análisis del desarrollo software. Partiendo de la especificación de los requisitos básicos que debe implementar la aplicación web, se ofrece un conjunto de casos de uso que dé una visión de cuál debe ser el flujo de uso.
@@ -593,7 +592,7 @@
     	\item[-] \textbf{Seguridad ante accidentes}. Con Git es muy difícil que, una vez realizado un \emph{commit}, se pierda el trabajo almacenado.
     \end{itemize}
     
-    En el presente proyecto el uso de Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
+    En el presente proyecto el uso del control de versiones con Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
     
     \subsubsection{Java}
     Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado el background adquirido a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
@@ -887,10 +886,10 @@
     
     Así, como se ha comentado, el pago es una tarea de vital importancia, transversal a todas las plataformas de comercio, con unos estrictos requisitos de seguridad a fin de generar la confianza que demanda el mercado. Es en este contexto donde juegan un papel esencial los proveedores de servicios de pago \emph{online}.
     
-    Actualmente en el mercado existen múltiples alternativas de servicios de este tipo, como \href{https://www.paypal.com/}{PayPal} o \href{https://securionpay.com/}{SecurionPay}, pero el elegido para el desarrollo del presente proyecto ha sido \href{https://stripe.com/}{Stripe}. Amén de su consolidada posición en el mercado como uno de los servicios líderes en el sector, la principal característica diferenciadora ha sido la \href{https://stripe.com/docs}{cuidada colección} de documentación, guías, ejemplos, etc. que mantienen para facilitar la integración con su infraestructura. En el resto de esta sección se comentará los detalles de dicha integración con Stripe, mientras que en la sección \ref{sec:striperadar} se hará lo propio con la funcionalidad anti-fraude que esta plataforma de pagos \emph{online} ofrece.
-    \\
+    Actualmente en el mercado existen múltiples alternativas de servicios de este tipo, como \href{https://www.paypal.com/}{PayPal} o \href{https://securionpay.com/}{SecurionPay}, pero el elegido para el desarrollo del presente proyecto ha sido \href{https://stripe.com/}{Stripe}. Amén de su consolidada posición en el mercado como uno de los servicios líderes en el sector, la principal característica diferenciadora ha sido la \href{https://stripe.com/docs}{cuidada colección} de documentación, guías, ejemplos, etc. que mantienen para facilitar la integración con su infraestructura. 
     
-    Fundamentalmente, la aplicación web desarrollada se integra con la infraestructura de Stripe haciendo uso de dos puntos de enlace, uno en backend y otro en frontend:
+    \paragraph{Integración}
+    Fundamentalmente, la aplicación web desarrollada se integra con la infraestructura de Stripe haciendo uso de dos puntos de enlace, uno en \emph{backend} y otro en \emph{frontend}:
     
     \begin{itemize}
     	\item[-] Una extensa interfaz de programación backend, \href{https://stripe.com/docs/api}{Stripe API}, para varios lenguajes (entre ellos Java), plena de funcionalidades que cubren multitud de casos de uso relacionados con la gestión de transacciones monetarias y sus aspectos asociados.
@@ -956,15 +955,27 @@
     \end{itemize}
     
     La principal consecuencia de la arquitectura explicada es que \textbf{FirstMarket nunca tiene contacto con la información sensible del cliente}. Esta se envía directamente a Stripe desde el cliente. Las implicaciones en términos de seguridad de este aspecto son profundas, mejorándose la exposición al riesgo de los clientes al tiempo que se alivian los requisitos y el coste de la aplicación web. De hecho, todo agente involucrado en el procesamiento, transmisión o almacenamiento de datos bancarios sensibles debe cumplir con los estándares del \href{https://www.pcisecuritystandards.org/pci_security/}{\emph{Payment Card Industry Security Standards Council}}. En este sentido, Stripe ha sido certificado como \emph{PCI Level 1 Service Provider}, el nivel de certificación más estricto disponible en la industria de pagos. Por su parte, Firstmarket se alinea con los estándares PCI al no tener relación, como se ha dicho, con la información sensible de los clientes, y al garantizar la utilización de TLS en sus comunicaciones.
-    \\
     
-    Como último apunte, Stripe no es gratis. Su modelo de negocio se basa en cobrar una comisión por cada transferencia que procesa. Para identificar a cada comercio ofrece un par de llaves, una pública y otra privada. Además, para facilitar las labores de desarrollo software, proporciona dos juegos de estas llaves: unas para \emph{test} y otras \emph{live}. Como su nombre indica, las primeras pueden ser usadas durante las labores de testeo de la integración, pudiendo simularse transacciones usando los datos de \href{https://stripe.com/docs/payments/accept-a-payment#web-test-integration}{tarjetas bancarias ficticias} ofrecidas por Stripe. El juego de llaves \emph{live}, por su parte, permite realizar pagos reales. Sin embargo, dada la política de Stripe para el control de blanqueo de capitales, para activar este juego de llaves se debe presentar la documentación oficial de la constitución de la persona jurídica que recibe los pagos. Es por ello que en el presente proyecto sólo se ha empleado el juego de llaves \emph{test}, aceptando únicamente transacciones simuladas. En la figura \ref{fig:stripe_dashboard} se muestra el \emph{dashboard} de Stripe, desde donde es posible controlar todo lo referente a la integración con esta plataforma. Se puede apreciar el requerimiento para proveer la información legal necesaria para desbloquear las llaves \emph{live}.
+    \paragraph{Recepción de Pagos Reales}
+    Stripe no es gratis. Su modelo de negocio se basa en cobrar una comisión por cada transferencia que procesa. Para identificar a cada comercio ofrece un par de llaves, una pública y otra privada. Además, para facilitar las labores de desarrollo software, proporciona dos juegos de estas llaves: unas para \emph{test} y otras \emph{live}. Como su nombre indica, las primeras pueden ser usadas durante las labores de testeo de la integración, pudiendo simularse transacciones usando los datos de \href{https://stripe.com/docs/payments/accept-a-payment#web-test-integration}{tarjetas bancarias ficticias} ofrecidas por Stripe.
+    
+    El juego de llaves \emph{live}, por su parte, permite realizar pagos reales. Sin embargo, dada la política de Stripe para el control de blanqueo de capitales, para activar este juego de llaves se debe presentar la documentación oficial de la constitución de la persona jurídica que recibe los pagos. Es por ello que en el presente proyecto sólo se ha empleado el juego de llaves \emph{test}, aceptando únicamente transacciones simuladas. En la figura \ref{fig:stripe_dashboard} se muestra el \emph{dashboard} de Stripe, desde donde es posible controlar todo lo referente a la integración con esta plataforma. Se puede apreciar el requerimiento para proveer la información legal necesaria para desbloquear las llaves \emph{live}.
     
     \begin{figure}[hbt!]
     	\centering
     	\includegraphics[width=\textwidth,keepaspectratio]{stripe_dashboard}
     	\caption{Stripe Dashboard}
     	\label{fig:stripe_dashboard}
+    \end{figure}
+    
+    \paragraph{Stripe Radar}
+    Como último apunte de esta sección dedicada a Stripe, destacar que esta herramientas de pago ofrece, sin coste añadido, su sistema anti-fraude \href{https://stripe.com/es/radar}{Stripe Radar}. Esta herramienta, basada en mecanismos de \href{https://stripe.com/es/radar/guide}{\emph{machine learning}}, asocia a cada transacción un índice de riesgo, tomando las acciones apropiadas en caso de que sea necesario (por ejemplo, si el riesgo fuese alto por defecto se bloquea la transacción). En la figura \ref{fig:stripe_radar} se muestra un ejemplo de evaluación de riesgo sobre una transacción.
+    
+    \begin{figure}[hbt!]
+    	\centering
+    	\includegraphics[width=\textwidth,keepaspectratio]{stripe_radar}
+    	\caption{Evaluación del riesgo de una transacción con Stripe Radar}
+    	\label{fig:stripe_radar}
     \end{figure}
     
     \subsection{Control de Concurrencia} \label{sec:concurrencia}
@@ -1016,7 +1027,7 @@
     
     \begin{itemize}
     	\item[-] Se actualiza el stock, aumentando los libros en las cantidades correspondientes.
-    	\item[-] Se eliminan las entidades \emph{sale} correspondientes de la base de datos.
+    	\item[-] Se eliminan las entidades \emph{sale} apropiadas de la base de datos.
     	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
     \end{itemize}
 
@@ -1290,22 +1301,7 @@
 	
 	La aplicación web desarrollada puede usar HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}} (ACM). Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
 	
-	Para finalizar, resaltar que www.firstmarket.tech impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra en el listado \ref{list:https}, donde se detalla el fragmento del método \emph{configure} que especifica este comportamiento.
-	\\
-	
-	\begin{lstlisting}[caption=Configuración de Spring Security para imponer el uso de HTTPS,label=list:https]
-	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity
-			//...
-			.and()
-			.requiresChannel()
-			.antMatchers("/**")
-			.requiresSecure()
-			//...
-		;
-	}
-	\end{lstlisting}
+	Para finalizar, resaltar que \href{https://firstmarket.tech}{www.firstmarket.tech} impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra entre las líneas 27 y 31 del listado \ref{list:springsec_config}.
 	
 	\subsection{Spring Security} \label{sec:springsec}
 	Un enfoque comúnmente empleado, en el ámbito de la seguridad de la información, se basa en considerar los sistemas complejos como un conjunto de capas de abstracción, aplicándose los mecanismos de seguridad apropiados para cada una de ellas.
@@ -1665,8 +1661,6 @@
 	
 	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes. La primera se realiza utilizando las ya mencionadas expresiones regulares, pero, para validar si se trata de un ISBN válido, aún hay que calcular el dígito de control y comprobar que coincida con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación implementada en FirstMarket da soporte a ambos formatos de ISBN.
 	
-	\subsection{Stripe Radar} \label{sec:striperadar}
-	TODO
 	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
 	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con la ayuda de \href{https://probely.com/}{Probely} y \href{https://snyk.io/}{Snyk}. La primera herramienta detectó 5 vulnerabilidades, mientras que la segunda 13. Del total, 14 responden a vulnerabilidades conocidas en librerías utilizadas por la aplicación web, por lo que su resolución se basa en actualizar las versiones de dichas dependencias. A continuación se pasa a comentar los problemas encontrados, haciendo especial énfasis en las 4 vulnerabilidades propias de la aplicación web desarrollada: 
 	
@@ -1780,16 +1774,16 @@
 	
 	
 
-    %  \section{Manuales}
+    \section{Manual}
     %  En esta seccion se va a describir las cuestiones necesarias para facilitar el uso de la aplicacion web por parte de los usuarios
     %  \subsection{Cliente}
     %  \subsection{Administrador}
-
-	%\section{Presupuesto} \label{sec:budget}
+    
+    \section{Presupuesto} \label{sec:budget}
 	%precio de los cursos
 	%Resaltar que este \emph{dyno} tiene un coste de 7 dólares por mes.
 
-    %\section{Mejoras y Ampliaciones}
+    \section{Mejoras y Ampliaciones}
     %Testar el software
     
     %Sistema de valoracion por parte de los usuarios de los libros
