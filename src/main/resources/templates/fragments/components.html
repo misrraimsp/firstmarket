@@ -119,7 +119,7 @@
         <div class="row" th:fragment="mainCatsNavBar">
             <div class="col-sm-12">
                 <!-- NavBar -->
-                <nav class="navbar navbar-expand-sm p-0 m-0 navbar-dark"><!-- style="background-color:#e9ecef" -->
+                <nav class="navbar navbar-expand-sm p-0 m-0 navbar-dark">
                     <!-- Toggler/collapsibe Button -->
                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainCatsNavBar">
                         <span class="navbar-toggler-icon"></span>
@@ -243,6 +243,12 @@
 
         <!-- modal action -->
         <i th:fragment="modal-action(action)" id="action" th:attr="modal-action=${action}"></i>
+
+        <!-- pagination data -->
+        <i th:fragment="paginationData" id="paginationData" th:attr="totalElements=${pageOfEntities.totalElements},totalPages=${pageOfEntities.totalPages},pageIndex=${pageOfEntities.number},numberOfElements=${pageOfEntities.numberOfElements},pageSize=${pageOfEntities.size}"></i>
+
+        <!-- pagination trigger -->
+        <a th:fragment="paginationTrigger" id="paginationTrigger" style="display: none"></a>
 
         <!-- pagination links -->
         <div th:fragment="paginationLinks" class="d-flex justify-content-center" id="pagination">

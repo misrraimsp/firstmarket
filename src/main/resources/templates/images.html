@@ -153,18 +153,14 @@
         <script th:src="@{/js/disableFormSubmissionOnInvalidField.js}"></script>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- pagination functionality -->
-        <a id="paginationTrigger" style="display: none"></a>
-        <i id="paginationData" th:attr="totalElements=${pageOfEntities.totalElements},totalPages=${pageOfEntities.totalPages},pageIndex=${pageOfEntities.number},numberOfElements=${pageOfEntities.numberOfElements},pageSize=${pageOfEntities.size}"></i>
+        <a th:replace="fragments/components::paginationTrigger"></a>
+        <i th:replace="fragments/components::paginationData"></i>
         <script th:src="@{/js/paginationLinks.js}"></script>
         <script th:src="@{/js/paginationControl.js}"></script>
         <!-- modal functionality -->
         <i th:replace="fragments/components::host-address"></i>
         <i th:replace="fragments/components::modal-action(action = 'deleteImage')"></i>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                document.dispatchEvent(new CustomEvent('custom-htmlReady'));
-            }, false);
-        </script>
+        <script th:src="@{/js/customHtmlReadyTrigger.js}"></script>
         <script th:src="@{/js/modalManager.js}"></script>
     </body>
 </html>
