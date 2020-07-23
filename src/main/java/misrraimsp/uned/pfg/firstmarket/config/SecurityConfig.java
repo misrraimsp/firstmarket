@@ -62,13 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/home", "/login", "/newUser")
                 .access("permitAll")
 
-            /*    // force HTTPS always
+                // force HTTPS always
                 .and()
                 .requiresChannel()
                 .antMatchers("/**")
                 .requiresSecure()
-
-             */
 
                 // enable csrf protection
                 .and()

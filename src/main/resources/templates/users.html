@@ -35,7 +35,7 @@
                             <!-- label -->
                             <p th:replace="fragments/components::paginationSortLabel"></p>
                             <!-- options -->
-                            <select class="custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria" style="max-width: 70%">
+                            <select class="max-width-70 custom-select custom-select-sm text-secondary bg-light" id="paginationSortCriteria">
                                 <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.UserSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
@@ -113,9 +113,9 @@
                                 </div>
                                 <!-- collapse control -->
                                 <div class="col-sm-12 mb-2">
-                                    <a class="font-weight-light text-info small my-0" data-toggle="collapse" th:href="'#body-' + ${user.id}" style="text-decoration: none">
-                                        <span th:id="'plus-' + ${user.id}" style="display: inline"><i class="fas fa-angle-down mr-1"></i> more info</span>
-                                        <span th:id="'minus-' + ${user.id}" style="display: none"><i class="fas fa-angle-up mr-1"></i> less info</span>
+                                    <a class="no-decoration font-weight-light text-info small my-0" data-toggle="collapse" th:href="'#body-' + ${user.id}">
+                                        <span class="display-inline" th:id="'plus-' + ${user.id}"><i class="fas fa-angle-down mr-1"></i> more info</span>
+                                        <span class="display-none" th:id="'minus-' + ${user.id}"><i class="fas fa-angle-up mr-1"></i> less info</span>
                                     </a>
                                 </div>
                             </div>
