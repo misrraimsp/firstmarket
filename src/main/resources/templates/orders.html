@@ -41,7 +41,7 @@
                             <!-- label -->
                             <p th:replace="fragments/components::paginationSortLabel"></p>
                             <!-- admin options -->
-                            <select sec:authorize="hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary" id="paginationSortCriteria" style="max-width: 70%">
+                            <select sec:authorize="hasRole('ADMIN')" class="max-width-70 custom-select custom-select-sm text-secondary" id="paginationSortCriteria">
                                 <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.OrderSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
@@ -49,7 +49,7 @@
                                 </option>
                             </select>
                             <!-- no-admin options -->
-                            <select sec:authorize="!hasRole('ADMIN')" class="custom-select custom-select-sm text-secondary" id="paginationSortCriteria" style="max-width: 70%">
+                            <select sec:authorize="!hasRole('ADMIN')" class="max-width-70 custom-select custom-select-sm text-secondary" id="paginationSortCriteria">
                                 <option th:each="sc : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.sort.OrderSortCriteria).values()}"
                                         th:value="${sc.ordinal()}"
                                         th:text="${sc.text}"
@@ -130,9 +130,9 @@
                                 </div>
                                 <!-- collapse control -->
                                 <div class="col-sm-12 mb-2">
-                                    <a class="font-weight-light text-info small my-0" data-toggle="collapse" th:href="'#body-' + ${order.id}" style="text-decoration: none">
-                                        <span th:id="'plus-' + ${order.id}" style="display: inline"><i class="fas fa-angle-down mr-1"></i> more info</span>
-                                        <span th:id="'minus-' + ${order.id}" style="display: none"><i class="fas fa-angle-up mr-1"></i> less info</span>
+                                    <a class="no-decoration font-weight-light text-info small my-0" data-toggle="collapse" th:href="'#body-' + ${order.id}">
+                                        <span class="display-inline" th:id="'plus-' + ${order.id}"><i class="fas fa-angle-down mr-1"></i> more info</span>
+                                        <span class="display-none" th:id="'minus-' + ${order.id}"><i class="fas fa-angle-up mr-1"></i> less info</span>
                                     </a>
                                 </div>
                             </div>
@@ -170,12 +170,12 @@
                                     <div class="row mb-3" th:each="sale : ${order.sales}">
                                         <!-- image -->
                                         <div class="col-sm-2">
-                                            <a th:href="@{/book/{id}(id=${sale.book.id})}"><img class="img-fluid" th:src="@{/image/{id}(id=${sale.book.image.id})}" alt="book image" style="width:64px;height:64px;"/></a>
+                                            <a th:href="@{/book/{id}(id=${sale.book.id})}"><img class="img-64" th:src="@{/image/{id}(id=${sale.book.image.id})}" alt="book image"/></a>
                                         </div>
                                         <!-- book info -->
                                         <div class="col-sm-4">
                                             <!-- book title -->
-                                            <a class="text-info font-weight-light" th:href="@{/book/{id}(id=${sale.book.id})}" style="text-decoration: none">
+                                            <a class="no-decoration text-info font-weight-light" th:href="@{/book/{id}(id=${sale.book.id})}">
                                                 <p class="my-0" th:unless="${sale.book.title.isBlank()}">
                                                     <span th:text="${sale.book.title.substring(0, T(java.lang.Math).min(sale.book.title.length(), __${@environment.getProperty('fm.front-end.orders.title-max-size')}__))}">Book title</span>
                                                 </p>

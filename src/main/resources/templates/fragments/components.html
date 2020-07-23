@@ -39,7 +39,7 @@
                     <nav class="navbar navbar-expand-sm bg-secondary navbar-dark">
                         <!-- Brand -->
                         <a class="navbar-brand" th:href="@{/home}">
-                            <img th:src="@{/images/logo.jpg}" style="width:32px;height:32px;">
+                            <img class="img-32" th:src="@{/images/logo.jpg}">
                         </a>
                         <!-- Toggler/collapsibe Button -->
                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
@@ -179,6 +179,9 @@
         <!-- host address -->
         <i th:fragment="host-address" id="host" th:attr="host-address=${@environment.getProperty('fm.host.address')}"></i>
 
+        <!-- hidden login link -->
+        <a th:fragment="login-link" class="display-none" th:href="@{/login}" id="loginLink"></a>
+
         <!-- contactUs -->
         <span th:fragment="contactUs">If you need help, please contact us at <span class="text-info" th:text="${@environment.getProperty('spring.mail.username')}">email</span></span>
 
@@ -243,7 +246,7 @@
         <i th:fragment="paginationData" id="paginationData" th:attr="totalElements=${pageOfEntities.totalElements},totalPages=${pageOfEntities.totalPages},pageIndex=${pageOfEntities.number},numberOfElements=${pageOfEntities.numberOfElements},pageSize=${pageOfEntities.size}"></i>
 
         <!-- pagination trigger -->
-        <a th:fragment="paginationTrigger" id="paginationTrigger" style="display: none"></a>
+        <a th:fragment="paginationTrigger" class="display-none" id="paginationTrigger"></a>
 
         <!-- pagination links -->
         <div th:fragment="paginationLinks" class="d-flex justify-content-center" id="pagination">
@@ -264,7 +267,7 @@
         </p>
 
         <!-- pagination page size options -->
-        <select th:fragment="paginationPageSizeOptions" class="custom-select custom-select-sm text-secondary" id="paginationPageSize" style="max-width: 33%">
+        <select th:fragment="paginationPageSizeOptions" class="max-width-33 custom-select custom-select-sm text-secondary" id="paginationPageSize">
             <option th:each="ps : ${T(misrraimsp.uned.pfg.firstmarket.config.staticParameter.PageSize).values()}"
                     th:value="${ps.ordinal()}"
                     th:text="${ps.size}"
@@ -284,8 +287,8 @@
 
         <!-- footer -->
         <footer class="footer bg-white text-center pb-3" th:fragment="footer">
-            <hr style="max-width: 33%; margin-top: 3rem"/>
-            <span class="info-copyrigth"><a class="text-info" href="https://github.com/misrraimsp/firstmarket" style="text-decoration: none">FirstMarket Project</a> © 2020</span>
+            <hr class="hr-footer"/>
+            <span><a class="no-decoration text-info" href="https://github.com/misrraimsp/firstmarket">FirstMarket Project</a> © 2020</span>
         </footer>
 
     </body>
