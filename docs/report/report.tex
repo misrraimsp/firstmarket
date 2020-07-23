@@ -1419,7 +1419,7 @@
 						"https://cdnjs.cloudflare.com " +
 						"https://ajax.googleapis.com" +
 						"; " +
-						"style-src 'self' 'unsafe-inline' " +
+						"style-src 'self' " +
 						"https://cdn.jsdelivr.net " +
 						"https://maxcdn.bootstrapcdn.com " +
 						"https://fonts.googleapis.com " +
@@ -1628,7 +1628,7 @@
 	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
 	
 	\paragraph{Subresource Integrity}
-	Por último, para finalizar con este apartado, y aunque no se trate de una funcionalidad ofrecida por Spring Security, es necesario comentar que la aplicación web desarrollada hace uso del mecanismo conocido como \href{https://www.w3.org/TR/SRI/}{\emph{Subresource Integrity}}. 
+	Por último, y aunque no se trate de una funcionalidad ofrecida por Spring Security, es necesario comentar que la aplicación web desarrollada hace uso del mecanismo conocido como \href{https://www.w3.org/TR/SRI/}{\emph{Subresource Integrity}}. 
 	
 	Se trata de una protección destinada a mitigar la vulnerabilidad que entraña depender de librerías (u otros recursos) de terceros. Por ejemplo, si la librería de jQuery se viera comprometida, automáticamente lo estaría también todas las aplicaciones que hacen uso de la misma. Así, para prevenir que se pueda inyectar código en algún recurso del que se dependa, y este sea propagado sin detección, esta técnica introduce metadatos de integridad en la declaración de la fuente. Estos metadatos están ligados al contenido original, así que si este se viese modificado el navegador lo detectaría y lo bloquearía.
 	
@@ -1641,6 +1641,23 @@
 		crossorigin="anonymous">
 	</script>
 	\end{lstlisting}
+	
+	\paragraph{Resultados}
+	Para finalizar con este apartado, a continuación, en las figuras \ref{fig:moz_scan_summary} y \ref{fig:moz_scan_results}, se muestran los resultados obtenidos por \href{https://firstmarket.tech}{www.firstmarket.tech} en el test \href{https://observatory.mozilla.org/analyze/www.firstmarket.tech}{\emph{Mozilla Observatory}}, al aplicar las políticas de seguridad descritas en los párrafos anteriores.
+	
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=0.6\textwidth,keepaspectratio]{moz_scan_summary}
+		\caption{Resumen del test \emph{Mozilla Observatory}}
+		\label{fig:moz_scan_summary}
+	\end{figure}
+
+	\begin{figure}[hbt!]
+		\centering
+		\includegraphics[width=\textwidth,keepaspectratio]{moz_scan_results}
+		\caption{Resultados del test \emph{Mozilla Observatory}}
+		\label{fig:moz_scan_results}
+	\end{figure}
 	
 	\subsection{Validación de Entradas}
 	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y, quizás más importante, para evitar ataques de inyección de contenido.
