@@ -99,7 +99,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "https://cdnjs.cloudflare.com " +
                                         "https://ajax.googleapis.com" +
                                         "; " +
-                                        "style-src 'self' 'unsafe-inline' " +
+                                        "style-src 'self' " +
                                         "https://cdn.jsdelivr.net " +
                                         "https://maxcdn.bootstrapcdn.com " +
                                         "https://fonts.googleapis.com " +
