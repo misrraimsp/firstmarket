@@ -68,7 +68,7 @@
                                     <div class="card-body">
                                         <!-- title -->
                                         <div class="card-title">
-                                            <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
+                                            <a class="no-decoration text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}">
                                                 <p th:unless="${book.title.isBlank()}">
                                                     <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.home.title-max-size')}__))}"></strong>
                                                 </p>
@@ -126,7 +126,7 @@
                                     <div class="card-body">
                                         <!-- title -->
                                         <div class="card-title">
-                                            <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}" style="text-decoration: none">
+                                            <a class="no-decoration text-info font-weight-bold" th:href="@{/book/{id}(id=${book.id})}">
                                                 <p th:unless="${book.title.isBlank()}">
                                                     <strong th:text="${book.title.substring(0, T(java.lang.Math).min(book.title.length(), __${@environment.getProperty('fm.front-end.home.title-max-size')}__))}"></strong>
                                                 </p>
@@ -184,7 +184,7 @@
         <script th:src="@{/js/typeWriter.js}"></script>
         <!-- ajax add book to cart -->
         <i th:replace="fragments/components::host-address"></i>
-        <a th:href="@{/login}" id="loginLink" style="display: none"></a>
+        <a th:replace="fragments/components::login-link"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
     </body>
 </html>

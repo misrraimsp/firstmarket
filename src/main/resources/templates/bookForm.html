@@ -120,7 +120,7 @@
                                         <input class="form-control" type="text" name="authorsLastName" th:value="${bookForm.authorsLastName[__${i.index}__]}" placeholder="Last Name" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                                         <!-- dynamic authors buttons -->
                                         <div th:if="${i.last}" class="input-group-append" id="authorButtons">
-                                            <button class="btn btn-outline-secondary" id="removeAuthor" th:style="${i.size > 1}?'display: block':'display: none'" type="button">
+                                            <button class="btn btn-outline-secondary" id="removeAuthor" th:classappend="${i.size > 1}?'display-block':'display-none'" type="button">
                                                 <i class="fas fa-minus"></i>
                                             </button>
                                             <button class="btn btn-outline-info" id="addAuthor" type="button">

@@ -85,7 +85,7 @@
                                 <div class="col-sm-5">
                                     <!-- title -->
                                     <div class="mt-3">
-                                        <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
+                                        <a class="no-decoration text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}">
                                             <p th:unless="${item.book.title.isBlank()}">
                                                 <strong th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('fm.front-end.cart.title-max-size')}__))}"></strong>
                                             </p>
@@ -135,7 +135,7 @@
                                 </div>
                                 <!-- total price -->
                                 <div class="col-sm-2 d-flex justify-content-end">
-                                    <p th:id="'ibp-' + ${item.id}" style="display: none" th:text="${item.book.price}"></p>
+                                    <p th:id="'ibp-' + ${item.id}" class="display-none" th:text="${item.book.price}"></p>
                                     <p>€ <span th:id="'ip-' + ${item.id}" th:text="${item.getPrice()}">19.95</span></p>
                                 </div>
                             </div>
@@ -189,7 +189,7 @@
         <div th:replace="fragments/components::footer"></div>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- ajax cart -->
-        <a th:href="@{/login}" id="loginLink" style="display: none"></a>
+        <a th:replace="fragments/components::login-link"></a>
         <i th:replace="fragments/components::host-address"></i>
         <script th:src="@{/js/ajaxCart.js}"></script>
     </body>

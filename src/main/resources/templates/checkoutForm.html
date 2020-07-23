@@ -44,7 +44,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Phone</small></span>
                             </div>
-                            <input class="form-control" type="text" id="phone" style="max-width: 25%" th:pattern="${@environment.getProperty('fm.validation.regex.phone')}">
+                            <input class="max-width-25 form-control" type="text" id="phone" th:pattern="${@environment.getProperty('fm.validation.regex.phone')}">
                             <!-- error -->
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
@@ -70,7 +70,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><small class="font-weight-lighter">Postal Code *</small></span>
                             </div>
-                            <input class="form-control" type="text" id="postalCode" required style="max-width: 25%" th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
+                            <input class="max-width-25 form-control" type="text" id="postalCode" required th:pattern="${@environment.getProperty('fm.validation.regex.text-basic')}">
                             <div class="invalid-feedback">Please fill out this field correctly</div>
                         </div>
                         <!-- province and country -->
@@ -88,10 +88,10 @@
                         <!-------------------------------------------------------------------------Payment info-->
                         <label class="text-dark font-weight-light" for="card-element">Credit/Debit Card *</label>
                         <div class="form-group">
-                            <div class="form-control" id="card-element" style='height: 2.4em; padding-top: .7em;'>
+                            <div class="stripe-card-element form-control" id="card-element">
                                 <!-- card element here -->
                             </div>
-                            <div id="card-errors" role="alert" style="color: red; font-size: small">
+                            <div class="stripe-card-error" id="card-errors" role="alert">
                                 <!-- card error here -->
                             </div>
                         </div>
@@ -99,7 +99,7 @@
                         <div class="d-flex my-2">
                             <!-- Pay button -->
                             <button class="btn btn-info px-5 mr-auto" type="submit" id="pay" th:attr="data-secret=${user.cart.stripeClientSecret}" disabled>
-                                <span class="spinner-border spinner-border-sm" id="spinner" style="visibility: hidden"></span>
+                                <span class="visibility-hidden spinner-border spinner-border-sm" id="spinner"></span>
                                 <span class="font-weight-bolder">Pay </span>
                                 <span class="font-weight-lighter">€</span><span class="font-weight-bolder" th:text="${user.cart.price}"></span>
                             </button>
@@ -122,7 +122,7 @@
                                 <div class="d-flex flex-column">
                                     <!-- book title -->
                                     <div>
-                                        <a class="text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}" style="text-decoration: none">
+                                        <a class="no-decoration text-info font-weight-bold" th:href="@{/book/{id}(id=${item.book.id})}">
                                             <p class="my-0" th:unless="${item.book.title.isBlank()}">
                                                 <span th:text="${item.book.title.substring(0, T(java.lang.Math).min(item.book.title.length(), __${@environment.getProperty('fm.front-end.checkout.title-max-size')}__))}">Book title</span>
                                             </p>
@@ -158,7 +158,7 @@
         <!-- checkout -->
         <i th:replace="fragments/components::host-address"></i>
         <i id="pk" th:attr="pk=${@environment.getProperty('fm.payment.stripe.key.public')}"></i>
-        <a th:href="@{/user/success}" id="successLink" style="display: none"></a>
+        <a th:href="@{/user/success}" id="successLink" class="display-none"></a>
         <script th:src="@{/js/checkout.js}"></script>
         <!-- back button -->
         <script th:src="@{/js/back.js}"></script>

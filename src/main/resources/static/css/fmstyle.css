@@ -1,27 +1,11 @@
 
-/******************************* footer (and font and pulse) */
+/******************************* footer (and font, and pulse) */
 html, body {
     height: 100%;
 }
 body {
     display: flex;
     flex-direction: column;
-    /*
-    font-family: 'Cormorant Garamond', serif;
-    font-family: 'Arapey', serif;
-    font-family: 'Gentium Basic', serif;
-    font-family: 'Gabriela', serif;
-    font-family: 'Cormorant', serif;
-    font-family: 'Suranna', serif;
-    font-family: 'Lora', serif;
-    font-family: 'EB Garamond', serif;
-    font-family: 'Nanum Myeongjo', serif;
-    font-family: 'El Messiri', sans-serif;
-    font-family: 'Quicksand', sans-serif;
-    font-family: 'Gotu', sans-serif;
-    font-family: 'PT Sans', sans-serif;
-    font-family: 'Inconsolata', monospace;
-    */
     font-family: 'Noto Serif JP', serif;
 }
 .fm-content {
@@ -36,7 +20,7 @@ body {
     background: linear-gradient(#e9ecef, white);
 }
 
-/******************************* card responsiveness */
+/******************************* bs4 card responsiveness */
 @media (min-width: 34em) {
     .card-columns {
         -webkit-column-count: 2;
@@ -107,8 +91,7 @@ body {
     transition: max-height 0.2s ease-out;
 }
 
-/********************************/
-
+/******************************* fa cart icon stack */
 .fa-stack[data-count]::after{
     position:absolute;
     right:23%;
@@ -126,23 +109,7 @@ body {
 
 }
 .fa-circle {
-    /*color: #0275d8;  bs4 primary */
     color: #17a2b8; /* bs4 info */
-}
-
-.primary-over-dark {
-    color: #0275d8; /* bs4 primary */
-    background: #343a40; /* bs4 dark */
-}
-
-.primary-over-secondary {
-    color: #0275d8; /* bs4 primary */
-    background: #6c757d; /* BS4 secondary */
-}
-
-.info-over-dark {
-    color: #17a2b8; /* bs4 info */
-    background: #343a40; /* bs4 dark */
 }
 
 .info-over-secondary {
@@ -150,7 +117,7 @@ body {
     background: #6c757d; /* BS4 secondary */
 }
 
-/******************************* The snackbar - position it at the bottom and in the middle of the screen */
+/******************************* snackbar - position at the top in the middle of the screen */
 #snackbar {
     visibility: hidden; /* Hidden by default. Visible on click */
     min-width: 250px; /* Set a default minimum width */
@@ -197,9 +164,8 @@ body {
     from {top: 30px; opacity: 0.9;}
     to {top: 0; opacity: 0;}
 }
-/********************************/
 
-/********************************* Tooltip */
+/********************************* tooltip */
 .tooltip > .tooltip-inner {
     background-color: #17a2b8; /* bs4-info color */
     color: #fff; /* white text color */
@@ -219,7 +185,6 @@ body {
 .bs-tooltip-auto[x-placement^=right] .arrow::before, .bs-tooltip-right .arrow::before {
     border-right-color: #17a2b8 !important; /* bs4-info color */
 }
-/********************************/
 
 /********************************* Stripe */
 /* Blue outline on focus */
@@ -229,7 +194,6 @@ body {
     box-shadow: 0 0 0 .2rem rgba(0,123,255,.25);
     transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-/********************************/
 
 /******************************* pulse */
 @keyframes pulse {
@@ -246,9 +210,69 @@ body {
     border-color: #ffeeba;
     animation: pulse 5s infinite; /*pulse*/
 }
-/********************************/
 
+
+/******************************* miscellaneous */
 .left-bordered {
     border-left: 6px solid #17a2b8;
 }
 
+.logo-img {
+    width: 32px;
+    height: 32px;
+}
+
+.display-none {
+    display: none;
+}
+
+.display-block {
+    display: block;
+}
+
+.max-width-25 {
+    max-width: 25%;
+}
+
+.max-width-33 {
+    max-width: 33%;
+}
+
+.max-width-70 {
+    max-width: 70%;
+}
+
+.hr-footer {
+    max-width: 33%;
+    margin-top: 3rem;
+}
+
+.hr-description {
+    max-width: 50%;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+    margin-left: 0;
+}
+
+.text-description {
+    text-align: justify;
+    text-justify: inter-word;
+}
+
+a.no-decoration {
+    text-decoration: none;
+}
+
+.visibility-hidden {
+    visibility: hidden;
+}
+
+div.stripe-card-element {
+    height: 2.4em;
+    padding-top: .7em;
+}
+
+div.stripe-card-error {
+    color: red;
+    font-size: small;
+}

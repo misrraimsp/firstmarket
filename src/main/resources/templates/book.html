@@ -109,9 +109,9 @@
                             </div>
                         </div>
                         <!-- description -->
-                        <div class="col-sm-12" style="text-align: justify; text-justify: inter-word;">
+                        <div class="text-description col-sm-12">
                             <p class="font-weight-bolder my-0"><strong>Description</strong></p>
-                            <hr style="max-width: 50%; margin-top: 0.5rem; margin-bottom: 0.5rem; margin-left: 0"/>
+                            <hr class="hr-description"/>
                             <p class="my-0" th:unless="${book.description.isBlank()}" th:text="${book.description}"></p>
                             <p class="my-0" th:if="${book.title.isBlank()}"><em>unknown</em></p>
                         </div>
@@ -125,10 +125,10 @@
         </div>
         <!-- footer -->
         <div th:replace="fragments/components::footer"></div>
-        <i th:replace="fragments/components::host-address"></i>
         <script th:src="@{/js/enableTooltips.js}"></script>
         <!-- ajax add book to cart -->
-        <a th:href="@{/login}" id="loginLink" style="display: none"></a>
+        <i th:replace="fragments/components::host-address"></i>
+        <a th:replace="fragments/components::login-link"></a>
         <script th:src="@{/js/ajaxAddBook.js}"></script>
         <!-- back button -->
         <script th:src="@{/js/back.js}"></script>
