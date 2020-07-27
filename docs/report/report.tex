@@ -1,4 +1,4 @@
-\documentclass[a4paper]{article}
+\documentclass[a4paper,12pt]{article}
 
 \author{Misrraim~Su\'arez~P\'erez}
 \title{FirstMarket}
@@ -9,7 +9,7 @@
 \usepackage[spanish,es-tabla,es-nodecimaldot,es-lcroman]{babel}
 
 \usepackage{csquotes}
-\linespread{1.25}
+\linespread{1.5}
 
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
@@ -58,6 +58,10 @@
 
 \urlstyle{same}
 
+\usepackage{array}
+
+\usepackage{eurosym}
+
 %\setcounter{tocdepth}{4}
 
 %\setcounter{secnumdepth}{4}
@@ -86,8 +90,7 @@
     
     Por otro lado, y en clara conexión con lo comentado, otro objetivo de este último trabajo del plan de estudios fue el de servir como \emph{compensador} final de lagunas formativas. En este sentido, el control de versiones con Git era una tarea pendiente inaplazable, así como profundizar en tecnologías web básicas como HTTP, HTML, CSS ó JavaScript. Además, ampliar el dominio de las tecnologías Java siempre fue algo muy deseable.
     
-    Conviene no dejar de lado, por obvio, que un objetivo fundamental del presente trabajo es el de dar fin al plan de estudios. Remarcar esto es relevante porque en múltiples situaciones puede entrar en conflicto con la intención de desarrollar una aplicación web lo más moderna posible. Como se explicará más adelante en esta memoria, el mundo de las tecnologías web es muy cambiante, y pretender desarrollar una aplicación web alineada con el estado del arte en la materia partiendo, como es el caso, desde prácticamente cero conocimientos, sale fuera del marco de un trabajo de estas características. Por tanto, siempre se ha tenido en cuenta un compromiso entre recursos disponibles (principalmente tiempo y conocimientos) y grado de modernidad en las tecnologías usadas.
-    \\
+    Conviene no dejar de lado, por obvio, que un objetivo fundamental del presente trabajo es el de dar fin al plan de estudios. Remarcar esto es relevante, porque en múltiples situaciones puede entrar en conflicto con la intención de desarrollar una aplicación web lo más moderna posible. Como se explicará más adelante en esta memoria, el mundo de las tecnologías web es muy cambiante, y pretender desarrollar una aplicación web alineada con el estado del arte en la materia partiendo, como es el caso, desde prácticamente cero conocimientos, sale fuera del marco de un trabajo de estas características. Por tanto, siempre se ha tenido en cuenta un compromiso entre recursos disponibles (principalmente tiempo y conocimientos) y grado de modernidad en las tecnologías usadas.
     
     En definitiva, el principio fundamental que ha guiado la toma de decisión ha sido el reforzar, y alinear en la medida de lo posible con el estado del arte, las habilidades técnicas adquiridas fruto del plan de estudios, de forma a facilitar una futura integración en la industria web, a la par de satisfacer una histórica inquietud personal en la materia.
 
@@ -1797,6 +1800,23 @@
     %  \subsection{Administrador}
     
     \section{Presupuesto} \label{sec:budget}
+    En esta sección se estudian los costes asociados al desarrollo de la aplicación web. Es necesario aclarar que, dado el carácter académico de la presente aplicación web, se trata de un estudio aproximativo, en el que a grandes rasgos se describen las principales líneas de recursos y sus costes.
+    
+    De una manera amplia, estos costes pueden ser agrupados en coste del factor humano y coste de los recursos materiales. Para analizar los primeros es necesario distinguir los diferentes roles profesionales implicados en la consecución de los objetivos. En este sentido, varios perfiles pueden ser identificados, a saber, la dirección del proyecto, encargada de la planificación y distribución de tareas, un analista/diseñador, encargado de recabar las necesidades y especificar las grandes directrices de la solución a adoptar, y un programador que las lleve a cabo.
+    
+    \begin{center}
+    	\begin{tabular}{ | m{10em} | m{10em}| m{10em} | } 
+    		\hline
+    		Tarea & Perfil Profesional & Coste Horario \\ 
+    		\hline
+    		Dirección del Proyecto & B.I & \EUR{30} \\ 
+    		\hline
+    		Análisis y Diseño & C.I & \EUR{30} \\ 
+    		\hline
+    		Implementación & D.I & \EUR{30} \\ 
+    		\hline
+    	\end{tabular}
+    \end{center}
 	%precio de los cursos
 	%Resaltar que este \emph{dyno} tiene un coste de 7 dólares por mes.
 
