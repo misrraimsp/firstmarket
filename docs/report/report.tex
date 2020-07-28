@@ -1800,25 +1800,76 @@
     %  \subsection{Administrador}
     
     \section{Presupuesto} \label{sec:budget}
-    En esta sección se estudian los costes asociados al desarrollo de la aplicación web. Es necesario aclarar que, dado el carácter académico de la presente aplicación web, se trata de un estudio aproximativo, en el que a grandes rasgos se describen las principales líneas de recursos y sus costes.
+    En esta sección se estudian los costes asociados al desarrollo de la aplicación web. De una manera amplia, estos pueden ser agrupados en coste del factor humano y coste de los recursos materiales.
     
-    De una manera amplia, estos costes pueden ser agrupados en coste del factor humano y coste de los recursos materiales. Para analizar los primeros es necesario distinguir los diferentes roles profesionales implicados en la consecución de los objetivos. En este sentido, varios perfiles pueden ser identificados, a saber, la dirección del proyecto, encargada de la planificación y distribución de tareas, un analista/diseñador, encargado de recabar las necesidades y especificar las grandes directrices de la solución a adoptar, y un programador que las lleve a cabo.
+    Para analizar los primeros es necesario distinguir los diferentes roles profesionales implicados en la consecución de los objetivos, para lo cual se toma como guía el \href{https://www.boe.es/diario_boe/txt.php?id=BOE-A-2018-3156}{XVII Convenio colectivo estatal de empresas de consultoría y estudios de mercado y de la opinión pública}, que engloba a la actividad de desarrollo software. Así, en su artículo 15 son descritos los grupos profesionales, a los que en el Anexo I del mismo texto se les asocia su retribución anual. En el presente estudio se tomarán dichos valores como suelo retributivo legal, tomándose el pulso actual del mercado en \href{https://www.glassdoor.es/Sueldos/index.htm}{glassdoor.es} y \href{https://es.indeed.com/salaries}{indeed.com}.
     
-    \begin{center}
-    	\begin{tabular}{ | m{10em} | m{10em}| m{10em} | } 
+    En esta línea, los perfiles profesionales identificados (todos pertenecientes al área 3, \emph{Consultoría, desarrollo y sistemas}) para el desarrollo de la aplicación web han sido:
+    
+    \begin{itemize}
+    	\item[-] Dirección de Proyecto (grupo A, nivel I). Se encarga de la planificación y distribución de tareas, recayendo sobre este rol la responsabilidad última de la consecución de los objetivos.
+    	\item[-] Análisis y Diseño (grupo B, nivel I). Se encarga de recabar las necesidades y especificar las grandes directrices de la solución a adoptar. Este rol requiere de una gran experiencia y conocimientos técnicos, ya que en él recae la responsabilidad de tomar las decisiones de índole técnica.
+    	\item[-] Programación y Pruebas (grupo C, nivel I). Se trata de un perfil que ejecute de la mejor forma posible las indicaciones dadas desde la dirección de diseño.
+    \end{itemize}
+	
+	En la tabla \ref{table:recursos_humanos} se muestra la distribución del trabajo entre los perfiles descritos, con su coste asociado. En total se ha estimado que la aplicación web desarrollada requiere 16 semanas de trabajo, de las cuales el 70\% ha sido implementación, el 25\% análisis y diseño, y el resto labores asociadas a la dirección del proyecto.
+    
+    \begin{table}[hbt!]
+    	\centering
+    	\begin{tabular} { | c | c | c | c | } 
     		\hline
-    		Tarea & Perfil Profesional & Coste Horario \\ 
+    		\textbf{Tarea} & \textbf{Coste Horario} & \textbf{Horas} & \textbf{Total} \\ 
     		\hline
-    		Dirección del Proyecto & B.I & \EUR{30} \\ 
+    		Dirección del Proyecto & \EUR{30} & 32 & \EUR{960} \\ 
     		\hline
-    		Análisis y Diseño & C.I & \EUR{30} \\ 
+    		Análisis y Diseño & \EUR{23} & 160 & \EUR{3680} \\ 
     		\hline
-    		Implementación & D.I & \EUR{30} \\ 
+    		Implementación y Pruebas & \EUR{15} & 448 & \EUR{6720} \\ 
     		\hline
     	\end{tabular}
-    \end{center}
-	%precio de los cursos
-	%Resaltar que este \emph{dyno} tiene un coste de 7 dólares por mes.
+    	\caption{Distribución del trabajo y coste de los recursos humanos}
+    	\label{table:recursos_humanos}
+    \end{table}
+	
+	En relación con el coste de los recursos materiales, en la tabla \ref{table:recursos_materiales} se detallan los que se han considerado más relevantes, siendo su valor monetario el que directamente se estima atribuible al desarrollo de la aplicación web.
+	
+	\begin{table}[hbt!]
+		\centering
+		\begin{tabular} { | c | c | c | c | } 
+			\hline
+			\textbf{Recurso} & \textbf{Coste Mensual} & \textbf{Meses} & \textbf{Total} \\
+			\hline
+			Amortización hardware & \EUR{30} & 5 & \EUR{150} \\ 
+			\hline
+			IntelliJ IDEA & \EUR{14,9} & 4 & \EUR{59,6} \\ 
+			\hline
+			Heroku Hobby Dyno & \EUR{7} & 6 & \EUR{42} \\ 
+			\hline
+			Dominio \href{https://firstmarket.tech}{\emph{firstmarket.tech}} & \EUR{0,04} & 12 & \EUR{0,48} \\ 
+			\hline
+		\end{tabular}
+		\caption{Coste de los recursos materiales}
+		\label{table:recursos_materiales}
+	\end{table}
+	
+	Con todo, en la tabla \ref{table:recursos_total} se muestra el resumen de la estimación del coste total de desarrollo de la aplicación web \href{https://firstmarket.tech}{FirstMarket}.
+	
+	\begin{table}[hbt!]
+		\centering
+		\begin{tabular} { | c | c | } 
+			\hline
+			\textbf{Recurso} & \textbf{Coste} \\
+			\hline
+			Humano & \EUR{11.360} \\ 
+			\hline
+			Material & \EUR{252} \\ 
+			\hline
+			\emph{\textbf{Total}} & \emph{\textbf{\EUR{11.612}}} \\ 
+			\hline
+		\end{tabular}
+		\caption{Coste total}
+		\label{table:recursos_total}
+	\end{table}
 
     \section{Mejoras y Ampliaciones}
     %Testar el software
