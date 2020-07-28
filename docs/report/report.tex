@@ -1,4 +1,6 @@
-\documentclass[a4paper,12pt]{article}
+\documentclass[a4paper,12pt,twoside,openright]{report}
+
+\usepackage{titling}
 
 \author{Misrraim~Su\'arez~P\'erez}
 \title{FirstMarket}
@@ -46,6 +48,7 @@
 	showtabs=false,
 	captionpos=b
 }
+\addto\captionsspanish{\renewcommand{\lstlistingname}{Listado}}
 
 
 \usepackage{hyperref}
@@ -62,17 +65,32 @@
 
 \usepackage{eurosym}
 
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[RO]{\leftmark}
+\fancyhead[LE]{\thetitle}
+\fancyfoot[LE,RO]{\thepage}
+
+\renewcommand{\headrulewidth}{0.1pt}
+\renewcommand{\footrulewidth}{0.1pt}
+
+\usepackage{setspace}
+
 %\setcounter{tocdepth}{4}
 
 %\setcounter{secnumdepth}{4}
 
 
 \begin{document}
-
-    \maketitle
+    
+    \include{portada}
+    
     \tableofcontents
+    
+     \include{c1}
 
-    \section{Introducción}
+    \chapter{Introducción}
     El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática de la Universidad Nacional de Educación a Distancia.
     
     Se basa en el proyecto específico ofertado por el Departamento de Sistemas de Comunicación y Control de la UNED titulado \emph{Desarrollo de un portal de comercio electrónico}. Citando la propia descripción de dicha oferta de proyecto específico:
@@ -83,7 +101,7 @@
 
 	En este contexto, el comercio electrónico desarrollado a sido una librería, denominada \textbf{FirstMarket}.
 
-    \subsection{Motivación y Objetivos}
+    \section{Motivación y Objetivos}
     Desde un primer momento la intención fue desarrollar un proyecto que tuviese la mayor relación posible con el mercado actual, lo que, junto con un fuerte interés personal hacia el ecosistema de Internet, llevó a la decisión de escoger esta propuesta.
     
     La idea era desarrollar algo moderno, útil, con reflejo real en la sociedad y que cumpliese el papel de facilitar la inserción laboral. En este sentido, las aplicaciones web en general, y las específicas de comercio electrónico en particular, cumplen a la perfección los requisitos comentados. A nadie se le escapa hoy en día la implantación casi ubicua que estas tecnologías tienen en la sociedad.
@@ -94,10 +112,10 @@
     
     En definitiva, el principio fundamental que ha guiado la toma de decisión ha sido el reforzar, y alinear en la medida de lo posible con el estado del arte, las habilidades técnicas adquiridas fruto del plan de estudios, de forma a facilitar una futura integración en la industria web, a la par de satisfacer una histórica inquietud personal en la materia.
 
-    \subsection{Internet, Web y Aplicaciones Web}
+    \section{Internet, Web y Aplicaciones Web}
     En esta sección se ofrece una introducción, meramente descriptiva, del contexto en el que situar la aplicación web desarrollada. Se tratará de diferenciar los conceptos de Internet, World Wide Web y aplicaciones web.
 
-    \subsubsection{¿Qué es Internet?}
+    \subsection{¿Qué es Internet?}
     Tal como se explica en [bib ref], esta pregunta puede ser enfocada desde dos puntos de vista complementarios.
     
     Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo, denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
@@ -110,7 +128,7 @@
     
     Se dice que las aplicaciones son aplicaciones distribuidas, o \textbf{aplicaciones de Internet}, cuando se ejecutan en diferentes máquinas que intercambian datos entre sí. Es importante destacar que las aplicaciones de Internet se ejecutan estrictamente en los sistemas finales, no en la infraestructura de la red, que es agnóstica (o debiera serlo) de la semántica de la información que está trasportando. Así, puede pensarse en Internet como un servicio postal, que garantiza el envío de información entre partes, las cuales pueden estar desarrollando cualquier tipo de actividad basada, entre otras cosas, en la propia comunicación que mantienen. Al igual que el servicio postal impone una serie de reglas para ser usado, como dónde depositar la carta que se pretende enviar o dónde y de qué manera especificar la dirección de envío, Internet ofrece unas reglas en forma de interfaz de programación que las aplicaciones de Internet deben adoptar.
     
-    \subsubsection{¿Qué es la Web?}
+    \subsection{¿Qué es la Web?}
     Siguiendo el hilo de la discusión del epígrafe anterior, la World Wide Web es una de las muchas aplicaciones de Internet existentes. Otras serían el correo electrónico, las aplicaciones para acceder remotamente a otra máquina, la transferencia de archivos, el streaming de video, la telefonía por Internet, y más.
     
     A veces, dado que la Web es la aplicación más conocida, se confunde la parte con el todo al identificarla con la propia Internet. Sin embargo, esta aplicación surgió bastante tiempo después de que otras ya estuvieran ampliamente implantadas y maduras, como el correo electrónico o la transferencia de ficheros, si bien su uso era principalmente en ámbitos académicos.
@@ -125,7 +143,7 @@
     
     En definitiva, y sin entrar en matices que desvíen de la esencia, la Web es la aplicación de Internet que permite el consumo de páginas web bajo demanda por parte de los usuarios (en contraste con el modelo broadcast, en el que se emite y el usuario sólo puede consumir lo emitido, como en la radio).
     
-    \subsubsection{¿Qué es una Aplicación Web?}
+    \subsection{¿Qué es una Aplicación Web?}
     Las páginas web que son enviadas desde el servidor al cliente se dice que pueden ser estáticas o dinámicas. Esta característica, más que hablar de la página web en sí misma, habla del proceso mediante el cual su contenido ha sido creado y modificado a lo largo del tiempo.
    	
    	Las páginas estáticas lo son en el sentido de que su contenido, creado comúnmente por un humano, no varía con el tiempo de manera programática. La información que presentan es la misma, a menos que se modifique \emph{a mano}. Así eran todas las páginas web en los primeros años. En contraste, en las páginas web dinámicas, el contenido no está dado de antemano, sino que se genera en cada ciclo de petición-respuesta. Esto es útil porque entre otras cosas permite páginas web personalizadas para cada usuario, e incluso que sea él mismo quien aporte contenido a la página web.
@@ -134,7 +152,7 @@
     
     Desde este punto de vista, en el presente proyecto se ha desarrollado una aplicación web encargada de generar contenido web que los usuarios pueden visitar con el objetivo de comprar libros a través de Internet.
 
-    \subsection{Estructura de la Memoria}
+    \section{Estructura de la Memoria}
     El resto de la presente memoria está dedicado a presentar los aspectos más relevantes del trabajo desarrollado.
     
     En la sección \ref{sec:analysis} se detallan los aspectos relacionados con la fase de análisis en el desarrollo de la aplicación web. Para ello, se comentan los requisitos de partida y se ofrecen varios casos de uso.
@@ -149,10 +167,10 @@
     
     Por último, para concluir con esta memoria, en la sección \ref{sec:budget} se ofrece un presupuesto estimativo de todos los costes asociados con el desarrollo del presente proyecto.
     
-    \section{Análisis} \label{sec:analysis}
+    \chapter{Análisis} \label{sec:analysis}
     En esta sección se aborda la fase de análisis del desarrollo software. Partiendo de la especificación de los requisitos básicos que debe implementar la aplicación web, se ofrece un conjunto de casos de uso que dé una visión de cuál debe ser el flujo de uso.
     
-        \subsection{Requisitos}
+        \section{Requisitos}
             La aplicación, fundamentalmente, debe admitir los roles y capacidades siguientes:
             \begin{enumerate}
                 \item Usuario anónimo (UA).
@@ -201,7 +219,7 @@
                 \item[b)] Mostrar un mensaje de error cuando un usuario introduzca incorrectamente sus credenciales de autenticación.
             \end{enumerate}
 
-        \subsection{Casos de Uso}
+        \section{Casos de Uso}
             En este apartado se presentan las interacciones más comunes que los usuarios pueden realizar con la aplicación web. No se pretende proporcionar una enumeración exhaustiva de todos los casos de uso, sino un subconjunto relevante de los mismos, a modo de introducción a las capacidades básicas que se espera de la aplicación.
 
             \begin{figure}[htb!]
@@ -426,10 +444,10 @@
                     \item[+] Post-Condiciones: El usuario ha efectuado el logout con éxito.
                 \end{itemize}
 
-    \section{Diseño} \label{sec:design}
+    \chapter{Diseño} \label{sec:design}
     En este apartado se ofrece una descripción de las decisiones tomadas a nivel de diseño a lo largo del desarrollo de la aplicación web.
     
-    \subsection{Arquitectura del Sistema}
+    \section{Arquitectura del Sistema}
     Desde un punto de vista lo suficientemente alejado como para no percibir los detalles internos, la aplicación web está organizada siguiendo la arquitectura clásica cliente-servidor-datos. Hoy en día, quizás, esta no sea la organización más vanguardista. Los términos \emph{serverless}, \emph{microservicios} o \emph{single-page-application} son los que con mayor eco resuenan en la industria web actual.
     
     \begin{figure}[h]
@@ -452,7 +470,7 @@
         
     Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
-    \subsubsection[Inversión de Control]{Inversión de Control - Inyección de Dependencias} \label{sec:ioc}
+    \subsection[Inversión de Control]{Inversión de Control - Inyección de Dependencias} \label{sec:ioc}
     Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
     
     Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su \href{https://martinfowler.com/articles/injection.html}{artículo seminal} en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por inversión de control se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de inyección de dependencias del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
@@ -494,7 +512,7 @@
 		\label{fig:di_bookController}
 	\end{figure}
     
-    \subsubsection{Capas funcionales} \label{sec:design_layer}
+    \subsection{Capas funcionales} \label{sec:design_layer}
     Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:spring}).
     
     \begin{figure}[htb!]
@@ -553,7 +571,7 @@
    	\end{figure}
     	
     
-    \subsection{Modelo de Datos}
+    \section{Modelo de Datos}
     Para dar solución al problema presentado (la venta de libros online) se ha realizado un modelado de entidades del mundo real. Estas entidades se encuentran definidas en el paquete \emph{core.model}. En la figura \ref{fig:package_model} se muestra el diagrama de clases de este paquete. Este modelo encuentra una traducción directa en las entidades gestionadas en la base datos. En las figuras \ref{fig:er_simple_diagram} y \ref{fig:er_expanded_diagram} se ofrecen, respectivamente, los diagramas entidad relación sin y con las propiedades de los objetos visibles.
     
     \begin{figure}[htb!]
@@ -577,13 +595,13 @@
 		\label{fig:er_expanded_diagram}
 	\end{figure}
 
-    \section{Implementación} \label{sec:implementation}
+    \chapter{Implementación} \label{sec:implementation}
     La materialización del análisis y diseño detallado en las secciones anteriores lo conforma el conjunto software que se incluye en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
-    \subsection{Stack Tecnológico}
+    \section{Stack Tecnológico}
     En este apartado se ofrece un comentario sobre las principales decisiones tomadas acerca de las tecnologías empleadas en el desarrollo de la aplicación web.
     
-    \subsubsection{Git}
+    \subsection{Git}
     Como se comentó en la exposición de motivos, Git es una tecnología clave para el control de versiones, y desde el principio se puso el foco en ella. Aunque existen otras herramientas muy válidas, como Mercurial, la decisión fue seguir la tendencia global.
     
     Formalmente, Git es un sistema de control de versiones distribuido, permitiendo gestionar los cambios introducidos en un conjunto de ficheros, conocido como \emph{repositorio}, por un número arbitrario de personas. Sus principales características son:
@@ -597,7 +615,7 @@
     
     En el presente proyecto el uso del control de versiones con Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
     
-    \subsubsection{Java}
+    \subsection{Java}
     Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado el background adquirido a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
     
     Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS, \emph{Long Term Support}).
@@ -711,7 +729,7 @@
     
     Por último, un apunte acerca del entorno de desarrollo utilizado. Durante las primeras semanas se usó el mismo que en toda la carrera: Eclipse. Sin embargo, en el transcurso de una formación en Spring tomada en fases iniciales del proyecto, se entró en contacto con \textbf{IntelliJ IDEA}. Desde entonces ese fue el IDE empleado, destacándose su capacidad de aumentar la productividad y su facilidad de uso.
     
-    \subsubsection{Apache Maven}
+    \subsection{Apache Maven}
     En el mundo del desarrollo software una fase de especial importancia es aquella encargada de transformar todos los archivos de código fuente del proyecto en un paquete susceptible de ser distribuido, instalado y ejecutado en cualquier máquina. A esto se le conoce como el proceso de construcción del proyecto, y representa una tarea no trivial desde el momento en que el proyecto en sí adquiere cierta complejidad.
     
     Antiguamente, este proceso tenía que ser diseñado e implementado \emph{ad hoc}, de una manera específica para cada proyecto. Sin embargo, en la actualidad este proceso se encuentra altamente optimizado. En el caso del mundo Java las principales herramientas empleadas al efecto son Apache Maven y Gradle.
@@ -746,7 +764,7 @@
     
     El desarrollo del presente proyecto ha servido para tomar un primer contacto serio con Apache Maven, resultando de vital importancia para la construcción y para la gestión de dependencias.
     
-    \subsubsection{Spring} \label{sec:spring}
+    \subsection{Spring} \label{sec:spring}
     Sin duda, Spring ha sido una de las tecnologías que más impacto ha tenido en el presente proyecto. En esta sección se pretende dar una idea lo más general y amplia posible de sus características.
     
     Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos Spring}, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
@@ -856,7 +874,7 @@
     
     En resumen, Spring Data JPA añade una capa de abstracción sobre JPA, lo que significa que hace uso de todas las funcionalidades que esta especificación proporciona, y además suministra sus propias facilidades, como la implementación sin código del patrón \emph{Repositorio} o la creación de consultas a la base datos a partir del nombre de los métodos.
     
-    \subsubsection{Thymeleaf} \label{sec:thymeleaf}
+    \subsection{Thymeleaf} \label{sec:thymeleaf}
     Thymeleaf es un motor de plantillas para aplicaciones Java, tanto web como de escritorio, que permite crear dinámicamente documentos HTML5 (y otros, como XML o XHTML). Como principales características de esta tecnología cabe resaltar:
     
     \begin{itemize}
@@ -867,7 +885,7 @@
     
     En el presente proyecto, los documentos incorporados en \emph{classpath: resources/templates} son las plantillas HTML que el motor toma, junto con los datos de negocio que Spring MVC le suministra, para producir el contenido HTML5 que se sirve al cliente.
     
-    \subsubsection{Bootstrap}
+    \subsection{Bootstrap}
     En el ámbito del diseño frontend de la presente aplicación, la herramienta que más ha destacado a sido Bootstrap, versión 4. Se trata de un framework de HTML, CSS y JavaScript, que prima el desarrollo \emph{responsive}. Esto quiere decir que la aplicación web adapta su presentación al tamaño de la pantalla disponible, esto es, que \emph{responde} automáticamente a los cambios de tamaño de pantalla, de forma que en cada caso optimiza la presentación.
     
     Gracias a Bootstrap, con relativamente poco esfuerzo se puede ofrecer una experiencia de usuario muy correcta. Un gran número de elementos HTML como formularios, botones, encabezados, etc. son proporcionados por este framework, con estilo CSS ya preconfigurado, además de otros elementos como \emph{spinners}, \emph{modals}, \emph{cards} etc., lo que aumenta enormemente la productividad.  Además, aparte de los objetos, Bootstrap permite controlar el layout de las vistas de una manera muy sencilla y potente, basada en los Flexbox de CSS.
@@ -880,7 +898,7 @@
     	\item[-] \href{https://fonts.google.com/}{Google Fonts}. A efectos de dar un cariz más personalizado a la aplicación web se usó este servicio de Google. La fuente usada en la aplicación web ha sido \href{https://fonts.google.com/specimen/Noto+Serif+JP}{Noto Serif JP}.
     \end{itemize}
     
-    \subsection[Pagos con Stripe]{Gestión de Pagos con Stripe} \label{sec:stripe}
+    \section[Pagos con Stripe]{Gestión de Pagos con Stripe} \label{sec:stripe}
     Los comercios, ya sean presenciales u \emph{online}, son en esencia lugares de intercambio. Normalmente, lo que una de las partes ofrece a la otra es dinero, a través de un pago. Por tanto, cabe esperar que, en cualquiera de estos establecimientos, el procedimiento por el cual se materializa el pago tome un lugar especial dentro de la lógica de negocio.
     
     Los comercios en Internet tienen, además, la responsabilidad de ofrecer altos estándares de seguridad a sus clientes, especialmente en lo concerniente con el pago. De hecho, una de las principales barreras que aparta a potenciales usuarios del comercio \emph{online} es la percepción de inseguridad que el proceso de pago telemático lleva asociado. En este sentido, el comercio a través de Internet depende de una manera radical en la confianza de los usuarios, siendo así este uno de los principales capitales a cultivar y fortalecer.
@@ -981,7 +999,7 @@
     	\label{fig:stripe_radar}
     \end{figure}
     
-    \subsection{Control de Concurrencia} \label{sec:concurrencia}
+    \section{Control de Concurrencia} \label{sec:concurrencia}
     Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus cestas y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
     
     \begin{figure}[hbt!]
@@ -1034,7 +1052,7 @@
     	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
     \end{itemize}
 
-    \subsection[Datos Jerárquicos]{Persistencia y Visualización de Datos Jerárquicos} \label{sec:hierarchy}
+    \section[Datos Jerárquicos]{Persistencia y Visualización de Datos Jerárquicos} \label{sec:hierarchy}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
     
     Tal como se explica con detalle en [bib ref], existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
@@ -1139,7 +1157,7 @@
     	\label{fig:nested_categories}
     \end{figure}
     
-    \subsection{Experiencia de Usuario Mejorada}
+    \section{Experiencia de Usuario Mejorada}
     Uno de los requisitos básicos de la aplicación web desarrollada es el de permitir a los usuarios gestionar su compra mediante el uso de una cesta virtual, que sirva de almacenamiento para la compra en curso. Esta funcionalidad permite a los usuarios:
     
     \begin{itemize}
@@ -1167,7 +1185,7 @@
     };
     \end{lstlisting}
     
-    \subsection[Libros Referenciados ]{Registro de Libros Referenciados en Cestas}
+    \section[Libros Referenciados ]{Registro de Libros Referenciados en Cestas}
     En este apartado se describe una funcionalidad añadida que, si bien no estaba presente en los requisitos de la aplicación, se ha mostrado muy útil y de relativa facilidad de implementación. La inspiración provino, como se aprecia en la figura \ref{fig:etsy}, del portal de comercio electrónico \href{https://www.etsy.com}{Etsy}, al querer imitar su capacidad de informar de la situación en la que, para un producto determinado, queden igual o menos unidades en stock de las que están siendo referenciadas en cestas de los usuarios. Esto es, que un libro esté en la cesta de \emph{x} usuarios diferentes, que de ese mismo libro queden en stock \emph{y} unidades, y que \emph{x} sea igual o mayor que \emph{y}.
     
     \begin{figure}[htb!]
@@ -1221,10 +1239,10 @@
     	\label{fig:fm_cartBookRegistry_alert}
     \end{figure}
     
-    \section{Despliegue} \label{sec:deployment}
+    \chapter{Despliegue} \label{sec:deployment}
     En esta sección se abordan aspectos relevantes en relación con el despliegue de la aplicación web desarrollada. 
     
-    \subsection{Heroku} \label{sec:heroku}
+    \section{Heroku} \label{sec:heroku}
     Desde el surgimiento de las tecnologías web hasta nuestros días, las herramientas a disposición de los desarrolladores para abrir al público una aplicación web se han incrementado considerablemente. Desde tener cada uno que adquirir, configurar y mantener el hardware necesario, a los modernos servicios de \emph{cloud-computing}.
     
     La presente aplicación web ha sido desplegada en Heroku, una infraestructura de \emph{cloud-computing} que sigue el modelo \emph{platform as a service}.
@@ -1249,7 +1267,7 @@
        	\label{fig:heroku}
     \end{figure}
 
-    \subsection{Heroku Add-ons} \label{sec:addons}
+    \section{Heroku Add-ons} \label{sec:addons}
     Un aspecto interesante de Heroku es su oferta de \emph{Add-ons}, accesible en su \href{https://elements.heroku.com/addons}{marketplace}. Se trata de módulos que se pueden añadir a la aplicación web, algunos gratuitos y otros de pago. La aplicación web desarrollada hace uso de los siguientes:
     
     \begin{itemize}
@@ -1275,7 +1293,7 @@
        	\item[-] \href{https://elements.heroku.com/addons/snyk}{Snyk}. Este add-on revisa las dependencias del proyecto en busca de vulnerabilidades de seguridad conocidas. En su versión gratuita permite realizar hasta 200 test al mes, pero no emite informes es formato pdf. Los resultados son comentados en la sección \ref{sec:vulnerabilities}.
     \end{itemize}
 
-	\subsection{firstmarket.tech}
+	\section{firstmarket.tech}
 	Por defecto, Heroku muestra sus aplicaciones web en el dominio \emph{nombre\_aplicacion.herokuapp.com}, aunque permite de forma sencilla y sin coste adicional \href{https://devcenter.heroku.com/articles/custom-domains}{añadir otros dominios}. Así, para la apertura al público de FirstMarket se ha comprado el dominio \textbf{\emph{firstmarket.tech}}, a través del registrador de dominios \href{https://www.namecheap.com/}{namecheap}.
 	
 	Una vez adquirido el dominio, se debe configurar sus registros DNS para que apunten a Heroku, que es donde se está ejecutando la aplicación. La figura \ref{fig:dns} muestra dichos registros DNS configurados en el panel de control que ofrece namecheap.
@@ -1287,11 +1305,11 @@
 		\label{fig:dns}
 	\end{figure}
 
-	\section{Seguridad} \label{sec:security}
+	\chapter{Seguridad} \label{sec:security}
 	La palabra seguridad es empleada en multitud de situaciones dentro del mundo de las tecnologías de la información, normalmente con significados dispares. No obstante, generalizando lo suficiente, viene a referirse a la protección que se debe proporcionar a determinados recursos, por su valor y/o sensibilidad, frente a posibles usos malintencionados.
 	
 	Esta sección está dedicada a las cuestiones de seguridad, en sentido amplio, relacionadas con \href{https://firstmarket.tech}{FirstMarket}.
-	\subsection{HTTPS} \label{sec:https}
+	\section{HTTPS} \label{sec:https}
 	Como se ha comentado, una de los principales retos que afronta el comercio electrónico es la generación de confianza. Los usuarios demandan seguridad a la hora de realizar sus compras por la red. En este sentido, el desarrollo de protocolos seguros de comunicación ha jugado un papel protagonista en el rápido incremento que el comercio \emph{online} ha vivido en las últimas décadas.
 	
 	HTTPS, la extensión segura de HTTP, es el protocolo de comunicación segura por excelencia en la actualidad. Los datos enviados con HTTPS son protegidos mediante el protocolo Transport Layer Security (TLS), el cual brinda tres tipos de protección:
@@ -1306,7 +1324,7 @@
 	
 	Para finalizar, resaltar que \href{https://firstmarket.tech}{www.firstmarket.tech} impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra entre las líneas 27 y 31 del listado \ref{list:springsec_config}.
 	
-	\subsection{Spring Security} \label{sec:springsec}
+	\section{Spring Security} \label{sec:springsec}
 	Un enfoque comúnmente empleado, en el ámbito de la seguridad de la información, se basa en considerar los sistemas complejos como un conjunto de capas de abstracción, aplicándose los mecanismos de seguridad apropiados para cada una de ellas.
 	
 	Si se piensa en la aplicación de comercio electrónico que se ha desarrollado, esta puede modelarse en esencia como un proceso que se ejecuta en el contexto de un sistema operativo, en el seno a su vez de una máquina, la cual se comunica con otras haciendo uso de la infraestructura de Internet. Este modelo simple ya es capaz de hacer contraste entre la aplicación, el sistema operativo, la máquina y la red. Cada una de estas capas implementa sus propias medidas destinadas a proteger la información que maneja.
@@ -1315,7 +1333,7 @@
 	
 	Spring Security es la piedra angular de la seguridad a nivel de aplicación del portal de comercio electrónico desarrollado, integrando las funcionalidades de autenticación y autorización encima de las características propias de Spring Framework. Además, como se verá, también ofrece mecanismos de protección frente a multitud de vulnerabilidades comunes a nivel de aplicación.
 	
-	\subsubsection{FilterChain}
+	\subsection{FilterChain}
 	Como se comenta en la sección \ref{sec:spring}, las aplicaciones web con Spring basadas en el stack servlet, como es el caso, siguen el patrón \emph{front controller}, en el que el servlet \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet}{\emph{DispatcherServlet}} ejerce de punto de entrada y distribuidor de las peticiones HTTP hacia los \emph{@Controller}/\emph{@RestController} adecuados.
 	
 	El \emph{DispatcherServlet} no integra lógica de autenticación/autorización, por lo que, en ausencia de alternativas, esta debería ser implementada en las clases \emph{@Controller}/\emph{@RestController} en las que delega las peticiones HTTP. Esto, por supuesto, destrozaría el principio de separación de responsabilidades. 
@@ -1356,7 +1374,7 @@
 	]
 	\end{lstlisting}
 	
-	\subsubsection{Configuración}
+	\subsection{Configuración}
 	En estos filtros Spring Security implementa la autenticación/autorización y la protección frente a determinados tipos de ataques. Lo que resta es configurarlos para satisfacer las necesidades propias de cada aplicación. Esta configuración se lleva a cabo extendiendo la clase de Spring Security \emph{WebSecurityConfigurerAdapter} y sobreescribiendo su método \emph{configure(HttpSecurity)} (expuesto en el listado \ref{list:springsec_config}), tarea que en la aplicación web desarrollada realiza la clase \emph{SecurityConfig}.
 	\\
 	
@@ -1450,7 +1468,7 @@
 	}
 	\end{lstlisting}
 	
-	\subsubsection{Autenticación}
+	\subsection{Autenticación}
 	Spring Security ofrece toda una gama de métodos de autenticación. El usado en FirstMarket, configurado entre las líneas 5 y 7 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña. En caso de un fallo de autenticación, la clase \emph{customAuthenticationFailureHandler} toma el control, determina la causa del fallo y presenta el mensaje adecuado al usuario.
 	
 	Es importante resaltar que, con el fin de garantizar la seguridad de la información de los usuarios, la aplicación web desarrollada almacena las constraseñas en la base de datos encriptadas.  En concreto, se usa el agoritmo \href{https://en.wikipedia.org/wiki/Bcrypt}{Bcrypt}. De esta forma, para saber si la contraseña es correcta, la aplicación web encripta la contraseña enviada en el formulario y la compara con la que tiene almacenada.
@@ -1480,7 +1498,7 @@
 	\end{lstlisting}
 	
 
-	\subsubsection{Autorización}
+	\subsection{Autorización}
 	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 15 a la 26, FirstMarket implementa tres tipos de recursos: 
 	
 	\begin{itemize}
@@ -1491,7 +1509,7 @@
 
 	Notar que los dos primeros tipos requieren necesariamente autenticación previa.
 	
-	\subsubsection{Cross-Site Request Forgery}
+	\subsection{Cross-Site Request Forgery}
 	\href{https://en.wikipedia.org/wiki/Cross-site_request_forgery}{\emph{Cross-Site Request Forgery}} representa un tipo de ataque que toma ventaja de la confianza que un determinado sitio web tiene en un cliente, por ejemplo porque previamente se ha autenticado. Así, el cliente envía (sin saberlo) una petición (maliciosa) al sitio web y este la acepta dada la confianza que deposita en el primero. Es el caso inverso a los ataques \href{https://owasp.org/www-community/attacks/xss/}{\emph{Cross-Site Scripting}}, donde se saca partido de la confianza que el cliente tiene en el sitio web, ejecutando el código (malicioso) que este le envía (sin saberlo).
 	
 	Imagínese que un usuario se encuentra, autenticado, en la aplicación web de su banco, en la vista que le permite transferir fondos de su cuenta a otra. Esta vista, por ejemplo, mostraría un formulario como el mostrado en el listado \ref{list:csrf_form}. Al completarlo y presionar \emph{Transfer} se enviaría al servidor del banco la petición HTTP mostrada en el listado \ref{list:csrf_http}.
@@ -1552,7 +1570,7 @@
 	
 	Como se ha dicho, esta funcionalidad se implementa por defecto con Spring Security. Sin embargo, como se aprecia en las líneas 34 a 37 del listado \ref{list:springsec_config}, se ha modificado ligeramente el comportamiento por defecto para permitir que desde Stripe se realicen peticiones POST sin necesidad de contar con el token \emph{\_csrf}.
 	
-	\subsubsection[Encabezados HTTP]{Encabezados de Seguridad en las Respuestas HTTP}
+	\subsection[Encabezados HTTP]{Encabezados de Seguridad en las Respuestas HTTP}
 	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente.
 	
 	\paragraph{Cache Control}
@@ -1662,7 +1680,7 @@
 		\label{fig:moz_scan_results}
 	\end{figure}
 	
-	\subsection{Validación de Entradas}
+	\section{Validación de Entradas}
 	Por validación se entiende las comprobaciones que la aplicación web hace sobre los datos que le son proporcionados externamente. El caso más común es cuando un usuario envía un formulario cumplimentado a la aplicación web, y esta, antes de procesar la información, comprueba que se cumplen ciertas reglas. Por ejemplo, puede requerirse que el campo de email sea efectivamente una dirección de correo válida, o que la fecha de nacimiento sea una fecha pasada válida (nadie puede nacer el 30 de febrero, por ejemplo). Esto se hace para garantizar la consistencia de los datos en la base de datos y, quizás más importante, para evitar ataques de inyección de contenido.
 	
 	Esta comprobación se puede hacer tanto en cliente como en servidor. Desde el punto de vista de la seguridad, realizar la comprobación en servidor es \textbf{obligatorio}, ya que las comprobaciones en cliente son muy fácilmente circunvaladas. Por otro lado, desde el punto de vista de la experiencia de usuario es muy recomendable implementarla también en cliente, ya que permite al usuario tener un \emph{feedback} mucho más rápido que si debiese esperar a que el servidor responda. En definitiva, la mejor práctica es implementar la validación tanto en \emph{backend} como en \emph{frontend}, y así se ha implementado en la aplicación web desarrollada. Resaltar, además, que los componentes de validación en \emph{backend} están en el paquete \emph{util.validation}.
@@ -1681,7 +1699,7 @@
 	
 	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes. La primera se realiza utilizando las ya mencionadas expresiones regulares, pero, para validar si se trata de un ISBN válido, aún hay que calcular el dígito de control y comprobar que coincida con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación implementada en FirstMarket da soporte a ambos formatos de ISBN.
 	
-	\subsection{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
+	\section{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
 	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con la ayuda de \href{https://probely.com/}{Probely} y \href{https://snyk.io/}{Snyk}. La primera herramienta detectó 5 vulnerabilidades, mientras que la segunda 13. Del total, 14 responden a vulnerabilidades conocidas en librerías utilizadas por la aplicación web, por lo que su resolución se basa en actualizar las versiones de dichas dependencias. A continuación se pasa a comentar los problemas encontrados, haciendo especial énfasis en las 4 vulnerabilidades propias de la aplicación web desarrollada: 
 	
 	\begin{itemize}
@@ -1794,12 +1812,12 @@
 	
 	
 
-    \section{Manual}
+    %\section{Manual}
     %  En esta seccion se va a describir las cuestiones necesarias para facilitar el uso de la aplicacion web por parte de los usuarios
     %  \subsection{Cliente}
     %  \subsection{Administrador}
     
-    \section{Presupuesto} \label{sec:budget}
+    \chapter{Presupuesto} \label{sec:budget}
     En esta sección se estudian los costes asociados al desarrollo de la aplicación web. De una manera amplia, estos pueden ser agrupados en coste del factor humano y coste de los recursos materiales.
     
     Para analizar los primeros es necesario distinguir los diferentes roles profesionales implicados en la consecución de los objetivos, para lo cual se toma como guía el \href{https://www.boe.es/diario_boe/txt.php?id=BOE-A-2018-3156}{XVII Convenio colectivo estatal de empresas de consultoría y estudios de mercado y de la opinión pública}, que engloba a la actividad de desarrollo software. Así, en su artículo 15 son descritos los grupos profesionales, a los que en el Anexo I del mismo texto se les asocia su retribución anual. En el presente estudio se tomarán dichos valores como suelo retributivo legal, tomándose el pulso actual del mercado en \href{https://www.glassdoor.es/Sueldos/index.htm}{glassdoor.es} y \href{https://es.indeed.com/salaries}{indeed.com}.
@@ -1871,7 +1889,7 @@
 		\label{table:recursos_total}
 	\end{table}
 
-    \section{Mejoras y Ampliaciones}
+    \chapter{Mejoras y Ampliaciones}
     %Testar el software
     
     %Sistema de valoracion por parte de los usuarios de los libros
