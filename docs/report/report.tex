@@ -1,14 +1,11 @@
 \documentclass[a4paper,12pt,twoside,openright]{report}
 
 \usepackage{titling}
-
-\author{Misrraim~Su\'arez~P\'erez}
-\title{FirstMarket: Aplicación Web de Comercio Electrónico}
-
-
-
 \usepackage[utf8]{inputenc}
 \usepackage[spanish,es-tabla,es-nodecimaldot,es-lcroman]{babel}
+
+\author{\uppercase{Misrraim Suárez Pérez}}
+\title{FirstMarket: Aplicación Web de Comercio Electrónico}
 
 \usepackage{csquotes}
 \linespread{1.3}
@@ -77,14 +74,41 @@
 \usepackage{verbatim}
 
 
-
 \begin{document}
-    \include{portada}
-    \thispagestyle{empty}
-    \cleardoublepage{}
+	
+   \begin{titlepage}
+	   	\fbox{
+	   		\begin{minipage}[c][0.99\textheight][t]{\columnwidth}
+	   			\begin{center}
+	   				\vspace{1cm}
+	   				\includegraphics[width=2cm]{escudo_uned}
+	   				\vspace{2cm}
+	   				\begin{singlespace}
+	   					UNIVERSIDAD NACIONAL DE EDUCACIÓN A DISTANCIA\\
+	   					\vspace{0.5cm}
+	   					ESCUELA TÉCNICA SUPERIOR DE INGENIERÍA INFORMÁTICA\\
+	   					\vspace{1cm}
+	   					Proyecto de Fin de Grado en Ingeniería Informática\\
+	   					\vspace{2cm}
+	   					\textbf{\large FIRSTMARKET: APLICACIÓN WEB}\\
+	   					\textbf{\large DE COMERCIO ELECTRÓNICO}
+	   				\end{singlespace}
+	   			\end{center}
+	   			\begin{flushleft}
+	   				\vspace{4cm}
+	   				\quad \theauthor\\
+	   				\vspace{0.5cm}
+	   				\quad Dirigido por: LUIS GRAU FERNÁNDEZ
+	   				\vfill
+	   				\quad Curso: 2019-2020 (Septiembre)
+	   				\vspace{0.5cm}
+	   			\end{flushleft}
+	   		\end{minipage}
+	   	}
+   \end{titlepage}
     
     \fbox{ 
-	    \thispagestyle{empty}
+    	\thispagestyle{empty}
 	    \begin{minipage}[c][\textheight][t]{\columnwidth}
 		    \begin{center}
 			    \vspace{1cm}
@@ -100,7 +124,7 @@
 		    \end{center}
 		    \begin{flushleft}
 			    \vspace{6.5cm}
-			    \quad Realizado por: \quad MISRRAIM SUÁREZ PÉREZ\\
+			    \quad Realizado por: \quad \theauthor\\
 			    \vspace{0.5cm}
 			    \quad Dirigido por: \quad LUIS GRAU FERNÁNDEZ
 			    \vfill
@@ -109,21 +133,74 @@
 		    \end{flushleft}
 	    \end{minipage}
     }
+
+	\pagenumbering{roman}
+	\fancyhead[LO]{\nouppercase{\leftmark}}
+	\fancyhead[RE]{\nouppercase{\rightmark}}
+	\fancyfoot[LE,RO]{\thepage}
    
-   
-   \pagenumbering{roman}
-   \fancyhead[LE,RO]{\thepage}
-   \fancyhead[LO]{\nouppercase{\leftmark}}
-   \fancyhead[RE]{\nouppercase{\rightmark}}
-   
+   \section*{Resumen}
    \thispagestyle{empty}
+   En la actualidad vivimos inmersos en la sociedad de Internet, tornándose las plataformas que ofrecen sus productos y servicios a través de la red parte esencial en nuestra forma de vida. A la par, los estándares de calidad de este tipo de sistemas se han visto elevados, aumentándose la productividad en la fase de desarrollo, mejorándose cada día la experiencia de usuario, y reforzando continuamente la seguridad, en todas sus vertientes.
+   
+   El presente Proyecto Final de Grado consiste en el desarrollo de una aplicación web de comercio electrónico especializada en la venta de libros, denominada \href{https://firstmarket.tech}{FirstMarket}. Se ha pretendido profundizar en los problemas que estas tecnologías enfrentan y en las maneras modernas de resolverlos, siempre con apoyo en las herramientas vistas en el transcurso del plan de estudios.
+   
+   La aplicación desarrollada permite tanto a un usuario recorrer todo el ciclo de compra de un libro (explorar el catálogo, gestionar la compra a través de una cesta virtual, realizar el pago, gestionar los pedidos, etc.), como al administrador de la tienda gestionar sus productos (agregar nuevos libros, modificar los existentes, gestionar los pedidos recibidos, etc.).
+   
+   Se ha utilizado una arquitectura cliente-servidor basada en el stack tecnológico Servlet de Java. La implementacón ha sido llevada a cabo de la mano de Spring, en concreto haciendo uso de sus módulos Spring Boot, Spring Framework, Spring Data JPA y Spring Security. Del lado de la presentación al usuario, Bootstrap 4 y JavaScript han sido los principales protagonistas, creando una experiencia de uso fluida y consistente. Por su parte, los pagos son gestionados mediante integración con la plataforma Stripe, ganando en robustez y seguridad. Por último, el despliegue de la aplicación web ha sido realizado en Heroku, adquiriendo y configurando un nombre de dominio propio: \href{https://firstmarket.tech}{firstmarket.tech}.
+   \pagebreak
+   
+   \section*{Palabras Clave}
+   \thispagestyle{empty}
+   \begin{itemize}
+	   	\item Aplicación Web
+	   	\item Java
+	   	\item Spring Boot
+	   	\item Spring Framework
+	   	\item Spring Data JPA
+	   	\item Hibernate
+	   	\item Spring Security
+	   	\item Thymeleaf
+	   	\item Bootstrap 4
+	   	\item Heroku
+	   	\item Stripe
+   \end{itemize}
+   \clearpage
+   
+   \section*{Abstract}
+   \thispagestyle{empty}
+   En la actualidad vivimos inmersos en la sociedad de Internet, tornándose las plataformas que ofrecen sus productos y servicios a través de la red parte esencial en nuestra forma de vida. A la par, los estándares de calidad de este tipo de sistemas se han visto elevados, aumentándose la productividad en la fase de desarrollo, mejorándose cada día la experiencia de usuario, y reforzando continuamente la seguridad, en todas sus vertientes.
+   
+   El presente Proyecto Final de Grado consiste en el desarrollo de una aplicación web de comercio electrónico especializada en la venta de libros, denominada \href{https://firstmarket.tech}{FirstMarket}. Se ha pretendido profundizar en los problemas que estas tecnologías enfrentan y en las maneras modernas de resolverlos, siempre con apoyo en las herramientas vistas en el transcurso del plan de estudios.
+   
+   La aplicación desarrollada permite tanto a un usuario recorrer todo el ciclo de compra de un libro (explorar el catálogo, gestionar la compra a través de una cesta virtual, realizar el pago, gestionar los pedidos, etc.), como al administrador de la tienda gestionar sus productos (agregar nuevos libros, modificar los existentes, gestionar los pedidos recibidos, etc.).
+   
+   Se ha utilizado una arquitectura cliente-servidor basada en el stack tecnológico Servlet de Java. La implementacón ha sido llevada a cabo de la mano de Spring, en concreto haciendo uso de sus módulos Spring Boot, Spring Framework, Spring Data JPA y Spring Security. Del lado de la presentación al usuario, Bootstrap 4 y JavaScript han sido los principales protagonistas, creando una experiencia de uso fluida y consistente. Por su parte, los pagos son gestionados mediante integración con la plataforma Stripe, ganando en robustez y seguridad. Por último, el despliegue de la aplicación web ha sido realizado en Heroku, adquiriendo y configurando un nombre de dominio propio: \href{https://firstmarket.tech}{firstmarket.tech}.
+   \pagebreak
+   
+   \section*{Key Words}
+   \thispagestyle{empty}
+   \begin{itemize}
+	   	\item Web Application
+	   	\item Java
+	   	\item Spring Boot
+	   	\item Spring Framework
+	   	\item Spring Data JPA
+	   	\item Hibernate
+	   	\item Spring Security
+	   	\item Thymeleaf
+	   	\item Bootstrap 4
+	   	\item Heroku
+	   	\item Stripe
+   \end{itemize}
+   \clearpage
    
     \tableofcontents
     
     \listoffigures
     
     \listoftables
-    \cleardoublepage{}
+    \clearpage
     
     \pagenumbering{arabic}
     \fancyhf{}
