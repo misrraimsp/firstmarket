@@ -3,7 +3,7 @@
 \usepackage{titling}
 
 \author{Misrraim~Su\'arez~P\'erez}
-\title{FirstMarket}
+\title{FirstMarket: Aplicación Web de Comercio Electrónico}
 
 
 
@@ -11,7 +11,7 @@
 \usepackage[spanish,es-tabla,es-nodecimaldot,es-lcroman]{babel}
 
 \usepackage{csquotes}
-\linespread{1.5}
+\linespread{1.3}
 
 \usepackage{graphicx}
 \graphicspath{ {./images/} }
@@ -48,8 +48,7 @@
 	showtabs=false,
 	captionpos=b
 }
-\addto\captionsspanish{\renewcommand{\lstlistingname}{Listado}}
-
+\renewcommand{\lstlistingname}{Listado}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -66,29 +65,72 @@
 \usepackage{eurosym}
 
 \usepackage{fancyhdr}
-\pagestyle{fancy}
 \fancyhf{}
-\fancyhead[RO]{\leftmark}
-\fancyhead[LE]{\thetitle}
-\fancyfoot[LE,RO]{\thepage}
+\setlength{\headheight}{15.2pt}
+\pagestyle{fancy}
 
 \renewcommand{\headrulewidth}{0.1pt}
 \renewcommand{\footrulewidth}{0.1pt}
 
 \usepackage{setspace}
 
-%\setcounter{tocdepth}{4}
+\usepackage{verbatim}
 
-%\setcounter{secnumdepth}{4}
 
 
 \begin{document}
-    
     \include{portada}
+    \thispagestyle{empty}
+    \cleardoublepage{}
     
+    \fbox{ 
+	    \thispagestyle{empty}
+	    \begin{minipage}[c][\textheight][t]{\columnwidth}
+		    \begin{center}
+			    \vspace{1cm}
+			    \includegraphics[width=2cm]{escudo_uned}
+			    \vspace{3cm}
+			    \begin{singlespace}
+				    \textbf{\large FIRSTMARKET: APLICACIÓN WEB}\\
+				    \textbf{\large DE COMERCIO ELECTRÓNICO}
+			    \end{singlespace}
+			    \vspace{1cm}
+			    \textbf{Proyecto de Fin de Grado en Ingeniería Informática}\\
+			    \textbf{de modalidad específica}
+		    \end{center}
+		    \begin{flushleft}
+			    \vspace{6.5cm}
+			    \quad Realizado por: \quad MISRRAIM SUÁREZ PÉREZ\\
+			    \vspace{0.5cm}
+			    \quad Dirigido por: \quad LUIS GRAU FERNÁNDEZ
+			    \vfill
+			    \quad Fecha de lectura y defensa:
+			    \vspace{0.5cm}
+		    \end{flushleft}
+	    \end{minipage}
+    }
+   
+   
+   \pagenumbering{roman}
+   \fancyhead[LE,RO]{\thepage}
+   \fancyhead[LO]{\nouppercase{\leftmark}}
+   \fancyhead[RE]{\nouppercase{\rightmark}}
+   
+   \thispagestyle{empty}
+   
     \tableofcontents
     
-     \include{c1}
+    \listoffigures
+    
+    \listoftables
+    \cleardoublepage{}
+    
+    \pagenumbering{arabic}
+    \fancyhf{}
+    \pagestyle{fancy}
+    \fancyhead[RO]{\nouppercase{\leftmark}}
+    \fancyhead[LE]{\thetitle}
+    \fancyfoot[LE,RO]{\thepage}
 
     \chapter{Introducción}
     El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática de la Universidad Nacional de Educación a Distancia.
@@ -1052,7 +1094,7 @@
     	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
     \end{itemize}
 
-    \section[Datos Jerárquicos]{Persistencia y Visualización de Datos Jerárquicos} \label{sec:hierarchy}
+    \section{Gestión de Datos Jerárquicos} \label{sec:hierarchy}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
     
     Tal como se explica con detalle en [bib ref], existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
@@ -1185,7 +1227,7 @@
     };
     \end{lstlisting}
     
-    \section[Libros Referenciados ]{Registro de Libros Referenciados en Cestas}
+    \section{Libros Referenciados en Cestas}
     En este apartado se describe una funcionalidad añadida que, si bien no estaba presente en los requisitos de la aplicación, se ha mostrado muy útil y de relativa facilidad de implementación. La inspiración provino, como se aprecia en la figura \ref{fig:etsy}, del portal de comercio electrónico \href{https://www.etsy.com}{Etsy}, al querer imitar su capacidad de informar de la situación en la que, para un producto determinado, queden igual o menos unidades en stock de las que están siendo referenciadas en cestas de los usuarios. Esto es, que un libro esté en la cesta de \emph{x} usuarios diferentes, que de ese mismo libro queden en stock \emph{y} unidades, y que \emph{x} sea igual o mayor que \emph{y}.
     
     \begin{figure}[htb!]
@@ -1570,7 +1612,7 @@
 	
 	Como se ha dicho, esta funcionalidad se implementa por defecto con Spring Security. Sin embargo, como se aprecia en las líneas 34 a 37 del listado \ref{list:springsec_config}, se ha modificado ligeramente el comportamiento por defecto para permitir que desde Stripe se realicen peticiones POST sin necesidad de contar con el token \emph{\_csrf}.
 	
-	\subsection[Encabezados HTTP]{Encabezados de Seguridad en las Respuestas HTTP}
+	\subsection{Encabezados HTTP de Seguridad}
 	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente.
 	
 	\paragraph{Cache Control}
