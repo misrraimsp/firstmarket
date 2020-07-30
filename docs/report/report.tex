@@ -1,8 +1,9 @@
 \documentclass[a4paper,12pt,twoside,openright]{report}
 
-\usepackage{titling}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish,es-tabla,es-nodecimaldot,es-lcroman]{babel}
+
+\usepackage{titling}
 
 \author{\uppercase{Misrraim Suárez Pérez}}
 \title{FirstMarket: Aplicación Web de Comercio Electrónico}
@@ -51,8 +52,8 @@
 \hypersetup{
 	colorlinks=true,
 	linkcolor=blue,
-	filecolor=magenta,      
 	urlcolor=blue,
+	citecolor=blue
 }
 
 \urlstyle{same}
@@ -71,7 +72,13 @@
 
 \usepackage{setspace}
 
-\usepackage{verbatim}
+\usepackage[backend=biber,style=alphabetic,sorting=ynt]{biblatex}
+\addbibresource{biblio.bib}
+
+\usepackage[intoc]{nomencl}
+\makenomenclature
+\renewcommand{\nomname}{Abreviaturas}
+%\renewcommand{\nompreamble}{La lista a continuación muestra el significado de las abreviaturas utilizadas en el texto}
 
 
 \begin{document}
@@ -106,6 +113,11 @@
 	   		\end{minipage}
 	   	}
    \end{titlepage}
+
+	\pagenumbering{roman}
+	\fancyhead[LO]{\nouppercase{\leftmark}}
+	\fancyhead[RE]{\nouppercase{\rightmark}}
+	\fancyfoot[LE,RO]{\thepage}
     
     \fbox{ 
     	\thispagestyle{empty}
@@ -133,26 +145,22 @@
 		    \end{flushleft}
 	    \end{minipage}
     }
-
-	\pagenumbering{roman}
-	\fancyhead[LO]{\nouppercase{\leftmark}}
-	\fancyhead[RE]{\nouppercase{\rightmark}}
-	\fancyfoot[LE,RO]{\thepage}
    
    \section*{Resumen}
    \thispagestyle{empty}
-   En la actualidad vivimos inmersos en la sociedad de Internet, tornándose las plataformas que ofrecen sus productos y servicios a través de la red parte esencial en nuestra forma de vida. A la par, los estándares de calidad de este tipo de sistemas se han visto elevados, aumentándose la productividad en la fase de desarrollo, mejorándose cada día la experiencia de usuario, y reforzando continuamente la seguridad, en todas sus vertientes.
+   En la actualidad vivimos inmersos en la sociedad de Internet, tornándose las plataformas que ofrecen sus productos y servicios a través de la red parte esencial de nuestra forma de vida. A la par, los estándares de calidad de este tipo de sistemas se han visto elevados, aumentándose la productividad en la fase de desarrollo, mejorándose cada día la experiencia de usuario, y reforzando continuamente la seguridad, en todas sus vertientes.
    
    El presente Proyecto Final de Grado consiste en el desarrollo de una aplicación web de comercio electrónico especializada en la venta de libros, denominada \href{https://firstmarket.tech}{FirstMarket}. Se ha pretendido profundizar en los problemas que estas tecnologías enfrentan y en las maneras modernas de resolverlos, siempre con apoyo en las herramientas vistas en el transcurso del plan de estudios.
    
    La aplicación desarrollada permite tanto a un usuario recorrer todo el ciclo de compra de un libro (explorar el catálogo, gestionar la compra a través de una cesta virtual, realizar el pago, gestionar los pedidos, etc.), como al administrador de la tienda gestionar sus productos (agregar nuevos libros, modificar los existentes, gestionar los pedidos recibidos, etc.).
    
-   Se ha utilizado una arquitectura cliente-servidor basada en el stack tecnológico Servlet de Java. La implementacón ha sido llevada a cabo de la mano de Spring, en concreto haciendo uso de sus módulos Spring Boot, Spring Framework, Spring Data JPA y Spring Security. Del lado de la presentación al usuario, Bootstrap 4 y JavaScript han sido los principales protagonistas, creando una experiencia de uso fluida y consistente. Por su parte, los pagos son gestionados mediante integración con la plataforma Stripe, ganando en robustez y seguridad. Por último, el despliegue de la aplicación web ha sido realizado en Heroku, adquiriendo y configurando un nombre de dominio propio: \href{https://firstmarket.tech}{firstmarket.tech}.
+   Se ha utilizado una arquitectura cliente-servidor basada en el \emph{stack} tecnológico Servlet de Java. La implementacón ha sido llevada a cabo de la mano de Spring, en concreto haciendo uso de sus módulos Spring Boot, Spring Framework, Spring Data JPA y Spring Security. Del lado de la presentación al usuario, Bootstrap 4 y JavaScript han sido los principales protagonistas, creando una experiencia de uso fluida y consistente. Por su parte, los pagos son gestionados mediante integración con la plataforma Stripe, ganando en robustez y seguridad. Por último, el despliegue de la aplicación web ha sido realizado en Heroku, adquiriendo y configurando un nombre de dominio propio: \href{https://firstmarket.tech}{firstmarket.tech}.
    \pagebreak
    
    \section*{Palabras Clave}
    \thispagestyle{empty}
    \begin{itemize}
+   		\item Comercio Electrónico
 	   	\item Aplicación Web
 	   	\item Java
 	   	\item Spring Boot
@@ -210,7 +218,7 @@
     \fancyfoot[LE,RO]{\thepage}
 
     \chapter{Introducción}
-    El presente proyecto se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática de la Universidad Nacional de Educación a Distancia.
+    El presente trabajo se enmarca dentro del Proyecto Final de Grado correspondiente al Grado en Ingeniería Informática de la Universidad Nacional de Educación a Distancia.
     
     Se basa en el proyecto específico ofertado por el Departamento de Sistemas de Comunicación y Control de la UNED titulado \emph{Desarrollo de un portal de comercio electrónico}. Citando la propia descripción de dicha oferta de proyecto específico:
     
@@ -235,7 +243,7 @@
     En esta sección se ofrece una introducción, meramente descriptiva, del contexto en el que situar la aplicación web desarrollada. Se tratará de diferenciar los conceptos de Internet, World Wide Web y aplicaciones web.
 
     \subsection{¿Qué es Internet?}
-    Tal como se explica en [bib ref], esta pregunta puede ser enfocada desde dos puntos de vista complementarios.
+    Tal como se explica en \cite{Kurose2016}, esta pregunta puede ser enfocada desde dos puntos de vista complementarios.
     
     Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo, denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
     
@@ -254,11 +262,11 @@
     
     Lo que da tanta importancia a la Web es que fue la aplicación de Internet que, a principios de los años 90, abrió al gran público a la hasta entonces desconocida Internet. De hecho, esta aplicación llevó a Internet de ser tan sólo una más de muchas redes existentes a ser la dominante por excelencia.
    
-   	Entonces, como se ha dicho, la Web es una aplicación de Internet, y como tal se trata de software que se ejecuta en diferentes máquinas que intercambian mensajes entre sí. El formato de estos mensajes, su timing y demás \emph{reglas de conversación} se recogen en un protocolo, el HyperText Transfer Protocol (HTTP). Este protocolo es el corazón de la Web, encontrándose definido en [RFC 1945] y en [RFC 2616], y su implementación se materializa en dos programas ejecutados en diferentes sistemas finales, un programa cliente y un programa servidor.
+   	Entonces, como se ha dicho, la Web es una aplicación de Internet, y como tal se trata de software que se ejecuta en diferentes máquinas que intercambian mensajes entre sí. El formato de estos mensajes, su temporización y demás \emph{reglas de conversación} se recogen en el protocolo HyperText Transfer Protocol. Este protocolo es el corazón de la Web, encontrándose definido en [RFC 1945] y en [RFC 2616], y su implementación se materializa en dos programas ejecutados en diferentes sistemas finales, un programa cliente y un programa servidor.
     
     La mecánica básica gira en torno a peticiones y respuestas. El programa cliente envía un mensaje HTTP conteniendo una petición al programa servidor. Por su parte, siguiendo las reglas definidas en el protocolo, el programa servidor contesta enviando otro mensaje HTTP al cliente. En el caso más común, el cliente le solicita al servidor el envío de una \emph{página web}.
     
-    Una página web es un documento de texto escrito con unas reglas de sintaxis específicas. Estas reglas definen el Hypertext Markup Language (HTML). En el sistema final cliente, la página web es presentada en pantalla de una manera amigable al usuario por medio de programas que procesan el contenido en HTML.
+    Una página web es un documento de texto escrito con unas reglas de sintaxis específicas. Estas reglas definen el Hypertext Markup Language. En el sistema final cliente, la página web es presentada en pantalla de una manera amigable al usuario por medio de programas que procesan el contenido en HTML.
     
     En definitiva, y sin entrar en matices que desvíen de la esencia, la Web es la aplicación de Internet que permite el consumo de páginas web bajo demanda por parte de los usuarios (en contraste con el modelo broadcast, en el que se emite y el usuario sólo puede consumir lo emitido, como en la radio).
     
@@ -292,7 +300,7 @@
         \section{Requisitos}
             La aplicación, fundamentalmente, debe admitir los roles y capacidades siguientes:
             \begin{enumerate}
-                \item Usuario anónimo (UA).
+                \item Usuario Anónimo.
                 \begin{itemize}
                     \item[-] Por defecto, al acceder al sitio web se hace como UA, sin ninguna validación ni credencial. Basta con acceder a la URL de inicio de la aplicación.
                     \item[-] Un UA debe poder realizar búsquedas de libros, es decir, debe tener pleno acceso a la exploración del catálogo.
@@ -304,7 +312,7 @@
                     \item[-] En su caso, un UA debe poder iniciar sesión en el sistema.
                     \item[-] En su caso, un UA debe poder realizar el procedimiento de recuperación de contraseña.
                 \end{itemize}
-                \item Usuario registrado (UR). Este perfil representa a un usuario que ha pasado de anónimo a registrado. Un UR posee todas las capacidades del UA, más otras específicas suyas, a saber:
+                \item Usuario Registrado. Este perfil representa a un usuario que ha pasado de anónimo a registrado. Un UR posee todas las capacidades del UA, más otras específicas suyas, a saber:
                 \begin{itemize}
                     \item[-] Poder editar la información de su perfil de usuario.
                     \item[-] Realizar pedidos y efectuar los correspondientes pagos a través de una pasarela segura.
@@ -589,10 +597,10 @@
         
     Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
-    \subsection[Inversión de Control]{Inversión de Control - Inyección de Dependencias} \label{sec:ioc}
+    \subsection{Inversión de Control} \label{sec:ioc}
     Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
     
-    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su \href{https://martinfowler.com/articles/injection.html}{artículo seminal} en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por inversión de control se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de inyección de dependencias del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
+    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su \href{https://martinfowler.com/articles/injection.html}{artículo seminal} en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por IoC se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de DI del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
     \\
     
     \begin{lstlisting}[language=Java,caption=Inversión de control de dependencias,label=list:ioc]
@@ -735,27 +743,27 @@
     En el presente proyecto el uso del control de versiones con Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
     
     \subsection{Java}
-    Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado el background adquirido a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
+    Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado la experiencia adquirida a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable [bib ref]. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
     
-    Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS, \emph{Long Term Support}).
+    Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS).
     \\
     
-    Java es un lenguaje que, como muchos otros, ha ido evolucionando con el tiempo, dando como resultado un conjunto de capacidades muy variado. En 2014, con la publicación de Java 8, el lenguaje experimentó una de las mayores expansiones, si no la mayor, de su historia. En ese momento se le introdujeron potentes capacidades de programación declarativa, como las \emph{Labmda Expressions} y la \emph{Stream API}, que, en cierto modo, han revolucionado la programación Java (véase, por ejemplo, el framework de desarrollo de aplicaciones web \href{http://sparkjava.com/}{Spark}, que sólo usa capacidades Java 8+)
+    Java es un lenguaje que, como muchos otros, ha ido evolucionando con el tiempo, dando como resultado un conjunto de capacidades muy variado. En 2014, con la publicación de Java 8, el lenguaje experimentó una de las mayores expansiones, si no la mayor, de su historia. En ese momento se le introdujeron potentes capacidades de programación declarativa, como las \emph{Labmda Expressions} y la \emph{Stream API}, que, en cierto modo, han revolucionado la programación Java (véase, por ejemplo, el \emph{framework} de desarrollo de aplicaciones web \href{http://sparkjava.com/}{Spark}, que sólo usa capacidades Java 8+)
     \\
     
     \begin{lstlisting}[language=Java,caption=Programación declarativa con Java,label=list:java_declarative]
     private Set<Long> getIdsByExcludedStatus(ProductStatus excludedStatus) {
-    return bookRepository
-    .findAll()
-    .stream()
-    .filter(book -> !book.getStatus().equals(excludedStatus))
-    .map(Book::getId)
-    .collect(Collectors.toSet())
-    ;
+	    return bookRepository
+		    .findAll()
+		    .stream()
+		    .filter(book -> !book.getStatus().equals(excludedStatus))
+		    .map(Book::getId)
+		    .collect(Collectors.toSet())
+	    ;
     }
     \end{lstlisting}
     
-    Como se ha comentado, una de las intenciones de usar la tecnología Java era precisamente profundizar en su conocimiento. Así, se ha aprovechado el desarrollo de la presente aplicación para estudiar estas capacidades declarativas, aplicándolas progresivamente. Como ejemplo, en el listado \ref{list:java_declarative} se muestra la implementación del método \emph{getIdsByExcludedStatus}, perteneciente a la clase \emph{BookServer}. Se puede apreciar la facilidad de lectura que el estilo declarativo proporciona, además de la potencia expresiva. 
+    Como se ha comentado, una de las intenciones de usar la tecnología Java era precisamente profundizar en su conocimiento. Así, se ha aprovechado el desarrollo de la presente aplicación para estudiar estas capacidades declarativas (tomando como referencia \cite{QuentinCharatan2019}), aplicándolas progresivamente. Como ejemplo, en el listado \ref{list:java_declarative} se muestra la implementación del método \emph{getIdsByExcludedStatus}, perteneciente a la clase \emph{BookServer}. Se puede apreciar la facilidad de lectura que el estilo declarativo proporciona, además de la potencia expresiva. 
     \\
     
     También es necesario comentar un par de librerías que merecen especial mención, por la relevancia que han tenido en el proyecto:
@@ -837,7 +845,7 @@
     \end{lstlisting}
     
     \paragraph{SLF4J - Logback}
-    SLF4J (Simple Logging Facade for Java) es una API Java para tareas de registro que implementa el patrón de diseño \href{https://en.wikipedia.org/wiki/Facade_pattern}{\emph{facade}}, el cual permite desacoplar completamente el código de la aplicación de la tecnología específica de registro que subyaga bajo la fachada.
+    SLF4J es una API Java para tareas de registro que implementa el patrón de diseño \href{https://en.wikipedia.org/wiki/Facade_pattern}{\emph{facade}}, el cual permite desacoplar completamente el código de la aplicación de la tecnología específica de registro que subyaga bajo la fachada.
     
     Logback es la tecnología elegida que en el presente proyecto se conecta como backend de SLF4J. Se trata de una librería moderna, diseñada por el fundador de la famosa Log4j (Ceki Gülcü), y que pretende ser su sucesora.
     
@@ -870,14 +878,14 @@
     	\item[-] \textbf{Convención sobre configuración}. Como también se comentará en la sección \ref{sec:spring}, este principio de diseño persigue que el desarrollador sólo deba especificar los aspectos no convencionales, confiando para el resto en la configuración por defecto ofrecida por Apache Maven. Como dichos valores por defecto normalmente son reflejo de buenas prácticas, más o menos consensuados por agentes expertos en la materia, automáticamente se está consiguiendo alinear el proyecto a dichas buenas prácticas, al tiempo de estarse facilitando el propio trabajo de construcción software. La adopción de Apache Maven de este paradigma se traduce en, entre otros muchas cosas, establecer una distribución de carpetas y ficheros estándar para el proyecto, o seguir determinadas convenciones a la hora de compilar el código fuente o ensamblar los paquetes.
     	\item[-] \textbf{Interfaz común}. Muy ligado con el aspecto anterior está el hecho de que Apache Maven ofrece un marco de trabajo o interfaz común para la construcción de proyectos software. Como ya se comentó, antes de la existencia de este tipo de herramientas el software se construía de una manera singular en cada proyecto. Con Apache Maven, sin embargo, se establece una manera estándar o canónica de hacerlo. Así, cuando un desarrollador aprecia que un determinado proyecto está gestionado con Apache Maven puede asumir mucha información sobre él.
     	\item[-] \textbf{Reutilización a través de \emph{plugins}}. Apache Maven está diseñado de forma que se maximiza la flexibilidad y la reutilización de la lógica de construcción. El núcleo de la herramienta se encarga de muy pocas tareas, actuando más como un orquestador que lee la información centralizada acerca del proyecto en un fichero XML y delega el grueso del trabajo en plugins. Es decir, son los plugins los que realizan las diferentes labores de construcción, como compilar, instalar o empaquetar. Apache Maven ofrece una serie de plugins por defecto, pero también la posibilidad de construir nuevos e implementar la lógica de construcción que se desee. De hecho, en el presente proyecto se ha añadido el plugin que ofrece Spring Boot.
-    	\item[-] \textbf{Modelo conceptual de proyecto}. Dicho lo anterior, la gran característica que aporta Apache Maven es la abstracción de toda la información necesaria referente a un proyecto en un fichero, el \textbf{Project Object Model} (en el presente proyecto ver el fichero \emph{pom.xml}). En él se especifica, entre otras cosas, las dependencias con otros proyectos, de forma que es Apache Maven quien se encarga de gestionarlas, esto es, resolverlas, descargarlas de un repositorio central, colocarlas en las carpetas apropiadas, enlazarlas durante la construcción, etc. En el listado \ref{list:maven_dependency} se muestra, como ejemplo, la declaración de una dependencia con la librería \href{https://www.passay.org/}{Passay}, utilizada en la aplicación web para generar nuevas contraseñas aleatorias. 
+    	\item[-] \textbf{Modelo conceptual de proyecto}. Dicho lo anterior, la gran característica que aporta Apache Maven es la abstracción de toda la información necesaria referente a un proyecto en un fichero, el \textbf{Project Object Model} (en el presente proyecto ver el fichero \emph{pom.xml}). En él se especifica, entre otras cosas, las dependencias con otros proyectos, de forma que es Apache Maven quien se encarga de gestionarlas, esto es, resolverlas, descargarlas de un repositorio central, colocarlas en las carpetas apropiadas, enlazarlas durante la construcción, etc. En el listado \ref{list:maven_dependency} se muestra, como ejemplo, la declaración en el POM de una dependencia con la librería \href{https://www.passay.org/}{Passay}, utilizada en la aplicación web para generar nuevas contraseñas aleatorias. 
     \end{itemize}
     
     \begin{lstlisting}[caption=Declaración de dependencia en Apache Maven, label=list:maven_dependency]
     <dependency>
-    <groupId>org.passay</groupId>
-    <artifactId>passay</artifactId>
-    <version>1.5.0</version>
+	    <groupId>org.passay</groupId>
+	    <artifactId>passay</artifactId>
+	    <version>1.5.0</version>
     </dependency>
     \end{lstlisting}
     
@@ -1174,7 +1182,7 @@
     \section{Gestión de Datos Jerárquicos} \label{sec:hierarchy}
     Desde muy pronto se reparó en la necesidad de gestionar en la base de datos información con relaciones de jerarquía, ya que las categorías de los libros están organizadas de esta manera. Además, si se implementase la funcionalidad de que los usuarios pudiesen añadir comentarios a los libros, con capacidad de respuestas anidadas, también se estaría en el escenario de estructuras jerárquicas.
     
-    Tal como se explica con detalle en [bib ref], existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
+    Tal como se explica con detalle en \cite{Karwin2010}, existen diversas formas de dar solución a esta necesidad, cada una de ellas con sus puntos fuertes y sus debilidades. La idoneidad de una solución frente a otra viene en gran medida determinada por la cantidad de información jerárquica a gestionar y por la frecuencia o importancia relativa de las operaciones de lectura, creación, actualización y eliminación.
     
     Si los datos jerárquicos son siempre de pequeño tamaño y las operaciones son principalmente de lectura, una solución sería cargarlos en memoria principal y gestionarlos desde allí con alguna estructura de datos apropiada. Este podría argumentarse que es el caso de la información de las categorías de los libros, ya que en principio estas no superarían a lo sumo algunas decenas de centenas, y la actividad principal realizada sería la lectura. La frecuencia con que el administrador de la tienda crea, modifica o elimina una categoría es despreciable respecto de la frecuencia con que las categorías son leídas por los usuarios en general.
     
@@ -2009,6 +2017,7 @@
 	\end{table}
 
     \chapter{Mejoras y Ampliaciones}
+    Como ya ha comentado en \cite{Kurose2016}
     %Testar el software
     
     %Sistema de valoracion por parte de los usuarios de los libros
@@ -2018,6 +2027,32 @@
     
     %pentesting con https://www.zaproxy.org/
     
+    \printbibliography[heading=bibintoc]
+    
+    \nomenclature{\textbf{JPA}}{Java Persistence API}
+    \nomenclature{\textbf{UNED}}{Universidad Nacional de Educación a Distancia}
+    \nomenclature{\textbf{HTTP}}{Hypertext Transfer Protocol}
+    \nomenclature{\textbf{HTML}}{Hypertext Markup Language}
+    \nomenclature{\textbf{CSS}}{Cascading Style Sheets}
+    \nomenclature{\textbf{UA}}{Usuario Anónimo}
+    \nomenclature{\textbf{URL}}{Uniform Resource Locator}
+    \nomenclature{\textbf{UR}}{Usuario Registrado}
+    \nomenclature{\textbf{CRUD}}{Create, read, update, and delete}
+    \nomenclature{\textbf{SPA}}{Single-page application}
+    \nomenclature{\textbf{API}}{Application Programming Interface}
+    \nomenclature{\textbf{AWS}}{Amazon Web Services}
+    \nomenclature{\textbf{SoC}}{Separation of Concerns}
+    \nomenclature{\textbf{DI}}{Dependency Injection}
+    \nomenclature{\textbf{IoC}}{Inversion of Control}
+    \nomenclature{\textbf{CD}}{Compact Disc}
+    \nomenclature{\textbf{PHP}}{PHP: Hypertext Preprocessor}
+    \nomenclature{\textbf{LTS}}{Long-term support}
+    \nomenclature{\textbf{SLF4J}}{Simple Logging Facade for Java}
+    \nomenclature{\textbf{IDE}}{Integrated Development Environment}
+    \nomenclature{\textbf{XML}}{Extensible Markup Language}
+    \nomenclature{\textbf{POM}}{Project Object Model}
+    
+    \printnomenclature
 
 
 \end{document}
