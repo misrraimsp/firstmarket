@@ -640,7 +640,7 @@
 	\end{figure}
     
     \subsection{Capas funcionales} \label{sec:design_layer}
-    Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:spring}).
+    Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia \cite{Fowler2015}. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:spring}).
     
     \begin{figure}[htb!]
     	\centering
@@ -1117,7 +1117,7 @@
     \end{figure}
     
     \paragraph{Stripe Radar}
-    Como último apunte de esta sección dedicada a Stripe, destacar que esta herramientas de pago ofrece, sin coste añadido, su sistema anti-fraude \href{https://stripe.com/es/radar}{Stripe Radar}. Esta herramienta, basada en mecanismos de \href{https://stripe.com/es/radar/guide}{\emph{machine learning}}, asocia a cada transacción un índice de riesgo, tomando las acciones apropiadas en caso de que sea necesario (por ejemplo, si el riesgo fuese alto por defecto se bloquea la transacción). En la figura \ref{fig:stripe_radar} se muestra un ejemplo de evaluación de riesgo sobre una transacción.
+    Como último apunte de esta sección dedicada a Stripe, destacar que esta herramientas de pago ofrece, sin coste añadido, su sistema anti-fraude \href{https://stripe.com/es/radar}{Stripe Radar}. Esta herramienta, basada en mecanismos de \emph{machine learning}, asocia a cada transacción un índice de riesgo, tomando las acciones apropiadas en caso de que sea necesario (por ejemplo, si el riesgo fuese alto por defecto se bloquea la transacción) \cite{Manapat}. En la figura \ref{fig:stripe_radar} se muestra un ejemplo de evaluación de riesgo sobre una transacción.
     
     \begin{figure}[hbt!]
     	\centering
@@ -1606,7 +1606,7 @@
 	
 	Cada vez que un usuario trata de autenticarse, en función del éxito o del motivo del fracaso, Spring Security emite el correspondiente evento. Si la autenticación tuvo éxito se emite el evento \emph{AuthenticationSuccessEvent}, mientras que si fracasa por ser la información proporcionada incorrecta se emite \emph{AuthenticationFailureBadCredentialsEvent}. Otro motivos de fracaso (por ejemplo estar la cuenta de usuario bloqueada por el administrador) emiten diferentes eventos.
 	
-	Escuchando estos eventos, la aplicación web desarrollada implementa, con las clases contenidas en el paquete \emph{firstmarket.security},  una protección frente a intentos de autenticación por fuerza bruta. Esto es, se impide la posibilidad de probar sistemáticamente un número muy grande de contraseñas para descubrir cuál es la correcta.
+	Escuchando estos eventos, la aplicación web desarrollada implementa, con las clases contenidas en el paquete \emph{firstmarket.security}, una protección frente a intentos de autenticación por fuerza bruta \cite{ParaschivBruteForce}. Esto es, se impide la posibilidad de probar sistemáticamente un número muy grande de contraseñas para descubrir cuál es la correcta.
 	
 	Para ello, la clase \emph{LockManager} mantiene un registro caché (usando la clase \emph{LoadingCache} de la librería \href{https://guava.dev/}{Guava}) con el que llevar el conteo de los intentos fallidos de autenticación, debido a credenciales incorrectas, dentro de una ventana temporal.
 	
@@ -1623,7 +1623,6 @@
 				locking-minutes: 60
 	\end{lstlisting}
 	
-
 	\subsection{Autorización}
 	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 15 a la 26, FirstMarket implementa tres tipos de recursos: 
 	
@@ -1932,7 +1931,7 @@
 			\label{fig:snyk}
 		\end{figure}
 		
-		Un aspecto que debe resaltarse es que las actualizaciones de la 2 a la 6, incluidas ellas, han tenido que establecerse sobrescribiendo la configuración que por defecto ofrece Spring Boot a través del fichero \emph{spring-boot-starter-parent}, del cual hereda el \emph{pom.xml} de la aplicación web desarrollada. Esto es importante porque se está saliendo del terreno seguro que esta configuración por defecto suministra, en el sentido de que desde Spring se ha testado que las versiones establecidas por defecto funcionan sin problemas de compatibilidades entre sí.
+		Un aspecto que debe resaltarse es que las actualizaciones de la 2 a la 6, incluidas ellas, han tenido que establecerse sobrescribiendo la configuración que por defecto ofrece Spring Boot a través del fichero \emph{spring-boot-starter-parent}, del cual hereda el \emph{pom.xml} de la aplicación web desarrollada \cite{ParaschivCustomParent}. Esto es importante porque se está saliendo del terreno seguro que esta configuración por defecto suministra, en el sentido de que desde Spring se ha testado que las versiones establecidas por defecto funcionan sin problemas de compatibilidades entre sí.
 		
 	\end{itemize}
     
