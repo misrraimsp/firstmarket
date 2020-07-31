@@ -72,7 +72,7 @@
 
 \usepackage{setspace}
 
-\usepackage[backend=biber,style=alphabetic,sorting=ynt]{biblatex}
+\usepackage[backend=biber,style=alphabetic,sorting=none]{biblatex}
 \addbibresource{biblio.bib}
 
 \usepackage[intoc]{nomencl}
@@ -226,7 +226,7 @@
         El proyecto consiste en el desarrollo de un portal web orientado al comercio electrónico. Dicha aplicación permitirá al comprador seleccionar artículos, realizar pedidos y pagos a través de una pasarela. El sistema también ofrecerá al comerciante gestionar los artículos expuestos en el portal.
     \end{displayquote}
 
-	En este contexto, el comercio electrónico desarrollado a sido una librería, denominada \textbf{FirstMarket}.
+	En este contexto, el comercio electrónico desarrollado a sido una librería, denominada \href{https://firstmarket.tech}{\textbf{FirstMarket}}.
 
     \section{Motivación y Objetivos}
     Desde un primer momento la intención fue desarrollar un proyecto que tuviese la mayor relación posible con el mercado actual, lo que, junto con un fuerte interés personal hacia el ecosistema de Internet, llevó a la decisión de escoger esta propuesta.
@@ -243,7 +243,7 @@
     En esta sección se ofrece una introducción, meramente descriptiva, del contexto en el que situar la aplicación web desarrollada. Se tratará de diferenciar los conceptos de Internet, World Wide Web y aplicaciones web.
 
     \subsection{¿Qué es Internet?}
-    Tal como se explica en \cite{Kurose2016}, esta pregunta puede ser enfocada desde dos puntos de vista complementarios.
+    Siguiendo el enfoque presentado en \cite{Kurose2016}, esta pregunta puede ser enfocada desde dos puntos de vista complementarios.
     
     Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo, denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
     
@@ -590,17 +590,17 @@
     
     \begin{itemize}
     	\item[-] Antes del 2 va el 1. El punto de partida en el desarrollo de la presente aplicación web fue el de prácticamente nulos conocimientos sobre esta rama de la informática. En este escenario, antes de estudiar directamente las arquitecturas surgidas en los últimos años, se ha preferido estudiar la arquitectura clásica, en el convencimiento de que es el camino formativo correcto.
-    	\item[-] Tecnología viva. En contra de lo que hace unos años algunas voces avanzaban, la arquitectura browser-server-database no está muerta y previsiblemente no lo va a estar. Esta es una tecnología madura, robusta y muy extendida. Aunque es muy cierto que su cuota de mercado ha descendido en pro de otras arquitecturas más recientes, muestra tener un suelo estable y un lugar propio dentro de las tecnologías web. En parte esto es así porque, como casi siempre, no es oro todo lo que reluce. Las arquitecturas modernas no son la perfección, mostrando tener algunos puntos débiles [bib ref].
+    	\item[-] Tecnología viva. En contra de lo que hace unos años algunas voces avanzaban, la arquitectura browser-server-database no está muerta y previsiblemente no lo va a estar. Esta es una tecnología madura, robusta y muy extendida. Aunque es muy cierto que su cuota de mercado ha descendido en pro de otras arquitecturas más recientes, muestra tener un suelo estable y un lugar propio dentro de las tecnologías web. En parte, esto es así porque las arquitecturas modernas tienen sus propios problemas, como se apunta en \cite{MacWright2020}.
     \end{itemize}
     
     En la figura \ref{fig:desing_general} se presenta un esquema de la arquitectura de la aplicación web. Como se aprecia, responde a la mencionada arquitectura clásica cliente-servidor-datos. No obstante, existen ciertos elementos que descansan en servicios cloud externos, dotando a la aplicación de cierto carácter serverless. Así, el servicio de pagos es ofrecido por Stripe (ver \ref{sec:stripe}). Como se aprecia en la figura \ref{fig:desing_general}, existe una vía de comunicación directa entre el cliente y Stripe. Esto es así para garantizar que la aplicación web no tiene nunca acceso a los datos confidenciales de pago del cliente (p.e., número de la tarjeta de crédito), sino que esta información es enviada directamente desde el cliente a Stripe. Por su parte, el servicio de correo es delegado en Gmail, a través de la capa de abstracción que Spring Framework ofrece de la API JavaMail. Y, por último, la base de datos. Este caso es especial porque dependiendo del entorno de ejecución se puede asimilar a un servicio cloud o no. En este sentido, cuando el entorno de ejecución es producción, la base datos es accedida como un servicio que AWS presta a Heroku.
         
-    Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}, SoC). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
+    Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
     \subsection{Inversión de Control} \label{sec:ioc}
-    Un primer paso en la división de responsabilidades es la separación de la construcción y el uso. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
+    Un primer paso en la división de responsabilidades es la separación de la construcción y el uso \cite{Martin2009} \cite{Lopez2019}. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
     
-    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}, DI), que, tal como explica Martin Fowler en su \href{https://martinfowler.com/articles/injection.html}{artículo seminal} en la materia [bib ref], es un tipo de \textbf{inversión de control} (\emph{inversion of control}, IoC) para la gestión de dependencias. Por IoC se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de DI del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
+    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}), que, tal como explica Martin Fowler en su artículo seminal en la materia, \cite{Fowler2004}, es un tipo de \textbf{inversión de control} (\emph{inversion of control}) para la gestión de dependencias. Por IoC se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de DI del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
     \\
     
     \begin{lstlisting}[language=Java,caption=Inversión de control de dependencias,label=list:ioc]
@@ -731,7 +731,7 @@
     \subsection{Git}
     Como se comentó en la exposición de motivos, Git es una tecnología clave para el control de versiones, y desde el principio se puso el foco en ella. Aunque existen otras herramientas muy válidas, como Mercurial, la decisión fue seguir la tendencia global.
     
-    Formalmente, Git es un sistema de control de versiones distribuido, permitiendo gestionar los cambios introducidos en un conjunto de ficheros, conocido como \emph{repositorio}, por un número arbitrario de personas. Sus principales características son:
+    Formalmente, Git es un sistema de control de versiones distribuido, permitiendo gestionar los cambios introducidos en un conjunto de ficheros, conocido como \emph{repositorio}, por un número arbitrario de personas. Sus principales características son (\cite{ScottChacon2014}):
     
     \begin{itemize}
     	\item[-] \textbf{Basado en instantáneas}. Otros sistemas de control de versiones tratan la información que almacenan como un conjunto de archivos más sus cambios a lo largo del tiempo, los incrementos. En cambio, Git piensa en sus datos más como una serie de instantáneas de un sistema de archivos en miniatura. Así, cada vez que se efectúa un \emph{commit} o se guarda el estado de un proyecto, Git toma una fotografía de cómo se están todos los archivos en ese momento y almacena una referencia a esa instantánea. Además, para ser eficiente, si los archivos no han cambiado no almacena el archivo nuevamente, sino un enlace al archivo idéntico anterior almacenado. En resumen, Git trata los datos que gestiona como una secuencia de capturas.
@@ -743,10 +743,9 @@
     En el presente proyecto el uso del control de versiones con Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
     
     \subsection{Java}
-    Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado la experiencia adquirida a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable [bib ref]. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
+    Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado la experiencia adquirida a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que, en línea con lo expuesto en \cite{Lopez2020}, Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
     
     Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS).
-    \\
     
     Java es un lenguaje que, como muchos otros, ha ido evolucionando con el tiempo, dando como resultado un conjunto de capacidades muy variado. En 2014, con la publicación de Java 8, el lenguaje experimentó una de las mayores expansiones, si no la mayor, de su historia. En ese momento se le introdujeron potentes capacidades de programación declarativa, como las \emph{Labmda Expressions} y la \emph{Stream API}, que, en cierto modo, han revolucionado la programación Java (véase, por ejemplo, el \emph{framework} de desarrollo de aplicaciones web \href{http://sparkjava.com/}{Spark}, que sólo usa capacidades Java 8+)
     \\
@@ -764,7 +763,6 @@
     \end{lstlisting}
     
     Como se ha comentado, una de las intenciones de usar la tecnología Java era precisamente profundizar en su conocimiento. Así, se ha aprovechado el desarrollo de la presente aplicación para estudiar estas capacidades declarativas (tomando como referencia \cite{QuentinCharatan2019}), aplicándolas progresivamente. Como ejemplo, en el listado \ref{list:java_declarative} se muestra la implementación del método \emph{getIdsByExcludedStatus}, perteneciente a la clase \emph{BookServer}. Se puede apreciar la facilidad de lectura que el estilo declarativo proporciona, además de la potencia expresiva. 
-    \\
     
     También es necesario comentar un par de librerías que merecen especial mención, por la relevancia que han tenido en el proyecto:
     
@@ -847,7 +845,7 @@
     \paragraph{SLF4J - Logback}
     SLF4J es una API Java para tareas de registro que implementa el patrón de diseño \href{https://en.wikipedia.org/wiki/Facade_pattern}{\emph{facade}}, el cual permite desacoplar completamente el código de la aplicación de la tecnología específica de registro que subyaga bajo la fachada.
     
-    Logback es la tecnología elegida que en el presente proyecto se conecta como backend de SLF4J. Se trata de una librería moderna, diseñada por el fundador de la famosa Log4j (Ceki Gülcü), y que pretende ser su sucesora.
+    Logback es la tecnología elegida que en el presente proyecto se conecta como backend de SLF4J. Se trata de una librería moderna, diseñada por el fundador de la famosa Log4j (Ceki Gülcü), y que pretende ser su sucesora \cite{Thompson2016}.
     
     La configuración se encuentra en el fichero \emph{classpath: logback-spring.xml}, donde se detallan todos los aspectos relevantes, como el formato utilizado en los registros o la política de escritura y rotación de los ficheros de registro producidos.
     
@@ -872,12 +870,15 @@
     	\item[-] Incentivar buenas prácticas de desarrollo software.
     \end{itemize}
     
-    Las características que han permitido a Apache Maven alcanzar estos objetivos descansan en gran medida en:
+    Las características que han permitido a Apache Maven alcanzar estos objetivos, siguiendo la argumentación ofrecida en \cite{Sonatype2008}, descansan en gran medida en:
     
     \begin{itemize}
     	\item[-] \textbf{Convención sobre configuración}. Como también se comentará en la sección \ref{sec:spring}, este principio de diseño persigue que el desarrollador sólo deba especificar los aspectos no convencionales, confiando para el resto en la configuración por defecto ofrecida por Apache Maven. Como dichos valores por defecto normalmente son reflejo de buenas prácticas, más o menos consensuados por agentes expertos en la materia, automáticamente se está consiguiendo alinear el proyecto a dichas buenas prácticas, al tiempo de estarse facilitando el propio trabajo de construcción software. La adopción de Apache Maven de este paradigma se traduce en, entre otros muchas cosas, establecer una distribución de carpetas y ficheros estándar para el proyecto, o seguir determinadas convenciones a la hora de compilar el código fuente o ensamblar los paquetes.
+    	
     	\item[-] \textbf{Interfaz común}. Muy ligado con el aspecto anterior está el hecho de que Apache Maven ofrece un marco de trabajo o interfaz común para la construcción de proyectos software. Como ya se comentó, antes de la existencia de este tipo de herramientas el software se construía de una manera singular en cada proyecto. Con Apache Maven, sin embargo, se establece una manera estándar o canónica de hacerlo. Así, cuando un desarrollador aprecia que un determinado proyecto está gestionado con Apache Maven puede asumir mucha información sobre él.
+    	
     	\item[-] \textbf{Reutilización a través de \emph{plugins}}. Apache Maven está diseñado de forma que se maximiza la flexibilidad y la reutilización de la lógica de construcción. El núcleo de la herramienta se encarga de muy pocas tareas, actuando más como un orquestador que lee la información centralizada acerca del proyecto en un fichero XML y delega el grueso del trabajo en plugins. Es decir, son los plugins los que realizan las diferentes labores de construcción, como compilar, instalar o empaquetar. Apache Maven ofrece una serie de plugins por defecto, pero también la posibilidad de construir nuevos e implementar la lógica de construcción que se desee. De hecho, en el presente proyecto se ha añadido el plugin que ofrece Spring Boot.
+    	
     	\item[-] \textbf{Modelo conceptual de proyecto}. Dicho lo anterior, la gran característica que aporta Apache Maven es la abstracción de toda la información necesaria referente a un proyecto en un fichero, el \textbf{Project Object Model} (en el presente proyecto ver el fichero \emph{pom.xml}). En él se especifica, entre otras cosas, las dependencias con otros proyectos, de forma que es Apache Maven quien se encarga de gestionarlas, esto es, resolverlas, descargarlas de un repositorio central, colocarlas en las carpetas apropiadas, enlazarlas durante la construcción, etc. En el listado \ref{list:maven_dependency} se muestra, como ejemplo, la declaración en el POM de una dependencia con la librería \href{https://www.passay.org/}{Passay}, utilizada en la aplicación web para generar nuevas contraseñas aleatorias. 
     \end{itemize}
     
@@ -896,10 +897,10 @@
     
     Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos Spring}, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
     
-    Los proyectos Spring usados en el desarrollo de la aplicación web han sido \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las principales características de cada uno de ellos que han tenido relación con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
+    Los proyectos Spring usados en el desarrollo de la aplicación web han sido, siguiendo la línea básica descrita en \cite{Walls2019}, \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las principales características de cada uno de ellos que han tenido relación con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
     
     \paragraph{Spring Framework} 
-    En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/}{documentación}.
+    En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia documentación (\cite{Johnson2020}).
     
     Tal como establecen sus autores, los principios de diseño que han guiado su desarrollo a lo largo del tiempo han sido:
     
@@ -911,13 +912,13 @@
     	\item[-] Seguir los más altos estándares de calidad del código.
     \end{itemize}
     
-    De todas las funcionalidades integradas dentro del proyecto Spring Framework, la más importante es el contenedor de Inversión de Control (inversion of control, IoC). Este concepto, tratado en la sección \ref{sec:ioc}, hace referencia a la capacidad de gestionar el ciclo de vida de los \emph{beans}, que es como en el ecosistema Spring se conoce a los objetos gestionados por el contenedor.
+    De todas las funcionalidades integradas dentro del proyecto Spring Framework, la más importante es el contenedor de IoC. Este concepto, tratado en la sección \ref{sec:ioc}, hace referencia a la capacidad de gestionar el ciclo de vida de los \emph{beans}, que es como en el ecosistema Spring se conoce a los objetos gestionados por el contenedor.
     
     La interfaz \emph{org.springframework.context.ApplicationContext}, que representa el contenedor de IoC de Spring, es la responsable de instanciar, configurar y ensamblar los \emph{beans}.
     
     Por su parte, el contenedor conoce qué objetos instanciar y cómo configurarlos y ensamblarlos entre sí a través de la lectura de metadatos de configuración especificados por el desarrollador.
     
-    La figura \ref{fig:container_magic}, tomada de la documentación oficial, muestra un diagrama de alto nivel de cómo funciona lo explicado. Esto es, el código desarrollado en forma de POJOs (Plain Old Java Object) es gestionado en el contenedor de IoC según se haya especificado en los metadatos de configuración, produciendo como resultado una aplicación completamente funcional.
+    La figura \ref{fig:container_magic}, tomada de la documentación oficial, muestra un diagrama de alto nivel de cómo funciona lo explicado. Esto es, el código desarrollado en forma de POJOs es gestionado en el contenedor de IoC según se haya especificado en los metadatos de configuración, produciendo como resultado una aplicación completamente funcional.
     
     \begin{figure}[hbt!]
     	\centering
@@ -931,7 +932,6 @@
     Existe la cuestión de qué tipo de configuración es mejor. La respuesta no es clara, ya que cada opción posee su dosis de ventajas e inconvenientes. Las anotaciones son la manera más concisa y quizás mas simple para un principiante, pero mezclan código de negocio con configuración del framework, algo que mina el principio de separación de responsabilidades. Además poseen el inconveniente de descentralizar la configuración, impactando negativamente en su mantenibilidad. La configuración con código Java permite un control centralizado, pero se pierde en facilidad y brevedad. Por su parte, los ficheros XML son inmejorables a la hora separar responsabilidades, pudiéndose alterar la configuración sin tocar una línea de código y, por tanto, sin tener que recompilar. El inconveniente de este sistema es el elevado tamaño y complejidad que muchas veces estos ficheros alcanzan, siendo además su curva de aprendizaje más pronunciada.
     
     En el desarrollo de la presente aplicación web se ha utilizado la configuración a través de anotaciones y de código Java dedicado. Además, se ha utilizado Spring Boot, lo que, como se verá, implica que una gran parte (la mayoría) de la configuración necesaria ha sido establecida por defecto.
-    \\
     
     Además del contenedor de IoC, la aplicación web desarrollada hace uso de otras capacidades ofrecidas por Spring Framework:
     
@@ -964,7 +964,7 @@
     Conviene destacar también que Spring Boot permite ejecutar aplicaciones web sin necesidad de hacerlo en un contenedor de servlets externo o un servidor de aplicaciones, ya que el propio Spring Boot incluye un Tomcat embebido, el cual se despliega automáticamente en tiempo de ejecución.
     
     \paragraph{Spring Data JPA - Hibernate ORM}
-    El proyecto Spring Data JPA, parte de la amplia familia Spring Data, es una capa de abstracción extra sobre la implementación de la especificación JPA que se utilice, que en el caso del presente proyecto ha sido Hibernate ORM.
+    El proyecto Spring Data JPA, parte de la amplia familia Spring Data, es una capa de abstracción extra sobre la implementación de la especificación JPA que se utilice, que en el caso del presente proyecto ha sido Hibernate ORM (\cite{Tyson2019}, \cite{JanssenJPA}).
     
     Por persistencia se hace referencia a la funcionalidad que permite que determinados objetos creados por la aplicación puedan sobrevivir más allá de la frontera de la misma. En términos Java, se trata de que el estado de ciertos objetos pueda perdurar fuera del entorno de la JVM, de modo que dicho estado esté disponible en cualquier momento posterior.
     
@@ -977,7 +977,7 @@
     
     JPA es una especificación que define una API de mapeo objeto-relacional y gestión de objetos persistentes. Además, hace innecesario el tratamiento explícito de las conexiones/recursos usuales al trabajar directamente con JDBC. Actualmente se encuentra en su versión 2.2, siendo su implementación de referencia EclipseLink. No obstante, Spring usa por defecto Hibernate ORM como proveedor de JPA, y en el presente proyecto no se ha modificado dicha configuración preestablecida.
     
-    El mapeo objeto-relacional es la funcionalidad que permite la traducción entre los objetos de la aplicación (llamados entidades en este contexto) y las tablas de la base datos. Esto implica gestionar, entre otras cosas, las relaciones que existen entre las entidades. Esta es una tarea no trivial que los proyectos con necesidades de persistencia relacional (en contraposición con los modelos no relacionales, no tratados en el presente proyecto) deben afrontar. En este sentido, Hibernate ORM (Object/Relational Mapping) es un framework que permite la simplificación y en parte automatización de esta tarea. Como ejemplo, y sin entrar en detalles, las relaciones entre las entidades son especificadas a través de las anotaciones \emph{@OneToOne}, \emph{@OneToMany}, \emph{@ManyToOne} y \emph{@ManyToMany}.
+    El mapeo objeto-relacional es la funcionalidad que permite la traducción entre los objetos de la aplicación (llamados entidades en este contexto) y las tablas de la base datos. Esto implica gestionar, entre otras cosas, las relaciones que existen entre las entidades. Esta es una tarea no trivial que los proyectos con necesidades de persistencia relacional (en contraposición con los modelos no relacionales, no tratados en el presente proyecto) deben afrontar. En este sentido, Hibernate ORM es un framework que permite la simplificación y en parte automatización de esta tarea. Como ejemplo, y sin entrar en detalles, las relaciones entre las entidades son especificadas a través de las anotaciones \emph{@OneToOne}, \emph{@OneToMany}, \emph{@ManyToOne} y \emph{@ManyToMany}.
     
     Resaltar que además del mapeo objeto-relacional, la abstracción JPA ofrece (de la mano de Hibernate ORM, en este caso) la gestión del ciclo de vida de las entidades y el lenguaje de consultas relacionales orientado a objeto JPQL. En el listado \ref{list:jpql} se muestra un ejemplo de consulta con este lenguaje extraído del presente proyecto.
     
@@ -990,7 +990,7 @@
     
     \begin{itemize}
     	\item[-] Permite la integración de JPA con el ecosistema Spring de una forma natural.
-    	\item[-] Permite la adopción del patrón de diseño \emph{Repositorio} (ver sección \ref{sec:design_layer}) sin necesidad de añadir código extra, ya que Spring Data JPA, como subconjunto de Spring Data, proporciona una serie de interfaces al efecto, tal como se esquematiza en la figura \ref{fig:data_access}. Así, construir una interfaz repositorio para cualquier entidad de la aplicación es tan fácil como extender alguna de las proporcionadas. En el presente proyecto todos los repositorios extienden a \emph{CrudRepository\textless{}T,ID\textgreater{}}.
+    	\item[-] Permite la adopción del patrón de diseño \emph{Repositorio} (ver sección \ref{sec:design_layer}) (\cite{JanssenRepository}) sin necesidad de añadir código extra, ya que Spring Data JPA, como subconjunto de Spring Data, proporciona una serie de interfaces al efecto, tal como se esquematiza en la figura \ref{fig:data_access}. Así, construir una interfaz repositorio para cualquier entidad de la aplicación es tan fácil como extender alguna de las proporcionadas. En el presente proyecto todos los repositorios extienden a \emph{CrudRepository\textless{}T,ID\textgreater{}}.
     	\item[-] Además de ofrecer las interfaces, también lo hace con sus implementaciones. Es decir, el desarrollador puede olvidarse de crear código que implemente las interfaces de acceso a datos, Spring Data JPA lo realiza automáticamente.
     	\item[-] Posibilidad de inferir las consultas de acceso a datos a partir del nombre del método en la interfaz. Esta funcionalidad ha sido usada extensamente en el desarrollo del presente proyecto. En el listado \ref{list:query_inference} se muestra un método de la interfaz \emph{SecurityTokenRepository}, a partir del cual Spring Data JPA construye la consulta necesaria para obtener los \emph{SecurityToken} que cumplan estar asociados a un usuario determinado, con un \emph{SecurityEvent} dado y creados después de un punto temporal dado.
     \end{itemize}
@@ -1040,13 +1040,13 @@
     Fundamentalmente, la aplicación web desarrollada se integra con la infraestructura de Stripe haciendo uso de dos puntos de enlace, uno en \emph{backend} y otro en \emph{frontend}:
     
     \begin{itemize}
-    	\item[-] Una extensa interfaz de programación backend, \href{https://stripe.com/docs/api}{Stripe API}, para varios lenguajes (entre ellos Java), plena de funcionalidades que cubren multitud de casos de uso relacionados con la gestión de transacciones monetarias y sus aspectos asociados.
+    	\item[-] Una extensa interfaz de programación \emph{backend}, \href{https://stripe.com/docs/api}{Stripe API}, para varios lenguajes (entre ellos Java), plena de funcionalidades que cubren multitud de casos de uso relacionados con la gestión de transacciones monetarias y sus aspectos asociados.
     	
     	La integración de la presente aplicación web se ha basado en el objeto \href{https://stripe.com/docs/api/payment_intents}{PaymentIntent}. Un PaymentIntent mantiene la información relacionada con un pago puntual. Entre dicha información, una pieza clave es el \emph{client\_secret}, que es el código identificativo de la transacción que permite al cliente, usándolo como parámetro en la invocación de funciones en \emph{Stripe.js}, finalizar el pago. Además, el PaymentIntent mantiene la información sobre la situación del pago que gestiona al recorrer una serie de \href{https://stripe.com/docs/payments/intents#intent-statuses}{estados} desde su creación (su ciclo de vida). Como se verá, FirstMarket conoce de estos estados al escuchar las notificaciones que Stripe le envía al \emph{webhook} configurado.
     	
-    	\item[-] Una librería frontend, \href{https://stripe.com/docs/js}{\emph{Stripe.js}}, que permite, entre otras cosas, gestionar la comunicación entre el cliente y Stripe, y la inserción de elementos gráficos configurables en las vistas que la aplicación web sirve al cliente. Estos \href{https://stripe.com/docs/js/elements_object}{elementos} son empleados para recabar la información sensible de los formularios de pago (por ejemplo, el número de la tarjeta de débito).
+    	\item[-] Una librería \emph{frontend}, \href{https://stripe.com/docs/js}{\emph{Stripe.js}}, que permite, entre otras cosas, gestionar la comunicación entre el cliente y Stripe, y la inserción de elementos gráficos configurables en las vistas que la aplicación web sirve al cliente. Estos \href{https://stripe.com/docs/js/elements_object}{elementos} son empleados para recabar la información sensible de los formularios de pago (por ejemplo, el número de la tarjeta de débito).
     	
-    	La presente aplicación web coordina todo el proceso de pago en el lado del cliente mediante el script desarrollado \emph{checkout.js}. En él, como se muestra en el listado \ref{list:js_checkout_card}, se ha usado el elemento \emph{card} ofrecido en \emph{Stripe.js}. En la figura \ref{fig:checkout_form} se muestra el resultado obtenido, siendo el citado elemento \emph{card} la entrada del formulario donde se solicita la información de la tarjeta bancaria.
+    	La presente aplicación web coordina todo el proceso de pago en el lado del cliente mediante \emph{checkout.js}. Como se muestra en el listado \ref{list:js_checkout_card}, se ha usado el elemento \emph{card} ofrecido en \emph{Stripe.js}. En la figura \ref{fig:checkout_form} se muestra el resultado obtenido, siendo el citado elemento \emph{card} la entrada del formulario donde se solicita la información de la tarjeta bancaria.
     \end{itemize}
     
     \begin{lstlisting}[language=Javascript,caption=Extracto de checkout.js donde se crea y enlaza el elemento \emph{card},label=list:js_checkout_card]
@@ -1083,13 +1083,13 @@
     	\item[4.] El sistema sirve la vista \emph{checkoutForm.html} al cliente, la cual lleva inserta el \emph{client\_secret}. Resaltar en este punto la importancia del encriptado que protocolos de transporte seguro proporcionan, ya que este código sólo debe ser conocido, fuera de Stripe y de Firstmarket, por el cliente. Así, como se explica en la sección \ref{sec:https}, la aplicación web desarrollada emplea HTTPS.
     	\item[5.] Tras completar correctamente el formulario de checkout (presentado en la figura \ref{fig:checkout_form}), el cliente presiona el botón de pagar. Esto desencadena que desde \emph{checkout.js} se invoque la función \emph{confirmCardPayment} (perteneciente a la librería \emph{Stripe.js}), tomando como parámetro, entre otros valores, el \emph{client\_secret}.
     	\item[6.] Stripe procesa el pago y responde al cliente enviándole el objeto \emph{result} (más adelante se explicará que en este punto, y en otros, Stripe notifica a FirstMarket a través del \emph{webhook}). Dependiendo del éxito o no del pago, este objeto contendrá en su interior, respectivamente, el PaymentIntent o un objeto \emph{error}. En ambos casos, \emph{checkout.js} toma las medidas oportunas. En caso de éxito, se realiza lo explicado en el siguiente punto. En caso contrario se notifica por pantalla al cliente para que tome las medidas oportunas.
-    	\item[7.] \emph{checkout.js} realiza en background una petición a FirstMarket al \emph{endpoint} GET \nolinkurl{~/user/success}.
+    	\item[7.] \emph{checkout.js} realiza en \emph{background} una petición a FirstMarket al \emph{endpoint} GET \nolinkurl{~/user/success}.
     	\item[8.] El sistema sirve la vista \emph{info.html} al cliente, la cual le comunica que el pedido se ha realizado con éxito y que pronto recibirá confirmación por email.
     \end{itemize}
     
     Notar en la figura \ref{fig:stripe} que, tal como se explicó en la sección \ref{sec:concurrencia}, cuando se produce el \emph{timeout} y el pago no se ha efectuado se activa la vía de descomprometer la cesta y, por tanto, cancelar el PaymentIntent.
     
-    Por otro lado, podría pensarse que FirstMarket conoce de la finalización con éxito del pago a través de la solicitud que en el punto 7 anterior el cliente le realiza. Sin embargo, esa solicitud sólo es usada en backend como disparador para servir el mensaje estándar de finalización de una compra. Es decir, el sistema no realiza ninguna acción de lógica de negocio (no crea ningún pedido, de modifica ninguna cesta, etc.) al recibir la petición del punto 7. Sólo se limita a servir una vista con un mensaje. De hecho, cualquier cliente con sesión abierta en FirstMarket puede escribir en su navegador la dirección \nolinkurl{~/user/success} y el sistema le devolverá el mensaje de compra finalizada (por supuesto, sin haber realizado ninguna compra en realidad).
+    Por otro lado, podría pensarse que FirstMarket conoce de la finalización con éxito del pago a través de la solicitud que en el punto 7 anterior el cliente le realiza. Sin embargo, esa solicitud sólo es usada en \emph{backend} como disparador para servir el mensaje estándar de finalización de una compra. Es decir, el sistema no realiza ninguna acción de lógica de negocio (no crea ningún pedido, de modifica ninguna cesta, etc.) al recibir la petición del punto 7. Sólo se limita a servir una vista con un mensaje. De hecho, cualquier cliente con sesión abierta en FirstMarket puede escribir en su navegador la dirección \nolinkurl{~/user/success} y el sistema le devolverá el mensaje de compra finalizada (por supuesto, sin haber realizado ninguna compra en realidad).
     
     Esto es así porque para conocer del estado de un pago FirstMarket no debe depender del cliente, sino de Stripe directamente. Y esta comunicación directa se realiza por medio del \emph{webhook} configurado en Stripe. Esto es, Stripe permite configurar el envío de notificaciones POST ante los eventos que se desee, existiendo multitud de \href{https://stripe.com/docs/api/events/types}{eventos disponibles}. FirstMarket escucha notificaciones POST provenientes de Stripe (se comprueba que es Stripe quien notifica al comparar la dirección IP de origen con las \href{https://stripe.com/docs/ips}{oficiales} de Stripe, además de por existir un código de verificación en las notificaciones) en el \emph{endpoint} \nolinkurl{~/listener}. En concreto, se ha configurado la notificación de los eventos relacionados con el ciclo de vida de los PaymentIntent:
     
@@ -1127,7 +1127,7 @@
     \end{figure}
     
     \section{Control de Concurrencia} \label{sec:concurrencia}
-    Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del stock de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus cestas y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
+    Uno de los aspectos más críticos para el correcto funcionamiento de una tienda online es el control del \emph{stock} de productos y del proceso de realización de una compra. Muchos usuarios, quizás simultáneamente, pueden añadir productos a sus cestas y proceder a su compra. La aplicación debe garantizar que estas acciones se realicen de forma a conservar en todo momento la consistencia de los datos.
     
     \begin{figure}[hbt!]
     	\centering
@@ -1154,14 +1154,14 @@
     	\item[-] Se activa el contador de tiempo disponible para finalizar la compra.
     \end{itemize}
     
-    Todas estas acciones que realiza el sistema para comprometer la cesta las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA (ver \ref{sec:spring}). Las transacciones software se describen en términos de las características ACID, del acrónimo en inglés de Atomicity, Consistency, Isolation, y Durability:
+    Todas estas acciones que realiza el sistema para comprometer la cesta las lleva a cabo de forma transaccional, apoyándose en la API de Spring Data JPA (ver \ref{sec:spring}) \cite{JanssenTransactions}. Las transacciones software se describen en términos de las características ACID:
     
     \begin{itemize}
-    	\item[-] Atomicity. Cada paso en la secuencia de acciones realizadas dentro de los límites de una transacción deben completarse con éxito o todo el trabajo debe
+    	\item[-] Atomicidad. Cada paso en la secuencia de acciones realizadas dentro de los límites de una transacción deben completarse con éxito o todo el trabajo debe
     	retroceder. La finalización parcial no es posible, o sucede todo o no sucede nada.
-    	\item[-] Consistency. Los recursos de un sistema deben estar en un estado coherente, no corrupto, tanto en el inicio como en la finalización de una transacción.
-    	\item[-] Isolation. El resultado de una transacción no debe ser visible para otras transacciones hasta que la primera se confirme con éxito.
-    	\item[-] Durability. El resultado de una transacción comprometida debe hacerse permanente, independientemente a cualquier fallo del sistema.
+    	\item[-] Consistencia. Los recursos de un sistema deben estar en un estado coherente, no corrupto, tanto en el inicio como en la finalización de una transacción.
+    	\item[-] Aislamiento. El resultado de una transacción no debe ser visible para otras transacciones hasta que la primera se confirme con éxito.
+    	\item[-] Durabilidad. El resultado de una transacción comprometida debe hacerse permanente, independientemente a cualquier fallo del sistema.
     \end{itemize}
     
     Una vez comprometida la cesta, que otro usuario modifique el stock (ya sea un cliente al comprar un libro o el administrador al variar el stock), o que el administrador varíe el precio de algún libro de los recién comprometidos, o que incluso deshabilite alguno de estos libros, sería transparente para el usuario que acaba de comprometer su cesta. Mientras dure el tiempo disponible para finalizar la compra, la cesta comprometida es un contrato inmodificable. En este punto pueden suceder dos cosas: 
@@ -1174,7 +1174,7 @@
     El procedimiento de descomprometer la cesta es el inverso al de comprometerla, y también se realiza transaccionalmente. Así, lo más destacado que el sistema lleva a cabo internamente en este proceso se resume en:
     
     \begin{itemize}
-    	\item[-] Se actualiza el stock, aumentando los libros en las cantidades correspondientes.
+    	\item[-] Se actualiza el \emph{stock}, aumentando los libros en las cantidades correspondientes.
     	\item[-] Se eliminan las entidades \emph{sale} apropiadas de la base de datos.
     	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
     \end{itemize}
@@ -1201,8 +1201,7 @@
     	\label{fig:closure_table}
     \end{figure}
     
-    Esta solución es la más versátil y rápida de todas las mostradas en [bib ref], permitiendo incluso a un nodo pertenecer a varios árboles. Sin embargo, estos beneficios los consigue a costa de espacio. Este consumo puede ser importante si la estructura almacena jerarquías muy profundas.
-    \\
+    Esta solución es la más versátil y rápida de todas las mostradas en \cite{Karwin2010}, permitiendo incluso a un nodo pertenecer a varios árboles. Sin embargo, estos beneficios los consigue a costa de espacio. Este consumo puede ser importante si la estructura almacena jerarquías muy profundas.
     
     No obstante todo lo discutido con anterioridad, la solución real implementada para el trato específico de las categorías es triple (ver listado \ref{list:sql_cat}): Closure table, lista de adyacencia y trabajo en memoria principal con una estructura de datos en árbol. Esto es así por una cuestión de eficiencia y por desarrollar experiencia en el uso de estas soluciones.
     \\
@@ -1244,7 +1243,7 @@
     ;
     \end{lstlisting}
     
-    Aparejado con el problema descrito en los párrafos anteriores se encuentra el de presentar al usuario dicha información jerárquica. Muy al principio del desarrollo de este proyecto se utilizó la tecnología de plantillas Java Server Pages para general el contenido HTML, la cual permite insertar en las vistas código Java de servidor. Así, se desarrolló una vista que contenía una función recursiva que permitía generar código HTML que mostrase la estructura anidada de las categorías. Pero esta aproximación de mezclar HTML y código Java de servidor es considerada una mala práctica y está en desuso.
+    Aparejado con el problema descrito en los párrafos anteriores se encuentra el de presentar al usuario dicha información jerárquica. Muy al principio del desarrollo de este proyecto se utilizó la tecnología de plantillas JSP para general el contenido HTML, la cual permite insertar en las vistas código Java de servidor. Así, se desarrolló una vista que contenía una función recursiva que permitía generar código HTML que mostrase la estructura anidada de las categorías. Pero esta aproximación de mezclar HTML y código Java de servidor es considerada una mala práctica y está en desuso.
     
     Posteriormente se adoptó el uso de Thymeleaf como motor de plantillas (ver \ref{sec:thymeleaf}), que no contempla esta posibilidad de insertar código de servidor en las vistas (al menos de la manera tan natural como lo permite JSP). Thymeleaf permite generar contenido lineal (una lista, por ejemplo) haciendo uso de la directiva \emph{th:each}, que hace las veces de bucle \emph{for}, pero para generar contenido anidado no dispone de ninguna funcionalidad nativa.
     
@@ -1294,7 +1293,7 @@
     
     Para la gestión de estas acciones, la arquitectura clásica de petición de un recurso por parte del cliente y respuesta con contenido HTML por parte del servidor (con su consecuente refresco de la página) se juzgó inapropiada. Un usuario que esté visualizando la página de su cesta y aumente en una unidad un libro tendría que esperar, para ver el resultado de dicho aumento, a que el servidor responda con el nuevo contenido HTML y que el navegador lo renderice, todo ello para únicamente cambiar unos pocos números respecto de la página previa. Situaciones similares ocurren en el caso de disminuir la cantidad de un libro, o eliminarlo de la cesta por completo. Peor aún es el caso del usuario que decide añadir un libro a su cesta, ya que el contenido HTML por el que debiera esperar sería igual (salvo el icono del número de elementos en la cesta) al de la página desde donde se solicita tal acción.
     
-    En este contexto, y como pretexto perfecto para su estudio, se decidió desarrollar estas acciones con tecnología Ajax, de forma que no tenga lugar el refresco de la página en la que el usuario se encuentre. Así, el script \emph{ajaxCart.js} se encarga, entre otras cosas, de actualizar el DOM de la vista de la cesta del usuario, \emph{cart.html}, de manera consistente con las acciones que este realice, mientras que el script \emph{ajaxAddBook.js} gestiona el DOM de las citadas vistas desde las cuales es posible añadir libros a la cesta. Ambos scripts establecen en background la comunicación con el servidor, de forma transparente al usuario, haciendo uso del objeto \emph{XMLHttpRequest}, tal como muestra el extracto de \emph{ajaxCart.js} mostrado en el listado \ref{list:js_ajax}.
+    En este contexto, y como pretexto perfecto para su estudio, se decidió desarrollar estas acciones con tecnología AJAX, de forma que no tenga lugar el refresco de la página en la que el usuario se encuentre. Así, el script \emph{ajaxCart.js} se encarga, entre otras cosas, de actualizar el DOM de la vista de la cesta del usuario, \emph{cart.html}, de manera consistente con las acciones que este realice, mientras que el script \emph{ajaxAddBook.js} gestiona el DOM de las citadas vistas desde las cuales es posible añadir libros a la cesta. Ambos scripts establecen en background la comunicación con el servidor, de forma transparente al usuario, haciendo uso del objeto \emph{XMLHttpRequest}, tal como muestra el extracto de \emph{ajaxCart.js} mostrado en el listado \ref{list:js_ajax}.
     \\
     
     \begin{lstlisting}[language=JavaScript,caption=Comunicación Ajax con el servidor,label=list:js_ajax]
@@ -1376,7 +1375,7 @@
     
     Aparte de las ventajas que de por sí ofrece el modelo de computación en la nube, Heroku destaca por proporcionar una experiencia de desarrollo excepcional. Así, los desarrolladores sólo tienen que enfocarse en las tareas propias de programación, reduciéndose las labores de despliegue a unas pocas configuraciones y a efectuar un \emph{git push}. Literalmente, tras una mínima configuración (en el común de los casos sólo necesaria la primera vez), desplegar la aplicación en Heroku se realiza enviando el repositorio Git a la plataforma (existen otras formas, como integrar GitHub o IntelliJ IDEA con Heroku). Es decir, a Heroku se le envía el código fuente del proyecto, tras lo cual automáticamente lo construye, configura el hardware necesario, y lo despliega.
     
-    Las aplicaciones desplegadas en Heroku son ejecutadas en contenedores Linux, denominados en la jerga Heroku como \href{https://devcenter.heroku.com/articles/dynos}{\emph{dynos}}. Cada uno de estos contenedores puede tener una configuración \emph{Web} (los únicos que admiten tráfico HTTP), \emph{Worker} o \emph{One-off}. Además, Heroku ofrece varios tipos de \emph{dynos}, cada uno adaptado a diferentes necesidades, desde pequeños proyectos hasta servicios en producción de gran tráfico. Así, como se muestra en la figura \ref{fig:dyno_types}, tomada de la documentación oficial, cada tipo de dyno posee diferentes características, como la memoria disponible o la exclusividad de los recursos que utiliza.
+    Las aplicaciones desplegadas en Heroku son ejecutadas en contenedores Linux, denominados en la jerga Heroku como \href{https://devcenter.heroku.com/articles/dynos}{\emph{dynos}}. Cada uno de estos contenedores puede tener una configuración \emph{Web} (los únicos que admiten tráfico HTTP), \emph{Worker} ó \emph{One-off}. Además, Heroku ofrece varios tipos de \emph{dynos}, cada uno adaptado a diferentes necesidades, desde pequeños proyectos hasta servicios en producción de gran tráfico. Así, como se muestra en la figura \ref{fig:dyno_types}, tomada de la documentación oficial, cada tipo de dyno posee diferentes características, como la memoria disponible o la exclusividad de los recursos que utiliza.
     
     \begin{figure}[hbt!]
        	\centering
@@ -1417,7 +1416,7 @@
        	\end{figure}
        	
        	\item[-] \href{https://elements.heroku.com/addons/probely}{Probely}. Este es un servicio de detección de vulnerabilidades de seguridad. En su versión pro, a la cual se ha tenido acceso gratuito durante dos semanas, permite realizar multitud de pruebas a la aplicación web, generando un informe de forma automática con los problemas encontrados y sus posibles soluciones. Se evaluó la aplicación web desarrollada con dos test diferentes: un análisis en profundidad estándar de Probely y un análisis OWASP top 10. Los resultados son comentados en la sección \ref{sec:vulnerabilities}.
-       	\item[-] \href{https://elements.heroku.com/addons/snyk}{Snyk}. Este add-on revisa las dependencias del proyecto en busca de vulnerabilidades de seguridad conocidas. En su versión gratuita permite realizar hasta 200 test al mes, pero no emite informes es formato pdf. Los resultados son comentados en la sección \ref{sec:vulnerabilities}.
+       	\item[-] \href{https://elements.heroku.com/addons/snyk}{Snyk}. Este add-on revisa las dependencias del proyecto en busca de vulnerabilidades de seguridad conocidas. En su versión gratuita permite realizar hasta 200 test al mes, pero no emite informes es formato PDF. Los resultados son comentados en la sección \ref{sec:vulnerabilities}.
     \end{itemize}
 
 	\section{firstmarket.tech}
@@ -1433,7 +1432,7 @@
 	\end{figure}
 
 	\chapter{Seguridad} \label{sec:security}
-	La palabra seguridad es empleada en multitud de situaciones dentro del mundo de las tecnologías de la información, normalmente con significados dispares. No obstante, generalizando lo suficiente, viene a referirse a la protección que se debe proporcionar a determinados recursos, por su valor y/o sensibilidad, frente a posibles usos malintencionados.
+	La palabra seguridad es empleada en multitud de situaciones dentro del mundo de las tecnologías de la información, normalmente con significados dispares. No obstante, generalizando lo suficiente, viene a referirse a la protección que se debe proporcionar a determinados recursos, por su valor y/o sensibilidad, frente a posibles usos malintencionados \cite{CarloScarioni2019}.
 	
 	Esta sección está dedicada a las cuestiones de seguridad, en sentido amplio, relacionadas con \href{https://firstmarket.tech}{FirstMarket}.
 	\section{HTTPS} \label{sec:https}
@@ -1444,15 +1443,15 @@
 		\begin{itemize}
 			\item[-] Privacidad. Los datos son encriptados antes de moverse por la red, de forma que nadie ajeno a la conversación pueda comprender su semántica.
 			\item[-] Integridad. De una manera similar a como Git detecta los cambios en los documentos que gestiona, TLS calcula determinados parámetros criptográficos que hacen extremadamente difícil que los datos sean alterados en su camino por la red, ya sea accidental o intencionadamente, sin que el protocolo lo detecte.
-			\item[-] Autenticidad. Aún teniendo garantizado que nadie podrá entender los datos enviados, y que nadie los podrá alterar sin notarse, persiste la duda de si se está comunicando con el interlocutor pretendido. Esto es, cuando alguien accede a www.firstmarket.tech debe tener la certeza de que efectivamente está intercambiando información con FirstMarket (hipotética persona jurídica). Para esta labor TLS hace uso de los certificados digitales, que un tercer agente \emph{de confianza} emite garantizando que la web de FirstMarket es www.firstmarket.tech. Este agente es el conocido en la industria como \emph{Certificate Authority} (CA). Pero, ¿quién establece la autoridad de este CA, es decir, quién asegura que es \emph{de confianza}? Otro CA, de mayor autoridad, y así sucesivamente. Esto crea una cadena de confianza, finita, englobada dentro de la \emph{Public Key Infrastructure} (PKI), la tecnología fundamental de Internet para construir la confianza acerca de la autenticidad de los agentes en la red.
+			\item[-] Autenticidad. Aún teniendo garantizado que nadie podrá entender los datos enviados, y que nadie los podrá alterar sin notarse, persiste la duda de si se está comunicando con el interlocutor pretendido. Esto es, cuando alguien accede a \href{https://firstmarket.tech}{www.firstmarket.tech} debe tener la certeza de que efectivamente está intercambiando información con FirstMarket (hipotética persona jurídica). Para esta labor TLS hace uso de los certificados digitales, que un tercer agente \emph{de confianza} emite garantizando que la web de FirstMarket es, efectivamente, \href{https://firstmarket.tech}{www.firstmarket.tech}. Este agente es el conocido en la industria como \emph{Certificate Authority}. Pero, ¿quién establece la autoridad de este CA, es decir, quién asegura que es \emph{de confianza}? Otro CA, de mayor autoridad, y así sucesivamente. Esto crea una cadena de confianza, finita, englobada dentro de la \emph{Public Key Infrastructure}, la tecnología fundamental de Internet para construir la confianza acerca de la autenticidad de los agentes en la red.
 		\end{itemize}
 	
-	La aplicación web desarrollada puede usar HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}} (ACM). Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
+	La aplicación web desarrollada puede usar HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}}. Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
 	
 	Para finalizar, resaltar que \href{https://firstmarket.tech}{www.firstmarket.tech} impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra entre las líneas 27 y 31 del listado \ref{list:springsec_config}.
 	
 	\section{Spring Security} \label{sec:springsec}
-	Un enfoque comúnmente empleado, en el ámbito de la seguridad de la información, se basa en considerar los sistemas complejos como un conjunto de capas de abstracción, aplicándose los mecanismos de seguridad apropiados para cada una de ellas.
+	Un enfoque comúnmente empleado, en el ámbito de la seguridad de la información, se basa en considerar los sistemas complejos como un conjunto de capas de abstracción, aplicándose los mecanismos de seguridad apropiados para cada una de ellas \cite{CarloScarioni2019}.
 	
 	Si se piensa en la aplicación de comercio electrónico que se ha desarrollado, esta puede modelarse en esencia como un proceso que se ejecuta en el contexto de un sistema operativo, en el seno a su vez de una máquina, la cual se comunica con otras haciendo uso de la infraestructura de Internet. Este modelo simple ya es capaz de hacer contraste entre la aplicación, el sistema operativo, la máquina y la red. Cada una de estas capas implementa sus propias medidas destinadas a proteger la información que maneja.
 	
@@ -1461,7 +1460,7 @@
 	Spring Security es la piedra angular de la seguridad a nivel de aplicación del portal de comercio electrónico desarrollado, integrando las funcionalidades de autenticación y autorización encima de las características propias de Spring Framework. Además, como se verá, también ofrece mecanismos de protección frente a multitud de vulnerabilidades comunes a nivel de aplicación.
 	
 	\subsection{FilterChain}
-	Como se comenta en la sección \ref{sec:spring}, las aplicaciones web con Spring basadas en el stack servlet, como es el caso, siguen el patrón \emph{front controller}, en el que el servlet \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet}{\emph{DispatcherServlet}} ejerce de punto de entrada y distribuidor de las peticiones HTTP hacia los \emph{@Controller}/\emph{@RestController} adecuados.
+	Como se comenta en la sección \ref{sec:spring}, las aplicaciones web con Spring basadas en el \emph{stack} Servlet, como es el caso, siguen el patrón \emph{Front Controller}, en el que el Servlet \href{https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-servlet}{\emph{DispatcherServlet}} ejerce de punto de entrada y distribuidor de las peticiones HTTP hacia los \emph{@Controller}/\emph{@RestController} adecuados.
 	
 	El \emph{DispatcherServlet} no integra lógica de autenticación/autorización, por lo que, en ausencia de alternativas, esta debería ser implementada en las clases \emph{@Controller}/\emph{@RestController} en las que delega las peticiones HTTP. Esto, por supuesto, destrozaría el principio de separación de responsabilidades. 
 	
@@ -1478,7 +1477,7 @@
 	
 	Por ejemplo, una petición HTTP podría primero alcanzar un filtro destinado a recabar las credenciales de autenticación del usuario (por ejemplo un formulario de \emph{login}). Después, con dichas credenciales, atravesar el filtro que las comprueba, y autenticar así o no al usuario. Seguidamente podría estar el filtro que decide si el usuario recién autenticado posee el permiso necesario para acceder al recurso o funcionalidad pedida. Por último, en caso necesario, la petición HTTP llegaría al \emph{DispatcherServlet}.
 	
-	En el listado \ref{list:filter_chain} se aprecia el mensaje de registro emitido durante el arranque de la aplicación en el que se detalla la cadena de filtros que Spring Security proporciona. Pues bien, en esencia, \textbf{Spring Security \emph{es} esta concatenación de filtros} antes del \emph{DispatcherServlet}. 
+	En el listado \ref{list:filter_chain} se aprecia el mensaje de registro emitido durante el arranque de la aplicación en el que se detalla la cadena de filtros que Spring Security proporciona. Pues bien, en esencia, \textbf{Spring Security \emph{es} esta concatenación de filtros} antes del \emph{DispatcherServlet} \cite{Behler2020}.
 	\\
 	
 	\begin{lstlisting}[caption=Cadena de filtros creada por Spring Security, label=list:filter_chain]
@@ -1502,7 +1501,7 @@
 	\end{lstlisting}
 	
 	\subsection{Configuración}
-	En estos filtros Spring Security implementa la autenticación/autorización y la protección frente a determinados tipos de ataques. Lo que resta es configurarlos para satisfacer las necesidades propias de cada aplicación. Esta configuración se lleva a cabo extendiendo la clase de Spring Security \emph{WebSecurityConfigurerAdapter} y sobreescribiendo su método \emph{configure(HttpSecurity)} (expuesto en el listado \ref{list:springsec_config}), tarea que en la aplicación web desarrollada realiza la clase \emph{SecurityConfig}.
+	En estos filtros Spring Security implementa la autenticación/autorización y la protección frente a determinados tipos de ataques. Lo que resta es configurarlos para satisfacer las necesidades propias de cada aplicación. Esta configuración se lleva a cabo extendiendo la clase de Spring Security \emph{WebSecurityConfigurerAdapter} y sobreescribiendo su método \emph{configure(HttpSecurity)} (expuesto en el listado \ref{list:springsec_config}) \cite{Behler2020} \cite{Alex2020}, tarea que en la aplicación web desarrollada realiza la clase \emph{SecurityConfig}.
 	\\
 	
 	\begin{lstlisting}[caption=Configuración de Spring Security en FirstMarket, label=list:springsec_config]
@@ -1596,14 +1595,14 @@
 	\end{lstlisting}
 	
 	\subsection{Autenticación}
-	Spring Security ofrece toda una gama de métodos de autenticación. El usado en FirstMarket, configurado entre las líneas 5 y 7 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña. En caso de un fallo de autenticación, la clase \emph{customAuthenticationFailureHandler} toma el control, determina la causa del fallo y presenta el mensaje adecuado al usuario.
+	Spring Security ofrece toda una gama de métodos de autenticación \cite{Behler2020} \cite{Alex2020}. El usado en FirstMarket, configurado entre las líneas 5 y 7 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña. En caso de un fallo de autenticación, la clase \emph{customAuthenticationFailureHandler} toma el control, determina la causa del fallo y presenta el mensaje adecuado al usuario.
 	
 	Es importante resaltar que, con el fin de garantizar la seguridad de la información de los usuarios, la aplicación web desarrollada almacena las constraseñas en la base de datos encriptadas.  En concreto, se usa el agoritmo \href{https://en.wikipedia.org/wiki/Bcrypt}{Bcrypt}. De esta forma, para saber si la contraseña es correcta, la aplicación web encripta la contraseña enviada en el formulario y la compara con la que tiene almacenada.
 	
 	Además, Spring Security permite especificar la lógica tras un \emph{logout}, que en el caso de la presente aplicación es simplemente una redirección a la páquina de inicio, como se muestra en las líneas 12 y 13 del listado \ref{list:springsec_config}.
 	
 	\paragraph{Autenticación por Fuerza Bruta}
-	Como ya se ha comentado, el ecosistema Spring destaca por su extensibilidad. Allá donde se requieran funcionalidades especiales, el framework permite alcanzarlas. En este sentido, aunque Spring Security no implementa ningún mecanismo para prevenir la autenticación por fuerza bruta, sí ofrece facilidades para incorporarlo.
+	Como ya se ha comentado, el ecosistema Spring destaca por su extensibilidad. Allá donde se requieran funcionalidades especiales, el \emph{framework} permite alcanzarlas. En este sentido, aunque Spring Security no implementa ningún mecanismo para prevenir la autenticación por fuerza bruta, sí ofrece facilidades para incorporarlo.
 	
 	Cada vez que un usuario trata de autenticarse, en función del éxito o del motivo del fracaso, Spring Security emite el correspondiente evento. Si la autenticación tuvo éxito se emite el evento \emph{AuthenticationSuccessEvent}, mientras que si fracasa por ser la información proporcionada incorrecta se emite \emph{AuthenticationFailureBadCredentialsEvent}. Otro motivos de fracaso (por ejemplo estar la cuenta de usuario bloqueada por el administrador) emiten diferentes eventos.
 	
@@ -1637,7 +1636,7 @@
 	Notar que los dos primeros tipos requieren necesariamente autenticación previa.
 	
 	\subsection{Cross-Site Request Forgery}
-	\href{https://en.wikipedia.org/wiki/Cross-site_request_forgery}{\emph{Cross-Site Request Forgery}} representa un tipo de ataque que toma ventaja de la confianza que un determinado sitio web tiene en un cliente, por ejemplo porque previamente se ha autenticado. Así, el cliente envía (sin saberlo) una petición (maliciosa) al sitio web y este la acepta dada la confianza que deposita en el primero. Es el caso inverso a los ataques \href{https://owasp.org/www-community/attacks/xss/}{\emph{Cross-Site Scripting}}, donde se saca partido de la confianza que el cliente tiene en el sitio web, ejecutando el código (malicioso) que este le envía (sin saberlo).
+	\href{https://en.wikipedia.org/wiki/Cross-site_request_forgery}{\emph{Cross-Site Request Forgery}} representa un tipo de ataque que toma ventaja de la confianza que un determinado sitio web tiene en un cliente, por ejemplo porque previamente se ha autenticado. Así, el cliente envía (sin saberlo) una petición (maliciosa) al sitio web y este la acepta dada la confianza que deposita en el primero \cite{Alex2020}. Es el caso inverso a los ataques \href{https://owasp.org/www-community/attacks/xss/}{\emph{Cross-Site Scripting}}, donde se saca partido de la confianza que el cliente tiene en el sitio web, ejecutando el código (malicioso) que este le envía (sin saberlo).
 	
 	Imagínese que un usuario se encuentra, autenticado, en la aplicación web de su banco, en la vista que le permite transferir fondos de su cuenta a otra. Esta vista, por ejemplo, mostraría un formulario como el mostrado en el listado \ref{list:csrf_form}. Al completarlo y presionar \emph{Transfer} se enviaría al servidor del banco la petición HTTP mostrada en el listado \ref{list:csrf_http}.
 	\\
@@ -1672,7 +1671,7 @@
 	
 	El banco no tiene posibilidad de distinguir si alguna de las dos peticiones es ilegítima, ya que en ambas cree que las está haciendo el usuario autorizado para ello. ¿Por qué? porque el medio que utiliza para identificar al usuario, la \emph{cookie} de la línea 3 del listado \ref{list:csrf_http}, es exactamente igual en ambas peticiones, ya que el navegador por defecto adjunta las cookies en todas las peticiones.
 	
-	La manera más extendida de solucionar este problema, que Spring Security implementa por defecto, es adjuntar una pieza de información extra (\emph{token}) que sólo conozca el usuario legítimo. Obviamente, este \emph{token} no puede ser colocado en una \emph{cookie}, porque se estaría en la misma situación vulnerable anteriormente descrita. En este sentido, existen diversas alternativas de lugares donde colocar el \emph{token}, siendo en un campo oculto (llamado \emph{\_csrf}) la utilizada por defecto en Spring Security. Así, el formulario que el banco enviaría ahora al usuario sería como el mostrado en el listado \ref{list:csrf_form_token}, mientras que la petición HTTP sería la mostrada en el listado \ref{list:csrf_http_token}.
+	La manera más extendida de solucionar este problema, que Spring Security implementa por defecto, es adjuntar una pieza de información extra (\emph{token}) que sólo conozca el usuario legítimo \cite{Alex2020}. Obviamente, este \emph{token} no puede ser colocado en una \emph{cookie}, porque se estaría en la misma situación vulnerable anteriormente descrita. En este sentido, existen diversas alternativas de lugares donde colocar el \emph{token}, siendo en un campo oculto (llamado \emph{\_csrf}) la utilizada por defecto en Spring Security. Así, el formulario que el banco enviaría ahora al usuario sería como el mostrado en el listado \ref{list:csrf_form_token}, mientras que la petición HTTP sería la mostrada en el listado \ref{list:csrf_http_token}.
 	\\
 	
 	\begin{lstlisting}[caption=Formulario seguro para la transferencia de fondos,label=list:csrf_form_token]
@@ -1698,10 +1697,10 @@
 	Como se ha dicho, esta funcionalidad se implementa por defecto con Spring Security. Sin embargo, como se aprecia en las líneas 34 a 37 del listado \ref{list:springsec_config}, se ha modificado ligeramente el comportamiento por defecto para permitir que desde Stripe se realicen peticiones POST sin necesidad de contar con el token \emph{\_csrf}.
 	
 	\subsection{Encabezados HTTP de Seguridad}
-	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente.
+	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente \cite{Barnett2018}.
 	
 	\paragraph{Cache Control}
-	Por defecto, Spring Security instruye al navegador, por medio de las cabeceras de respuesta mostradas en el listado \ref{list:cache_control}, para que no guarde en su caché ninguna información, debido al riesgo que esto representa para el usuario. Piénsese, por ejemplo, en una situación en la que un usuario, tras autenticarse, consulta información confidencial, que el navegador almacena en caché. Después, tras cerrar su sesión, otro usuario podría tener acceso a dicha información privada sin más que consultar las páginas guardadas en el historial de navegación.
+	Por defecto, Spring Security instruye al navegador, por medio de las cabeceras de respuesta mostradas en el listado \ref{list:cache_control}, para que no guarde en su caché ninguna información, debido al riesgo que esto representa para el usuario \cite{Alex2020}. Piénsese, por ejemplo, en una situación en la que un usuario, tras autenticarse, consulta información confidencial, que el navegador almacena en caché. Después, tras cerrar su sesión, otro usuario podría tener acceso a dicha información privada sin más que consultar las páginas guardadas en el historial de navegación.
 	\\
 	
 	\begin{lstlisting}[caption=Cabeceras para impedir el almacenamiento en caché, label=list:cache_control]
@@ -1715,7 +1714,7 @@
 	\paragraph{Content Type Options}
 	Normalmente, cuando el campo \emph{content type} (tipo de contenido) no es especificado, los navegadores tratan de deducirlo para mejorar la experiencia de usuario. Por ejemplo, si el navegador encuentra un archivo JavaScript sin el tipo de contenido especificado, intentará deducir su naturaleza a partir del propio contenido y, en caso de que finalmente lo juzgue como código JS, lo ejecutará. A este procedimiento de inferencia del tipo de contenido se le conoce como \href{https://en.wikipedia.org/wiki/Content_sniffing}{\emph{content sniffing}}
 	
-	Este sistema de inferencia del tipo de contenido presenta el problema de ser un vector para ataques XSS (\href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}). En efecto, existen archivos contruidos de tal manera que pueden ser interpretados de varias formas al mismo tiempo. Por ejemplo, una aplicación web puede permitir a los usuarios enviar un documento PostScript válido para posteriormente visualizarlo. Un usuario malintencionado podría crear un documento PostScript que también sea un archivo JavaScript válido y ejecutar un ataque XSS con él.
+	Este sistema de inferencia del tipo de contenido presenta el problema de ser un vector para ataques XSS (\href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}). En efecto, existen archivos contruidos de tal manera que pueden ser interpretados de varias formas al mismo tiempo. Por ejemplo, una aplicación web puede permitir a los usuarios enviar un documento PostScript válido para posteriormente visualizarlo. Un usuario malintencionado podría crear un documento PostScript que también sea un archivo JavaScript válido y ejecutar un ataque XSS con él \cite{Alex2020}.
 	
 	Por estas razones, la configuración que por defecto ofrece Spring Security es instruir al navegador para que no realice \emph{content sniffing}, a través de la cabecera mostrada en el listado \ref{list:content_sniffing}. Notar que, como contraparte, ahora en todo momento se debe indicar el tipo de contenido en lo que se envíe al navegador para que funcione correctamente.
 	\\
@@ -1727,7 +1726,7 @@
 	\paragraph{HTTP Strict Transport Security}
 	Cuando un usuario teclea la dirección web del sitio que pretende visitar, normalmente no especifica que la comunicación se haga a través de HTTPS. Es decir, se suele escribir sólo \emph{firstmarket.tech} en lugar de \emph{https://firstmarket.tech}. Esto representa un riesgo, ya que las comunicaciones HTTP son vulnerables a ataques \href{https://en.wikipedia.org/wiki/Man-in-the-middle_attack}{\emph{man in the middle}}. Es más, aunque la comunicación HTTP sea redirigida a usar la versión segura (como es el caso en la aplicación web desarollada), la vulnerabilidad comentada persistiría entre la comunicación inicial con HTTP y la redirección.
 	
-	Para gestionar esta situación se creó el \href{https://tools.ietf.org/html/rfc6797}{HTTP Strict Transport Security (HSTS)}, un mecanismo para que los sitios web puedan declararse como \emph{HTST host}, esto es, como accesibles únicamente mediante conexiones seguras.
+	Para gestionar esta situación se creó el \href{https://tools.ietf.org/html/rfc6797}{HTTP Strict Transport Security}, un mecanismo para que los sitios web puedan declararse como \emph{HSTS host}, esto es, como accesibles únicamente mediante conexiones seguras.
 	
 	Una manera de alcanzar este estatus es ingresar en la lista de dominios web \emph{preloaded} gestionada en \href{https://hstspreload.org/}{hstspreload.org}. En la figura \ref{fig:hsts_preload} se muestra la confirmación de la inclusión de \href{https://firstmarket.tech}{firstmarket.tech} en dicha lista.
 	
@@ -1738,7 +1737,7 @@
 		\label{fig:hsts_preload}
 	\end{figure}
 	
-	Otra forma es incluyendo el encabezado \emph{Strict-Transport-Security} en las respuestas HTTP. En las líneas de la 46 a la 51 del listado \ref{list:springsec_config} se muestra la configuración realizada en Spring Security para incluir la cabecera mostrada en el listado \ref{list:hsts} en las respuestas HTTP.
+	Otra forma es incluyendo el encabezado \emph{Strict-Transport-Security} en las respuestas HTTP. En las líneas de la 46 a la 51 del listado \ref{list:springsec_config} se muestra la configuración realizada en Spring Security para incluir la cabecera mostrada en el listado \ref{list:hsts} en las respuestas HTTP \cite{Alex2020}.
 	\\
 	
 	\begin{lstlisting}[caption=Cabecera de declaración \emph{HSTS host}, label=list:hsts]
@@ -1746,7 +1745,7 @@
 	\end{lstlisting}
 	
 	\paragraph{X-Frame-Options}
-	Con el objetivo de prevenir los ataques conocidos como \href{https://en.wikipedia.org/wiki/Clickjacking}{\emph{clickjacking}}, Spring Security inhabilita el renderizado de vistas que contengan etiquetas HTML5 \emph{iframe}. Esto se consigue enviando a los navegadores el encabezado que se muestra en el listado \ref{list:iframe}.
+	Con el objetivo de prevenir los ataques conocidos como \href{https://en.wikipedia.org/wiki/Clickjacking}{\emph{clickjacking}}, Spring Security inhabilita el renderizado de vistas que contengan etiquetas HTML5 \emph{iframe} \cite{Alex2020}. Esto se consigue enviando a los navegadores el encabezado que se muestra en el listado \ref{list:iframe}.
 	\\
 	
 	\begin{lstlisting}[caption=Cabecera que inhibe el uso de las etiquetas \emph{iframe}, label=list:iframe]
@@ -1756,7 +1755,7 @@
 	\paragraph{X-XSS-Protection}
 	Muchos navegadores implementan filtros anti-\href{https://owasp.org/www-community/attacks/xss/}{XSS}. Aún no representando una solución infalible al problema, ayudan mucho a su mitigación. Normalmente estos filtros están habilitados por defecto, siendo posible configurar qué hacer en caso de un positivo (por ejemplo, intentar enmendar el contenido detectado).
 	
-	Spring Security, por defecto, a través del encabezado que se muestra en el listado \ref{list:filtro_xss}, activa explícitamente el filtro del navegador y lo configura para que ante un positivo bloquee el contenido.
+	Spring Security, por defecto, a través del encabezado que se muestra en el listado \ref{list:filtro_xss}, activa explícitamente el filtro del navegador y lo configura para que ante un positivo bloquee el contenido \cite{Alex2020}.
 	\\
 	
 	\begin{lstlisting}[caption=Cabecera que activa y configura el filtro anti-XSS del navegador, label=list:filtro_xss]
@@ -1764,16 +1763,16 @@
 	\end{lstlisting}
 	
 	\paragraph{Content Security Policy}
-	La \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP}{\emph{Content Security Policy}} (CSP) es un mecanismo de protección frente a vulnerabilidades de inyección de contenido, como por ejemplo el comentado \href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}. A través de esta funcionalidad se puede declarar y, en última instancia, informar al navegador acerca de cuáles son las fuentes autorizadas desde las cuales descargar los recursos que las vistas de la aplicación web necesita.
+	La \emph{Content Security Policy} es un mecanismo de protección frente a vulnerabilidades de inyección de contenido, como por ejemplo el comentado \href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}. A través de esta funcionalidad se puede declarar y, en última instancia, informar al navegador acerca de cuáles son las fuentes autorizadas desde las cuales descargar los recursos que las vistas de la aplicación web necesita \cite{Mozilla2020} \cite{West2012}.
 	
-	Esta política de permisos, no trivial, depende de las necesidades de cada sitio web, y es por ello que Spring Security no la configura por defecto. Así, en el listado \ref{list:springsec_config}, entre las líneas X y Y, se declara la CSP de la aplicación web desarrollada. Como se aprecia, se especifican diversas fuentes para distintos tipos de contenido. Es importante resaltar que tanto con los \emph{scripts} como con las hojas de estilo debe evitarse su uso en modo \emph{inline}, esto es, embebido en el propio HTML, usando en su lugar ficheros \emph{.js} y \emph{.css}.
+	Esta política de permisos, no trivial, depende de las necesidades de cada sitio web, y es por ello que Spring Security no la configura por defecto \cite{Alex2020}. Así, en el listado \ref{list:springsec_config}, entre las líneas 51 y 80, se declara la CSP de la aplicación web desarrollada. Como se aprecia, se especifican diversas fuentes para distintos tipos de contenido. Es importante resaltar que tanto con los \emph{scripts} como con las hojas de estilo se prohibe su uso en modo \emph{inline}, esto es, embebido en el propio HTML, usando en su lugar ficheros \emph{.js} y \emph{.css}.
 	
 	\paragraph{Referrer  Policy}
 	Uno de los muchos encabezados que se incluyen en una petición HTTP es el \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referer}{\emph{Referer}}, que contiene la dirección de la página web anterior desde la cual se realizó la navegación a la página actual. Por otro lado, el encabezado \href{https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy}{\emph{Referrer-Policy}} controla qué restricciones aplicar a la información suministrada en el encabezado \emph{Referer}.
 	
 	Es importante establecer un criterio apropiado ya que, por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. En general, la información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
 	
-	Spring Security permite de una manera sencilla configurar la política deseada, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
+	Spring Security permite de una manera sencilla configurar la política deseada \cite{Alex2020}, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
 	
 	\paragraph{Subresource Integrity}
 	Por último, y aunque no se trate de una funcionalidad ofrecida por Spring Security, es necesario comentar que la aplicación web desarrollada hace uso del mecanismo conocido como \href{https://www.w3.org/TR/SRI/}{\emph{Subresource Integrity}}. 
@@ -1824,7 +1823,7 @@
 	
 	Así, esta expresión regular es utilizada por la aplicación web para comprobar, tanto en \emph{frontend} como en \emph{backend}, que cuando un usuario proporciona una nueva contraseña esta tenga una longitud de entre 8 y 16 caractéres e incluya al menos una minúscula, una mayúscula y un dígito.
 	
-	Existe un campo que destaca por su manera de ser validado. Se trata del ISBN (International Standard Book Number) de los libros. Este campo necesita validación en dos vertientes. La primera se realiza utilizando las ya mencionadas expresiones regulares, pero, para validar si se trata de un ISBN válido, aún hay que calcular el dígito de control y comprobar que coincida con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación implementada en FirstMarket da soporte a ambos formatos de ISBN.
+	Existe un campo que destaca por su manera de ser validado, a saber, el ISBN de los libros. Este campo necesita validación en dos vertientes. La primera se realiza utilizando las ya mencionadas expresiones regulares, pero, para validar si se trata de un ISBN válido, aún hay que calcular el dígito de control y comprobar que coincida con el último dígito del código. Los ISBN tuvieron 10 dígitos hasta diciembre de 2006, pero desde entonces tienen siempre 13 (ambas versiones con diferentes algoritmos de cálculo del dígito de control). Así pues, la validación implementada en FirstMarket da soporte a ambos formatos de ISBN.
 	
 	\section{Análisis de Vulnerabilidades} \label{sec:vulnerabilities}
 	Como se comentó en la sección \ref{sec:addons}, la seguridad de la aplicación web ha sido testada con la ayuda de \href{https://probely.com/}{Probely} y \href{https://snyk.io/}{Snyk}. La primera herramienta detectó 5 vulnerabilidades, mientras que la segunda 13. Del total, 14 responden a vulnerabilidades conocidas en librerías utilizadas por la aplicación web, por lo que su resolución se basa en actualizar las versiones de dichas dependencias. A continuación se pasa a comentar los problemas encontrados, haciendo especial énfasis en las 4 vulnerabilidades propias de la aplicación web desarrollada: 
@@ -1886,7 +1885,7 @@
 		
 		\item[-] \textbf{\emph{Outdated TLS protocol version 1.0 supported}}. Como se explica en la sección \ref{sec:https}, Heroku ofrece conexiones seguras con TLS, por defecto, a través de su funcionalidad \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}}. La vulnerabilidad descrita en este apartado se produce por el hecho de que ACM no fuerza el uso de TLS v1.2+, es decir, no deshabilita el uso de versiones obsoletas de TLS.
 		
-		Tal como se explica en su \href{https://devcenter.heroku.com/articles/understanding-ssl-on-heroku#when-to-use-the-ssl-endpoint}{documentación}, para deshabilitar el soporte a las versiones inseguras, TLS v1.0 y TLS v1.1, sería necesario sustituir ACM por \href{https://devcenter.heroku.com/articles/ssl-endpoint}{SSL Endpoint}, el cual es un servicio con un coste de 20 dólares mensuales.
+		Tal como se recoge en su documentación \cite{Heroku2019}, para deshabilitar el soporte a las versiones inseguras, TLS v1.0 y TLS v1.1, sería necesario sustituir ACM por \href{https://devcenter.heroku.com/articles/ssl-endpoint}{\emph{SSL Endpoint}}, el cual es un servicio con un coste de 20 dólares mensuales.
 		
 		Teniendo en cuenta el coste indicado, y la reciente (8 Jul 2020) notificación recibida desde Heroku, mostrada a seguir, se ha optado por continuar usando ACM:
 		
@@ -1936,18 +1935,11 @@
 		Un aspecto que debe resaltarse es que las actualizaciones de la 2 a la 6, incluidas ellas, han tenido que establecerse sobrescribiendo la configuración que por defecto ofrece Spring Boot a través del fichero \emph{spring-boot-starter-parent}, del cual hereda el \emph{pom.xml} de la aplicación web desarrollada. Esto es importante porque se está saliendo del terreno seguro que esta configuración por defecto suministra, en el sentido de que desde Spring se ha testado que las versiones establecidas por defecto funcionan sin problemas de compatibilidades entre sí.
 		
 	\end{itemize}
-	
-	
-
-    %\section{Manual}
-    %  En esta seccion se va a describir las cuestiones necesarias para facilitar el uso de la aplicacion web por parte de los usuarios
-    %  \subsection{Cliente}
-    %  \subsection{Administrador}
     
     \chapter{Presupuesto} \label{sec:budget}
     En esta sección se estudian los costes asociados al desarrollo de la aplicación web. De una manera amplia, estos pueden ser agrupados en coste del factor humano y coste de los recursos materiales.
     
-    Para analizar los primeros es necesario distinguir los diferentes roles profesionales implicados en la consecución de los objetivos, para lo cual se toma como guía el \href{https://www.boe.es/diario_boe/txt.php?id=BOE-A-2018-3156}{XVII Convenio colectivo estatal de empresas de consultoría y estudios de mercado y de la opinión pública}, que engloba a la actividad de desarrollo software. Así, en su artículo 15 son descritos los grupos profesionales, a los que en el Anexo I del mismo texto se les asocia su retribución anual. En el presente estudio se tomarán dichos valores como suelo retributivo legal, tomándose el pulso actual del mercado en \href{https://www.glassdoor.es/Sueldos/index.htm}{glassdoor.es} y \href{https://es.indeed.com/salaries}{indeed.com}.
+    Para analizar los primeros es necesario distinguir los diferentes roles profesionales implicados en la consecución de los objetivos, para lo cual se toma como guía el XVII Convenio colectivo estatal de empresas de consultoría y estudios de mercado y de la opinión pública, que engloba a la actividad de desarrollo software \cite{EmpleoySeguridadSocial2018}. Así, en su artículo 15 son descritos los grupos profesionales, a los que en el Anexo I del mismo texto se les asocia su retribución anual. En el presente estudio se tomarán dichos valores como suelo retributivo legal, tomándose el pulso actual del mercado en \href{https://www.glassdoor.es/Sueldos/index.htm}{glassdoor.es} y \href{https://es.indeed.com/salaries}{indeed.com}.
     
     En esta línea, los perfiles profesionales identificados (todos pertenecientes al área 3, \emph{Consultoría, desarrollo y sistemas}) para el desarrollo de la aplicación web han sido:
     
@@ -1959,7 +1951,7 @@
 	
 	En la tabla \ref{table:recursos_humanos} se muestra la distribución del trabajo entre los perfiles descritos, con su coste asociado. En total se ha estimado que la aplicación web desarrollada requiere 16 semanas de trabajo, de las cuales el 70\% ha sido implementación, el 25\% análisis y diseño, y el resto labores asociadas a la dirección del proyecto.
     
-    \begin{table}[hbt!]
+    \begin{table}[htb!]
     	\centering
     	\begin{tabular} { | c | c | c | c | } 
     		\hline
@@ -1978,13 +1970,13 @@
 	
 	En relación con el coste de los recursos materiales, en la tabla \ref{table:recursos_materiales} se detallan los que se han considerado más relevantes, siendo su valor monetario el que directamente se estima atribuible al desarrollo de la aplicación web.
 	
-	\begin{table}[hbt!]
+	\begin{table}[htb!]
 		\centering
 		\begin{tabular} { | c | c | c | c | } 
 			\hline
 			\textbf{Recurso} & \textbf{Coste Mensual} & \textbf{Meses} & \textbf{Total} \\
 			\hline
-			Amortización hardware & \EUR{30} & 5 & \EUR{150} \\ 
+			Amortización hardware & \EUR{30} & 4 & \EUR{120} \\ 
 			\hline
 			IntelliJ IDEA & \EUR{14,9} & 4 & \EUR{59,6} \\ 
 			\hline
@@ -1999,17 +1991,17 @@
 	
 	Con todo, en la tabla \ref{table:recursos_total} se muestra el resumen de la estimación del coste total de desarrollo de la aplicación web \href{https://firstmarket.tech}{FirstMarket}.
 	
-	\begin{table}[hbt!]
+	\begin{table}[htb!]
 		\centering
 		\begin{tabular} { | c | c | } 
+			%\hline
+			%\textbf{Recurso} & \textbf{Coste} \\
 			\hline
-			\textbf{Recurso} & \textbf{Coste} \\
+			Factor Humano & \EUR{11.360} \\ 
 			\hline
-			Humano & \EUR{11.360} \\ 
+			Recursos Materiales & \EUR{222} \\ 
 			\hline
-			Material & \EUR{252} \\ 
-			\hline
-			\emph{\textbf{Total}} & \emph{\textbf{\EUR{11.612}}} \\ 
+			\emph{\textbf{Total}} & \emph{\textbf{\EUR{11.582}}} \\ 
 			\hline
 		\end{tabular}
 		\caption{Coste total}
@@ -2017,7 +2009,7 @@
 	\end{table}
 
     \chapter{Mejoras y Ampliaciones}
-    Como ya ha comentado en \cite{Kurose2016}
+    
     %Testar el software
     
     %Sistema de valoracion por parte de los usuarios de los libros
@@ -2037,8 +2029,8 @@
     \nomenclature{\textbf{UA}}{Usuario Anónimo}
     \nomenclature{\textbf{URL}}{Uniform Resource Locator}
     \nomenclature{\textbf{UR}}{Usuario Registrado}
-    \nomenclature{\textbf{CRUD}}{Create, read, update, and delete}
-    \nomenclature{\textbf{SPA}}{Single-page application}
+    \nomenclature{\textbf{CRUD}}{Create, Read, Update and Delete}
+    \nomenclature{\textbf{SPA}}{Single Page Application}
     \nomenclature{\textbf{API}}{Application Programming Interface}
     \nomenclature{\textbf{AWS}}{Amazon Web Services}
     \nomenclature{\textbf{SoC}}{Separation of Concerns}
@@ -2046,13 +2038,43 @@
     \nomenclature{\textbf{IoC}}{Inversion of Control}
     \nomenclature{\textbf{CD}}{Compact Disc}
     \nomenclature{\textbf{PHP}}{PHP: Hypertext Preprocessor}
-    \nomenclature{\textbf{LTS}}{Long-term support}
+    \nomenclature{\textbf{LTS}}{Long Term Support}
     \nomenclature{\textbf{SLF4J}}{Simple Logging Facade for Java}
     \nomenclature{\textbf{IDE}}{Integrated Development Environment}
-    \nomenclature{\textbf{XML}}{Extensible Markup Language}
+    \nomenclature{\textbf{XML}}{eXtensible Markup Language}
     \nomenclature{\textbf{POM}}{Project Object Model}
+    \nomenclature{\textbf{POJO}}{Plain Old Java Object}
+    \nomenclature{\textbf{MVC}}{Model, View, and Controller}
+    \nomenclature{\textbf{CoC}}{Convention over Configuration}
+    \nomenclature{\textbf{ORM}}{Object/Relational Mapping}
+    \nomenclature{\textbf{JVM}}{Java Virtual Machine}
+    \nomenclature{\textbf{JDBC}}{Java Database Connectivity}
+    \nomenclature{\textbf{JPQL}}{Java Persistence Query Language}
+    \nomenclature{\textbf{XHTML}}{eXtensible HyperText Markup Language}
+    \nomenclature{\textbf{JSP}}{Jakarta Server Pages}
+    \nomenclature{\textbf{HTTPS}}{Hypertext Transfer Protocol Secure}
+    \nomenclature{\textbf{IP}}{Internet Protocol}
+    \nomenclature{\textbf{PCI}}{Payment Card Industry}
+    \nomenclature{\textbf{TLS}}{Transport Layer Security}
+    \nomenclature{\textbf{ACID}}{Atomicity, Consistency, Isolation and Durability}
+    \nomenclature{\textbf{DOM}}{Document Object Model}
+    \nomenclature{\textbf{AJAX}}{Asynchronous JavaScript And XML}
+    \nomenclature{\textbf{OWASP}}{Open Web Application Security Project}
+    \nomenclature{\textbf{PDF}}{Portable Document Format}
+    \nomenclature{\textbf{DNS}}{Domain Name System}
+    \nomenclature{\textbf{CA}}{Certificate Authority}
+    \nomenclature{\textbf{ACM}}{Automated Certificate Management}
+    \nomenclature{\textbf{JS}}{JavaScript}
+    \nomenclature{\textbf{XSS}}{Cross Site Scripting}
+    \nomenclature{\textbf{HSTS}}{HTTP Strict Transport Security}
+    \nomenclature{\textbf{CSP}}{Content Security Policy}
+    \nomenclature{\textbf{ISBN}}{International Standard Book Number}
+    \nomenclature{\textbf{JSON}}{JavaScript Object Notation}
+    \nomenclature{\textbf{DoS}}{Denial of Service}
+    \nomenclature{\textbf{TCP}}{Transmission Control Protocol}
+    \nomenclature{\textbf{SSL}}{Secure Sockets Layer}
     
-    \printnomenclature
+    \printnomenclature[3cm]
 
 
 \end{document}
