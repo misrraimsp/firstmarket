@@ -169,6 +169,7 @@
 	   	\item Hibernate
 	   	\item Spring Security
 	   	\item Thymeleaf
+	   	\item JavaScript
 	   	\item Bootstrap 4
 	   	\item Heroku
 	   	\item Stripe
@@ -177,18 +178,20 @@
    
    \section*{Abstract}
    \thispagestyle{empty}
-   En la actualidad vivimos inmersos en la sociedad de Internet, tornándose las plataformas que ofrecen sus productos y servicios a través de la red parte esencial en nuestra forma de vida. A la par, los estándares de calidad de este tipo de sistemas se han visto elevados, aumentándose la productividad en la fase de desarrollo, mejorándose cada día la experiencia de usuario, y reforzando continuamente la seguridad, en todas sus vertientes.
    
-   El presente Proyecto Final de Grado consiste en el desarrollo de una aplicación web de comercio electrónico especializada en la venta de libros, denominada \href{https://firstmarket.tech}{FirstMarket}. Se ha pretendido profundizar en los problemas que estas tecnologías enfrentan y en las maneras modernas de resolverlos, siempre con apoyo en las herramientas vistas en el transcurso del plan de estudios.
+   Nowadays we live immersed in the Internet society, making platforms that offer their products and services through the Internet an essential part of our way of life. At the same time, the quality standards of this type of system have been raised, increasing productivity at development time, improving user experience day by day, and continuously reinforcing security, in all its aspects.
    
-   La aplicación desarrollada permite tanto a un usuario recorrer todo el ciclo de compra de un libro (explorar el catálogo, gestionar la compra a través de una cesta virtual, realizar el pago, gestionar los pedidos, etc.), como al administrador de la tienda gestionar sus productos (agregar nuevos libros, modificar los existentes, gestionar los pedidos recibidos, etc.).
+   This Final Degree Project consists of the development of a book e-commerce web application, called \href{https://firstmarket.tech}{FirstMarket}. The goal has been to delve into the problems faced by these technologies and the modern ways of solving them, always keeping in mind the tools seen in the course of the study plan.
    
-   Se ha utilizado una arquitectura cliente-servidor basada en el stack tecnológico Servlet de Java. La implementacón ha sido llevada a cabo de la mano de Spring, en concreto haciendo uso de sus módulos Spring Boot, Spring Framework, Spring Data JPA y Spring Security. Del lado de la presentación al usuario, Bootstrap 4 y JavaScript han sido los principales protagonistas, creando una experiencia de uso fluida y consistente. Por su parte, los pagos son gestionados mediante integración con la plataforma Stripe, ganando en robustez y seguridad. Por último, el despliegue de la aplicación web ha sido realizado en Heroku, adquiriendo y configurando un nombre de dominio propio: \href{https://firstmarket.tech}{firstmarket.tech}.
+   The application developed allows both the user to go through the entire book purchase cycle (explore the catalog, manage the purchase through a virtual basket, make the payment, view the orders placed, etc.), as well as the store administrator to manage their products (add new books, modify existing ones, manage received orders, etc.).
+   
+   A Java Servlet based client-server architecture has been used. The implementation has been done with Spring, specifically using its Spring Boot, Spring Framework, Spring Data JPA and Spring Security modules. On the user presentation side, Bootstrap 4 and JavaScript have been the main protagonists, creating a smooth and consistent user experience. Payments are managed through integration with Stripe platform, gaining robustness and security. Finally, the web application has been deployed to Heroku, acquiring and configuring its own domain name: \href{https://firstmarket.tech}{firstmarket.tech}.
    \pagebreak
    
    \section*{Key Words}
    \thispagestyle{empty}
    \begin{itemize}
+   		\item e-Commerce
 	   	\item Web Application
 	   	\item Java
 	   	\item Spring Boot
@@ -197,6 +200,7 @@
 	   	\item Hibernate
 	   	\item Spring Security
 	   	\item Thymeleaf
+	   	\item JavaScript
 	   	\item Bootstrap 4
 	   	\item Heroku
 	   	\item Stripe
@@ -247,7 +251,9 @@
     
     Por un lado, desde una perspectiva \textbf{hardware}, Internet es una red que conecta miles de millones de dispositivos en todo el mundo, denominados \emph{hosts} o \emph{sistemas finales}, por medio de \emph{enlaces de comunicación} y \emph{conmutadores de paquetes}.
     
-    Los enlaces de comunicación son diferentes tipos de medios físicos a través de los cuales se transfieren ondas electromagnéticas que portan la información. Puede tratarse de medios guiados, como cables de cobre, cables coaxiales o fibra óptica, o no guiados, como el espectro de radio. Cuando un sistema final decide enviar información a otro sistema final, el emisor fragmenta los datos en \emph{paquetes} de información y los envía al destinatario a través de la red. Una vez en destino, el sistema final receptor ensambla los paquetes para reconstruir los datos originales. Un conmutador de paquetes toma un paquete que llega a uno de sus enlaces de comunicación entrantes y decide hacia cuál de sus enlaces de comunicación salientes lo reenvía.
+    Los enlaces de comunicación son diferentes tipos de medios físicos a través de los cuales se transfieren ondas electromagnéticas que portan la información. Puede tratarse de medios guiados, como cables de cobre, cables coaxiales o fibra óptica, o no guiados, como el espectro de radio.
+    
+    Cuando un sistema final decide enviar información a otro sistema final, el emisor fragmenta los datos en \emph{paquetes} de información y los envía al destinatario a través de la red. Una vez en destino, el sistema final receptor ensambla los paquetes para reconstruir los datos originales. Un conmutador de paquetes toma un paquete que llega a uno de sus enlaces de comunicación entrantes y decide hacia cuál de sus enlaces de comunicación salientes lo reenvía.
     
     Estas \emph{redes de conmutación de paquetes} se pueden entender de forma análoga a una empresa que necesita mover una gran cantidad de carga entre dos almacenes separados gran distancia. En el almacén de origen la carga se divide y organiza en diferentes contenedores. Cada uno de los contenedores viaja de forma independiente a través de la red de transporte disponible siguiendo posiblemente rutas no del todo iguales. Por ejemplo, unos contenedores pueden ir por ciertas carreteras en ciertos camiones mientras que otros pueden viajar en tren o incluso en barco, o cualquier combinación de los anteriores. Lo importante es la independencia entre la ruta de un contenedor concreto con los demás. Una vez llegados al almacén de destino, la carga se extrae de los contenedores y se agrupa con el resto que llega del mismo envío. Así, los paquetes son análogos a los contenedores, los enlaces de comunicación son análogos a las vías de transporte, los conmutadores de paquetes son análogos a las intersecciones o discontinuidades en las vías de transporte (piénsese en una simple rotonda), y los sistemas finales son análogos a los almacenes. Pues bien, de igual forma que un contenedor toma un camino a través de la red de transporte, un paquete de información toma un camino a través de la infraestructura de Internet.
     
@@ -471,7 +477,7 @@
                         \item[2.] El sistema muestra la página de área personal, en donde se muestra el formulario de datos personales, rellenado con la información actual del usuario.
                         \item[3.] El usuario modifica los datos del formulario y lo envía al sistema.
                         \item[4.] El sistema comprueba los datos.
-                        \item[5.] Comprobación correcta.El sistema actualiza la información del usuario.
+                        \item[5.] Comprobación correcta. El sistema actualiza la información del usuario.
                         \item[6.] El sistema muestra la página de inicio.
                     \end{enumerate}
                     \item[+] Flujo alternativo: \emph{error\_datos\_formulario}. Los datos proporcionados en el formulario de información personal no son válidos.
@@ -590,7 +596,7 @@
     
     \begin{itemize}
     	\item[-] Antes del 2 va el 1. El punto de partida en el desarrollo de la presente aplicación web fue el de prácticamente nulos conocimientos sobre esta rama de la informática. En este escenario, antes de estudiar directamente las arquitecturas surgidas en los últimos años, se ha preferido estudiar la arquitectura clásica, en el convencimiento de que es el camino formativo correcto.
-    	\item[-] Tecnología viva. En contra de lo que hace unos años algunas voces avanzaban, la arquitectura browser-server-database no está muerta y previsiblemente no lo va a estar. Esta es una tecnología madura, robusta y muy extendida. Aunque es muy cierto que su cuota de mercado ha descendido en pro de otras arquitecturas más recientes, muestra tener un suelo estable y un lugar propio dentro de las tecnologías web. En parte, esto es así porque las arquitecturas modernas tienen sus propios problemas, como se apunta en \cite{MacWright2020}.
+    	\item[-] Tecnología viva. En contra de lo que hace unos años algunas voces avanzaban, la arquitectura browser-server-database no está muerta y previsiblemente no lo va a estar. Esta es una tecnología madura, robusta y muy extendida. Aunque es muy cierto que su cuota de mercado ha descendido en pro de otras arquitecturas más recientes, muestra tener un suelo estable y un lugar propio dentro de las tecnologías web. En parte, esto es así porque las arquitecturas modernas no están exentas de sus propios problemas, como se apunta en \cite{MacWright2020}.
     \end{itemize}
     
     En la figura \ref{fig:desing_general} se presenta un esquema de la arquitectura de la aplicación web. Como se aprecia, responde a la mencionada arquitectura clásica cliente-servidor-datos. No obstante, existen ciertos elementos que descansan en servicios cloud externos, dotando a la aplicación de cierto carácter serverless. Así, el servicio de pagos es ofrecido por Stripe (ver \ref{sec:stripe}). Como se aprecia en la figura \ref{fig:desing_general}, existe una vía de comunicación directa entre el cliente y Stripe. Esto es así para garantizar que la aplicación web no tiene nunca acceso a los datos confidenciales de pago del cliente (p.e., número de la tarjeta de crédito), sino que esta información es enviada directamente desde el cliente a Stripe. Por su parte, el servicio de correo es delegado en Gmail, a través de la capa de abstracción que Spring Framework ofrece de la API JavaMail. Y, por último, la base de datos. Este caso es especial porque dependiendo del entorno de ejecución se puede asimilar a un servicio cloud o no. En este sentido, cuando el entorno de ejecución es producción, la base datos es accedida como un servicio que AWS presta a Heroku.
@@ -667,35 +673,35 @@
     	
    	En la capa de negocio reside la lógica (objetos anotados con \emph{@Service}) que modela el funcionamiento de una tienda de libros a través del código contenido en el paquete \emph{core.service} (ver figura \ref{fig:package_service}). Esta capa da servicio a la capa web y a sí misma, mientras que se apoya en el servicio que le ofrece la capa de persistencia.
     	
-   	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=\textwidth,keepaspectratio]{package_service}
-		\caption{Diagrama del paquete core.service}
-		\label{fig:package_service}
-	\end{figure}
+   	%\begin{figure}[htb!]
+	%	\centering
+	%	\includegraphics[width=\textwidth,keepaspectratio]{package_service}
+	%	\caption{Diagrama del paquete core.service}
+	%	\label{fig:package_service}
+	%\end{figure}
 
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=\textwidth,keepaspectratio]{detail_bookServer}
-		\caption{Detalle de la clase BookServer}
-		\label{fig:detail_bookServer}
-	\end{figure}
+	%\begin{figure}[htb!]
+	%	\centering
+	%	\includegraphics[width=\textwidth,keepaspectratio]{detail_bookServer}
+	%	\caption{Detalle de la clase BookServer}
+	%	\label{fig:detail_bookServer}
+	%\end{figure}
 
    	La capa de persistencia sigue el patrón de diseño \href{https://thorben-janssen.com/implementing-the-repository-pattern-with-jpa-and-hibernate/}{\emph{Repositorio}}. Así, toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos, desacoplando por completo esta funcionalidad de la lógica de negocio, a la cual sirve mediante un conjunto de interfaces (anotadas con \emph{@Repository}) definidas en \emph{core.data} (ver figura \ref{fig:package_data}).
     	
-   	\begin{figure}[htb!]
-   		\centering
-   		\includegraphics[width=\textwidth,keepaspectratio]{package_data}
-   		\caption{Diagrama del paquete core.data}
-   		\label{fig:package_data}
-   	\end{figure}
+   	%\begin{figure}[htb!]
+   	%	\centering
+   	%	\includegraphics[width=\textwidth,keepaspectratio]{package_data}
+   	%	\caption{Diagrama del paquete core.data}
+   	%	\label{fig:package_data}
+   	%\end{figure}
    	
-   	\begin{figure}[htb!]
-   		\centering
-   		\includegraphics[width=\textwidth,keepaspectratio]{detail_bookRepository}
-   		\caption{Detalle de la interfaz BookRepository}
-   		\label{fig:detail_bookRepository}
-   	\end{figure}
+   	%\begin{figure}[htb!]
+   	%	\centering
+   	%	\includegraphics[width=\textwidth,keepaspectratio]{detail_bookRepository}
+   	%	\caption{Detalle de la interfaz BookRepository}
+   	%	\label{fig:detail_bookRepository}
+   	%\end{figure}
     	
     
     \section{Modelo de Datos}

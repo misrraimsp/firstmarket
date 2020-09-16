@@ -10,7 +10,7 @@ public class EntityNotFoundByIdException extends IllegalArgumentException {
     private final Long entityId;
 
     public EntityNotFoundByIdException(Long entityId, String className) {
-        super("Entity of class " + className + "not found by id=" + entityId);
+        super("Entity of class " + className + " not found by id=" + entityId);
         this.className = className;
         this.entityId = entityId;
     }
