@@ -583,9 +583,9 @@
     \section{Arquitectura del Sistema}
     Desde un punto de vista lo suficientemente alejado como para no percibir los detalles internos, la aplicación web está organizada siguiendo la arquitectura clásica cliente-servidor-datos. Hoy en día, quizás, esta no sea la organización más vanguardista. Los términos \emph{serverless}, \emph{microservicios} o \emph{single-page-application} son los que con mayor eco resuenan en la industria web actual.
     
-    \begin{figure}[h]
+    \begin{figure}[htb!]
     	\centering
-    	\includegraphics[width=\textwidth]{desing_general}
+    	\includegraphics[width=0.75\textwidth]{desing_general}
     	\caption{Modelo del sistema}
     	\label{fig:desing_general}
     \end{figure}
@@ -604,9 +604,34 @@
     Por otro lado, centrando ahora la atención en la organización interior de la aplicación, el principio de diseño protagonista ha sido la \textbf{separación de responsabilidades} (\emph{separation of concerns}). Este principio es un viejo conocido en el mundo de la ingeniería, haciendo manejables problemas que de otra manera serían muy costosos, si no directamente intratables.
     
     \subsection{Inversión de Control} \label{sec:ioc}
-    Un primer paso en la división de responsabilidades es la separación de la construcción y el uso \cite{Martin2009} \cite{Lopez2019}. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación. En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
+    Un primer paso en la división de responsabilidades es la separación de la construcción y el uso \cite{Martin2009} \cite{Lopez2019}. Piénsese por ejemplo en un aeropuerto. Los trabajos que se deben llevar a cabo, las herramientas necesarias, el personal técnico implicado, etc. son distintos en la fase de construcción que durante su posterior explotación.
     
-    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}), que, tal como explica Martin Fowler en su artículo seminal en la materia, \cite{Fowler2004}, es un tipo de \textbf{inversión de control} (\emph{inversion of control}) para la gestión de dependencias. Por IoC se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito. En el caso de la presente aplicación web se ha usado el contenedor de DI del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=0.5\textwidth]{di_bookRepository}
+    	\caption{Creación e inyección de dependencias en BookRepository}
+    	\label{fig:di_bookRepository}
+    \end{figure}
+    
+    En este sentido, los sistemas software no son excepción. Las tareas a realizar cuando la aplicación arranca son diferentes de las que se llevan a cabo durante el normal funcionamiento posterior. Por tanto, la lógica de arranque, encargada de crear los objetos y de resolver y conectar sus dependencias, debe ser separada de la lógica que comienza tras el arranque.
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=0.7\textwidth]{di_bookServer}
+    	\caption{Creación e inyección de dependencias en BookServer}
+    	\label{fig:di_bookServer}
+    \end{figure}
+    
+    Un mecanismo efectivo para separar la construcción del uso es la \textbf{inyección de dependencias} (\emph{dependency injection}), que, tal como explica Martin Fowler en su artículo seminal en la materia, \cite{Fowler2004}, es un tipo de \textbf{inversión de control} (\emph{inversion of control}) para la gestión de dependencias. Por IoC se entiende la técnica de traspasar las responsabilidades secundarias de un objeto a otros objetos especializados para el propósito. Así, en el contexto de gestión de dependencias, un objeto no debe asumir la responsabilidad de instanciar él mismo sus dependencias. En su lugar, debe ceder esta responsabilidad a otra entidad especializada, invirtiendo así el control. Debido a que la configuración inicial es una cuestión global, esta entidad especializada será la rutina \emph{main} o un contenedor especializado en este propósito.
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=0.7\textwidth]{di_bookController}
+    	\caption{Creación e inyección de dependencias en BookContoller}
+    	\label{fig:di_bookController}
+    \end{figure}
+    
+    En el caso de la presente aplicación web se ha usado el contenedor de DI del mundo Java líder en la actualidad, Spring Framework (ver \ref{sec:spring}). Como se muestra en el listado \ref{list:ioc}, el contenedor es invocado en la primera y única instrucción de \emph{main}.
     \\
     
     \begin{lstlisting}[language=Java,caption=Inversión de control de dependencias,label=list:ioc]
@@ -623,89 +648,33 @@
     \end{lstlisting}
     
     A modo de ejemplo, las figuras \ref{fig:di_bookRepository}, \ref{fig:di_bookServer} y \ref{fig:di_bookController} muestran, respectivamente, los diagramas de inyección de dependencias para las tres capas de abstracción relacionadas con los libros: \emph{bookRepository}, \emph{bookServer} y \emph{bookController}. La flecha verde, que parte siempre de \emph{firstmarketApplication}, indica que el objeto apuntado ha sido creado por el contenedor de IoC. Las flechas azules significan que el objeto apuntado (la dependencia) ha sido insertado por el contenedor de IoC en el objeto apuntador.
-
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=0.6\textwidth]{di_bookRepository}
-		\caption{Creación e inyección de dependencias en BookRepository}
-		\label{fig:di_bookRepository}
-	\end{figure}
-
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=\textwidth]{di_bookServer}
-		\caption{Creación e inyección de dependencias en BookServer}
-		\label{fig:di_bookServer}
-	\end{figure}
-
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=\textwidth]{di_bookController}
-		\caption{Creación e inyección de dependencias en BookContoller}
-		\label{fig:di_bookController}
-	\end{figure}
     
     \subsection{Capas funcionales} \label{sec:design_layer}
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=0.5\textwidth,keepaspectratio]{desing_layer}
+    	\caption{Modelo del sistema en capas funcionales}
+    	\label{fig:desing_layer}
+    \end{figure}
+
+	\begin{figure}[htb!]
+		\centering
+		\includegraphics[width=0.65\textwidth,keepaspectratio]{package_controller}
+		\caption{Diagrama del paquete core.controller}
+		\label{fig:package_controller}
+	\end{figure}
+
     Otro paso importante dado en la dirección de separar las responsabilidades es la división funcional del código en tres capas: web, negocio y persistencia \cite{Fowler2015}. Estas capas están contenidas dentro del paquete \emph{core}, y están inspiradas en el patrón de diseño \emph{Fron Controller}, que es el que ordena, a su vez, la infraestructura web que proporciona Spring Framework (ver sección \ref{sec:spring}).
     
     \begin{figure}[htb!]
     	\centering
-    	\includegraphics[width=0.75\textwidth,keepaspectratio]{desing_layer}
-    	\caption{Modelo del sistema en capas funcionales}
-    	\label{fig:desing_layer}
+    	\includegraphics[width=0.85\textwidth,keepaspectratio]{package_service}
+    	\caption{Diagrama del paquete core.service}
+    	\label{fig:package_service}
     \end{figure}
     
     La capa web se encarga de gestionar las peticiones HTTP encauzadas a través del \emph{DispatcherServler} y de resolver y generar el contenido HTML. A parte de toda la infraestructura que ofrece Spring Framework para esta tarea, se ha desarrollado una serie de \emph{controladores} (anotados con \emph{@Controller}), contenidos en el paquete \emph{core.controller} (ver figura \ref{fig:package_controller}), que sirven un conjunto de \emph{vistas}, contenidas en \emph{classpath: resources/templates}. Esta capa recibe el servicio de la capa de negocio.
-    	
-   	\begin{figure}[htb!]
-   		\centering
-   		\includegraphics[width=0.7\textwidth,keepaspectratio]{package_controller}
-   		\caption{Diagrama del paquete core.controller}
-   		\label{fig:package_controller}
-   	\end{figure}
-
-   	\begin{figure}[htb!]
-   		\centering
-   		\includegraphics[width=\textwidth,keepaspectratio]{detail_bookController}
-   		\caption{Detalle de la clase BookController}
-   		\label{fig:detail_bookController}
-   	\end{figure}
-    	
-   	En la capa de negocio reside la lógica (objetos anotados con \emph{@Service}) que modela el funcionamiento de una tienda de libros a través del código contenido en el paquete \emph{core.service} (ver figura \ref{fig:package_service}). Esta capa da servicio a la capa web y a sí misma, mientras que se apoya en el servicio que le ofrece la capa de persistencia.
-    	
-   	%\begin{figure}[htb!]
-	%	\centering
-	%	\includegraphics[width=\textwidth,keepaspectratio]{package_service}
-	%	\caption{Diagrama del paquete core.service}
-	%	\label{fig:package_service}
-	%\end{figure}
-
-	%\begin{figure}[htb!]
-	%	\centering
-	%	\includegraphics[width=\textwidth,keepaspectratio]{detail_bookServer}
-	%	\caption{Detalle de la clase BookServer}
-	%	\label{fig:detail_bookServer}
-	%\end{figure}
-
-   	La capa de persistencia sigue el patrón de diseño \href{https://thorben-janssen.com/implementing-the-repository-pattern-with-jpa-and-hibernate/}{\emph{Repositorio}}. Así, toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos, desacoplando por completo esta funcionalidad de la lógica de negocio, a la cual sirve mediante un conjunto de interfaces (anotadas con \emph{@Repository}) definidas en \emph{core.data} (ver figura \ref{fig:package_data}).
-    	
-   	%\begin{figure}[htb!]
-   	%	\centering
-   	%	\includegraphics[width=\textwidth,keepaspectratio]{package_data}
-   	%	\caption{Diagrama del paquete core.data}
-   	%	\label{fig:package_data}
-   	%\end{figure}
-   	
-   	%\begin{figure}[htb!]
-   	%	\centering
-   	%	\includegraphics[width=\textwidth,keepaspectratio]{detail_bookRepository}
-   	%	\caption{Detalle de la interfaz BookRepository}
-   	%	\label{fig:detail_bookRepository}
-   	%\end{figure}
-    	
-    
-    \section{Modelo de Datos}
-    Para dar solución al problema presentado (la venta de libros online) se ha realizado un modelado de entidades del mundo real. Estas entidades se encuentran definidas en el paquete \emph{core.model}. En la figura \ref{fig:package_model} se muestra el diagrama de clases de este paquete. Este modelo encuentra una traducción directa en las entidades gestionadas en la base datos. En las figuras \ref{fig:er_simple_diagram} y \ref{fig:er_expanded_diagram} se ofrecen, respectivamente, los diagramas entidad relación sin y con las propiedades de los objetos visibles.
     
     \begin{figure}[htb!]
     	\centering
@@ -713,21 +682,23 @@
     	\caption{Diagrama de clases del paquete core.model}
     	\label{fig:package_model}
     \end{figure}
+    
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=\textwidth,keepaspectratio]{er_expanded_diagram}
+    	\caption{Diagrama entidad-relación}
+    	\label{fig:er_expanded_diagram}
+    \end{figure}
+    	
+   	En la capa de negocio reside la lógica (objetos anotados con \emph{@Service}) que modela el funcionamiento de una tienda de libros a través del código contenido en el paquete \emph{core.service} (ver figura \ref{fig:package_service}). Esta capa da servicio a la capa web y a sí misma, mientras que se apoya en el servicio que le ofrece la capa de persistencia.
 
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=\textwidth,keepaspectratio]{er_simple_diagram}
-		\caption{Diagrama entidad-relación}
-		\label{fig:er_simple_diagram}
-	\end{figure}
+   	La capa de persistencia sigue el patrón de diseño \href{https://thorben-janssen.com/implementing-the-repository-pattern-with-jpa-and-hibernate/}{\emph{Repositorio}}. Así, toma el control de todos los aspectos relacionados con la solución concreta de almacenamiento y manipulación de los datos, desacoplando por completo esta funcionalidad de la lógica de negocio, a la cual sirve mediante un conjunto de interfaces (anotadas con \emph{@Repository}) definidas en \emph{core.data}.
+    	
+    
+    \section{Modelo de Datos}
 
-	\begin{figure}[htb!]
-		\centering
-		\includegraphics[width=\textwidth,keepaspectratio]{er_expanded_diagram}
-		\caption{Diagrama entidad-relación expandido}
-		\label{fig:er_expanded_diagram}
-	\end{figure}
-
+    Para dar solución al problema presentado (la venta de libros online) se ha realizado un modelado de entidades del mundo real. Estas entidades se encuentran definidas en el paquete \emph{core.model}. En la figura \ref{fig:package_model} se muestra el diagrama de clases de este paquete. Este modelo encuentra una traducción directa en las entidades gestionadas en la base datos. Así, en la figura \ref{fig:er_expanded_diagram} se ofrece el diagrama entidad relación.
+    
     \chapter{Implementación} \label{sec:implementation}
     La materialización del análisis y diseño detallado en las secciones anteriores lo conforma el conjunto software que se incluye en el CD distribuido con la presente memoria. No obstante, en este apartado se ha querido comentar ciertos aspectos relevantes, que por la dificultad presentada y/o por el papel clave dentro de la aplicación merecen mención especial.
     
@@ -1331,6 +1302,13 @@
     
     La segunda alternativa, con objeto a disminuir el tiempo de respuesta, sería aumentar la información de cada libro que se almacena en la base de datos, creando un nuevo campo en el que se contabilizase el número de referencias que a dicho libro le son realizadas en las cestas de los usuarios. Esta solución sería muy rápida, pero a costa de un uso redundante de los recursos de almacenamiento, puesto que la información necesaria \emph{ya} estaba en la base de datos.
     
+    \begin{figure}[htb!]
+    	\centering
+    	\includegraphics[width=\textwidth]{fm_cartBookRegistry_alert}
+    	\caption{Aviso de producto escaso y demandado en FirstMarket}
+    	\label{fig:fm_cartBookRegistry_alert}
+    \end{figure}
+    
     Finalmente, la tercera vía, que es la implementada, trata de aunar rapidez y no redundancia en la base de datos. Esto se consigue manteniendo la información necesaria en una estructura de datos llave-valor en memoria principal, sólo para los libros referenciados. La llave sería el \emph{id} de un libro, y el valor el número de referencias en cestas que posea. Los tiempos necesarios para consultar esta estructura de datos, así como para actualizarla, son muy bajos. Además, la base de datos se mantiene no redundante. Es cierto que existe un grado de redundancia, pero esta es ajena a la base de datos, y se limita a los libros que estén referenciados (en contraste con la segunda solución, en la que \emph{todos} los libros en la base de datos ampliaban su información).
     
     Esta estructura de datos es mantenida eficientemente por la clase \emph{BookServer}, como se aprecia en el listado \ref{list:java_cartbooks}, de manera que cada vez que algún usuario añade o elimina un libro de su cesta queda reflejado en el registro.
@@ -1363,13 +1341,6 @@
     \end{lstlisting}
     
     Así, este registro es utilizado para avisar a los usuarios cuando un libro presenta escasez y alta demanda, como se muestra en la figura \ref{fig:fm_cartBookRegistry_alert}. Pero también es usado como \textbf{medida de la popularidad} de los libros, empleándose este uso en la página de inicio de la aplicación. Es cierto que el parámetro \emph{popularidad} se puede definir de muchas maneras, y que sería conveniente que en él se reflejase el volumen de ventas en una ventana temporal local, pero como una primera aproximación de bajo coste al concepto funciona perfectamente.
-    
-    \begin{figure}[htb!]
-    	\centering
-    	\includegraphics[width=\textwidth]{fm_cartBookRegistry_alert}
-    	\caption{Aviso de producto escaso y demandado en FirstMarket}
-    	\label{fig:fm_cartBookRegistry_alert}
-    \end{figure}
     
     \chapter{Despliegue} \label{sec:deployment}
     En esta sección se abordan aspectos relevantes en relación con el despliegue de la aplicación web desarrollada. 
@@ -1918,6 +1889,13 @@
 		
 		\item[-] \textbf{\emph{Referrer policy not defined}}. La vulnerabilidad comentada en este punto se debe a que no se había especificado qué política de \emph{Referer} emplear, con el consecuente riesgo de enviar información sensible en dicho encabezado. Como se explica en la sección \ref{sec:springsec}, el riesgo queda mitigado al especificar la política \emph{strict-origin} con Spring Security.
 		
+		\begin{figure}[hbt!]
+			\centering
+			\includegraphics[width=\textwidth,keepaspectratio]{snyk}
+			\caption{Ejemplo de vulnerabilidades encontradas por Snyk}
+			\label{fig:snyk}
+		\end{figure}
+		
 		\item[-] \textbf{\emph{Vulnerabilidades en librerías de terceros}}. Las restantes 14 vulnerabilidades se han solucionado por medio de actualizaciones. Por la propia naturaleza de la herramienta, todas los problemas detectados por Snyk entran dentro de este epígrafe, mostrándose en la figura \ref{fig:snyk} dos de las vulnerabilidades más graves que ha detectado. Las actualizaciones realizadas han sido las siguientes:
 		
 		\begin{itemize}
@@ -1929,13 +1907,6 @@
 			\item[6.] org.apache.tomcat.embed:tomcat-embed-core $\rightarrow$ 9.0.37
 			\item[7.] org.webjars:jquery $\rightarrow$ 3.5.1
 		\end{itemize}
-		
-		\begin{figure}[hbt!]
-			\centering
-			\includegraphics[width=\textwidth,keepaspectratio]{snyk}
-			\caption{Ejemplo de vulnerabilidades encontradas por Snyk}
-			\label{fig:snyk}
-		\end{figure}
 		
 		Un aspecto que debe resaltarse es que las actualizaciones de la 2 a la 6, incluidas ellas, han tenido que establecerse sobrescribiendo la configuración que por defecto ofrece Spring Boot a través del fichero \emph{spring-boot-starter-parent}, del cual hereda el \emph{pom.xml} de la aplicación web desarrollada \cite{ParaschivCustomParent}. Esto es importante porque se está saliendo del terreno seguro que esta configuración por defecto suministra, en el sentido de que desde Spring se ha testado que las versiones establecidas por defecto funcionan sin problemas de compatibilidades entre sí.
 		
@@ -1993,9 +1964,7 @@
 		\caption{Coste de los recursos materiales}
 		\label{table:recursos_materiales}
 	\end{table}
-	
-	Con todo, en la tabla \ref{table:recursos_total} se muestra el resumen de la estimación del coste total de desarrollo de la aplicación web \href{https://firstmarket.tech}{FirstMarket}.
-	
+
 	\begin{table}[htb!]
 		\centering
 		\begin{tabular} { | c | c | } 
@@ -2012,6 +1981,8 @@
 		\caption{Coste total}
 		\label{table:recursos_total}
 	\end{table}
+	
+	Con todo, en la tabla \ref{table:recursos_total} se muestra el resumen de la estimación del coste total de desarrollo de la aplicación web \href{https://firstmarket.tech}{FirstMarket}.
 
     \chapter{Mejoras y Ampliaciones}
     
