@@ -181,7 +181,7 @@
    
    Nowadays we live immersed in the Internet society, making platforms that offer their products and services through the Internet an essential part of our way of life. At the same time, the quality standards of this type of system have been raised, increasing productivity at development time, improving user experience day by day, and continuously reinforcing security, in all its aspects.
    
-   This Final Degree Project consists of the development of a book e-commerce web application, called \href{https://firstmarket.tech}{FirstMarket}. The goal has been to delve into the problems faced by these technologies and the modern ways of solving them, always keeping in mind the tools seen in the course of the study plan.
+   This Final Degree Project presents a book e-commerce web application, named \href{https://firstmarket.tech}{FirstMarket}. The goal has been to delve into the problems faced by these technologies and the modern ways of solving them, always keeping in mind the tools seen in the course of the study plan.
    
    The application developed allows both the user to go through the entire book purchase cycle (explore the catalog, manage the purchase through a virtual basket, make the payment, view the orders placed, etc.), as well as the store administrator to manage their products (add new books, modify existing ones, manage received orders, etc.).
    
@@ -281,7 +281,7 @@
    	
    	Las páginas estáticas lo son en el sentido de que su contenido, creado comúnmente por un humano, no varía con el tiempo de manera programática. La información que presentan es la misma, a menos que se modifique \emph{a mano}. Así eran todas las páginas web en los primeros años. En contraste, en las páginas web dinámicas, el contenido no está dado de antemano, sino que se genera en cada ciclo de petición-respuesta. Esto es útil porque entre otras cosas permite páginas web personalizadas para cada usuario, e incluso que sea él mismo quien aporte contenido a la página web.
     
-    Una \textbf{aplicación web} es el sistema software encargado de la generación dinámica de páginas webs. Normalmente, y a diferencia del modelo estático, entre sus componentes se encuentra una base de datos que permita la persistencia de la información, cambiante por definición de la propia arquitectura.
+    Una \textbf{aplicación web} es el sistema software encargado de la generación dinámica de páginas web. Normalmente, y a diferencia del modelo estático, entre sus componentes se encuentra una base de datos que permita la persistencia de la información, cambiante por definición de la propia arquitectura.
     
     Desde este punto de vista, en el presente proyecto se ha desarrollado una aplicación web encargada de generar contenido web que los usuarios pueden visitar con el objetivo de comprar libros a través de Internet.
 
@@ -298,10 +298,12 @@
     
     El siguiente apartado, el \ref{sec:security}, está focalizado en los aspectos de seguridad que rodean a FirstMarket. Es un apartado clave, que, aunque tampoco estaba contenido en los requisitos básicos, se ha querido profundizar en él. Así, se describen las principales características de seguridad implementadas en \href{https://firstmarket.tech}{firstmarket.tech}, además de un análisis de las vulnerabilidades detectadas.
     
-    Por último, para concluir con esta memoria, en la sección \ref{sec:budget} se ofrece un presupuesto estimativo de todos los costes asociados con el desarrollo del presente proyecto.
+    En la sección \ref{sec:budget} se ofrece un presupuesto estimativo de todos los costes asociados con el desarrollo del presente proyecto.
+    
+    Por último, para concluir con esta memoria, en la sección \ref{sec:improvements} se comentan determinados posibles campos de mejora y ampliación de la aplicación desarrollada.
     
     \chapter{Análisis} \label{sec:analysis}
-    En esta sección se aborda la fase de análisis del desarrollo software. Partiendo de la especificación de los requisitos básicos que debe implementar la aplicación web, se ofrece un conjunto de casos de uso que dé una visión de cuál debe ser el flujo de uso.
+    En esta sección se aborda la fase de análisis del desarrollo software. Partiendo de la especificación de los requisitos básicos que debe implementar la aplicación web, se ofrece un conjunto de casos de uso que dé una visión de cuál debe ser el flujo de interacción.
     
         \section{Requisitos}
             La aplicación, fundamentalmente, debe admitir los roles y capacidades siguientes:
@@ -312,7 +314,7 @@
                     \item[-] Un UA debe poder realizar búsquedas de libros, es decir, debe tener pleno acceso a la exploración del catálogo.
                     \item[-] La plena exploración del catálogo debe permitir realizar búsque\-das filtradas según 0, 1 o más criterios, tales como: categoría, título o autor.
                     \item[-] Un UA debe poder visualizar información detallada de un libro, por ejemplo de entre los obtenidos tras una búsqueda.
-                    \item[-] Un UA debe poder consultar las promociones disponibles.
+                    \item[-] (deseable) Un UA debe poder consultar las promociones disponibles.
                     \item[-] Un UA debe poder registrarse en el sistema completando un formulario (nombre, contraseña, dirección de correo electrónico, etc.).
                     \item[-] Finalizado el proceso de registro, el nuevo UR debe recibir confirmación por correo electrónico.
                     \item[-] En su caso, un UA debe poder iniciar sesión en el sistema.
@@ -327,22 +329,22 @@
                     \item[-] En cualquier momento del proceso de realizar un pedido, el UR debe poder cancelarlo.
                     \item[-] Tras una compra, el UR debe recibir confirmación en su correo electrónico.
                     \item[-] Un UR debe poder consultar el estado de sus pedidos.
-                    \item[-] Puntuar (de alguna manera, p.e. estrellas del 1 al 5) un determinado libro que haya adquirido. Debe poder hacerlo en cualquier momento tras la compra.
+                    \item[-] (deseable) Puntuar (de alguna manera, p.e. estrellas del 1 al 5) un determinado libro que haya adquirido. Debe poder hacerlo en cualquier momento tras la compra.
                     \item[-] Consultar un histórico de sus transacciones, detallando los libros comprados, la fecha de la compra y el precio de cada uno.
                     \item[-] Darse de baja como UR.
                     \item[-] Cerrar sesión.
-                    \item[-] Un UR debe poder ponerse en contacto con el administrador de la aplicación web a través de un formulario de contacto, recibiendo confirmación por correo electrónico tras el envío del mismo.
+                    \item[-] Un UR debe poder ponerse en contacto con el administrador de la aplicación web, por ejemplo a través de una dirección de correo eletrónico.
                 \end{itemize}
                 \item Usuario Administrador
                 \begin{itemize}
                     \item[-] Ver y editar (añadir, modificar, eliminar) la jerarquía de categorías (CRUD categorías).
                     \item[-] Ver y editar (añadir, modificar, eliminar) la información relativa a los libros (título, autor/es, editorial, precio, disponibilidad, \ldots) (CRUD libros).
-                    \item[-] Crear, modificar o eliminar promociones de libros (CRUD promociones).
+                    \item[-] (deseable) Crear, editar o eliminar promociones de libros (CRUD promociones).
                     \item[-] Tener acceso a la información de los UR, salvo sus contraseñas.
                     \item[-] Bloquear-desbloquear a un UR.
                     \item[-] Visualizar la información de los pedidos, tanto los que estén en curso como los finalizados.
                     \item[-] Poder alterar el estado de un pedido.
-                    \item[-] Poder generar informes (p.e. ventas durante un determinado periodo con su importe y la facturación total).
+                    \item[-] (deseable) Poder generar informes (p.e. ventas durante un determinado periodo con su importe y la facturación total).
                 \end{itemize}
             \end{enumerate}
 
@@ -674,7 +676,7 @@
     	\label{fig:package_service}
     \end{figure}
     
-    La capa web se encarga de gestionar las peticiones HTTP encauzadas a través del \emph{DispatcherServler} y de resolver y generar el contenido HTML. A parte de toda la infraestructura que ofrece Spring Framework para esta tarea, se ha desarrollado una serie de \emph{controladores} (anotados con \emph{@Controller}), contenidos en el paquete \emph{core.controller} (ver figura \ref{fig:package_controller}), que sirven un conjunto de \emph{vistas}, contenidas en \emph{classpath: resources/templates}. Esta capa recibe el servicio de la capa de negocio.
+    La capa web se encarga de gestionar las peticiones HTTP encauzadas a través del \emph{DispatcherServlet} y de resolver y generar el contenido HTML. A parte de toda la infraestructura que ofrece Spring Framework para esta tarea, se ha desarrollado una serie de \emph{controladores} (anotados con \emph{@Controller}), contenidos en el paquete \emph{core.controller} (ver figura \ref{fig:package_controller}), que sirven un conjunto de \emph{vistas}, contenidas en \emph{classpath: resources/templates}. Esta capa recibe el servicio de la capa de negocio.
     
     \begin{figure}[htb!]
     	\centering
@@ -720,7 +722,7 @@
     En el presente proyecto el uso del control de versiones con Git ha sido intensivo y fundamental. El repositorio del proyecto, alojado en GitHub, puede ser accedido \href{https://github.com/misrraimsp/firstmarket}{aquí}.
     
     \subsection{Java}
-    Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado la experiencia adquirida a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que, en línea con lo expuesto en \cite{Lopez2020}, Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante defícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
+    Una de las primeras decisiones que se tuvo que tomar fue qué lenguaje de programación emplear para construir la aplicación web, ya que aunque en la especificación de la oferta del proyecto se establecía que este debiera ser PHP, a posteriori la libertad fue total. Esta no es una decisión trivial, ya que determina en gran medida el resto del stack tecnológico utilizado. Tras una exploración de las diferentes alternativas, y dado la experiencia adquirida a lo largo del plan de estudios, la opción tomada fue Java. Es cierto que existen alternativas potentes en el mundo de la programación web, pero también lo es que, en línea con lo expuesto en \cite{Lopez2020}, Java ocupa una posición muy madura y asentada en la industria, con un entorno de recursos disponibles para el estudiante difícilmente superable, y con una perspectiva de futuro, como mínimo, estable. La decisión tomada primó profundidad antes que anchura, en el sentido de preferir aumentar y depurar las habilidades en Java antes de expandir a otros lenguajes. Por supuesto, esto es muy discutible, pero se creyó que era la opción correcta.
     
     Resaltar, además, que la versión utilizada ha sido Java 11, que en la actualidad es la más reciente que ofrece soporte a largo plazo (LTS).
     
@@ -874,12 +876,10 @@
     
     Lo primero a aclarar es qué se entiende por \emph{Spring}, ya que su significado puede variar dependiendo del contexto. Puede que se refiera en concreto al proyecto \emph{Spring Framework}, donde empezó todo allá por el año 2003, o al ecosistema completo formado por todos los \href{https://spring.io/projects}{proyectos Spring}, esto es, por Spring Framework más todos los otros proyectos Spring que se desarrollaron posteriormente utilizando como núcleo al primero.
     
-    Los proyectos Spring usados en el desarrollo de la aplicación web han sido, siguiendo la línea básica descrita en \cite{Walls2019}, \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las principales características de cada uno de ellos que han tenido relación con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
+    Los proyectos Spring usados en el desarrollo de la aplicación web han sido, siguiendo la línea básica descrita en \cite{Walls2019}, \emph{Spring Framework}, \emph{Spring Boot}, \emph{Spring Data JPA} y \emph{Spring Security}. En la presente sección se dará una descripción de las características de cada uno de ellos relacionadas con el desarrollo del presente proyecto, salvo aquellas referentes a Spring Security, tratadas por separado en la sección \ref{sec:springsec} en el marco de la seguridad de la aplicación web.
     
     \paragraph{Spring Framework} 
-    En este apartado se esbozará las principales características de esta parte fundamental dentro del ecosistema Spring, tomando para ello como principal fuente su propia documentación (\cite{Johnson2020}).
-    
-    Tal como establecen sus autores, los principios de diseño que han guiado su desarrollo a lo largo del tiempo han sido:
+    Esta es la parte fundamental dentro del ecosistema Spring. Tomando como principal fuente su propia documentación (\cite{Johnson2020}), los principios de diseño que han guiado su desarrollo a lo largo del tiempo han sido:
     
     \begin{itemize}
     	\item[-] Estar orientado a permitir que se tomen las decisiones de diseño lo más tarde posible. Por ejemplo, permite cambiar la tecnología de persistencia sin alterar el código de la aplicación (esto fue constatado en el desarrollo de la aplicación web, al pasar de forma transparente, en una etapa bastante avanzada del proyecto, de MariaDB a PostgreSQL).
@@ -906,7 +906,7 @@
     
     Existen diversas formas de especificar los metadatos de configuración. La manera original fue a través de un fichero XML, pero en la actualidad también se puede realizar con anotaciones insertadas en el código de la aplicación (añadido en la versión 2.5), o con código Java dedicado de configuración (añadido en la versión 3.0). El contenedor de IoC está completamente desacoplado de estos mecanismos de especificación de los metadatos de configuración.
     
-    Existe la cuestión de qué tipo de configuración es mejor. La respuesta no es clara, ya que cada opción posee su dosis de ventajas e inconvenientes. Las anotaciones son la manera más concisa y quizás mas simple para un principiante, pero mezclan código de negocio con configuración del framework, algo que mina el principio de separación de responsabilidades. Además poseen el inconveniente de descentralizar la configuración, impactando negativamente en su mantenibilidad. La configuración con código Java permite un control centralizado, pero se pierde en facilidad y brevedad. Por su parte, los ficheros XML son inmejorables a la hora separar responsabilidades, pudiéndose alterar la configuración sin tocar una línea de código y, por tanto, sin tener que recompilar. El inconveniente de este sistema es el elevado tamaño y complejidad que muchas veces estos ficheros alcanzan, siendo además su curva de aprendizaje más pronunciada.
+    Existe la cuestión de qué tipo de configuración es mejor. La respuesta no es clara, ya que cada opción posee su dosis de ventajas e inconvenientes. Las anotaciones son la manera más concisa y quizás más simple para un principiante, pero mezclan código de negocio con configuración del framework, algo que mina el principio de separación de responsabilidades. Además poseen el inconveniente de descentralizar la configuración, impactando negativamente en su mantenibilidad. La configuración con código Java permite un control centralizado, pero se pierde en facilidad y brevedad. Por su parte, los ficheros XML son inmejorables a la hora separar responsabilidades, pudiéndose alterar la configuración sin tocar una línea de código y, por tanto, sin tener que recompilar. El inconveniente de este sistema es el elevado tamaño y complejidad que muchas veces estos ficheros alcanzan, siendo además su curva de aprendizaje más pronunciada.
     
     En el desarrollo de la presente aplicación web se ha utilizado la configuración a través de anotaciones y de código Java dedicado. Además, se ha utilizado Spring Boot, lo que, como se verá, implica que una gran parte (la mayoría) de la configuración necesaria ha sido establecida por defecto.
     
@@ -1005,7 +1005,7 @@
     \section[Pagos con Stripe]{Gestión de Pagos con Stripe} \label{sec:stripe}
     Los comercios, ya sean presenciales u \emph{online}, son en esencia lugares de intercambio. Normalmente, lo que una de las partes ofrece a la otra es dinero, a través de un pago. Por tanto, cabe esperar que, en cualquiera de estos establecimientos, el procedimiento por el cual se materializa el pago tome un lugar especial dentro de la lógica de negocio.
     
-    Los comercios en Internet tienen, además, la responsabilidad de ofrecer altos estándares de seguridad a sus clientes, especialmente en lo concerniente con el pago. De hecho, una de las principales barreras que aparta a potenciales usuarios del comercio \emph{online} es la percepción de inseguridad que el proceso de pago telemático lleva asociado. En este sentido, el comercio a través de Internet depende de una manera radical en la confianza de los usuarios, siendo así este uno de los principales capitales a cultivar y fortalecer.
+    Los comercios en Internet tienen, además, la responsabilidad de ofrecer altos estándares de seguridad a sus clientes, especialmente en lo concerniente con el pago. De hecho, una de las principales barreras que aparta a potenciales usuarios del comercio \emph{online} es la percepción de inseguridad que el proceso de pago telemático lleva asociado. En este sentido, el comercio a través de Internet depende radicalmente de la confianza de los usuarios, siendo así este uno de los principales capitales a cultivar y fortalecer.
     
     La percepción de inseguridad no es en absoluto infundada. El notable desarrollo de la sociedad de la información a lo largo de las últimas décadas lleva inevitablemente asociado el incremento de las modalidades y de la capacidad de fraude digital. No obstante, en una pugna continua, la tecnología anti-fraude trata de mantenerse en todo momento actualizada para ejercer de contrapeso.
     
@@ -1064,7 +1064,7 @@
     	\item[8.] El sistema sirve la vista \emph{info.html} al cliente, la cual le comunica que el pedido se ha realizado con éxito y que pronto recibirá confirmación por email.
     \end{itemize}
     
-    Notar en la figura \ref{fig:stripe} que, tal como se explicó en la sección \ref{sec:concurrencia}, cuando se produce el \emph{timeout} y el pago no se ha efectuado se activa la vía de descomprometer la cesta y, por tanto, cancelar el PaymentIntent.
+    Notar en la figura \ref{fig:stripe} que cuando se produce el \emph{timeout} y el pago no se ha efectuado se activa la vía de cancelar el PaymentIntent (como se verá en la sección \ref{sec:concurrencia}, descomprometiendo la cesta).
     
     Por otro lado, podría pensarse que FirstMarket conoce de la finalización con éxito del pago a través de la solicitud que en el punto 7 anterior el cliente le realiza. Sin embargo, esa solicitud sólo es usada en \emph{backend} como disparador para servir el mensaje estándar de finalización de una compra. Es decir, el sistema no realiza ninguna acción de lógica de negocio (no crea ningún pedido, de modifica ninguna cesta, etc.) al recibir la petición del punto 7. Sólo se limita a servir una vista con un mensaje. De hecho, cualquier cliente con sesión abierta en FirstMarket puede escribir en su navegador la dirección \nolinkurl{~/user/success} y el sistema le devolverá el mensaje de compra finalizada (por supuesto, sin haber realizado ninguna compra en realidad).
     
@@ -1076,7 +1076,7 @@
     	\item[-] \emph{payment\_intent.payment\_failed}. Ocurre cuando el pago ha fallado. No se realiza ninguna acción aparte de su registro.
     	\item[-] \emph{payment\_intent.created}. El PaymentIntent ha sido creado. No se realiza ninguna acción aparte de su registro.
     	\item[-] \emph{payment\_intent.processing}. Ocurre cuando el PaymentIntent ha comenzado su procesamiento. No se realiza ninguna acción aparte de su registro.
-    	\item[-] \emph{payment\_intent.amount\_capturable\_updated}. Se da cuando el PaymentIntent posee fondos aún por capturar. No se realiza ninguna acción aparte de su registro.
+    	\item[-] \emph{payment\_intent.amount\_capturable\_updated}. Tiene lugar cuando el PaymentIntent posee fondos aún por capturar. No se realiza ninguna acción aparte de su registro.
     \end{itemize}
     
     La principal consecuencia de la arquitectura explicada es que \textbf{FirstMarket nunca tiene contacto con la información sensible del cliente}. Esta se envía directamente a Stripe desde el cliente. Las implicaciones en términos de seguridad de este aspecto son profundas, mejorándose la exposición al riesgo de los clientes al tiempo que se alivian los requisitos y el coste de la aplicación web. De hecho, todo agente involucrado en el procesamiento, transmisión o almacenamiento de datos bancarios sensibles debe cumplir con los estándares del \href{https://www.pcisecuritystandards.org/pci_security/}{\emph{Payment Card Industry Security Standards Council}}. En este sentido, Stripe ha sido certificado como \emph{PCI Level 1 Service Provider}, el nivel de certificación más estricto disponible en la industria de pagos. Por su parte, Firstmarket se alinea con los estándares PCI al no tener relación, como se ha dicho, con la información sensible de los clientes, y al garantizar la utilización de TLS en sus comunicaciones.
@@ -1127,7 +1127,7 @@
     \begin{itemize}
     	\item[-] Se actualiza el stock, sustrayendo los libros en las cantidades correspondientes.
     	\item[-] Se crea en la base de datos una entidad \emph{sale} por cada item de la cesta, para así capturar el estado (principalmente el precio) de los libros en ese momento.
-    	\item[-] Se contacta con Stripe para crear un nuevo \emph{Payment Intent}.
+    	\item[-] Se contacta con Stripe para crear un nuevo \emph{PaymentIntent}.
     	\item[-] Se activa el contador de tiempo disponible para finalizar la compra.
     \end{itemize}
     
@@ -1153,7 +1153,7 @@
     \begin{itemize}
     	\item[-] Se actualiza el \emph{stock}, aumentando los libros en las cantidades correspondientes.
     	\item[-] Se eliminan las entidades \emph{sale} apropiadas de la base de datos.
-    	\item[-] Se contacta con Stripe para cancelar el \emph{Payment Intent}.
+    	\item[-] Se contacta con Stripe para cancelar el \emph{PaymentIntent}.
     \end{itemize}
 
     \section{Gestión de Datos Jerárquicos} \label{sec:hierarchy}
@@ -1383,7 +1383,7 @@
        		\label{fig:herokupostgres}
        	\end{figure}
        	
-       	\item[-] \href{https://elements.heroku.com/addons/logdna}{LogDNA}. Este servicio permite acceder a los registros emitidos, tanto por la Heroku como por la aplicación web, de una manera sencilla a través del navegador. Tiene multitud de opciones de configuración, siendo la interfaz gráfica la mostrada en la figura \ref{fig:logdna}.
+       	\item[-] \href{https://elements.heroku.com/addons/logdna}{LogDNA}. Este servicio permite acceder a los registros emitidos, tanto por Heroku como por la aplicación web, de una manera sencilla a través del navegador. Tiene multitud de opciones de configuración, siendo la interfaz gráfica la mostrada en la figura \ref{fig:logdna}.
        	
        	\begin{figure}[hbt!]
        		\centering
@@ -1425,7 +1425,7 @@
 	
 	La aplicación web desarrollada puede usar HTTPS, ya que por defecto este es el protocolo que Heroku proporciona para la comunicación de sus aplicaciones ejecutadas con \emph{dynos} de pago (como es el caso). En concreto, por defecto y sin coste añadido, Heroku gestiona los certificados digitales de las aplicaciones automáticamente con su servicio \href{https://devcenter.heroku.com/articles/automated-certificate-management}{\emph{Automated Certificate Management}}. Por su parte, ACM utiliza \href{https://letsencrypt.org/}{\emph{Let’s Encrypt}}, un CA abierto, gratuito y automatizado que ofrece para el bien común el \href{https://www.abetterinternet.org/}{\emph{Internet Security Research Group}}.
 	
-	Para finalizar, resaltar que \href{https://firstmarket.tech}{www.firstmarket.tech} impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra entre las líneas 27 y 31 del listado \ref{list:springsec_config}.
+	Por último, resaltar que \href{https://firstmarket.tech}{www.firstmarket.tech} impone el uso de HTTPS, es decir, los intentos de comunicarse con la aplicación web por medio de HTTP son redirigidos al uso de la versión segura. Esto se ha implementado con Spring Security, como se muestra entre las líneas 27 y 31 del listado \ref{list:springsec_config}.
 	
 	\section{Spring Security} \label{sec:springsec}
 	Un enfoque comúnmente empleado, en el ámbito de la seguridad de la información, se basa en considerar los sistemas complejos como un conjunto de capas de abstracción, aplicándose los mecanismos de seguridad apropiados para cada una de ellas \cite{CarloScarioni2019}.
@@ -1572,11 +1572,11 @@
 	\end{lstlisting}
 	
 	\subsection{Autenticación}
-	Spring Security ofrece toda una gama de métodos de autenticación \cite{Behler2020} \cite{Alex2020}. El usado en FirstMarket, configurado entre las líneas 5 y 7 del listado \ref{list:springsec_config}, ha sido a través de un formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña. En caso de un fallo de autenticación, la clase \emph{customAuthenticationFailureHandler} toma el control, determina la causa del fallo y presenta el mensaje adecuado al usuario.
+	Spring Security proporciona toda una gama de métodos de autenticación \cite{Behler2020} \cite{Alex2020}. El usado en FirstMarket, configurado entre las líneas 5 y 7 del listado \ref{list:springsec_config}, ha sido a través de formulario, contenido en la vista \emph{login.html}, en el que el usuario introduce su dirección de correo electrónico y su contraseña. En caso de un fallo de autenticación, la clase \emph{customAuthenticationFailureHandler} toma el control, determina la causa del fallo y presenta el mensaje adecuado al usuario.
 	
 	Es importante resaltar que, con el fin de garantizar la seguridad de la información de los usuarios, la aplicación web desarrollada almacena las constraseñas en la base de datos encriptadas.  En concreto, se usa el agoritmo \href{https://en.wikipedia.org/wiki/Bcrypt}{Bcrypt}. De esta forma, para saber si la contraseña es correcta, la aplicación web encripta la contraseña enviada en el formulario y la compara con la que tiene almacenada.
 	
-	Además, Spring Security permite especificar la lógica tras un \emph{logout}, que en el caso de la presente aplicación es simplemente una redirección a la páquina de inicio, como se muestra en las líneas 12 y 13 del listado \ref{list:springsec_config}.
+	Además, Spring Security permite especificar la lógica tras un \emph{logout}, que en el caso de la presente aplicación es simplemente una redirección a la página de inicio, como se muestra en las líneas 11 y 12 del listado \ref{list:springsec_config}.
 	
 	\paragraph{Autenticación por Fuerza Bruta}
 	Como ya se ha comentado, el ecosistema Spring destaca por su extensibilidad. Allá donde se requieran funcionalidades especiales, el \emph{framework} permite alcanzarlas. En este sentido, aunque Spring Security no implementa ningún mecanismo para prevenir la autenticación por fuerza bruta, sí ofrece facilidades para incorporarlo.
@@ -1601,11 +1601,11 @@
 	\end{lstlisting}
 	
 	\subsection{Autorización}
-	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 15 a la 26, FirstMarket implementa tres tipos de recursos: 
+	Como se puede apreciar en el listado \ref{list:springsec_config}, líneas de la 14 a la 25, FirstMarket implementa tres tipos de recursos: 
 	
 	\begin{itemize}
-		\item[-] Los que sólo pueden ser accedidos por los usuarios con rol \emph{ROLE\_ADMIN}, ubicados en \emph{\nolinkurl{~/admin/**}}.
-		\item[-] Los que sólo pueden ser accedidos por los usuarios con rol \emph{ROLE\_USER}, ubicados en \emph{\nolinkurl{~/user/**}}.
+		\item[-] Los que sólo pueden ser accedidos por usuarios con rol \emph{ROLE\_ADMIN}, ubicados en \emph{\nolinkurl{~/admin/**}}.
+		\item[-] Los que sólo pueden ser accedidos por usuarios con rol \emph{ROLE\_USER}, ubicados en \emph{\nolinkurl{~/user/**}}.
 		\item[-] El resto, que puede ser accedido por cualquiera.
 	\end{itemize}
 
@@ -1670,7 +1670,7 @@
 	
 	De esta forma, el agente malintencionado ya no podrá tener acceso a la información necesaria para suplantar la identidad del usuario legítimo, teniendo ahora el banco un mecanismo para distinguirlos.
 	
-	Como se ha dicho, esta funcionalidad se implementa por defecto con Spring Security. Sin embargo, como se aprecia en las líneas 34 a 37 del listado \ref{list:springsec_config}, se ha modificado ligeramente el comportamiento por defecto para permitir que desde Stripe se realicen peticiones POST sin necesidad de contar con el token \emph{\_csrf}.
+	Como se ha dicho, esta funcionalidad se implementa por defecto con Spring Security. Sin embargo, como se aprecia en las líneas 33 a 36 del listado \ref{list:springsec_config}, se ha modificado ligeramente el comportamiento por defecto para permitir que desde Stripe se realicen peticiones POST sin necesidad de contar con el token \emph{\_csrf}.
 	
 	\subsection{Encabezados HTTP de Seguridad}
 	Los principales navegadores web implementan diversos controles de seguridad que entran en acción cuando desde el servidor se les especifica la configuración deseada. Los \href{https://owasp.org/www-project-secure-headers/}{encabezados de seguridad} insertados en las respuestas HTTP cumplen este papel. Esto es, son directrices que los servidores proporcionan a los clientes web, con el objetivo de establecer la configuración de la política de seguridad que se desea que el navegador implemente \cite{Barnett2018}.
@@ -1688,7 +1688,7 @@
 	No obstante, para el contenido estático (principalmente hojas de estilo y código JavaScript), sí se ha permitido al navegador almacenarlo en su caché, con el fin de mejorar el tiempo de carga de las páginas y ganar en experiencia de usuario, sin merma de seguridad.
 
 	\paragraph{Content Type Options}
-	Normalmente, cuando el campo \emph{content type} (tipo de contenido) no es especificado, los navegadores tratan de deducirlo para mejorar la experiencia de usuario. Por ejemplo, si el navegador encuentra un archivo JavaScript sin el tipo de contenido especificado, intentará deducir su naturaleza a partir del propio contenido y, en caso de que finalmente lo juzgue como código JS, lo ejecutará. A este procedimiento de inferencia del tipo de contenido se le conoce como \href{https://en.wikipedia.org/wiki/Content_sniffing}{\emph{content sniffing}}
+	Normalmente, cuando el campo \emph{content type} (tipo de contenido) no es especificado, los navegadores tratan de deducirlo para mejorar la experiencia de usuario. Por ejemplo, si el navegador encuentra un archivo JavaScript sin el tipo de contenido especificado, intentará deducir su naturaleza a partir del propio contenido y, en caso de que finalmente lo juzgue como código JS, lo ejecutará. A este procedimiento de inferencia del tipo de contenido se le conoce como \href{https://en.wikipedia.org/wiki/Content_sniffing}{\emph{content sniffing}}.
 	
 	Este sistema de inferencia del tipo de contenido presenta el problema de ser un vector para ataques XSS (\href{https://owasp.org/www-community/attacks/xss/}{\emph{cross-site scripting}}). En efecto, existen archivos contruidos de tal manera que pueden ser interpretados de varias formas al mismo tiempo. Por ejemplo, una aplicación web puede permitir a los usuarios enviar un documento PostScript válido para posteriormente visualizarlo. Un usuario malintencionado podría crear un documento PostScript que también sea un archivo JavaScript válido y ejecutar un ataque XSS con él \cite{Alex2020}.
 	
@@ -1713,7 +1713,7 @@
 		\label{fig:hsts_preload}
 	\end{figure}
 	
-	Otra forma es incluyendo el encabezado \emph{Strict-Transport-Security} en las respuestas HTTP. En las líneas de la 46 a la 51 del listado \ref{list:springsec_config} se muestra la configuración realizada en Spring Security para incluir la cabecera mostrada en el listado \ref{list:hsts} en las respuestas HTTP \cite{Alex2020}.
+	Otra forma es incluyendo el encabezado \emph{Strict-Transport-Security} en las respuestas HTTP. En las líneas de la 45 a la 50 del listado \ref{list:springsec_config} se muestra la configuración realizada en Spring Security para incluir la cabecera mostrada en el listado \ref{list:hsts} en las respuestas HTTP \cite{Alex2020}.
 	\\
 	
 	\begin{lstlisting}[caption=Cabecera de declaración \emph{HSTS host}, label=list:hsts]
@@ -1729,7 +1729,7 @@
 	\end{lstlisting}
 	
 	\paragraph{X-XSS-Protection}
-	Muchos navegadores implementan filtros anti-\href{https://owasp.org/www-community/attacks/xss/}{XSS}. Aún no representando una solución infalible al problema, ayudan mucho a su mitigación. Normalmente estos filtros están habilitados por defecto, siendo posible configurar qué hacer en caso de un positivo (por ejemplo, intentar enmendar el contenido detectado).
+	Muchos navegadores incluyen filtros anti-\href{https://owasp.org/www-community/attacks/xss/}{XSS}. Aún no representando una solución infalible al problema, ayudan mucho a su mitigación. Normalmente estos filtros están habilitados por defecto, siendo posible configurar qué hacer en caso de un positivo (por ejemplo, intentar enmendar el contenido detectado).
 	
 	Spring Security, por defecto, a través del encabezado que se muestra en el listado \ref{list:filtro_xss}, activa explícitamente el filtro del navegador y lo configura para que ante un positivo bloquee el contenido \cite{Alex2020}.
 	\\
@@ -1748,7 +1748,7 @@
 	
 	Es importante establecer un criterio apropiado ya que, por ejemplo, si no se especifica política alguna que restrinja la información contenida en el encabezado \emph{Referer}, este podría contener el token de seguridad que FirstMarket adjunta en el link que envía a los usuarios para verificar la dirección de correo electrónico. En general, la información sensible que puedan contener las URL quedaría expuesta en el encabezado \emph{Referer}.
 	
-	Spring Security permite de una manera sencilla configurar la política deseada \cite{Alex2020}, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 76 y 79 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} sólo sería enviado \emph{www.firstmarket.tech}.
+	Spring Security permite de una manera sencilla configurar la política deseada \cite{Alex2020}, que en el caso de FirstMarket ha sido \textbf{\emph{strict-origin}}, como se aprecia en las líneas 81 y 84 del listado \ref{list:springsec_config}. Esta política establece que sólo se envía información en el encabezado \emph{Referer} si el destinatario usa HTTPS. Esta es la parte \emph{strict} de \emph{strict-origin}. La parte \emph{origin} significa que sólo se envía el origen de la dirección. Por ejemplo, de \emph{www.firstmarket.tech/login?error=true} únicamente sería incluido en el encabezado \emph{www.firstmarket.tech}, ocultando así el resto de detalles.
 	
 	\paragraph{Subresource Integrity}
 	Por último, y aunque no se trate de una funcionalidad ofrecida por Spring Security, es necesario comentar que la aplicación web desarrollada hace uso del mecanismo conocido como \href{https://www.w3.org/TR/SRI/}{\emph{Subresource Integrity}}. 
@@ -1899,6 +1899,7 @@
 		\item[-] \textbf{\emph{Vulnerabilidades en librerías de terceros}}. Las restantes 14 vulnerabilidades se han solucionado por medio de actualizaciones. Por la propia naturaleza de la herramienta, todas los problemas detectados por Snyk entran dentro de este epígrafe, mostrándose en la figura \ref{fig:snyk} dos de las vulnerabilidades más graves que ha detectado. Las actualizaciones realizadas han sido las siguientes:
 		
 		\begin{itemize}
+			\small
 			\item[1.] org.springframework.boot:spring-boot $\rightarrow$ 2.3.1.RELEASE
 			\item[2.] org.springframework:spring-web $\rightarrow$ 5.2.4.RELEASE
 			\item[3.] org.springframework:spring-webmvc $\rightarrow$ 5.2.4.RELEASE
@@ -1984,16 +1985,29 @@
 	
 	Con todo, en la tabla \ref{table:recursos_total} se muestra el resumen de la estimación del coste total de desarrollo de la aplicación web \href{https://firstmarket.tech}{FirstMarket}.
 
-    \chapter{Mejoras y Ampliaciones}
+    \chapter{Mejoras y Ampliaciones} \label{sec:improvements}
+    Tras la finalización del presente proyecto se han detectado diversos puntos de potencial mejora, pertenecientes a diferentes ámbitos. A continuación se comenta cada uno de ellos:
     
-    %Testar el software
-    
-    %Sistema de valoracion por parte de los usuarios de los libros
-    
-    %STRIPE -- https://stripe.com/docs/radar/checklist
-    %Using Customer objects when creating payments allows Stripe to track the payment patterns for each customer over time. This significantly increases our ability to identify irregularities in purchasing behavior. To do this, you should:
-    
-    %pentesting con https://www.zaproxy.org/
+    \begin{itemize}
+    	\item[-] Una de las principales (si no la principal) ampliación que se le puede (debe) aplicar al presente proyecto es el desarrollo de pruebas automatizadas que cubran la mayor cantidad de funcionalidades posible. Este es un punto crítico para el mantenimiento y/o ampliación de funcionalidades futuras.
+    	
+    	Tal como está en la actualidad resulta ser un sistema software muy frágil en el sentido de los errores que pueda contener, y de los que se pueda introducir con cualquier actualización o ampliación de funcionalidad.
+    	
+    	En esta línea, el desarrollo de test con herramientas como JUnit, Mockito, AssertJ, etc. son muy necesarias para garantizar la calidad del producto y mejorar la experiencia de desarrollo y depuración.
+    	
+    	\item[-] Sería muy interesante implementar una funcionalidad que permita a los usuarios emitir valoraciones de los libros que han adquirido, por ejemplo con un sistema de estrellas de 1 a 5. Esto permitiría, entre otras cosas, obtener información de los gustos de cada usuario y mejorar en su segmentación.
+    	
+    	\item[-] Otra ampliación deseable, que en realidad formaba parte del esbozo de requisitos deseables, pero que por tiempo no se implementó, sería habilitar un sistema de ofertas. De esta forma el administrador de la tienda podría establecer descuentos o cupones sobre determinados productos, con posiblemente determinadas ventanas temporales de validez, etc.
+    	
+    	\item[-] El sistema de búsqueda de artículos en una tienda online es vital. El usuario debe notar que es fluida, sencilla, eficiente, amigable, intuitiva, y que, sobretodo, le permita encontrar lo que busca rápidamente. En este sentido, aunque el sistema de búsqueda desarrollado cumple con su cometido básico, es muy mejorable. Una posible alternativa sería externalizar esta funcionalidad con servicios como el que ofrece \href{https://www.algolia.com/}{Algolia}.
+    	
+    	\item[-] Profundizar en la \href{https://stripe.com/docs/radar/checklist}{integración} con Stripe, de forma que le facilitemos información de los clientes, utilizando la \href{https://stripe.com/docs/api/customers}{Customer API}. Esto le permite a la plataforma de pagos mejorar considerablemente el éxito en la predicción de fraudes en los pagos, ya que enriquece el modelo de machine learning subyacente.
+    	
+ 
+    	\item[-] En el plano de la seguridad, aunque se ha realizado un gran esfuerzo, cabría realizar pruebas de pentesting, con herramientas como por ejemplo \href{https://www.zaproxy.org/}{OWASP Zed Attack Proxy}.
+    	
+    \end{itemize}
+        
     
     \printbibliography[heading=bibintoc]
     
