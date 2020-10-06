@@ -292,3 +292,7 @@ div.stripe-card-error {
     color: red;
     font-size: small;
 }
+
+#mainTitle {
+    font-size: xx-large;
+}
