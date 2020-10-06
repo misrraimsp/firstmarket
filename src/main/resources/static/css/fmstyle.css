@@ -293,6 +293,6 @@ div.stripe-card-error {
     font-size: small;
 }
 
-#mainTitle {
-    font-size: 200px;
+#mainTitleH1 {
+    font-size: 200%;
 }
