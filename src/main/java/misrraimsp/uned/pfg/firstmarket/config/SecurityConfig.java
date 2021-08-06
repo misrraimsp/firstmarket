@@ -116,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "; " +
                                         "connect-src 'self' " +
                                         "https://api.stripe.com " +
-                                        "https://*.fontawesome.com/*"
+                                        "https://*.fontawesome.com"
                                 )
                         )
                         // Referrer Policy
