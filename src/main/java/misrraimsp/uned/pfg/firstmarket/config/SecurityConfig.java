@@ -111,7 +111,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                         "; " +
                                         "img-src 'self' data:" +
                                         "; " +
-                                        "frame-src 'sel policyf' " +
+                                        "frame-src 'self' " +
                                         "https://js.stripe.com" +
                                         "; " +
                                         "connect-src 'self' " +
