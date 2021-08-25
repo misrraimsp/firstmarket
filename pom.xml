@@ -142,7 +142,7 @@
         <dependency>
             <groupId>org.passay</groupId>
             <artifactId>passay</artifactId>
-            <version>1.6.0</version>
+            <version>1.6.1</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
